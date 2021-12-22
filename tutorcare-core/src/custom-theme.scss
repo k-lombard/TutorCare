@@ -1,0 +1,85 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+/* For use in src/lib/core/theming/_palette.scss */
+$custom0: (
+    50 : #eaebeb,
+    100 : #cccdce,
+    200 : #aaacad,
+    300 : #878a8c,
+    400 : #6e7173,
+    500 : #54585a,
+    600 : #4d5052,
+    700 : #434748,
+    800 : #3a3d3f,
+    900 : #292d2e,
+    A100 : #eaaa00,
+    A200 : #d6dbd4,
+    A400 : #ffffff,
+    A700 : #000000,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+
+$my-custom-level: mat.define-typography-level(
+  $font-family: "Dosis",
+  $font-weight: 600,
+  $letter-spacing: normal,
+  $font-size: 1rem,
+  $line-height: 1,
+);
+
+
+$my-custom-typography-config: mat.define-typography-config($my-custom-level);
+$my-custom-typography: mat.define-typography-config(
+  $headline:  mat.define-typography-level(3rem, 1, 700),
+);
+
+@include mat.core($my-custom-typography);
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$tutorcare-core-primary: mat.define-palette($custom0);
+$tutorcare-core-accent: mat.define-palette($custom0, A200, A100, A400, A700);
+
+// The warn palette is optional (defaults to red).
+$tutorcare-core-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$tutorcare-core-theme: mat.define-light-theme((
+  color: (
+    primary: $tutorcare-core-primary,
+    accent: $tutorcare-core-accent,
+    warn: $tutorcare-core-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($tutorcare-core-theme);
+
