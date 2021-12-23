@@ -1,0 +1,18 @@
+version: '2.4'
+services:
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=tutorcare_core
+      - POSTGRES_USER=tutorcare_admin
+      - POSTGRES_PASSWORD=tutorcare1234
+    volumes:
+      # - db-data:/var/lib/postgresql/data:delegated
+      - ./data/pgsql:/var/lib/postgresql/data
+
+volumes:
+  db-data:
