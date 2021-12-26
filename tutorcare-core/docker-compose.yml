@@ -1,18 +1,28 @@
-version: '2.4'
-services:
+version: "3.7" 
+services:   
   db:
+    restart: always
+    # image: postgres:latest
     build:
       context: ./db
       dockerfile: Dockerfile
     ports:
-      - 5432:5432
+      - "5435:5432"
     environment:
-      - POSTGRES_DB=tutorcare_core
-      - POSTGRES_USER=tutorcare_admin
-      - POSTGRES_PASSWORD=tutorcare1234
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: tutorcare_core
+  web:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
     volumes:
-      # - db-data:/var/lib/postgresql/data:delegated
-      - ./data/pgsql:/var/lib/postgresql/data
-
-volumes:
-  db-data:
+      - .:/server
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      PORT: 8080
+      CONNECTION_STRING_DEV: postgres://user:password@tutorcare_core/tutorcare_core
