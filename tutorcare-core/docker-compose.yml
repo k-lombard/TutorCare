@@ -1,20 +1,34 @@
 version: "3.7" 
 services:   
   db:
+    networks:
+      new:
+          aliases:
+              - database
     restart: always
-    # image: postgres:latest
-    build:
-      context: ./db
-      dockerfile: Dockerfile
+    container_name: db
+    image: postgres:latest
     ports:
-      - "5435:5432"
+      - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: user
-      POSTGRES_DB: tutorcare_core
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=tutorcare_core
+  migrate:
+    image: migrate/migrate
+    depends_on:
+      - db
+    networks:
+        - new
+    volumes:
+        - ./db/migrations:/migrations
+    command: ["-path", "/migrations", "-database",  "postgres://user:password@database:5432/tutorcare_core?sslmode=disable", "up"]
+    links: 
+        - db
   web:
-    build:
-      context: .
+    networks:
+      - new
+    build: . 
     ports:
       - "8080:8080"
     volumes:
@@ -25,4 +39,7 @@ services:
       - db
     environment:
       PORT: 8080
-      CONNECTION_STRING_DEV: postgres://user:password@tutorcare_core/tutorcare_core
+      CONNECTION_STRING_DEV: db://user:password@db:5432/db
+      DSN: "db://user:password@db:5432/tutorcare_core"
+networks:
+  new:
