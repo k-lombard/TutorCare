@@ -7,7 +7,7 @@ import (
 	"main/models"
 )
 
-func (db Database) GetAllItems() (*models.UserList, error) {
+func (db Database) GetAllUsers() (*models.UserList, error) {
 	list := &models.UserList{}
 	rows, err := db.Conn.Query("SELECT * FROM users ORDER BY user_id DESC")
 	if err != nil {

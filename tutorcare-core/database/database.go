@@ -34,12 +34,3 @@ func Initialize(username, password, database string) (Database, error) {
 	log.Println("Database connection established")
 	return db, nil
 }
-
-// func Stop(server *http.Server) {
-// 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-// 	defer cancel()
-// 	if err := server.Shutdown(ctx); err != nil {
-// 		log.Printf("Could not shut down server correctly: %v\n", err)
-// 		os.Exit(1)
-// 	}
-// }
