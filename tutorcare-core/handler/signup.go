@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"hash/fnv"
 	"main/models"
 	"net/http"
+	"os"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 )
@@ -23,28 +27,25 @@ func signupPage(w http.ResponseWriter, r *http.Request) {
 	}
 	user := &models.User{}
 
-	// username := r.FormValue("email")
-	// password := r.FormValue("password")
-
 	if err := render.Bind(r, user); err != nil {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
-	userOut, err := dbInstance.Signup(user)
+	isUnique := dbInstance.Signup(user)
 
 	switch {
-	case userOut.Email != "" && err == nil:
-		if err := dbInstance.AddUser(user); err != nil {
+	case user.Email != "" && isUnique == true:
+		userOut1, err := dbInstance.AddUser(user)
+		if err != nil {
 			render.Render(w, r, ErrorRenderer(err))
 			return
 		}
-		if err := render.Render(w, r, user); err != nil {
+		if err := render.Render(w, r, &userOut1); err != nil {
 			render.Render(w, r, ServerErrorRenderer(err))
 			return
 		}
-		w.Write([]byte("User created!"))
-		return
-	case userOut.Email == "":
+		http.Redirect(w, r, "/login", 301)
+	case isUnique == false:
 		http.Error(w, "Server error, unable to create your account. User with email already exists", 500)
 		return
 	default:
@@ -67,13 +68,35 @@ func loginPage(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, ErrNotFound)
 		return
 	}
-	if err := render.Render(w, r, user); err != nil {
+	if err := render.Render(w, r, &userOut); err != nil {
 		render.Render(w, r, ServerErrorRenderer(err))
 		http.Redirect(w, r, "/login", 301)
 		return
 	}
-	w.Write([]byte("Hello " + userOut.Email))
+	h := fnv.New64a()
+	h.Write([]byte(userOut.UserID.String()))
+	token, err := CreateToken(h.Sum64())
+	if err != nil {
+		render.Render(w, r, ErrorRenderer(err))
+		return
+	}
+	w.Write([]byte(token))
+}
 
+func CreateToken(userid uint64) (string, error) {
+	var err error
+	//Creating Access Token
+	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
+	accessTokenClaims := jwt.MapClaims{}
+	accessTokenClaims["authorized"] = true
+	accessTokenClaims["user_id"] = userid
+	accessTokenClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessTokenClaims)
+	token, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	if err != nil {
+		return "", err
+	}
+	return token, nil
 }
 
 func homePage(res http.ResponseWriter, req *http.Request) {

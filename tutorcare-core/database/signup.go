@@ -6,16 +6,16 @@ import (
 	"main/models"
 )
 
-func (db Database) Signup(user *models.User) (models.User, error) {
+func (db Database) Signup(user *models.User) bool {
 	userOut := models.User{}
 	row := db.Conn.QueryRow("SELECT email FROM users WHERE email=$1", &user.Email)
 	switch err := row.Scan(&userOut.Email); err {
 	case sql.ErrNoRows:
 		fmt.Println("Email doesn't already exist; proceed with registration.")
-		return userOut, nil
+		return true
 	default:
 		fmt.Println("Email already exists")
-		return userOut, nil
+		return false
 	}
 }
 
@@ -23,7 +23,7 @@ func (db Database) Login(user *models.User) (models.User, bool) {
 
 	userOut := models.User{}
 
-	db.Conn.QueryRow("SELECT email, password FROM users WHERE email=$1", user.Email).Scan(&userOut.Email, &userOut.Password)
+	db.Conn.QueryRow("SELECT * FROM users WHERE email = $1;", user.Email).Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status)
 	// hash, errOne := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
 	// if errOne != nil {
 	// 	fmt.Println(errOne)

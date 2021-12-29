@@ -26,11 +26,12 @@ func (db Database) GetAllUsers() (*models.UserList, error) {
 	}
 	return list, nil
 }
-func (db Database) AddUser(user *models.User) error {
+func (db Database) AddUser(user *models.User) (models.User, error) {
 	sqlStatement := `INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING user_id, date_joined, status;`
 	var id uuid.UUID
 	var status bool
 	var dateJoined string
+	userOut := models.User{}
 	hash, errOne := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
 	if errOne != nil {
 		fmt.Println(errOne)
@@ -38,10 +39,14 @@ func (db Database) AddUser(user *models.User) error {
 	err := db.Conn.QueryRow(sqlStatement, &user.FirstName, &user.LastName, &user.Email, string(hash)).Scan(&id, &dateJoined, &status)
 
 	if err != nil {
-		return err
+		return userOut, err
+	}
+	err2 := db.Conn.QueryRow(`SELECT * FROM users WHERE email = $1;`, &user.Email).Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status)
+	if err2 != nil {
+		return userOut, err2
 	}
 	fmt.Println("New user record created with ID and dateJoined: ", id, dateJoined)
-	return nil
+	return userOut, nil
 }
 
 func (db Database) GetUserById(userId uuid.UUID) (models.User, error) {

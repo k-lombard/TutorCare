@@ -47,14 +47,16 @@ func addUser(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, ErrBadRequest)
 		return
 	}
-	if err := dbInstance.AddUser(user); err != nil {
+	userOut, err := dbInstance.AddUser(user)
+	if err != nil {
 		render.Render(w, r, ErrorRenderer(err))
 		return
 	}
-	if err := render.Render(w, r, user); err != nil {
-		render.Render(w, r, ServerErrorRenderer(err))
+	if err2 := render.Render(w, r, user); err2 != nil {
+		render.Render(w, r, ServerErrorRenderer(err2))
 		return
 	}
+	w.Write([]byte(userOut.UserID.String()))
 }
 
 func getAllUsers(w http.ResponseWriter, r *http.Request) {
