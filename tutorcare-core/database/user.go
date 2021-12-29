@@ -26,9 +26,7 @@ func (db Database) GetAllUsers() (*models.UserList, error) {
 	return list, nil
 }
 func (db Database) AddUser(user *models.User) error {
-	sqlStatement := `INSERT INTO users (first_name, last_name, email, password)
-	VALUES ($1, $2, $3, $4)
-	RETURNING user_id, date_joined, status`
+	sqlStatement := `INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING user_id, date_joined, status;`
 	var id uuid.UUID
 	var status bool
 	var dateJoined string
@@ -52,14 +50,19 @@ func (db Database) GetUserById(userId uuid.UUID) (models.User, error) {
 	}
 }
 func (db Database) DeleteUser(userId uuid.UUID) error {
-	query := `DELETE FROM users WHERE user_id = $1;`
-	_, err := db.Conn.Exec(query, userId)
-	switch err {
-	case sql.ErrNoRows:
-		return ErrNoMatch
-	default:
-		return err
+	var id uuid.UUID
+	query := `DELETE FROM users WHERE user_id = $1 RETURNING user_id;`
+	err := db.Conn.QueryRow(query, userId).Scan(&id)
+	if err != nil {
+		switch err {
+		case sql.ErrNoRows:
+			return ErrNoMatch
+		default:
+			return err
+		}
 	}
+	fmt.Println("User deleted with userID: ", id)
+	return nil
 }
 func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.User, error) {
 	user := models.User{}
