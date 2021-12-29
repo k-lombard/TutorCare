@@ -7,9 +7,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 func signup(router chi.Router) {
@@ -85,12 +85,10 @@ func loginPage(w http.ResponseWriter, r *http.Request) {
 
 func CreateToken(userid uint64) (string, error) {
 	var err error
-	//Creating Access Token
-	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
 	accessTokenClaims := jwt.MapClaims{}
 	accessTokenClaims["authorized"] = true
 	accessTokenClaims["user_id"] = userid
-	accessTokenClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+	accessTokenClaims["exp"] = time.Now().Add(time.Minute * 20).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessTokenClaims)
 	token, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
 	if err != nil {

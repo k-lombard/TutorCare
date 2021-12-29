@@ -17,6 +17,12 @@ type User struct {
 	Status     bool      `json:"status"`
 }
 
+type Token struct {
+	Role        string `json:"role"`
+	Email       string `json:"email"`
+	TokenString string `json:"token"`
+}
+
 type UserList struct {
 	Users []User `json:"users"`
 }
