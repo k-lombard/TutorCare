@@ -9,11 +9,13 @@ services:
     container_name: db
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - 5433:5432
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=user
       - POSTGRES_DB=tutorcare_core
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
   migrate:
     image: migrate/migrate
     depends_on:
@@ -39,7 +41,7 @@ services:
       - db
     environment:
       PORT: 8080
-      CONNECTION_STRING_DEV: db://user:password@db:5432/db
-      DSN: "db://user:password@db:5432/tutorcare_core"
+      CONNECTION_STRING_DEV: db://user:password@db:5433/db
+      DSN: "db://user:password@db:5433/tutorcare_core"
 networks:
   new:

@@ -10,7 +10,7 @@ import (
 
 const (
 	HOST = "db"
-	PORT = 5432
+	PORT = 5433
 )
 
 type Database struct {

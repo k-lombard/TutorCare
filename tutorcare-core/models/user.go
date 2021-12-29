@@ -3,15 +3,18 @@ package models
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/google/uuid"
 )
 
 type User struct {
-	UserID     int    `json:"user_id"`
-	FirstName  string `json:"first_name"`
-	LastName   string `json:"last_name"`
-	Email      string `json:"email"`
-	Password   string `json:"password"`
-	DateJoined string `json:"date_joined"`
+	UserID     uuid.NullUUID `sql:",pk" json:"user_id"`
+	FirstName  string        `json:"first_name"`
+	LastName   string        `json:"last_name"`
+	Email      string        `json:"email"`
+	Password   string        `json:"password"`
+	DateJoined string        `json:"date_joined"`
+	Status     bool          `json:"status"`
 }
 
 type UserList struct {

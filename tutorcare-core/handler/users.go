@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"main/database"
 	"net/http"
-	"strconv"
 
 	"main/models"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	"github.com/google/uuid"
 )
 
 var userIDKey = "userID"
@@ -32,10 +32,10 @@ func UserContext(next http.Handler) http.Handler {
 			render.Render(w, r, ErrorRenderer(fmt.Errorf("user ID is required")))
 			return
 		}
-		id, err := strconv.Atoi(userId)
-		if err != nil {
-			render.Render(w, r, ErrorRenderer(fmt.Errorf("invalid user ID")))
-		}
+		id := uuid.MustParse(userId)
+		// if err != nil {
+		// 	render.Render(w, r, ErrorRenderer(fmt.Errorf("invalid user ID")))
+		// }
 		ctx := context.WithValue(r.Context(), userIDKey, id)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -69,7 +69,7 @@ func getAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUserById(w http.ResponseWriter, r *http.Request) {
-	userID := r.Context().Value(userIDKey).(int)
+	userID := r.Context().Value(userIDKey).(uuid.UUID)
 	user, err := dbInstance.GetUserById(userID)
 	if err != nil {
 		if err == database.ErrNoMatch {
@@ -86,7 +86,7 @@ func getUserById(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteUser(w http.ResponseWriter, r *http.Request) {
-	userId := r.Context().Value(userIDKey).(int)
+	userId := r.Context().Value(userIDKey).(uuid.UUID)
 	err := dbInstance.DeleteUser(userId)
 	if err != nil {
 		if err == database.ErrNoMatch {
@@ -98,7 +98,7 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func updateUser(w http.ResponseWriter, r *http.Request) {
-	userId := r.Context().Value(userIDKey).(int)
+	userId := r.Context().Value(userIDKey).(uuid.UUID)
 	userData := models.User{}
 	if err := render.Bind(r, &userData); err != nil {
 		render.Render(w, r, ErrBadRequest)

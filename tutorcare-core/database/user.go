@@ -5,6 +5,8 @@ import (
 	"fmt"
 
 	"main/models"
+
+	"github.com/google/uuid"
 )
 
 func (db Database) GetAllUsers() (*models.UserList, error) {
@@ -15,7 +17,7 @@ func (db Database) GetAllUsers() (*models.UserList, error) {
 	}
 	for rows.Next() {
 		var user models.User
-		err := rows.Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.DateJoined)
+		err := rows.Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.DateJoined, &user.Status)
 		if err != nil {
 			return list, err
 		}
@@ -26,10 +28,11 @@ func (db Database) GetAllUsers() (*models.UserList, error) {
 func (db Database) AddUser(user *models.User) error {
 	sqlStatement := `INSERT INTO users (first_name, last_name, email, password)
 	VALUES ($1, $2, $3, $4)
-	RETURNING user_id, date_joined`
-	id := 0
-	dateJoined := ""
-	err := db.Conn.QueryRow(sqlStatement, &user.FirstName, &user.LastName, &user.Email, &user.Password).Scan(&id, &dateJoined)
+	RETURNING user_id, date_joined, status`
+	var id uuid.UUID
+	var status bool
+	var dateJoined string
+	err := db.Conn.QueryRow(sqlStatement, &user.FirstName, &user.LastName, &user.Email, &user.Password).Scan(&id, &dateJoined, &status)
 	if err != nil {
 		return err
 	}
@@ -37,18 +40,18 @@ func (db Database) AddUser(user *models.User) error {
 	return nil
 }
 
-func (db Database) GetUserById(userId int) (models.User, error) {
+func (db Database) GetUserById(userId uuid.UUID) (models.User, error) {
 	user := models.User{}
-	query := `SELECT * FROM user WHERE user_id = $1;`
+	query := `SELECT * FROM users WHERE user_id = $1;`
 	row := db.Conn.QueryRow(query, userId)
-	switch err := row.Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.DateJoined); err {
+	switch err := row.Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.DateJoined, &user.Status); err {
 	case sql.ErrNoRows:
 		return user, ErrNoMatch
 	default:
 		return user, err
 	}
 }
-func (db Database) DeleteUser(userId int) error {
+func (db Database) DeleteUser(userId uuid.UUID) error {
 	query := `DELETE FROM users WHERE user_id = $1;`
 	_, err := db.Conn.Exec(query, userId)
 	switch err {
@@ -58,10 +61,10 @@ func (db Database) DeleteUser(userId int) error {
 		return err
 	}
 }
-func (db Database) UpdateUser(userId int, userData models.User) (models.User, error) {
+func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.User, error) {
 	user := models.User{}
-	query := `UPDATE users SET first_name=$1, last_name=$2, email=$3, password=$4 WHERE user_id=$5 RETURNING user_id, first_name, last_name, email, password, date_joined;`
-	err := db.Conn.QueryRow(query, userData.FirstName, userData.LastName, userData.Email, userData.Password, userId).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.DateJoined)
+	query := `UPDATE users SET first_name=$1, last_name=$2, email=$3, password=$4 WHERE user_id=$5 RETURNING user_id, first_name, last_name, email, password, date_joined, status;`
+	err := db.Conn.QueryRow(query, userData.FirstName, userData.LastName, userData.Email, userData.Password, userId).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.DateJoined, &user.Status)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return user, ErrNoMatch
