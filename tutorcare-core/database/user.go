@@ -7,6 +7,7 @@ import (
 	"main/models"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (db Database) GetAllUsers() (*models.UserList, error) {
@@ -30,7 +31,12 @@ func (db Database) AddUser(user *models.User) error {
 	var id uuid.UUID
 	var status bool
 	var dateJoined string
-	err := db.Conn.QueryRow(sqlStatement, &user.FirstName, &user.LastName, &user.Email, &user.Password).Scan(&id, &dateJoined, &status)
+	hash, errOne := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
+	if errOne != nil {
+		fmt.Println(errOne)
+	}
+	err := db.Conn.QueryRow(sqlStatement, &user.FirstName, &user.LastName, &user.Email, string(hash)).Scan(&id, &dateJoined, &status)
+
 	if err != nil {
 		return err
 	}
@@ -67,7 +73,24 @@ func (db Database) DeleteUser(userId uuid.UUID) error {
 func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.User, error) {
 	user := models.User{}
 	query := `UPDATE users SET first_name=$1, last_name=$2, email=$3, password=$4 WHERE user_id=$5 RETURNING user_id, first_name, last_name, email, password, date_joined, status;`
-	err := db.Conn.QueryRow(query, userData.FirstName, userData.LastName, userData.Email, userData.Password, userId).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.DateJoined, &user.Status)
+	hash, errOne := bcrypt.GenerateFromPassword([]byte(userData.Password), bcrypt.MinCost)
+	if errOne != nil {
+		fmt.Println(errOne)
+	}
+	query2 := `SELECT * FROM users WHERE user_id = $1;`
+	user2 := models.User{}
+	errTwo := db.Conn.QueryRow(query2, userId).Scan(&user2.UserID, &user2.FirstName, &user2.LastName, &user2.Email, &user2.Password, &user2.DateJoined, &user2.Status)
+	if errTwo != nil {
+		if errTwo == sql.ErrNoRows {
+			return user, ErrNoMatch
+		}
+		return user, errTwo
+	}
+	isMatch := comparePasswords(user2.Password, []byte(userData.Password))
+	if isMatch == true {
+		hash = []byte(user2.Password)
+	}
+	err := db.Conn.QueryRow(query, userData.FirstName, userData.LastName, userData.Email, string(hash), userId).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.DateJoined, &user.Status)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return user, ErrNoMatch
@@ -75,4 +98,14 @@ func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.Us
 		return user, err
 	}
 	return user, nil
+}
+
+func comparePasswords(hashedPwd string, plainPwd []byte) bool {
+	byteHash := []byte(hashedPwd)
+	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	return true
 }
