@@ -16,8 +16,11 @@ func NewHandler(db database.Database) http.Handler {
 	router.MethodNotAllowed(methodNotAllowedHandler)
 	router.NotFound(notFoundHandler)
 	router.Route("/users", users)
+	router.Route("/signup", signup)
+	router.Route("/login", login)
 	return router
 }
+
 func methodNotAllowedHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(405)
