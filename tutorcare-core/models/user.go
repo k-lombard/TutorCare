@@ -17,10 +17,13 @@ type User struct {
 	Status     bool      `json:"status"`
 }
 
-type Token struct {
-	Role        string `json:"role"`
-	Email       string `json:"email"`
-	TokenString string `json:"token"`
+type TokenDetails struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	AccessUuid   string `json:"access_uuid"`
+	RefreshUuid  string `json:"refresh_uuid"`
+	AtExpires    int64  `json:"at_expires"`
+	RtExpires    int64  `json:"rt_expires"`
 }
 
 type UserList struct {
@@ -39,5 +42,9 @@ func (*UserList) Render(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (*User) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+func (*TokenDetails) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }

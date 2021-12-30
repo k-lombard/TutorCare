@@ -18,7 +18,6 @@ func NewHandler(db database.Database) http.Handler {
 	router.Route("/users", users)
 	router.Route("/signup", signup)
 	router.Route("/login", login)
-	router.Route("/", authentication)
 	return router
 }
 

@@ -39,9 +39,16 @@ services:
       - db
     depends_on:
       - db
+      - redis
     environment:
       PORT: 8080
       CONNECTION_STRING_DEV: db://user:password@db:5433/db
       DSN: "db://user:password@db:5433/tutorcare_core"
+  redis:
+    networks:
+      - new
+    image: "redis"
+    ports:
+      - "6379:6379"
 networks:
   new:
