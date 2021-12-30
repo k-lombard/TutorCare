@@ -143,11 +143,11 @@ func CreateToken(userid uint64) (*models.TokenDetails, error) {
 	if err != nil {
 		return td, err
 	}
-	rtClaims := jwt.MapClaims{}
-	rtClaims["refresh_uuid"] = td.RefreshUuid
-	rtClaims["user_id"] = userid
-	rtClaims["exp"] = td.RtExpires
-	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
+	refreshTokenClaims := jwt.MapClaims{}
+	refreshTokenClaims["refresh_uuid"] = td.RefreshUuid
+	refreshTokenClaims["user_id"] = userid
+	refreshTokenClaims["exp"] = td.RtExpires
+	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshTokenClaims)
 	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))
 	if err != nil {
 		return nil, err
@@ -157,7 +157,7 @@ func CreateToken(userid uint64) (*models.TokenDetails, error) {
 }
 
 func AuthFunc(userid uint64, td *models.TokenDetails) error {
-	at := time.Unix(td.AtExpires, 0) //converting Unix to UTC(to Time object)
+	at := time.Unix(td.AtExpires, 0)
 	rt := time.Unix(td.RtExpires, 0)
 	now := time.Now()
 
