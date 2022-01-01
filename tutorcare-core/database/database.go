@@ -17,9 +17,9 @@ type Database struct {
 	Conn *sql.DB
 }
 
-var ErrNoMatch = fmt.Errorf("no matching record")
+var ErrNoMatch = fmt.Errorf("Error: no matching table record")
 
-func Initialize(username, password, database string) (Database, error) {
+func InitializeDatabase(username, password, database string) (Database, error) {
 	db := Database{}
 	dsn := "postgres://user:password@db/tutorcare_core?sslmode=disable"
 	conn, err := sql.Open("postgres", dsn)

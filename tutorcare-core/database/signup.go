@@ -24,10 +24,6 @@ func (db Database) Login(user *models.User) (models.User, bool) {
 	userOut := models.User{}
 
 	db.Conn.QueryRow("SELECT * FROM users WHERE email = $1;", user.Email).Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status)
-	// hash, errOne := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
-	// if errOne != nil {
-	// 	fmt.Println(errOne)
-	// }
 	isMatch := comparePasswords(userOut.Password, []byte(user.Password))
 	if isMatch == true {
 		return userOut, true

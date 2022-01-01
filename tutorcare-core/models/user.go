@@ -26,6 +26,11 @@ type TokenDetails struct {
 	RtExpires    int64  `json:"rt_expires"`
 }
 
+type AccessDetails struct {
+	AccessUuid string `json:"access_uuid"`
+	UserId     uint64 `json:"user_id"`
+}
+
 type UserList struct {
 	Users []User `json:"users"`
 }

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"fmt"
 	"hash/fnv"
 	"main/models"
@@ -10,22 +9,26 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-chi/chi"
+	"github.com/gin-gonic/gin"
 	"github.com/go-chi/render"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v4"
 	uuid "github.com/nu7hatch/gouuid"
 )
 
-func signup(router chi.Router) {
-	router.Post("/", signupPage)
+func (r routes) signup(rg *gin.RouterGroup) {
+	users := rg.Group("/")
+
+	users.POST("/", signupPage)
 }
 
-func login(router chi.Router) {
-	router.Post("/", loginPage)
+func (r routes) login(rg *gin.RouterGroup) {
+	users := rg.Group("/")
+
+	users.POST("/", loginPage)
 }
 
-var client *redis.Client
+var Client *redis.Client
 
 func init() {
 	// dsn := os.Getenv("REDIS_DSN")
@@ -36,22 +39,23 @@ func init() {
 	if err2 != nil {
 		panic(err2)
 	}
-	client = redis.NewClient(url)
-	_, err := client.Ping(client.Context()).Result()
+	Client = redis.NewClient(url)
+	_, err := Client.Ping(Client.Context()).Result()
 	if err != nil {
 		panic(err)
 	}
 }
 
-func signupPage(w http.ResponseWriter, r *http.Request) {
+func signupPage(c *gin.Context) {
+	r := c.Request
 	if r.Method != "POST" {
-		http.ServeFile(w, r, "signup.html")
+		http.ServeFile(c.Writer, r, "signup.html")
 		return
 	}
 	user := &models.User{}
 
 	if err := render.Bind(r, user); err != nil {
-		render.Render(w, r, ErrBadRequest)
+		c.JSON(http.StatusBadRequest, "Bad Request")
 		return
 	}
 	isUnique := dbInstance.Signup(user)
@@ -60,75 +64,68 @@ func signupPage(w http.ResponseWriter, r *http.Request) {
 	case user.Email != "" && isUnique == true:
 		userOut1, err := dbInstance.AddUser(user)
 		if err != nil {
-			render.Render(w, r, ErrorRenderer(err))
+			c.JSON(http.StatusBadRequest, "Bad Request")
 			return
 		}
-		if err := render.Render(w, r, &userOut1); err != nil {
-			render.Render(w, r, ServerErrorRenderer(err))
-			return
-		}
-		http.Redirect(w, r, "/login", 301)
+		c.JSON(http.StatusOK, userOut1)
 	case isUnique == false:
-		http.Error(w, "Server error, unable to create your account. User with email already exists", 500)
+		c.JSON(http.StatusInternalServerError, "Server error, unable to create your account. User with email already exists")
 		return
 	default:
-		http.Redirect(w, r, "/", 301)
+		http.Redirect(c.Writer, r, "/", 301)
 	}
 }
 
-func loginPage(w http.ResponseWriter, r *http.Request) {
+func loginPage(c *gin.Context) {
+	r := c.Request
 	if r.Method != "POST" {
-		http.ServeFile(w, r, "login.html")
+		http.ServeFile(c.Writer, r, "login.html")
 		return
 	}
 	user := &models.User{}
 	if err := render.Bind(r, user); err != nil {
-		render.Render(w, r, ErrBadRequest)
+		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
 		return
 	}
 	userOut, isMatch := dbInstance.Login(user)
 	if isMatch == false {
-		render.Render(w, r, ErrNotFound)
+		c.JSON(http.StatusNotFound, "Resource not found")
 		return
 	}
-	if err := render.Render(w, r, &userOut); err != nil {
-		render.Render(w, r, ServerErrorRenderer(err))
-		http.Redirect(w, r, "/login", 301)
-		return
-	}
+	c.JSON(http.StatusOK, userOut)
 	h := fnv.New64a()
 	h.Write([]byte(userOut.UserID.String()))
 	summedUserID := h.Sum64()
-	ts, err := CreateToken(summedUserID)
+	ts, err := NewToken(summedUserID)
 	if err != nil {
-		render.Render(w, r, ErrorRenderer(err))
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 	saveErr := AuthFunc(summedUserID, ts)
 	if saveErr != nil {
-		render.Render(w, r, ErrorRenderer(err))
+		c.JSON(http.StatusUnprocessableEntity, saveErr.Error())
 	}
 
 	tokens := map[string]string{
 		"access_token":  ts.AccessToken,
 		"refresh_token": ts.RefreshToken,
 	}
-	json.NewEncoder(w).Encode(tokens)
+	c.JSON(http.StatusOK, tokens)
 }
 
-func CreateToken(userid uint64) (*models.TokenDetails, error) {
+func NewToken(userid uint64) (*models.TokenDetails, error) {
 	td := &models.TokenDetails{}
-	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
+	td.AtExpires = time.Now().Add(time.Minute * 20).Unix()
 	newUuid, err3 := uuid.NewV4()
 	if err3 != nil {
-		fmt.Println("error creating v4 uuid: ", err3)
+		fmt.Println("Error creating v4 uuid: ", err3)
 		return td, err3
 	}
 	td.AccessUuid = newUuid.String()
 	td.RtExpires = time.Now().Add(time.Hour * 24 * 7).Unix()
 	refreshUuid, err2 := uuid.NewV4()
 	if err2 != nil {
-		fmt.Println("error creating v4 uuid: ", err2)
+		fmt.Println("Error creating v4 uuid: ", err2)
 		return td, err2
 	}
 	td.RefreshUuid = refreshUuid.String()
@@ -136,8 +133,9 @@ func CreateToken(userid uint64) (*models.TokenDetails, error) {
 	var err error
 	accessTokenClaims := jwt.MapClaims{}
 	accessTokenClaims["authorized"] = true
+	accessTokenClaims["access_uuid"] = td.AccessUuid
 	accessTokenClaims["user_id"] = userid
-	accessTokenClaims["exp"] = time.Now().Add(time.Minute * 20).Unix()
+	accessTokenClaims["exp"] = td.AtExpires
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessTokenClaims)
 	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
 	if err != nil {
@@ -161,11 +159,11 @@ func AuthFunc(userid uint64, td *models.TokenDetails) error {
 	rt := time.Unix(td.RtExpires, 0)
 	now := time.Now()
 
-	errAccess := client.Set(client.Context(), td.AccessUuid, strconv.Itoa(int(userid)), at.Sub(now)).Err()
+	errAccess := Client.Set(Client.Context(), td.AccessUuid, strconv.Itoa(int(userid)), at.Sub(now)).Err()
 	if errAccess != nil {
 		return errAccess
 	}
-	errRefresh := client.Set(client.Context(), td.RefreshUuid, strconv.Itoa(int(userid)), rt.Sub(now)).Err()
+	errRefresh := Client.Set(Client.Context(), td.RefreshUuid, strconv.Itoa(int(userid)), rt.Sub(now)).Err()
 	if errRefresh != nil {
 		return errRefresh
 	}

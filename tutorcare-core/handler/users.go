@@ -1,122 +1,94 @@
 package handler
 
 import (
-	"context"
-	"fmt"
 	"main/database"
 	"net/http"
 
 	"main/models"
 
-	"github.com/go-chi/chi"
+	"github.com/gin-gonic/gin"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 )
 
 var userIDKey = "userID"
 
-func users(router chi.Router) {
-	router.Get("/", getAllUsers)
-	router.Post("/", addUser)
-	router.Route("/{userId}", func(router chi.Router) {
-		router.Use(UserContext)
-		router.Get("/", getUserById)
-		router.Put("/", updateUser)
-		router.Delete("/", deleteUser)
-	})
-}
-func UserContext(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		userId := chi.URLParam(r, "userId")
-		if userId == "" {
-			render.Render(w, r, ErrorRenderer(fmt.Errorf("user ID is required")))
-			return
-		}
-		id := uuid.MustParse(userId)
-		// if err != nil {
-		// 	render.Render(w, r, ErrorRenderer(fmt.Errorf("invalid user ID")))
-		// }
-		ctx := context.WithValue(r.Context(), userIDKey, id)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+func (r routes) users(rg *gin.RouterGroup) {
+
+	rg.GET("/", getAllUsers)
+	rg.POST("/", addUser)
+	rg.GET("/:userid", getUserById)
+	rg.PUT("/:userid", updateUser)
+	rg.DELETE("/:userid", deleteUser)
 }
 
-func addUser(w http.ResponseWriter, r *http.Request) {
+func addUser(c *gin.Context) {
 	user := &models.User{}
+	r := c.Request
 	if err := render.Bind(r, user); err != nil {
-		render.Render(w, r, ErrBadRequest)
+		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
 	userOut, err := dbInstance.AddUser(user)
 	if err != nil {
-		render.Render(w, r, ErrorRenderer(err))
+		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
-	if err2 := render.Render(w, r, user); err2 != nil {
-		render.Render(w, r, ServerErrorRenderer(err2))
-		return
-	}
-	w.Write([]byte(userOut.UserID.String()))
+	c.JSON(http.StatusOK, userOut)
 }
 
-func getAllUsers(w http.ResponseWriter, r *http.Request) {
+func getAllUsers(c *gin.Context) {
 	users, err := dbInstance.GetAllUsers()
 	if err != nil {
-		render.Render(w, r, ServerErrorRenderer(err))
+		c.JSON(http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
-	if err := render.Render(w, r, users); err != nil {
-		render.Render(w, r, ErrorRenderer(err))
-	}
+	c.JSON(http.StatusOK, users)
 }
 
-func getUserById(w http.ResponseWriter, r *http.Request) {
-	userID := r.Context().Value(userIDKey).(uuid.UUID)
+func getUserById(c *gin.Context) {
+	userID := uuid.MustParse(c.Param("userid"))
 	user, err := dbInstance.GetUserById(userID)
 	if err != nil {
 		if err == database.ErrNoMatch {
-			render.Render(w, r, ErrNotFound)
+			c.JSON(http.StatusNotFound, "Error: Resource not found")
 		} else {
-			render.Render(w, r, ErrorRenderer(err))
+			c.JSON(http.StatusBadRequest, "Error: Bad request")
 		}
 		return
 	}
-	if err := render.Render(w, r, &user); err != nil {
-		render.Render(w, r, ServerErrorRenderer(err))
-		return
-	}
+	c.JSON(http.StatusOK, user)
 }
 
-func deleteUser(w http.ResponseWriter, r *http.Request) {
-	userId := r.Context().Value(userIDKey).(uuid.UUID)
+func deleteUser(c *gin.Context) {
+	userId := uuid.MustParse(c.Param("userid"))
 	err := dbInstance.DeleteUser(userId)
 	if err != nil {
 		if err == database.ErrNoMatch {
-			render.Render(w, r, ErrNotFound)
+			c.JSON(http.StatusNotFound, "Error: Resource not found")
 		} else {
-			render.Render(w, r, ServerErrorRenderer(err))
+			c.JSON(http.StatusInternalServerError, "Internal Server Error")
 		}
 		return
 	}
+	c.JSON(http.StatusOK, userId)
 }
-func updateUser(w http.ResponseWriter, r *http.Request) {
-	userId := r.Context().Value(userIDKey).(uuid.UUID)
+func updateUser(c *gin.Context) {
+	r := c.Request
+	userId := uuid.MustParse(c.Param("userid"))
 	userData := models.User{}
 	if err := render.Bind(r, &userData); err != nil {
-		render.Render(w, r, ErrBadRequest)
+		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
 	user, err := dbInstance.UpdateUser(userId, userData)
 	if err != nil {
 		if err == database.ErrNoMatch {
-			render.Render(w, r, ErrNotFound)
+			c.JSON(http.StatusNotFound, "Error: Resource not found")
 		} else {
-			render.Render(w, r, ServerErrorRenderer(err))
+			c.JSON(http.StatusInternalServerError, "Internal Server Error")
 		}
 		return
 	}
-	if err := render.Render(w, r, &user); err != nil {
-		render.Render(w, r, ServerErrorRenderer(err))
-		return
-	}
+	c.JSON(http.StatusOK, user)
 }
