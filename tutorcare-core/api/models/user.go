@@ -36,8 +36,8 @@ type UserList struct {
 }
 
 func (i *User) Bind(r *http.Request) error {
-	if i.FirstName == "" || i.LastName == "" || i.Email == "" {
-		return fmt.Errorf("Firstname, Lastname, Email, and userID are required fields.")
+	if i.Email == "" || i.Password == "" {
+		return fmt.Errorf("Email and password are required fields.")
 	}
 	return nil
 }

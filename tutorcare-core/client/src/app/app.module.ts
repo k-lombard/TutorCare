@@ -5,16 +5,29 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { MatInputModule } from '@angular/material/input';
+import { UsersService } from './users.service';
+import { Http, ConnectionBackend, HttpModule } from '@angular/http';
+import { MatButtonModule } from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { LoginService } from './login.service';
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
+  imports: [  
+    BrowserModule,  
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatInputModule,
+    HttpClientModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    HttpModule
   ],
-  providers: [],
+  providers: [UsersService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
