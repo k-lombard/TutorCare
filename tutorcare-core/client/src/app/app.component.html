@@ -1,15 +1,3 @@
 <div>
-  <h1>{{ users }}</h1>
-  <form class="example-form">
-    <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>Email</mat-label>
-      <textarea [formControl]="emailFC" matInput (change)="onEmailChange()"></textarea>
-    </mat-form-field>
-  
-    <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>Password</mat-label>
-      <textarea [formControl]="passwordFC" matInput (change)="onPasswordChange()"></textarea>
-    </mat-form-field>
-  </form>
-  <button mat-stroked-button (click)="onLoginSubmit()" color="accent">Login</button>
+  <router-outlet></router-outlet>
 </div>

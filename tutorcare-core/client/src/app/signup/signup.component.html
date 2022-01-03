@@ -1,0 +1,24 @@
+<div>
+    <navbar></navbar>
+    <h1>{{ users }}</h1>
+    <form class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>First Name</mat-label>
+            <textarea [formControl]="firstNameFC" matInput (change)="onFirstNameChange()"></textarea>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Last Name</mat-label>
+            <textarea [formControl]="lastNameFC" matInput (change)="onLastNameChange()"></textarea>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Email</mat-label>
+            <textarea [formControl]="emailFC" matInput (change)="onEmailChange()"></textarea>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Password</mat-label>
+            <textarea [formControl]="passwordFC" matInput (change)="onPasswordChange()"></textarea>
+        </mat-form-field>
+    </form>
+    <button mat-stroked-button (click)="onSignupSubmit()" color="accent">Signup</button> 
+    <button mat-stroked-button (click)="onLoginSubmit()" color="accent">Login</button>  
+</div>
