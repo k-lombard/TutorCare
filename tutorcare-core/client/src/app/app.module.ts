@@ -20,6 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignupService } from './signup/signup.service';
+import { HomeComponent } from './home/home.component';
 
 
 
@@ -29,7 +30,8 @@ import { SignupService } from './signup/signup.service';
     AppComponent,
     LoginComponent,
     NavbarComponent,
-    SignupComponent
+    SignupComponent,
+    HomeComponent
   ],
   imports: [  
     BrowserModule,  

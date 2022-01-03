@@ -3,11 +3,13 @@
       <h1>TutorCare</h1>
       <span class="menu-spacer"></span>
       <div>
-        <a mat-button [routerLink]="'/home'"> Home </a>
-        <a mat-button [routerLink]="'/find-care'"> Find Care </a>
-        <a mat-button [routerLink]="'/find-jobs'"> Find Jobs </a>
-        <a mat-button [routerLink]="'/about-us'"> About Us </a>
-        <a mat-button [routerLink]="'/account'"> Account </a>
+        <a mat-button [routerLink]="'/home'" (click)="onHomeClick()"> Home </a>
+        <a mat-button [routerLink]="'/find-care'" (click)="onFindCareClick()"> Find Care </a>
+        <a mat-button [routerLink]="'/find-jobs'" (click)="onFindJobsClick()"> Find Jobs </a>
+        <a mat-button [routerLink]="'/about-us'" (click)="onAboutUsClick()"> About Us </a>
+        <a mat-button [routerLink]="'/account'" (click)="onAccountClick()"> Account </a>
+        <a mat-button [routerLink]="'/login'" (click)="onLoginClick()"> Login </a>
+        <a mat-button [routerLink]="'/signup'" (click)="onSignupClick()"> Signup </a>
       </div>
     </mat-toolbar-row>
 </mat-toolbar>
