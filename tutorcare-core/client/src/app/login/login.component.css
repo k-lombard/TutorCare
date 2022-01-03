@@ -1,3 +1,21 @@
 button {
     margin: 50px;
 }
+
+mat-card {
+    margin:  40px 20%;
+    padding-bottom: 20px;
+}
+
+mat-card-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+mat-form-field {
+    display: block;
+}
+
+#login-button {
+    float: right;
+}

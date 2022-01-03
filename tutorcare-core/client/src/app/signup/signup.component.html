@@ -2,23 +2,34 @@
     <navbar></navbar>
     <h1>{{ users }}</h1>
     <form class="example-form">
-        <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>First Name</mat-label>
-            <textarea [formControl]="firstNameFC" matInput (change)="onFirstNameChange()"></textarea>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Last Name</mat-label>
-            <textarea [formControl]="lastNameFC" matInput (change)="onLastNameChange()"></textarea>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Email</mat-label>
-            <textarea [formControl]="emailFC" matInput (change)="onEmailChange()"></textarea>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Password</mat-label>
-            <textarea [formControl]="passwordFC" matInput (change)="onPasswordChange()"></textarea>
-        </mat-form-field>
+        <mat-card>
+            <mat-card-title>Sign Up</mat-card-title>
+            <mat-form-field appearance="outline">
+                <mat-label>First Name</mat-label>
+                <input [formControl]="firstNameFC" matInput (change)="onFirstNameChange()">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Last Name</mat-label>
+                <input [formControl]="lastNameFC" matInput (change)="onLastNameChange()">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input [formControl]="emailFC" matInput (change)="onEmailChange()">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input [formControl]="passwordFC" matInput (change)="onPasswordChange()">
+            </mat-form-field>
+            
+            <mat-card-actions>
+                <button mat-button (click)="onLoginSubmit()" color="accent">
+                    <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">login</mat-icon> -->
+                    <span>LOGIN</span>
+                </button> 
+                <button mat-raised-button (click)="onSignupSubmit()" color="primary" id="login-button">
+                    <span>SIGN UP</span>
+                </button>  
+            </mat-card-actions>
+        </mat-card>
     </form>
-    <button mat-stroked-button (click)="onSignupSubmit()" color="accent">Signup</button> 
-    <button mat-stroked-button (click)="onLoginSubmit()" color="accent">Login</button>  
 </div>
