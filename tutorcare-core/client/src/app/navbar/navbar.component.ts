@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css'],
+  styleUrls: ['./navbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class NavbarComponent implements OnInit {

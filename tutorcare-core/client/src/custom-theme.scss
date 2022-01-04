@@ -63,7 +63,7 @@ $my-custom-typography: mat.define-typography-config(
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $tutorcare-core-primary: mat.define-palette($custom0);
-$tutorcare-core-accent: mat.define-palette($custom0, A200, A100, A400, A700);
+$tutorcare-core-accent: mat.define-palette($custom0, A100, A200, A400, A700);
 
 // The warn palette is optional (defaults to red).
 $tutorcare-core-warn: mat.define-palette(mat.$red-palette);
