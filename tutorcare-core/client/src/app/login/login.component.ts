@@ -19,12 +19,17 @@ export class LoginComponent implements OnInit {
   users: Object | undefined
   output: Object | undefined
   email: string = ""
+  pos: string | undefined
   password: string = ""
   emailFC = new FormControl();
   passwordFC = new FormControl();
   constructor(private router: Router, private usersService: UsersService, private loginService: LoginService) {}
 
   ngOnInit() {
+    this.loginService.getPosition().subscribe(pos => {
+        this.pos = pos
+        console.log(pos)
+    })
     this.loading = true
     this.getUsersFunc()
     console.log(this.users)

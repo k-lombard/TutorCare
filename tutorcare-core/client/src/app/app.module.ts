@@ -23,6 +23,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignupService } from './signup/signup.service';
 import { HomeComponent } from './home/home.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+
 
 
 
@@ -48,7 +50,8 @@ import { HomeComponent } from './home/home.component';
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatGridListModule
   ],
   providers: [UsersService, LoginService, SignupService],
   bootstrap: [AppComponent]
