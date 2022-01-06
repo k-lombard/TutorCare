@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+@import "../../custom-theme.scss"; 
+
+h1 {
+    color: mat.get-color-from-palette($tutorcare-core-accent, A100);
+    font-family: "Dosis" !important;
+    font-size: 36px !important;
+}
+
+.mat-h1 {
+    color: mat.get-color-from-palette($tutorcare-core-accent, A100);
+    font-family: "Dosis" !important;
+}
+
+.mat-button {
+    margin: 30px;
+    font-size: 16px !important;
+    margin-bottom: 25px !important;
+}

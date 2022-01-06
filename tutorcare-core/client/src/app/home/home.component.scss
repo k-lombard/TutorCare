@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+@import "../../custom-theme.scss";
+h1 {
+    margin: 50px;
+    font-family: "Mako";
+    font-size: 86px;
+    font-weight: normal;
+    font-style: normal;
+    color: mat.get-color-from-palette($tutorcare-core-accent, A100);
+}
+
+h2 {
+    margin-top: 20px;
+    font-size: 40px;
+    font-family: "Dosis";
+    color: black;
+    line-height: 40px;
+
+}
