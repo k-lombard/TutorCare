@@ -1,0 +1,23 @@
+<div>
+    <navbar></navbar>
+    <form class="example-form">
+      <mat-card>
+        <mat-card-title>Login</mat-card-title>
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input [formControl]="emailFC" matInput (change)="onEmailChange()">
+        </mat-form-field>
+      
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Password</mat-label>
+          <input [formControl]="passwordFC" matInput (change)="onPasswordChange()">
+        </mat-form-field>
+        
+        <mat-card-actions>
+        <button mat-button (click)="onSignupSubmit()" color="accent">SIGN UP</button>  
+        <button mat-raised-button (click)="onLoginSubmit()" color="primary" id="login-button">LOGIN</button> 
+        </mat-card-actions>
+      </mat-card>
+    </form>
+</div>
+  

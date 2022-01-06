@@ -1,0 +1,6 @@
+@use '@angular/material' as mat;
+@import "../../custom-theme.scss";
+h1 {
+    text-align: center;
+    font-family: "Dosis";
+}
