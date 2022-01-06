@@ -17,6 +17,18 @@ type User struct {
 	Status     bool      `json:"status"`
 }
 
+type UserWithTokens struct {
+	UserID       uuid.UUID `sql:",pk" json:"user_id"`
+	FirstName    string    `json:"first_name"`
+	LastName     string    `json:"last_name"`
+	Email        string    `json:"email"`
+	Password     string    `json:"password"`
+	DateJoined   string    `json:"date_joined"`
+	Status       bool      `json:"status"`
+	AccessToken  string    `json:"access_token"`
+	RefreshToken string    `json:"refresh_token"`
+}
+
 type TokenDetails struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`

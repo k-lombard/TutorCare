@@ -43,6 +43,7 @@ testem.log
 /typings
 .env
 /api/pgdata
+/client/.angular
 
 # System Files
 .DS_Store

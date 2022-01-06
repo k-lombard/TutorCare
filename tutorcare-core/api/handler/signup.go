@@ -92,7 +92,6 @@ func loginPage(c *gin.Context) {
 		c.JSON(http.StatusNotFound, "Resource not found")
 		return
 	}
-	c.JSON(http.StatusOK, userOut)
 	h := fnv.New64a()
 	h.Write([]byte(userOut.UserID.String()))
 	summedUserID := h.Sum64()
@@ -106,11 +105,13 @@ func loginPage(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, saveErr.Error())
 	}
 
-	tokens := map[string]string{
-		"access_token":  ts.AccessToken,
-		"refresh_token": ts.RefreshToken,
-	}
-	c.JSON(http.StatusOK, tokens)
+	// tokens := map[string]string{
+	// 	"access_token":  ts.AccessToken,
+	// 	"refresh_token": ts.RefreshToken,
+	// }
+	userOut.AccessToken = ts.AccessToken
+	userOut.RefreshToken = ts.RefreshToken
+	c.JSON(http.StatusOK, userOut)
 }
 
 func NewToken(userid uint64) (*models.TokenDetails, error) {

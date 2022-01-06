@@ -19,9 +19,9 @@ func (db Database) Signup(user *models.User) bool {
 	}
 }
 
-func (db Database) Login(user *models.User) (models.User, bool) {
+func (db Database) Login(user *models.User) (models.UserWithTokens, bool) {
 
-	userOut := models.User{}
+	userOut := models.UserWithTokens{}
 
 	db.Conn.QueryRow("SELECT * FROM users WHERE email = $1;", user.Email).Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status)
 	isMatch := comparePasswords(userOut.Password, []byte(user.Password))
