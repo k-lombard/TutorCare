@@ -35,13 +35,13 @@ export class AuthService {
            }), {headers: this.headers})
     }
 
-    // getPosition(): Observable<any> {
-    //     return new Observable((observer: any) => {
-    //       window.navigator.geolocation.getCurrentPosition(position => {
-    //         observer.next(position);
-    //         observer.complete();
-    //       },
-    //         error => observer.error(error));
-    //     });
-    // }
+    getPosition(): Observable<any> {
+        return new Observable((observer: any) => {
+          window.navigator.geolocation.getCurrentPosition(position => {
+            observer.next(position);
+            observer.complete();
+          },
+            error => observer.error(error));
+        });
+    }
 }

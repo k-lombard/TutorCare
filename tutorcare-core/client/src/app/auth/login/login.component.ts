@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/reducers';
 import Swal from 'sweetalert2'
 import { User } from 'src/app/models/user.model';
+import { _getOptionScrollPosition } from '@angular/material/core';
 
 
 @Component({
@@ -77,6 +78,9 @@ export class LoginComponent implements OnInit {
       title: 'Success!',
       text: 'You have successfully logged in.',
       icon: 'success',
+    })
+    this.authService.getPosition().subscribe(resp => {
+      console.log(resp)
     })
   }
   timeout(ms: number) {
