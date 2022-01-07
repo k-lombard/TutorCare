@@ -10,7 +10,7 @@ import (
 type GeolocationPosition struct {
 	UserID     uuid.UUID `sql:",fk" json:"user_id"`
 	LocationID int       `json:"location_id"`
-	Accuracy   string    `json:"accuracy"`
+	Accuracy   float32   `json:"accuracy"`
 	Latitude   float32   `json:"latitude"`
 	Longitude  float32   `json:"longitude"`
 	Timestamp  string    `json:"timestamp"`
@@ -21,8 +21,8 @@ type GeolocationPositionList struct {
 }
 
 func (i *GeolocationPosition) Bind(r *http.Request) error {
-	if i.Latitude == 0 || i.Longitude == 0 || (i.UserID).String() == "" {
-		return fmt.Errorf("Latitude, longitude, and user_id are required fields.")
+	if i.Accuracy == 0 || i.Latitude == 0 || i.Longitude == 0 || (i.UserID).String() == "" {
+		return fmt.Errorf("Accuracy, latitude, longitude, and user_id are required fields.")
 	}
 	return nil
 }

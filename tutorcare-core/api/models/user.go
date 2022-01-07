@@ -8,13 +8,16 @@ import (
 )
 
 type User struct {
-	UserID     uuid.UUID `sql:",pk" json:"user_id"`
-	FirstName  string    `json:"first_name"`
-	LastName   string    `json:"last_name"`
-	Email      string    `json:"email"`
-	Password   string    `json:"password"`
-	DateJoined string    `json:"date_joined"`
-	Status     bool      `json:"status"`
+	UserID       uuid.UUID `sql:",pk" json:"user_id"`
+	FirstName    string    `json:"first_name"`
+	LastName     string    `json:"last_name"`
+	Email        string    `json:"email"`
+	Password     string    `json:"password"`
+	DateJoined   string    `json:"date_joined"`
+	Status       bool      `json:"status"`
+	UserCategory string    `json:"user_category"`
+	Experience   string    `json:"experience"`
+	Bio          string    `json:"bio"`
 }
 
 type UserWithTokens struct {
@@ -25,6 +28,9 @@ type UserWithTokens struct {
 	Password     string    `json:"password"`
 	DateJoined   string    `json:"date_joined"`
 	Status       bool      `json:"status"`
+	UserCategory string    `json:"user_category"`
+	Experience   string    `json:"experience"`
+	Bio          string    `json:"bio"`
 	AccessToken  string    `json:"access_token"`
 	RefreshToken string    `json:"refresh_token"`
 }
@@ -48,6 +54,13 @@ type UserList struct {
 }
 
 func (i *User) Bind(r *http.Request) error {
+	if i.Email == "" || i.Password == "" {
+		return fmt.Errorf("Email and password are required fields.")
+	}
+	return nil
+}
+
+func (i *UserWithTokens) Bind(r *http.Request) error {
 	if i.Email == "" || i.Password == "" {
 		return fmt.Errorf("Email and password are required fields.")
 	}

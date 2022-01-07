@@ -4,7 +4,7 @@ import {LoginComponent} from './login/login.component';
 import {MatCardModule} from "@angular/material/card";
 import { MatInputModule } from "@angular/material/input";
 import {RouterModule} from "@angular/router";
-import {ReactiveFormsModule} from "@angular/forms";
+import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import { StoreModule } from '@ngrx/store';
 import {AuthService} from "./auth.service";
@@ -23,11 +23,15 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { AccountComponent } from '../account/account.component';
+import {MatSelectModule} from '@angular/material/select';
+
 
 
 @NgModule({
     imports: [
         CommonModule,
+        FormsModule,
+        MatSelectModule,
         ReactiveFormsModule,
         MatInputModule,
         MatCardModule,
@@ -40,7 +44,7 @@ import { AccountComponent } from '../account/account.component';
         MatListModule,
         MatIconModule,
         MatGridListModule,
-        RouterModule.forChild([{path: '', component: LoginComponent}]),
+        RouterModule,
         StoreModule.forFeature('auth', fromAuth.authReducer),
         EffectsModule.forFeature([AuthEffects]),
 

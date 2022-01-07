@@ -7,14 +7,17 @@ import { AuthModule } from './auth/auth.module';
 import { AccountComponent } from './account/account.component';
 
 const routes: Routes = [
+  { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'home', component: HomeComponent },
   { path: 'find-care', component: HomeComponent },
   { path: 'find-jobs', component: HomeComponent },
   { path: 'about-us', component: HomeComponent },
   { path: 'account', component: AccountComponent },
-  { path: '',   redirectTo: 'login', pathMatch: 'full' }
+  { path: '',   redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: '/home', pathMatch: 'full' },
+  { path: '',   component: HomeComponent }
+
 ];
 
 @NgModule({

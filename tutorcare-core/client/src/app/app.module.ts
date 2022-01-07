@@ -11,7 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { UsersService } from './users.service';
 import { Http, ConnectionBackend, HttpModule } from '@angular/http';
 import { MatButtonModule } from '@angular/material/button';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
@@ -39,6 +39,7 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [  
     RouterModule,
+    FormsModule,
     BrowserModule,  
     AppRoutingModule,
     BrowserAnimationsModule,

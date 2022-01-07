@@ -27,8 +27,6 @@ export class AuthService {
         // let url = `${environment.serverUrl}/api/login/`;
         let url = `/api/login/`;
         return this.http.post<any>(url, JSON.stringify({
-               "first_name": "",
-               "last_name": "",
                "email": email,
                "password": password,
                

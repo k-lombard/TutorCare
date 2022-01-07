@@ -61,6 +61,8 @@ func RouteHandler(db database.Database) *gin.Engine {
 	}
 	r.router.Use(CORSMiddleware())
 	api := r.router.Group("/api", CORSMiddleware())
+	geolocationpositions := api.Group("/geolocationpositions")
+	r.geolocationpositions(geolocationpositions)
 	users := api.Group("/users")
 	r.users(users)
 	signup := api.Group("/signup")

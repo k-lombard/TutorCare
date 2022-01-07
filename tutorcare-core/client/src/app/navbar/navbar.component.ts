@@ -13,18 +13,18 @@ import { getCurrUser } from '../auth/auth.selectors';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class NavbarComponent implements OnInit {
-  // user$: Observable<User> | undefined;
   user: User | undefined;
-  name: string = "Account"
+  name = "Account"
   constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit() {
+    this.name = "Account"
     this.store
       .pipe(
         select(getCurrUser)
       ).subscribe(data =>  {
         this.user = data
-        this.name = (this.user? this.user.first_name : "") + " " + (this.user ? this.user.last_name : "")
+        this.name = (this.user? this.user.first_name + " " + this.user.last_name: "Account")
       })
   }
 

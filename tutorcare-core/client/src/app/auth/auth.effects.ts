@@ -21,7 +21,7 @@ export class AuthEffects {
     tap(() => {
 
       sessionStorage.removeItem("user");
-      this.router.navigateByUrl('/login');
+      // this.router.navigateByUrl('/login');
 
     })
   );
