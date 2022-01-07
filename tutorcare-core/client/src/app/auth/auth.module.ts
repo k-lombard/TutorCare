@@ -24,8 +24,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { AccountComponent } from '../account/account.component';
 import {MatSelectModule} from '@angular/material/select';
-
-
+import { GoogleMapsModule } from '@angular/google-maps'
+import { FindCareComponent } from '../find-care/find-care.component';
 
 @NgModule({
     imports: [
@@ -45,6 +45,7 @@ import {MatSelectModule} from '@angular/material/select';
         MatIconModule,
         MatGridListModule,
         RouterModule,
+        GoogleMapsModule,
         StoreModule.forFeature('auth', fromAuth.authReducer),
         EffectsModule.forFeature([AuthEffects]),
 
@@ -54,7 +55,8 @@ import {MatSelectModule} from '@angular/material/select';
         NavbarComponent,
         SignupComponent,
         HomeComponent,
-        AccountComponent
+        AccountComponent,
+        FindCareComponent
     ],
     exports: [LoginComponent]
 })

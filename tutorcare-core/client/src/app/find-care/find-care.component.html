@@ -1,0 +1,30 @@
+<div>
+    <navbar></navbar>
+    <google-map
+        height="350px"
+        width="100%"
+        [zoom]="zoom"
+        [center]="center"
+        [options]="options"
+    ></google-map>
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+          <span class="menu-spacer"></span>
+          <div>
+            <a mat-button [routerLink]="'/find-care'" (click)="onFindCareClick()"> <mat-icon>arrow_back</mat-icon> </a>
+            <a> Name </a>
+            <a> Rating </a>
+            <a> Jobs </a>
+            <a> First Available </a>
+            <mat-form-field [style.font-size]="'16px'" [style.margin-top]="'30px'" [style.margin-left]="'120px'" appearance="fill">
+                <mat-label>Filter By</mat-label>
+                    <mat-select [(ngModel)]="selectedValue" name="option">
+                    <mat-option *ngFor="let option of filter_options" [value]="option.value">
+                        {{option.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</div>  

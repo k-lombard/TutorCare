@@ -1,0 +1,11 @@
+@use '@angular/material' as mat;
+@import "../../custom-theme.scss"; 
+a {
+    margin-left: 120px;
+    font-size: 16px !important;
+    margin-bottom: 40px;
+}
+
+.mat-icon {
+    margin-left: -120px !important;
+}

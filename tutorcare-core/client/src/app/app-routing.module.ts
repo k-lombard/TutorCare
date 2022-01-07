@@ -5,12 +5,13 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { AuthModule } from './auth/auth.module';
 import { AccountComponent } from './account/account.component';
+import { FindCareComponent } from './find-care/find-care.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'find-care', component: HomeComponent },
+  { path: 'find-care', component: FindCareComponent },
   { path: 'find-jobs', component: HomeComponent },
   { path: 'about-us', component: HomeComponent },
   { path: 'account', component: AccountComponent },
