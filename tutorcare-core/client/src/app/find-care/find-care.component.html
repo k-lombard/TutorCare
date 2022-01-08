@@ -6,7 +6,10 @@
         [zoom]="zoom"
         [center]="center"
         [options]="options"
-    ></google-map>
+    >
+
+    <map-marker *ngFor="let marker of markers" [position]="marker.position"></map-marker>
+    </google-map>
     <mat-toolbar color="primary">
         <mat-toolbar-row>
           <span class="menu-spacer"></span>
@@ -27,4 +30,15 @@
           </div>
         </mat-toolbar-row>
     </mat-toolbar>
+    <mat-list>
+        <mat-list-item *ngFor="let loc of locs">
+            <!-- <mat-grid-list cols="2" rowHeight="1:1">
+            <mat-grid-tile>1</mat-grid-tile>
+            <mat-grid-tile>2</mat-grid-tile>
+            <mat-grid-tile>3</mat-grid-tile>
+            <mat-grid-tile>4</mat-grid-tile> -->
+          <!-- </mat-grid-list> -->
+            <p>{{loc.user.first_name}} {{loc.user.last_name}}</p>
+        </mat-list-item>
+      </mat-list> 
 </div>  

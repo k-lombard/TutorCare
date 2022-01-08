@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"main/database"
 	"net/http"
 
@@ -13,6 +14,7 @@ import (
 
 func (r routes) geolocationpositions(rg *gin.RouterGroup) {
 	rg.GET("/", getAllGeolocationPositions)
+	rg.GET("/caregivers", getCaregiverGeolocationPositions)
 	rg.POST("/", addGeolocationPosition)
 	rg.GET("/:userid", getGeolocationPositionByUserId)
 	rg.PUT("/:userid", updateGeolocationPosition)
@@ -38,6 +40,16 @@ func getAllGeolocationPositions(c *gin.Context) {
 	locs, err := dbInstance.GetAllLocations()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, "Internal Server Error")
+		return
+	}
+	c.JSON(http.StatusOK, locs)
+}
+
+func getCaregiverGeolocationPositions(c *gin.Context) {
+	locs, err := dbInstance.GetCaregiverLocations()
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
 	c.JSON(http.StatusOK, locs)

@@ -32,6 +32,7 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { CustomSerializer } from './shared/utils';
 import { RouterModule } from '@angular/router';
+import { FindCareService } from './find-care/find-care.service';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,7 @@ import { RouterModule } from '@angular/router';
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, { provide: RouterStateSerializer, useClass: CustomSerializer }],
+  providers: [UsersService, SignupService, FindCareService, { provide: RouterStateSerializer, useClass: CustomSerializer }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

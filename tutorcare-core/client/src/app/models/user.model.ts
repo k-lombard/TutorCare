@@ -5,6 +5,9 @@ export interface User {
     password?: string
     date_joined?: string
     status?: boolean
+    user_category?: string
+    experience?: string
+    bio?: string
     access_token?: string
     refresh_token?: string
 }

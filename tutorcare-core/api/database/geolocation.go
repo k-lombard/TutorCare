@@ -25,6 +25,33 @@ func (db Database) GetAllLocations() (*models.GeolocationPositionList, error) {
 	}
 	return list, nil
 }
+
+func (db Database) GetCaregiverLocations() (*models.GeolocationPositionWithUserList, error) {
+	list := &models.GeolocationPositionWithUserList{}
+	rows, err := db.Conn.Query("SELECT * FROM geolocation ORDER BY location_id DESC")
+	if err != nil {
+		return list, err
+	}
+	for rows.Next() {
+		var loc models.GeolocationPositionWithUser
+		err5 := rows.Scan(&loc.UserID, &loc.LocationID, &loc.Accuracy, &loc.Latitude, &loc.Longitude, &loc.Timestamp)
+		if err5 != nil {
+			return list, err5
+		}
+		var us models.User
+		err2 := db.Conn.QueryRow(`SELECT * FROM users WHERE user_id = $1;`, loc.UserID).Scan(&us.UserID, &us.FirstName, &us.LastName, &us.Email, &us.Password, &us.DateJoined, &us.Status, &us.UserCategory, &us.Experience, &us.Bio)
+		if err2 != nil {
+			return list, err2
+		}
+		if us.UserCategory != "caregiver" {
+			return list, ErrNoMatch
+		}
+		loc.User = us
+		list.GeolocationPositions = append(list.GeolocationPositions, loc)
+	}
+	return list, nil
+}
+
 func (db Database) AddGeolocationPosition(loc *models.GeolocationPosition) (models.GeolocationPosition, error) {
 	sqlStatement := `INSERT INTO geolocation (user_id, accuracy, latitude, longitude) VALUES ($1, $2, $3, $4) RETURNING location_id, timestamp;`
 	var id int

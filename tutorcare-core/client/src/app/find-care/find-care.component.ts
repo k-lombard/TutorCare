@@ -1,5 +1,7 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { Router } from '@angular/router';
+import { GeolocationPositionWithUser } from '../models/geolocationposition.model';
+import { FindCareService } from './find-care.service';
 
 interface FilterOption {
     value: string;
@@ -11,6 +13,7 @@ interface FilterOption {
   styleUrls: ['./find-care.component.scss']
 })
 export class FindCareComponent implements OnInit {
+    markers: any[] | undefined;
     zoom = 12
     center!: google.maps.LatLngLiteral
     options: google.maps.MapOptions = {
@@ -219,7 +222,9 @@ export class FindCareComponent implements OnInit {
         {value: 'first-4', viewValue: 'Most Recent'},
         {value: 'first-5', viewValue: 'Least Recent'}
     ];
-    constructor(private router: Router) {}
+
+    locs: GeolocationPositionWithUser[] | undefined
+    constructor(private router: Router, private findCare: FindCareService) {}
 
     ngOnInit() {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -228,6 +233,26 @@ export class FindCareComponent implements OnInit {
                 lng: position.coords.longitude,
             }
         })
+        this.findCare.getLocs().subscribe(data => {
+            this.locs = data
+            console.log(this.locs)
+            let marks: any[] = []
+            for(const loc of this.locs) {
+                console.log(loc)
+                var marker = JSON.parse(JSON.stringify({
+                    "position": {
+                        "lat": loc.latitude,
+                        "lng": loc.longitude
+                    }
+                }))
+                console.log(marker)
+                marks.push(marker)
+                console.log(marks)
+            }
+            this.markers = marks
+            console.log(this.markers)
+        })
+
     }
     onFindCareClick() {
         this.router.navigate(['/find-care'])

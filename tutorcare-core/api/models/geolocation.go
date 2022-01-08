@@ -16,8 +16,22 @@ type GeolocationPosition struct {
 	Timestamp  string    `json:"timestamp"`
 }
 
+type GeolocationPositionWithUser struct {
+	UserID     uuid.UUID `sql:",fk" json:"user_id"`
+	LocationID int       `json:"location_id"`
+	Accuracy   float32   `json:"accuracy"`
+	Latitude   float32   `json:"latitude"`
+	Longitude  float32   `json:"longitude"`
+	Timestamp  string    `json:"timestamp"`
+	User       User      `json:"user"`
+}
+
 type GeolocationPositionList struct {
 	GeolocationPositions []GeolocationPosition `json:"geolocation_positions"`
+}
+
+type GeolocationPositionWithUserList struct {
+	GeolocationPositions []GeolocationPositionWithUser `json:"geolocation_positions"`
 }
 
 func (i *GeolocationPosition) Bind(r *http.Request) error {
