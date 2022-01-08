@@ -1,6 +1,15 @@
 <div>
     <navbar></navbar>
     <mat-card>
-        <h1>{{ name }}</h1>
+        <mat-grid-list cols="5" rowHeight="2:1" ratio="1:1">
+            <mat-grid-tile [rowspan]="2"><img id="stock" src="../../assets/images/profile_picture.jpeg"/></mat-grid-tile>
+            <mat-grid-tile><h1>{{ first_name }}</h1></mat-grid-tile>
+            <mat-grid-tile><h1>{{ last_name }}</h1></mat-grid-tile>
+            <mat-grid-tile><bar-rating [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating></mat-grid-tile>
+            <mat-grid-tile></mat-grid-tile>
+            <mat-grid-tile><h2>Type: {{ user_type }}</h2></mat-grid-tile>
+            <mat-grid-tile><h2> Badges: <mat-icon>check_circle</mat-icon></h2></mat-grid-tile>
+            <mat-grid-tile><button color="Primary" class="edit-profile" mat-raised-button>Edit Profile <mat-icon>edit_icon</mat-icon></button></mat-grid-tile>
+        </mat-grid-list>
     </mat-card>
 </div>

@@ -3,4 +3,27 @@
 h1 {
     text-align: center;
     font-family: "Dosis";
+    font-size: 80px;
+}
+
+
+[id="stock"] {
+    border-radius: 50% !important;
+    border: solid 1px #000 !important;
+    height: 200px;
+    width: 200px;
+}
+
+h2 {
+    text-align: center;
+    font-family: "Dosis";
+    font-size: 30px;
+}
+
+.edit-profile{
+    width: 200px!important;
+    min-width: unset!important;
+    color: white;
+    background-color: mat.get-color-from-palette($tutorcare-core-primary);
+    border-radius: 30px !important;
 }

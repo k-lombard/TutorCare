@@ -26,7 +26,7 @@ import { AccountComponent } from '../account/account.component';
 import {MatSelectModule} from '@angular/material/select';
 import { GoogleMapsModule } from '@angular/google-maps'
 import { FindCareComponent } from '../find-care/find-care.component';
-
+import { BarRatingModule } from "ngx-bar-rating";
 @NgModule({
     imports: [
         CommonModule,
@@ -43,6 +43,7 @@ import { FindCareComponent } from '../find-care/find-care.component';
         MatSidenavModule,
         MatListModule,
         MatIconModule,
+        BarRatingModule,
         MatGridListModule,
         RouterModule,
         GoogleMapsModule,

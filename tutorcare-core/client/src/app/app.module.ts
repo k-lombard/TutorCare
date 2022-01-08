@@ -33,6 +33,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { CustomSerializer } from './shared/utils';
 import { RouterModule } from '@angular/router';
 import { FindCareService } from './find-care/find-care.service';
+import { BarRatingModule } from 'ngx-bar-rating';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { FindCareService } from './find-care/find-care.service';
     MatCardModule,
     HttpClientModule,
     MatButtonModule,
+    BarRatingModule,
     ReactiveFormsModule,
     HttpModule,
     MatToolbarModule,
