@@ -14,7 +14,7 @@ interface Option {
 @Component({
   selector: 'signup-component',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css'],
+  styleUrls: ['./signup.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class SignupComponent implements OnInit {

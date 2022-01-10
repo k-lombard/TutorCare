@@ -21,6 +21,20 @@ func (r routes) logout(rg *gin.RouterGroup) {
 
 func (r routes) token(rg *gin.RouterGroup) {
 	rg.POST("/refresh", Refresh)
+	rg.GET("/valid", IsAccessTokenValid)
+}
+
+func IsAccessTokenValid(c *gin.Context) {
+	r := c.Request
+	tokenMetaData, err := ExtractTokenMetadata(r)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, false)
+	}
+	num, err2 := GetAuthentication(tokenMetaData)
+	if err2 != nil || num == 0 {
+		c.JSON(http.StatusBadRequest, false)
+	}
+	c.JSON(http.StatusOK, true)
 }
 
 func TokenAuthMiddleware() gin.HandlerFunc {

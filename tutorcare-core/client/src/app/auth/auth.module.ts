@@ -15,7 +15,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { SignupComponent } from '../signup/signup.component';
 import { HomeComponent } from '../home/home.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -27,6 +27,8 @@ import {MatSelectModule} from '@angular/material/select';
 import { GoogleMapsModule } from '@angular/google-maps'
 import { FindCareComponent } from '../find-care/find-care.component';
 import { BarRatingModule } from "ngx-bar-rating";
+import { EditProfileComponent } from '../account/edit-profile/edit-profile.component';
+import { AuthInterceptor } from './auth.interceptor';
 @NgModule({
     imports: [
         CommonModule,
@@ -57,7 +59,8 @@ import { BarRatingModule } from "ngx-bar-rating";
         SignupComponent,
         HomeComponent,
         AccountComponent,
-        FindCareComponent
+        FindCareComponent,
+        EditProfileComponent
     ],
     exports: [LoginComponent]
 })
@@ -66,8 +69,13 @@ export class AuthModule {
         return {
             ngModule: AuthModule,
             providers: [
-              AuthService
-            //   AuthGuard
+              AuthService,
+              {
+                provide : HTTP_INTERCEPTORS,
+                useClass: AuthInterceptor,
+                multi   : true,
+              },
+              AuthGuard
             ]
         }
     }

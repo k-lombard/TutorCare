@@ -34,6 +34,7 @@ import { CustomSerializer } from './shared/utils';
 import { RouterModule } from '@angular/router';
 import { FindCareService } from './find-care/find-care.service';
 import { BarRatingModule } from 'ngx-bar-rating';
+import { EditProfileService } from './account/edit-profile/edit-profile.service';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,7 @@ import { BarRatingModule } from 'ngx-bar-rating';
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, { provide: RouterStateSerializer, useClass: CustomSerializer }],
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, { provide: RouterStateSerializer, useClass: CustomSerializer }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

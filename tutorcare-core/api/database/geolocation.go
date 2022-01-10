@@ -43,11 +43,10 @@ func (db Database) GetCaregiverLocations() (*models.GeolocationPositionWithUserL
 		if err2 != nil {
 			return list, err2
 		}
-		if us.UserCategory != "caregiver" {
-			return list, ErrNoMatch
+		if us.UserCategory == "caregiver" {
+			loc.User = us
+			list.GeolocationPositions = append(list.GeolocationPositions, loc)
 		}
-		loc.User = us
-		list.GeolocationPositions = append(list.GeolocationPositions, loc)
 	}
 	return list, nil
 }

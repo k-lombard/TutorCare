@@ -3,6 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { User } from '../models/user.model';
 import { getCurrUser } from '../auth/auth.selectors';
+import { Router, ActivatedRoute, NavigationExtras} from '@angular/router';
 
 @Component({
     selector: 'account-component',
@@ -15,7 +16,7 @@ export class AccountComponent implements OnInit {
     last_name: string |undefined
     rate: number = 4.5
     user_type: string | undefined
-    constructor(private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute) {}
 
     ngOnInit() {
         this.store
@@ -27,6 +28,10 @@ export class AccountComponent implements OnInit {
             this.last_name = (this.user ? this.user.last_name : "")
             this.user_type = this.user.user_category? this.user.user_category.charAt(0).toUpperCase() + this.user.user_category.substring(1) : ""
         })
+    }
+
+    onEditProfileClick() {
+        this.router.navigate(['edit-profile'], {relativeTo: this.route})
     }
 
 

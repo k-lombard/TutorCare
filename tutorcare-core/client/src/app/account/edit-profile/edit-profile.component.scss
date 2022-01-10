@@ -1,0 +1,81 @@
+button {
+    margin: 50px;
+}
+
+mat-card {
+    margin:  40px 20%;
+    padding-bottom: 20px;
+}
+
+mat-card-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+mat-form-field {
+    display: block;
+}
+
+#save-button {
+    float: right;
+}
+
+mat-icon {
+    margin: auto 5px;
+}
+
+.textarea-inline-control {
+    flex: 1;
+    border-color: transparent;
+    padding: 7px 0px 40px;
+    line-height: 1.28;
+    resize: none;
+    box-shadow: transparent 0px 0px 0px 1px;
+    overflow: auto;
+    overflow-y: hidden;  
+    overflow-x: hidden;
+    border-radius: 3px;
+    appearance: none;
+    display: flex;
+    &:hover:not(:focus) {  
+        background-color: rgb(235, 236, 240);
+        overflow-x: hidden;
+        display: flex;
+        flex: 1;
+    }
+
+    &:focus {
+        background-color: rgb(255,255,255);
+        border: 1px solid #4c9aff;
+        box-shadow: 0 0 0 1px #4c9aff;
+        outline: none;
+    }
+}
+
+[id="email-field"] {
+    flex: 1;
+    border-color: transparent;
+    padding: 7px 0px 8px;
+    line-height: 1.28;
+    resize: none;
+    box-shadow: transparent 0px 0px 0px 1px;
+    overflow: auto;
+    overflow-y: hidden;  
+    overflow-x: hidden;
+    border-radius: 3px;
+    appearance: none;
+    display: flex;
+    &:hover:not(:focus) {  
+        background-color: rgb(235, 236, 240);
+        overflow-x: hidden;
+        display: flex;
+        flex: 1;
+    }
+
+    &:focus {
+        background-color: rgb(255,255,255);
+        border: 1px solid #4c9aff;
+        box-shadow: 0 0 0 1px #4c9aff;
+        outline: none;
+    }
+}

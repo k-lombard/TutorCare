@@ -107,6 +107,28 @@ func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.Us
 	return user, nil
 }
 
+func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.User) (models.User, error) {
+	user := models.User{}
+	query := `UPDATE users SET email=$1, user_category=$2, experience=$3, bio=$4 WHERE user_id=$5 RETURNING user_id, first_name, last_name, email, password, date_joined, status, user_category, experience, bio;`
+	query2 := `SELECT * FROM users WHERE user_id = $1;`
+	user2 := models.User{}
+	errTwo := db.Conn.QueryRow(query2, userId).Scan(&user2.UserID, &user2.FirstName, &user2.LastName, &user2.Email, &user2.Password, &user2.DateJoined, &user2.Status, &user2.UserCategory, &user2.Experience, &user2.Bio)
+	if errTwo != nil {
+		if errTwo == sql.ErrNoRows {
+			return user, ErrNoMatch
+		}
+		return user, errTwo
+	}
+	err := db.Conn.QueryRow(query, userData.Email, userData.UserCategory, userData.Experience, userData.Bio, userId).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.DateJoined, &user.Status, &user.UserCategory, &user.Experience, &user.Bio)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return user, ErrNoMatch
+		}
+		return user, err
+	}
+	return user, nil
+}
+
 func comparePasswords(hashedPwd string, plainPwd []byte) bool {
 	byteHash := []byte(hashedPwd)
 	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)

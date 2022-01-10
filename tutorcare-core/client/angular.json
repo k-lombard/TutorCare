@@ -17,6 +17,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref": "/",
+            "deployUrl": "/",
             "outputPath": "dist/tutorcare-core",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -42,8 +44,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "90kb",
+                  "maximumError": "100kb"
                 }
               ],
               "fileReplacements": [
