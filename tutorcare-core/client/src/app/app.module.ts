@@ -12,7 +12,7 @@ import { UsersService } from './users.service';
 import { Http, ConnectionBackend, HttpModule } from '@angular/http';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
@@ -35,6 +35,8 @@ import { RouterModule } from '@angular/router';
 import { FindCareService } from './find-care/find-care.service';
 import { BarRatingModule } from 'ngx-bar-rating';
 import { EditProfileService } from './account/edit-profile/edit-profile.service';
+import { ToastrModule } from 'ngx-toastr';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,7 @@ import { EditProfileService } from './account/edit-profile/edit-profile.service'
     BrowserModule,  
     AppRoutingModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     MatInputModule,
     MatCardModule,
     HttpClientModule,
@@ -64,7 +67,7 @@ import { EditProfileService } from './account/edit-profile/edit-profile.service'
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, { provide: RouterStateSerializer, useClass: CustomSerializer }],
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

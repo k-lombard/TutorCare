@@ -29,10 +29,15 @@ func IsAccessTokenValid(c *gin.Context) {
 	tokenMetaData, err := ExtractTokenMetadata(r)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, false)
+		return
 	}
 	num, err2 := GetAuthentication(tokenMetaData)
-	if err2 != nil || num == 0 {
-		c.JSON(http.StatusBadRequest, false)
+	if err2 != nil {
+		c.JSON(http.StatusUnauthorized, false)
+		return
+	} else if num == 0 {
+		c.JSON(http.StatusOK, false)
+		return
 	}
 	c.JSON(http.StatusOK, true)
 }

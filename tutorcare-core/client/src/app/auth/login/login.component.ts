@@ -12,6 +12,7 @@ import { AppState } from 'src/app/reducers';
 import Swal from 'sweetalert2'
 import { User } from 'src/app/models/user.model';
 import { _getOptionScrollPosition } from '@angular/material/core';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -25,13 +26,13 @@ export class LoginComponent implements OnInit {
   _loginObservable: Observable<Object[]> | undefined
   users: Object | undefined
   output: Object | undefined
-  currUser: User | undefined
+  currUser!: User
   email: string = ""
   pos: string | undefined
   password: string = ""
   emailFC = new FormControl();
   passwordFC = new FormControl();
-  constructor(private authService: AuthService, private router:Router, private store: Store<AppState>) {}
+  constructor(private authService: AuthService, private router:Router, private store: Store<AppState>, private toastr: ToastrService) {}
 
   ngOnInit() {
   }
@@ -67,18 +68,13 @@ export class LoginComponent implements OnInit {
         this.store.dispatch(new Login({user}));
       })
     )
-    .subscribe(async resp => {
+    .subscribe(resp => {
       console.log(resp)
       this.currUser = resp
+      setTimeout(async () => { await this.timeout(10000) }, 100000)
+      this.router.navigate(['/home'])
+      this.toastr.success("Successfully logged in as " + ((this.currUser.first_name || " ") + " " + (this.currUser.last_name || " ")[0]) + ".", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
     });
-    setTimeout(async () => { await this.timeout(10000) }, 100000)
-    this.router.navigate(['/home'])
-    console.log(this.currUser)
-    Swal.fire({
-      title: 'Success!',
-      text: 'You have successfully logged in.',
-      icon: 'success',
-    })
     this.authService.getPosition().subscribe(resp => {
       console.log(resp)
     })

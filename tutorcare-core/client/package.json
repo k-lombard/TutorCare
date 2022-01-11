@@ -29,6 +29,7 @@
     "gopls": "^0.0.1-security.5",
     "ngrx-store-freeze": "^0.2.4",
     "ngx-bar-rating": "^2.0.0",
+    "ngx-toastr": "^14.2.1",
     "rxjs": "^6.3.2",
     "rxjs-compat": "^6.6.7",
     "sweetalert2": "^11.3.3",

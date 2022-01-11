@@ -20,6 +20,7 @@ export class AuthService {
         'Content-Type': 'application/json'
     });
     user!: User
+    _isValid: boolean | undefined
     access_token!: string
     refresh_token!: string
     constructor(private http:HttpClient, private store: Store<AppState>) {
@@ -67,7 +68,15 @@ export class AuthService {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${access_token}`
         });
-        return this.http.get(url, {headers: headers2})
+        return new Observable((observer: any) => {
+            this.http.get(url, {headers: headers2})
+                .pipe(map((res: any) => res.json()))
+                .subscribe((data: any) => {
+                    this._isValid = data
+                    observer.next(this._isValid);
+                    observer.complete();
+                });
+         });
     }
 
     getPosition(): Observable<any> {
@@ -81,11 +90,9 @@ export class AuthService {
     }
 
     getAccessToken(): string {
-        console.log(this.user.access_token)
         return this.user.access_token ? this.user.access_token : ""
     }
     getRefreshToken(): string {
-        console.log(this.user.refresh_token)
         return this.user.refresh_token ? this.user.refresh_token : ""
     }
     getCurrUser(): User {

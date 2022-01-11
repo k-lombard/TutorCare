@@ -17,8 +17,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "preserveSymlinks": true,
             "baseHref": "/",
-            "deployUrl": "/",
             "outputPath": "dist/tutorcare-core",
             "index": "src/index.html",
             "main": "src/main.ts",
