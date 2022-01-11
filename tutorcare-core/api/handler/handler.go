@@ -61,6 +61,8 @@ func RouteHandler(db database.Database) *gin.Engine {
 	}
 	r.router.Use(CORSMiddleware())
 	api := r.router.Group("/api", CORSMiddleware())
+	geolocationpositions := api.Group("/geolocationpositions")
+	r.geolocationpositions(geolocationpositions)
 	users := api.Group("/users")
 	r.users(users)
 	signup := api.Group("/signup")
@@ -71,5 +73,7 @@ func RouteHandler(db database.Database) *gin.Engine {
 	r.logout(logout)
 	token := api.Group("/token")
 	r.token(token)
+	profile := api.Group("/profile", TokenAuthMiddleware())
+	r.profile(profile)
 	return r.router
 }

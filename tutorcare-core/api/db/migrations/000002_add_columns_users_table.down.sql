@@ -1,0 +1,4 @@
+ALTER TABLE IF EXISTS users
+DROP COLUMN user_category,
+DROP COLUMN experience,
+DROP COLUMN bio;

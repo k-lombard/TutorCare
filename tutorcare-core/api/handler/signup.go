@@ -55,16 +55,16 @@ func signupPage(c *gin.Context) {
 	user := &models.User{}
 
 	if err := render.Bind(r, user); err != nil {
-		c.JSON(http.StatusBadRequest, "Bad Request")
+		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 	isUnique := dbInstance.Signup(user)
 
 	switch {
 	case user.Email != "" && isUnique == true:
-		userOut1, err := dbInstance.AddUser(user)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, "Bad Request")
+		userOut1, err2 := dbInstance.AddUser(user)
+		if err2 != nil {
+			c.JSON(http.StatusBadRequest, "Bad request")
 			return
 		}
 		c.JSON(http.StatusOK, userOut1)

@@ -1,5 +1,10 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { User } from '../models/user.model';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../reducers';
+import { getCurrUser } from '../auth/auth.selectors';
 
 @Component({
   selector: 'navbar',
@@ -8,9 +13,19 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class NavbarComponent implements OnInit {
-  constructor(private router: Router) {}
+  user: User | undefined;
+  name = "Account"
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit() {
+    this.name = "Account"
+    this.store
+      .pipe(
+        select(getCurrUser)
+      ).subscribe(data =>  {
+        this.user = data
+        this.name = (this.user? this.user.first_name + " " + this.user.last_name: "Account")
+      })
   }
 
   onHomeClick() {

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import {Http, RequestMethod, RequestOptions} from '@angular/http';
-import {environment} from '../../environments/environment';
+import {environment} from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { User } from 'src/app/models/user.model';
 
 @Injectable() 
-export class LoginService {
+export class EditProfileService {
   results:Object[];
   _output: any[] | undefined;
   headers = new HttpHeaders({
@@ -16,36 +17,25 @@ export class LoginService {
     this.results = []
   }
 
-  login(email: string, password: string): Observable<Object[]> {
-    let url = `${environment.serverUrl}/api/login/`;
+  editProfile(user_id?: string, email?: string, experience?: string, user_category?: string, bio?: string, password?: string): Observable<User> {
+    // let url = `${environment.serverUrl}/api/signup/`;
+    let url = `/api/profile/${user_id}`;
     return new Observable((observer: any) => {
-       this.http.post<any>(url, JSON.stringify({
-           "first_name": "",
-           "last_name": "",
+       this.http.put<any>(url, JSON.stringify({
            "email": email,
-           "password": password,
-           
+           "user_category": user_category,
+           "experience": experience,
+           "bio": bio,
+           "password": password
        }), {headers: this.headers})
-           .pipe(map((res: any) => res.json()))
+           .pipe(map((res: any) => res))
            .subscribe((data: any) => {
               this._output = data
  
               observer.next(this._output);
               observer.complete();
- 
- 
            });
     });
  }
-
- getPosition(): Observable<any> {
-  return new Observable(observer => {
-    window.navigator.geolocation.getCurrentPosition(position => {
-      observer.next(position);
-      observer.complete();
-    },
-      error => observer.error(error));
-  });
-}
 
 }

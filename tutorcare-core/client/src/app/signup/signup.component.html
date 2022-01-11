@@ -19,6 +19,15 @@
                 <mat-label>Password</mat-label>
                 <input [formControl]="passwordFC" matInput (change)="onPasswordChange()">
             </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Will you be:</mat-label>
+                <mat-select [(ngModel)]="selectedValue" name="option">
+                  <mat-option *ngFor="let option of options" [value]="option.value">
+                    {{option.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             
             <mat-card-actions>
                 <button mat-button (click)="onLoginSubmit()" color="accent">

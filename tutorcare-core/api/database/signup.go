@@ -23,7 +23,7 @@ func (db Database) Login(user *models.User) (models.UserWithTokens, bool) {
 
 	userOut := models.UserWithTokens{}
 
-	db.Conn.QueryRow("SELECT * FROM users WHERE email = $1;", user.Email).Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status)
+	db.Conn.QueryRow("SELECT * FROM users WHERE email = $1;", user.Email).Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio)
 	isMatch := comparePasswords(userOut.Password, []byte(user.Password))
 	if isMatch == true {
 		return userOut, true

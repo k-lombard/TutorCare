@@ -6,13 +6,25 @@ import { FormControl } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import { Router } from '@angular/router';
 
+interface Option {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'signup-component',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css'],
+  styleUrls: ['./signup.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class SignupComponent implements OnInit {
+  selectedValue: string | undefined
+  userCategory: string = ""
+  options: Option[] = [
+    {value: 'caregiver-0', viewValue: 'Providing Care'},
+    {value: 'careseeker-1', viewValue: 'Seeking Care'},
+    {value: 'both-2', viewValue: 'Both'},
+  ];
   loading: boolean = false
   _usersObservable: Observable<Object[]> | undefined
   _signupObservable: Observable<Object[]> | undefined
@@ -50,7 +62,15 @@ export class SignupComponent implements OnInit {
   } 
 
   onSignupSubmit() {
-    this.signupFunc(this.firstName, this.lastName, this.email, this.password)
+    console.log(this.selectedValue)
+    if (this.selectedValue == "caregiver-0") {
+      this.userCategory = "caregiver"
+    } else if (this.selectedValue == "careseeker-1") {
+      this.userCategory = "careseeker"
+    } else {
+      this.userCategory == "both"
+    }
+    this.signupFunc(this.firstName, this.lastName, this.email, this.password, this.userCategory)
   }
 
   onLoginSubmit() {
@@ -66,8 +86,8 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  signupFunc(firstName: string, lastName: string, email: string, password: string) {
-    this._signupObservable = this.signupService.signup(firstName, lastName, email, password);
+  signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string) {
+    this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category);
  
     this._signupObservable.subscribe((data: any) => {
        this.output = JSON.parse(JSON.stringify(data));
