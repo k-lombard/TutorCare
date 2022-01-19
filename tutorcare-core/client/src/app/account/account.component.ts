@@ -16,6 +16,8 @@ export class AccountComponent implements OnInit {
     last_name: string |undefined
     rate: number = 4.5
     user_type: string | undefined
+    exp!: string
+    bio!: string
     constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute) {}
 
     ngOnInit() {
@@ -27,6 +29,8 @@ export class AccountComponent implements OnInit {
             this.first_name = (this.user ? this.user.first_name : "")
             this.last_name = (this.user ? this.user.last_name : "")
             this.user_type = this.user.user_category? this.user.user_category.charAt(0).toUpperCase() + this.user.user_category.substring(1) : ""
+            this.exp = this.user.experience || ""
+            this.bio = this.user.bio || ""
         })
     }
 
