@@ -12,8 +12,8 @@
             <mat-grid-tile><button (click)="onEditProfileClick()" color="Primary" class="edit-profile" mat-raised-button>Edit Profile <mat-icon>edit_icon</mat-icon></button></mat-grid-tile>
         </mat-grid-list>
     </mat-card>
-    <mat-grid-list cols="5" rowHeight="3:1" ratio="1:1">
-      <mat-grid-tile></mat-grid-tile>
+    <mat-grid-list cols="5" rowHeight="1:1" ratio="1:1">
+      <mat-grid-tile id="empty"></mat-grid-tile>
       <mat-grid-tile>
         <div id="biodiv">
           <h2 [style.text-align]="'left'">Experience: </h2> <h3>{{ exp }}</h3>
