@@ -4,7 +4,7 @@
 - cd into client folder
 - **If on Windows run:**
 ```
-  bash serve.sh
+  ng serve --proxy-config proxy.config.json
 ```
 - **If on macOS/linux run:**
 ```
