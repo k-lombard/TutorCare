@@ -1,4 +1,5 @@
-# TutorCare: An application for on-demand childcare and tutoring services
+# TutorCare 
+## An application for on-demand childcare and tutoring services
 
 ### Starting Client Frontend
 - cd into client folder
