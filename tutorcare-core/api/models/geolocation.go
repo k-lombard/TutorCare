@@ -9,7 +9,7 @@ import (
 
 type GeolocationPosition struct {
 	UserID     uuid.UUID `sql:",fk" json:"user_id"`
-	LocationID int       `json:"location_id"`
+	LocationID int       `sql:",pk" json:"location_id"`
 	Accuracy   float32   `json:"accuracy"`
 	Latitude   float32   `json:"latitude"`
 	Longitude  float32   `json:"longitude"`
@@ -18,7 +18,7 @@ type GeolocationPosition struct {
 
 type GeolocationPositionWithUser struct {
 	UserID     uuid.UUID `sql:",fk" json:"user_id"`
-	LocationID int       `json:"location_id"`
+	LocationID int       `sql:",pk" json:"location_id"`
 	Accuracy   float32   `json:"accuracy"`
 	Latitude   float32   `json:"latitude"`
 	Longitude  float32   `json:"longitude"`

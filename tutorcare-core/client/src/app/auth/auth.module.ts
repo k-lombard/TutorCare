@@ -30,6 +30,7 @@ import { BarRatingModule } from "ngx-bar-rating";
 import { EditProfileComponent } from '../account/edit-profile/edit-profile.component';
 import { AuthInterceptor } from './auth.interceptor';
 import { ToastrModule } from 'ngx-toastr';
+import { FindJobsComponent } from '../find-jobs/find-jobs.component';
 
 @NgModule({
     imports: [
@@ -63,7 +64,8 @@ import { ToastrModule } from 'ngx-toastr';
         HomeComponent,
         AccountComponent,
         FindCareComponent,
-        EditProfileComponent
+        EditProfileComponent,
+        FindJobsComponent
     ],
     exports: [LoginComponent]
 })
