@@ -75,5 +75,7 @@ func RouteHandler(db database.Database) *gin.Engine {
 	r.token(token)
 	profile := api.Group("/profile", TokenAuthMiddleware())
 	r.profile(profile)
+	posts := api.Group("/posts")
+	r.posts(posts)
 	return r.router
 }

@@ -1,0 +1,46 @@
+@use '@angular/material' as mat;
+@import "../../custom-theme.scss";
+@import "../../styles.scss";
+
+.mat-list-item {
+    border-bottom: solid 1px #000;
+}
+
+
+.custom-a {
+    float: right !important;
+    margin: 50px;
+    padding: 10px;
+}
+
+.row-item-div {
+  margin-left: 80px;
+  width: 150px;
+
+}
+
+.row-item-div-large {
+  margin-left: 80px;
+  width: 250px;
+
+}
+
+h2 {
+  font-family: "Dosis";
+  font-size: 20px;
+}
+
+
+[id="stock"] {
+  border-radius: 50% !important;
+  border: solid 1px #000 !important;
+  height: 100px;
+  width: 100px;
+}
+
+mat-card {
+  margin:  10px 2.5%;
+  // padding-bottom: 20px;
+  width: 95%;
+}
+
