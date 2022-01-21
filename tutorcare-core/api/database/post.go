@@ -121,7 +121,7 @@ func (db Database) UpdatePost(postId int, postData models.Post) (models.Post, er
 	post := models.Post{}
 	query := `UPDATE posts SET caregiver_id=$1, care_description=$2, care_type=$3, completed=$4, date_of_job=$5, start_time=$6, end_time=$7 WHERE post_id=$8 RETURNING user_id, caregiver_id, post_id, care_description, care_type, completed, date_of_job, start_time, end_time, date_posted;`
 
-	query2 := `SELECT * FROM geolocation WHERE user_id = $1;`
+	query2 := `SELECT * FROM posts WHERE post_id = $1;`
 	post2 := models.Post{}
 	errTwo := db.Conn.QueryRow(query2, postId).Scan(&post2.UserID, &post2.CaregiverID, &post2.PostID, &post2.CareDescription, &post2.CareType, &post2.Completed, &post2.DateOfJob, &post2.StartTime, &post2.EndTime, &post2.DatePosted)
 	if errTwo != nil {

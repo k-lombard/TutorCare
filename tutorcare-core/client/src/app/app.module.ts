@@ -38,6 +38,7 @@ import { EditProfileService } from './account/edit-profile/edit-profile.service'
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { FindJobsService } from './find-jobs/find-jobs.service';
+import { ApplyJobService } from './find-jobs/apply-job/apply-job.service';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,7 @@ import { FindJobsService } from './find-jobs/find-jobs.service';
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

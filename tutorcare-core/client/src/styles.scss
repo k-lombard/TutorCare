@@ -11,4 +11,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-family: "Dosis";
     src: url(assets/fonts/Dosis-SemiBold.ttf) format("truetype");
 }
-  
+
+mat-dialog-container {
+  background-color: #D6DBD4 !important;
+}

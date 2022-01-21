@@ -1,0 +1,65 @@
+<div>
+  <h2 mat-dialog-title>Create Job Posting</h2>
+  <mat-dialog-content [formGroup]="form">
+    <mat-card>
+      <!-- <mat-form-field appearance="outline">
+          <mat-label>Type of Care</mat-label>
+          <input  formControlName="type_care" matInput />
+      </mat-form-field> -->
+      <mat-form-field [style.font-size]="'16px'" appearance="fill">
+        <mat-label>Type of Care</mat-label>
+            <mat-select formControlName="type_care" name="option">
+            <mat-option *ngFor="let option of filter_options" [value]="option.value">
+                {{option.viewValue}}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-card>
+    <mat-card>
+      <mat-form-field appearance="outline">
+          <mat-label>Job Description</mat-label>
+          <!-- <input formControlName="job_desc" matInput /> -->
+          <textarea id="desc-field" matInput
+                    name="first"
+                    formControlName="job_desc"
+                    cdkTextareaAutosize
+                    class="textarea-inline-control" >
+          </textarea>
+      </mat-form-field>
+    </mat-card>
+      <!-- <mat-form-field id="dashboardComponent">
+        <input matInput
+          [matDatepicker]="matDatepicker"
+          formControlName="picker"
+          >
+        <mat-datepicker-toggle matSuffix [for]="matDatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #matDatepicker></mat-datepicker>
+      </mat-form-field> -->
+      <mat-card>
+      <mat-form-field>
+        <mat-label>Start Time</mat-label>
+        <input matInput [ngxMatDatetimePicker]="picker1" placeholder="Choose a date" formControlName="start_time"
+           [min]="minDate" [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="$any(picker1)"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker1>
+        </ngx-mat-datetime-picker>
+     </mat-form-field>
+    </mat-card>
+    <mat-card>
+     <mat-form-field>
+      <mat-label>End Time</mat-label>
+      <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="end_time"
+         [min]="minDate" [max]="maxDate">
+      <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #picker2>
+      </ngx-mat-datetime-picker>
+   </mat-form-field>
+  </mat-card>
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button class="mat-raised-button mat-primary create-button"(click)="close()">CLOSE</button>
+    <button id="create-button" class="mat-raised-button mat-accent create-button"(click)="save()">CREATE</button>
+</mat-dialog-actions>
+</div>

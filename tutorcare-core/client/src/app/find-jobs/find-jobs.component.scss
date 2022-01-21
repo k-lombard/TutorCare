@@ -15,7 +15,8 @@
 
 .row-item-div {
   margin-left: 80px;
-  width: 150px;
+  // width: 150px;
+  width: 12.5%;
 
 }
 
@@ -38,9 +39,16 @@ h2 {
   width: 100px;
 }
 
-mat-card {
-  margin:  10px 2.5%;
-  // padding-bottom: 20px;
-  width: 95%;
-}
+// mat-card {
+//   margin:  10px 2.5%;
+//   // padding-bottom: 20px;
+//   width: 95%;
+// }
 
+.mat-card {
+  background-color: #D6DBD4;
+  margin-top: 10px;
+  width: 95%;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+}

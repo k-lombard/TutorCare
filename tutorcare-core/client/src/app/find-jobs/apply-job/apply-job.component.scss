@@ -1,0 +1,57 @@
+@use '@angular/material' as mat;
+@import "../../../custom-theme.scss";
+.mat-dialog-content {
+  margin: 40px 10%;
+  width: 90%;
+}
+.mat-dialog {
+  background-color: #D6DBD4;
+}
+.mat-card {
+  width: 90%;
+  margin-top: 20px;
+}
+.mat-form-field {
+  width: 100%;
+}
+h2 {
+  margin: 40px 10%;
+  font-family: "Dosis" !important;
+  font-size: 60px !important;
+}
+.textarea-inline-control {
+  flex: 1;
+  border-color: transparent;
+  padding: 7px 0px 40px;
+  line-height: 1.28;
+  resize: none;
+  box-shadow: transparent 0px 0px 0px 1px;
+  overflow: auto;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  border-radius: 3px;
+  appearance: none;
+  display: flex;
+  &:hover:not(:focus) {
+      background-color: rgb(235, 236, 240);
+      overflow-x: hidden;
+      display: flex;
+      flex: 1;
+  }
+
+  &:focus {
+      background-color: rgb(255,255,255);
+      border: 1px solid #4c9aff;
+      box-shadow: 0 0 0 1px #4c9aff;
+      outline: none;
+  }
+}
+
+#create-button {
+  float: right;
+}
+
+.create-button {
+  margin: 40px 22.5%;
+}
+

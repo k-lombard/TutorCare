@@ -8,7 +8,7 @@ import { AccountComponent } from './account/account.component';
 import { FindCareComponent } from './find-care/find-care.component';
 import { EditProfileComponent } from './account/edit-profile/edit-profile.component';
 import { AuthGuard } from './auth/auth.guard';
-import { FindJobsComponent } from './find-jobs/find-jobs.component';
+import { CreateJobDialog, FindJobsComponent } from './find-jobs/find-jobs.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: 'about-us', component: HomeComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthGuard]},
   { path: 'account/edit-profile', component: EditProfileComponent, canActivate: [AuthGuard]},
+  { path: 'find-jobs/create', component: CreateJobDialog, canActivate: [AuthGuard]},
   { path: '',   redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
   { path: '',   component: HomeComponent }

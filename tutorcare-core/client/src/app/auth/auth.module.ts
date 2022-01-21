@@ -30,7 +30,14 @@ import { BarRatingModule } from "ngx-bar-rating";
 import { EditProfileComponent } from '../account/edit-profile/edit-profile.component';
 import { AuthInterceptor } from './auth.interceptor';
 import { ToastrModule } from 'ngx-toastr';
-import { FindJobsComponent } from '../find-jobs/find-jobs.component';
+import { CreateJobDialog, FindJobsComponent } from '../find-jobs/find-jobs.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { ApplyJobDialog } from '../find-jobs/apply-job/apply-job.component';
 
 @NgModule({
     imports: [
@@ -43,16 +50,24 @@ import { FindJobsComponent } from '../find-jobs/find-jobs.component';
         HttpClientModule,
         MatButtonModule,
         ReactiveFormsModule,
+        NgxMaterialTimepickerModule,
         HttpModule,
         MatToolbarModule,
         MatSidenavModule,
+        NgxMatDatetimePickerModule,
+        NgxMatTimepickerModule,
         MatListModule,
         MatIconModule,
         BarRatingModule,
         MatGridListModule,
         RouterModule,
         GoogleMapsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        NgxMatNativeDateModule,
+        MatDialogModule,
         ToastrModule,
+        MatFormFieldModule,
         StoreModule.forFeature('auth', fromAuth.authReducer),
         EffectsModule.forFeature([AuthEffects]),
 
@@ -65,9 +80,12 @@ import { FindJobsComponent } from '../find-jobs/find-jobs.component';
         AccountComponent,
         FindCareComponent,
         EditProfileComponent,
-        FindJobsComponent
+        FindJobsComponent,
+        CreateJobDialog,
+        ApplyJobDialog
     ],
-    exports: [LoginComponent]
+    exports: [LoginComponent],
+    entryComponents: [CreateJobDialog]
 })
 export class AuthModule {
     static forRoot(): ModuleWithProviders<AuthModule> {
@@ -76,6 +94,11 @@ export class AuthModule {
             providers: [
               AuthService,
               AuthGuard,
+              { provide: MAT_DIALOG_DATA, useValue: {} },
+              {
+                provide: MatDialogRef,
+                useValue: {}
+              },
               {
                 provide : HTTP_INTERCEPTORS,
                 useClass: AuthInterceptor,

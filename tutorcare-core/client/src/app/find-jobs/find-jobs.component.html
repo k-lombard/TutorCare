@@ -23,7 +23,7 @@
         </form>
       </div>
       <div class="row-item-div-large">
-        <button class="custom-a" mat-raised-button color="primary"> <span>CREATE JOB POSTING</span></button>
+        <button class="custom-a" mat-raised-button color="primary" (click)="openDialog()"> <span>CREATE JOB POSTING</span></button>
       </div>
     </mat-list-item>
   </mat-list>
@@ -39,7 +39,7 @@
           <div class="row-item-div"><h2>End Time:</h2> {{ post.end_time }}</div>
           <div class="row-item-div"><bar-rating [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating></div>
           <div class="row-item-div">
-            <button class="custom-a" mat-raised-button color="accent">
+            <button (click)="openApplyDialog(post)" class="custom-a" mat-raised-button color="accent">
               <span>APPLY</span>
             </button>
           </div>

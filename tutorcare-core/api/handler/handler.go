@@ -77,5 +77,7 @@ func RouteHandler(db database.Database) *gin.Engine {
 	r.profile(profile)
 	posts := api.Group("/posts")
 	r.posts(posts)
+	applications := api.Group("/applications")
+	r.applications(applications)
 	return r.router
 }
