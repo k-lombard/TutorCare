@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -88,6 +91,9 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
+            "customWebpackConfig": {
+              "path": "./webpack.config.ts"
+            },
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",

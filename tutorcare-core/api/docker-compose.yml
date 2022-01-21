@@ -14,6 +14,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=user
       - POSTGRES_DB=tutorcare_core
+      # - PGDATA=/tmp
     volumes:
       - ./pgdata:/var/lib/postgresql/data
   migrate:

@@ -1,0 +1,50 @@
+<div>
+  <navbar>
+  </navbar>
+  <mat-list>
+    <mat-list-item layout="row" [style.height]="'100px'" [style.padding-bottom]="'20px'">
+      <div [style.margin-left]="'100px'" class="row-item-div-large">
+        <mat-form-field [style.font-size]="'16px'" appearance="fill">
+          <mat-label>Filter By</mat-label>
+              <mat-select [(ngModel)]="selectedValue" name="option">
+              <mat-option *ngFor="let option of filter_options" [value]="option.value">
+                  {{option.viewValue}}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row-item-div-large">
+        <form>
+          <mat-form-field>
+          <span matPrefix> </span>
+          <input type="tel" matInput placeholder="Search" name= "search" [(ngModel)]= "search">
+          <button matSuffix mat-button><mat-icon [style.margin-top]="'-40px'" [style.margin-left]="'10px'" [style.transform]="'scale(1.4)'">search</mat-icon></button>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="row-item-div-large">
+        <button class="custom-a" mat-raised-button color="primary" (click)="openDialog()"> <span>CREATE JOB POSTING</span></button>
+      </div>
+    </mat-list-item>
+  </mat-list>
+  <mat-list>
+    <!-- <mat-list-item *ngFor="let loc of locs"> -->
+      <mat-card *ngFor="let post of posts">
+        <mat-list-item layout="row" [style.height]="'120px'">
+          <div [style.margin-left]="'100px'" class="row-item-div"><img id="stock" src="../../assets/images/profile_picture.jpeg"/></div>
+          <div class="row-item-div"><h2>Type of Care:</h2> {{post.care_type}}</div>
+          <div class="row-item-div"> <h2>Job Description:</h2> {{post.care_description}}</div>
+          <div class="row-item-div"> <h2>Date:</h2> {{ post.date_of_job }}</div>
+          <div class="row-item-div"><h2>Start Time:</h2> {{ post.start_time }}</div>
+          <div class="row-item-div"><h2>End Time:</h2> {{ post.end_time }}</div>
+          <div class="row-item-div"><bar-rating [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating></div>
+          <div class="row-item-div">
+            <button (click)="openApplyDialog(post)" class="custom-a" mat-raised-button color="accent">
+              <span>APPLY</span>
+            </button>
+          </div>
+      </mat-list-item>
+    </mat-card>
+
+  </mat-list>
+</div>

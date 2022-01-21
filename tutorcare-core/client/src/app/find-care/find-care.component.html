@@ -14,7 +14,7 @@
         <mat-toolbar-row>
           <span class="menu-spacer"></span>
           <div>
-            <a mat-button [routerLink]="'/find-care'" (click)="onFindCareClick()"> <mat-icon>arrow_back</mat-icon> </a>
+            <a mat-raised-button [routerLink]="'/find-care'" (click)="onFindCareClick()"> <mat-icon>arrow_back</mat-icon> </a>
             <a> Name </a>
             <a> Rating </a>
             <a> Jobs </a>
@@ -31,14 +31,16 @@
         </mat-toolbar-row>
     </mat-toolbar>
     <mat-list>
-        <mat-list-item *ngFor="let loc of locs">
-            <!-- <mat-grid-list cols="2" rowHeight="1:1">
-            <mat-grid-tile>1</mat-grid-tile>
-            <mat-grid-tile>2</mat-grid-tile>
-            <mat-grid-tile>3</mat-grid-tile>
-            <mat-grid-tile>4</mat-grid-tile> -->
-          <!-- </mat-grid-list> -->
-            <p>{{loc.user.first_name}} {{loc.user.last_name}}</p>
+        <!-- <mat-list-item *ngFor="let loc of locs"> -->
+            <mat-list-item layout="row" *ngFor="let loc of locs">
+              <div [style.margin-left]="'305px'" class="row-item-div">{{loc.user.first_name}} {{loc.user.last_name}}</div>
+              <div class="row-item-div">2</div>
+              <div class="row-item-div">3</div>
+              <div class="row-item-div">
+                <a class="custom-a" mat-raised-button> 
+                  <mat-icon>message</mat-icon>
+                </a>
+              </div>
         </mat-list-item>
       </mat-list> 
 </div>  

@@ -52,7 +52,7 @@ constructor(private authService: AuthService, private toastr: ToastrService, pri
                 this._boolObservable.subscribe((data: any) => {
                     this.isValid = data
                     console.log(data)
-                })
+                })  
                 this.toastr.error("Error", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
                 this._refreshObservable = this.authService.refreshToken(this.authService.getRefreshToken());
 

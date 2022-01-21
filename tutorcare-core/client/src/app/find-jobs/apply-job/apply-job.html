@@ -1,0 +1,31 @@
+<div>
+  <h2 mat-dialog-title>Apply to this Job Posting</h2>
+  <mat-dialog-content [formGroup]="form">
+    <mat-card>
+      <mat-form-field appearance="outline">
+          <mat-label>Message</mat-label>
+          <!-- <input formControlName="job_desc" matInput /> -->
+          <textarea id="desc-field" matInput
+                    name="first"
+                    formControlName="message"
+                    cdkTextareaAutosize
+                    class="textarea-inline-control" >
+          </textarea>
+      </mat-form-field>
+    </mat-card>
+      <!-- <mat-form-field id="dashboardComponent">
+        <input matInput
+          [matDatepicker]="matDatepicker"
+          formControlName="picker"
+          >
+        <mat-datepicker-toggle matSuffix [for]="matDatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #matDatepicker></mat-datepicker>
+      </mat-form-field> -->
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button class="mat-raised-button mat-primary create-button"(click)="close()">CLOSE</button>
+    <button id="create-button" class="mat-raised-button mat-accent create-button"(click)="save()">APPLY</button>
+</mat-dialog-actions>
+</div>
