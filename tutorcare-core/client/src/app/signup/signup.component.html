@@ -1,43 +1,55 @@
 <div>
     <navbar></navbar>
-    <form class="example-form">
-        <mat-card>
-            <mat-card-title>Sign Up</mat-card-title>
-            <mat-form-field appearance="outline">
-                <mat-label>First Name</mat-label>
-                <input [formControl]="firstNameFC" matInput (change)="onFirstNameChange()">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Last Name</mat-label>
-                <input [formControl]="lastNameFC" matInput (change)="onLastNameChange()">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Email</mat-label>
-                <input [formControl]="emailFC" matInput (change)="onEmailChange()">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Password</mat-label>
-                <input [formControl]="passwordFC" matInput (change)="onPasswordChange()">
-            </mat-form-field>
+        
+        <form [formGroup]="accountDetailsForm" novalidate (ngSubmit)="onSignupSubmit(accountDetailsForm.value)">
+            <mat-card>
+                <mat-form-field class="full-width">
+                  <input matInput maxlength="25" placeholder="First Name" formControlName="firstName" required>
+                  <mat-error *ngFor="let validation of account_validation_messages.name">
+                    <mat-error class="error-message" *ngIf="accountDetailsForm.get('firstName').hasError(validation.type) && (accountDetailsForm.get('firstName').dirty || accountDetailsForm.get('firstName').touched)">{{validation.message}}</mat-error>
+                  </mat-error>
+                </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Will you be:</mat-label>
-                <mat-select [(ngModel)]="selectedValue" name="option">
-                  <mat-option *ngFor="let option of options" [value]="option.value">
-                    {{option.viewValue}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            
-            <mat-card-actions>
-                <button mat-button (click)="onLoginSubmit()" color="accent">
-                    <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">login</mat-icon> -->
-                    <span>LOGIN</span>
-                </button> 
-                <button mat-raised-button (click)="onSignupSubmit()" color="primary" id="login-button">
-                    <span>SIGN UP</span>
-                </button>  
-            </mat-card-actions>
+                <mat-form-field class="full-width">
+                    <input matInput maxlength="25" placeholder="Last Name" formControlName="lastName" required>
+                    <mat-error *ngFor="let validation of account_validation_messages.name">
+                      <mat-error class="error-message" *ngIf="accountDetailsForm.get('lastName').hasError(validation.type) && (accountDetailsForm.get('lastName').dirty || accountDetailsForm.get('lastName').touched)">{{validation.message}}</mat-error>
+                    </mat-error>
+                  </mat-form-field>
+        
+                <mat-form-field class="full-width">
+                  <input matInput type="email" placeholder="Email" formControlName="email" required>
+                  <mat-error *ngFor="let validation of account_validation_messages.email">
+                    <mat-error class="error-message" *ngIf="accountDetailsForm.get('email').hasError(validation.type) && (accountDetailsForm.get('email').dirty || accountDetailsForm.get('email').touched)">{{validation.message}}</mat-error>
+                  </mat-error>
+                </mat-form-field>
+        
+        
+                <div formGroupName="matchingPasswords">
+                  <mat-form-field class="full-width">
+                    <input matInput type="password" placeholder="Password" formControlName="password" required>
+                    <mat-error *ngFor="let validation of account_validation_messages.password">
+                      <mat-error class="error-message" *ngIf="accountDetailsForm.get('matchingPasswords').get('password').hasError(validation.type) && (accountDetailsForm.get('matchingPasswords').get('password').dirty || accountDetailsForm.get('matchingPasswords').get('password').touched)">{{validation.message}}</mat-error>
+                    </mat-error>
+                  </mat-form-field>
+        
+                  <mat-form-field class="full-width">
+                    <input matInput type="password" placeholder="Confirm Password" formControlName="confirm_password"  [errorStateMatcher]="parentErrorStateMatcher" required>
+                    <mat-error *ngFor="let validation of account_validation_messages.confirm_password">
+                      <mat-error class="error-message" *ngIf="(accountDetailsForm.get('matchingPasswords').get('confirm_password').hasError(validation.type)|| accountDetailsForm.get('matchingPasswords').hasError(validation.type)) && (accountDetailsForm.get('matchingPasswords').get('confirm_password').dirty || accountDetailsForm.get('matchingPasswords').get('confirm_password').touched)">{{validation.message}}</mat-error>
+                    </mat-error>
+                  </mat-form-field>
+        
+                </div>
+                <button class="submit-btn" color="primary" mat-raised-button type="submit" [disabled]="!accountDetailsForm.valid" id ="signin-button">
+                    Sign In
+                </button>
+                
+                <button class="submit-btn" color="primary" mat-raised-button id="login-button">
+                    <mat-icon aria-hidden="false" aria-label="Example home icon">login</mat-icon>
+                    Login
+                </button>
+                <div class ="clear"></div>
         </mat-card>
     </form>
 </div>

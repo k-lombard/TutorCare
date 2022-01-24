@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import {Http, RequestMethod, RequestOptions} from '@angular/http';
-import {environment} from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -11,7 +9,7 @@ export class SignupService {
   _output: any[] | undefined;
   headers = new HttpHeaders({
     'Content-Type': 'application/json'
-});
+  });
   constructor(private http: HttpClient) { 
     this.results = []
   }
