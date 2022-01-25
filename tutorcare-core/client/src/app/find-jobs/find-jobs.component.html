@@ -39,7 +39,7 @@
           <div class="row-item-div"><h2>End Time:</h2> {{ post.end_time }}</div>
           <div class="row-item-div"><bar-rating [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating></div>
           <div class="row-item-div">
-            <button (click)="openApplyDialog(post)" class="custom-a" mat-raised-button color="accent">
+            <button mat-raised-button (click)="openApplyDialog(post)" class="custom-a shadow-md shadow-[#eaaa00]" color="accent">
               <span>APPLY</span>
             </button>
           </div>

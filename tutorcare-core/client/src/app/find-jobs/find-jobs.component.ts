@@ -51,7 +51,7 @@ export class FindJobsComponent implements OnInit {
       const dialogRef = this.dialog.open(CreateJobDialog, dialogConfig);
 
       dialogRef.afterClosed().subscribe(
-        data => console.log("Dialog output:", data.data)
+        data => console.log("Dialog output:", data)
       );
     }
 
@@ -70,7 +70,7 @@ export class FindJobsComponent implements OnInit {
       const dialogRef = this.dialog.open(ApplyJobDialog, dialogConfig);
 
       dialogRef.afterClosed().subscribe(
-        data => console.log("Dialog output:", data.data)
+        data => console.log("Dialog output:", data)
       );
     }
 

@@ -55,3 +55,7 @@ h2 {
   margin: 40px 22.5%;
 }
 
+button {
+  padding: 10px;
+  @apply shadow-md shadow-[#eaaa00];
+}

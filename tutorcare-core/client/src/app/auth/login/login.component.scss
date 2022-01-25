@@ -1,5 +1,8 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 button {
-    margin: 50px;
+    padding: 10px !important;
 }
 
 mat-card {
@@ -19,10 +22,6 @@ mat-form-field {
 
 #login-button {
     float: right;
-}
-
-mat-icon {
-    margin: auto 5px;
 }
 
 .mat-raised-button {

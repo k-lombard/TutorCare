@@ -1,5 +1,8 @@
 @use '@angular/material' as mat;
 @import "../../custom-theme.scss";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 .mat-dialog-content {
   margin: 40px 10%;
   width: 90%;
@@ -53,5 +56,11 @@ h2 {
 
 .create-button {
   margin: 40px 22.5%;
+  padding: 10px;
 }
+
+.mat-raised-button {
+  @apply shadow-md shadow-[#eaaa00];
+}
+
 

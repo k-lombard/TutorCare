@@ -46,20 +46,20 @@ export class SignupComponent implements OnInit {
     console.log(this.users)
   }
 
-  onFirstNameChange() {
-    this.firstName = this.firstNameFC.value
-  } 
-
-  onLastNameChange() {
-    this.lastName = this.lastNameFC.value
-  } 
 
   onEmailChange() {
     this.email = this.emailFC.value
-  } 
+  }
   onPasswordChange() {
     this.password = this.passwordFC.value
-  } 
+  }
+
+  onFirstNameChange() {
+    this.firstName = this.firstNameFC.value
+  }
+  onLastNameChange() {
+    this.lastName = this.lastNameFC.value
+  }
 
   onSignupSubmit() {
     console.log(this.selectedValue)
@@ -79,7 +79,7 @@ export class SignupComponent implements OnInit {
 
   getUsersFunc() {
     this._usersObservable = this.usersService.getUsers();
- 
+
     this._usersObservable.subscribe((data: any) => {
        this.users = JSON.parse(JSON.stringify(data));
        console.log(data)
@@ -88,7 +88,7 @@ export class SignupComponent implements OnInit {
 
   signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string) {
     this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category);
- 
+
     this._signupObservable.subscribe((data: any) => {
        this.output = JSON.parse(JSON.stringify(data));
        console.log(data)

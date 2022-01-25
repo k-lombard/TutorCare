@@ -52,22 +52,44 @@ func (db Database) GetCaregiverLocations() (*models.GeolocationPositionWithUserL
 }
 
 func (db Database) AddGeolocationPosition(loc *models.GeolocationPosition) (models.GeolocationPosition, error) {
-	sqlStatement := `INSERT INTO geolocation (user_id, accuracy, latitude, longitude) VALUES ($1, $2, $3, $4) RETURNING location_id, timestamp;`
-	var id int
-	var timestamp string
-	geolocationPositionOut := models.GeolocationPosition{}
+	geolocationPositionTemp := models.GeolocationPosition{}
+	row := db.Conn.QueryRow(`SELECT * FROM geolocation WHERE user_id = $1;`, &loc.UserID)
+	switch err := row.Scan(&geolocationPositionTemp.UserID, &geolocationPositionTemp.LocationID, &geolocationPositionTemp.Accuracy, &geolocationPositionTemp.Latitude, &geolocationPositionTemp.Longitude, &geolocationPositionTemp.Timestamp); err {
+	case sql.ErrNoRows:
+		sqlStatement := `INSERT INTO geolocation (user_id, accuracy, latitude, longitude) VALUES ($1, $2, $3, $4) RETURNING location_id, timestamp;`
+		var id int
+		var timestamp string
+		geolocationPositionOut := models.GeolocationPosition{}
 
-	err := db.Conn.QueryRow(sqlStatement, &loc.UserID, &loc.Accuracy, &loc.Latitude, &loc.Longitude).Scan(&id, &timestamp)
+		err := db.Conn.QueryRow(sqlStatement, &loc.UserID, &loc.Accuracy, &loc.Latitude, &loc.Longitude).Scan(&id, &timestamp)
 
-	if err != nil {
-		return geolocationPositionOut, err
+		if err != nil {
+			return geolocationPositionOut, err
+		}
+		err2 := db.Conn.QueryRow(`SELECT * FROM geolocation WHERE user_id = $1;`, &loc.UserID).Scan(&geolocationPositionOut.UserID, &geolocationPositionOut.LocationID, &geolocationPositionOut.Accuracy, &geolocationPositionOut.Latitude, &geolocationPositionOut.Longitude, &geolocationPositionOut.Timestamp)
+		if err2 != nil {
+			return geolocationPositionOut, err2
+		}
+		fmt.Println("New geolocation_position record created with locationID and timestamp: ", id, timestamp)
+		return geolocationPositionOut, nil
+	default:
+		query := `UPDATE geolocation SET accuracy=$1, latitude=$2, longitude=$3 WHERE user_id=$4 RETURNING location_id, timestamp;`
+		var id int
+		var timestamp string
+		geolocationPositionOut := models.GeolocationPosition{}
+
+		err := db.Conn.QueryRow(query, &loc.Accuracy, &loc.Latitude, &loc.Longitude, &loc.UserID).Scan(&id, &timestamp)
+
+		if err != nil {
+			return geolocationPositionOut, err
+		}
+		err2 := db.Conn.QueryRow(`SELECT * FROM geolocation WHERE user_id = $1;`, &loc.UserID).Scan(&geolocationPositionOut.UserID, &geolocationPositionOut.LocationID, &geolocationPositionOut.Accuracy, &geolocationPositionOut.Latitude, &geolocationPositionOut.Longitude, &geolocationPositionOut.Timestamp)
+		if err2 != nil {
+			return geolocationPositionOut, err2
+		}
+		fmt.Println("Geolocation_position record updated with locationID and timestamp: ", id, timestamp)
+		return geolocationPositionOut, nil
 	}
-	err2 := db.Conn.QueryRow(`SELECT * FROM geolocation WHERE user_id = $1;`, &loc.UserID).Scan(&geolocationPositionOut.UserID, &geolocationPositionOut.LocationID, &geolocationPositionOut.Accuracy, &geolocationPositionOut.Latitude, &geolocationPositionOut.Longitude, &geolocationPositionOut.Timestamp)
-	if err2 != nil {
-		return geolocationPositionOut, err2
-	}
-	fmt.Println("New geolocation_position record created with locationID and timestamp: ", id, timestamp)
-	return geolocationPositionOut, nil
 }
 
 func (db Database) GetGeolocationPositionByUserId(userId uuid.UUID) (models.GeolocationPosition, error) {

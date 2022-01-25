@@ -7,17 +7,16 @@
           <mat-label>Email</mat-label>
           <input [formControl]="emailFC" matInput (change)="onEmailChange()">
         </mat-form-field>
-      
+
         <mat-form-field class="example-full-width" appearance="outline">
           <mat-label>Password</mat-label>
           <input [formControl]="passwordFC" matInput (change)="onPasswordChange()">
         </mat-form-field>
-        
+
         <mat-card-actions>
-        <button mat-button (click)="onSignupSubmit()" color="accent">SIGN UP</button>  
-        <button mat-raised-button (click)="onLoginSubmit()" color="primary" id="login-button">LOGIN</button> 
+        <button mat-button (click)="onSignupSubmit()" color="accent">SIGN UP</button>
+        <button mat-raised-button (click)="onLoginSubmit()" class="bg-current-500 shadow-lg shadow-{#eaaa00}-500/50" color="accent" id="login-button">LOGIN</button>
         </mat-card-actions>
       </mat-card>
     </form>
 </div>
-  

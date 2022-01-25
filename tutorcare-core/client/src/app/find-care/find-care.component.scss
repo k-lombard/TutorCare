@@ -1,37 +1,48 @@
 @use '@angular/material' as mat;
-@import "../../custom-theme.scss"; 
+@import "../../custom-theme.scss";
 @import "../../styles.scss";
-a {
-    margin-left: 120px;
-    font-size: 16px !important;
-    margin-bottom: 40px;
-}
 
 // .mat-icon {
 //     margin-left: -120px !important;
 // }
 
 
-.mat-list-item {
+.mat-list-item{
     border-bottom: solid 1px #000;
+    height: auto !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
 }
 
-p {
-    margin-left: 305px !important; 
-}
+// button {
+//     float: right !important;
+// }
 
-button {
-    float: right !important;
-}
-
-.row-item-div {
-    margin-left: 80px;
-    width: 100px;
-
-}
 
 .custom-a {
-    margin-left: 0px !important;
-    font-size: 16px !important;
-    margin-bottom: 0px !important;
+  font-size: 16px !important;
+  // margin-bottom: 40px;
+  flex: 1 1 auto;
+  width: 16.6666%;
+  margin: 10px;
+}
+
+.mat-list .mat-list-item.left .mat-list-item-content{
+  justify-content: flex-start;
+}
+
+.mat-list-item {
+  background-color: #D6DBD4;
+}
+
+
+
+
+.mat-list-base .mat-list-item .mat-list-item-content {
+  padding: 0px !important
+}
+
+a {
+  font-size: 16px !important;
+  margin: 40%;
 }
