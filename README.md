@@ -22,11 +22,13 @@
 - Adds working find-jobs page functionality where job posts are displayed in an easy to see, intuitive manner
 - Adds account page and edit profile functionality, to change a user's email, bio, experience, and user-type. 
 
+
+## Setup Guide
 ### Starting Client Frontend
 - cd into client folder
 - **If on Windows run:**
 ```
-  ng serve --proxy-config proxy.config.json
+  ng run start-windows
 ```
 - **If on macOS/linux run:**
 ```
