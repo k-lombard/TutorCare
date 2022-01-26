@@ -26,7 +26,7 @@
 ## Setup Guide
 ### Required Pre-Setup Installations
 - Node version manager such as nvm for macOS/linux or nodist for windows (latest version)
-- Install the latest node version and activate it with (nvm use <version>)
+- Install the latest node version and activate it with (nvm use "version")
 - PostgreSQL (latest version)
 - Docker (latest version)
 - Go (latest version)
