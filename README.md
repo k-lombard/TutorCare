@@ -6,8 +6,8 @@
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=material-ui&logoColor=white)
 ![Go](https://img.shields.io/badge/go-%2300ADD8.svg?style=for-the-badge&logo=go&logoColor=white)
-## An application for on-demand childcare and tutoring services
-
+# An application for on-demand childcare and tutoring services
+## JIA-1307
 [![GitHub issues](https://img.shields.io/github/issues/k-lombard/TutorCare)](https://github.com/k-lombard/TutorCare/issues)
 [![GitHub forks](https://img.shields.io/github/forks/k-lombard/TutorCare)](https://github.com/k-lombard/TutorCare/network)
 [![GitHub stars](https://img.shields.io/github/stars/k-lombard/TutorCare)](https://github.com/k-lombard/TutorCare/stargazers)
@@ -15,7 +15,12 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/k-lombard/TutorCare)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)
 
-
+## Version 0.1.0:
+### New Features:
+- Adds working signup/login functionality and stores authentication tokens in session storage
+- Adds working find-care page functionality where caregiver users are displayed in a user's local area
+- Adds working find-jobs page functionality where job posts are displayed in an easy to see, intuitive manner
+- Adds account page and edit profile functionality, to change a user's email, bio, experience, and user-type. 
 
 ### Starting Client Frontend
 - cd into client folder
