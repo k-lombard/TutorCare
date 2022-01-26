@@ -15,8 +15,8 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/k-lombard/TutorCare)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)
 
-## Version 0.1.0:
-### New Features:
+## Version 0.1.0
+### New Features
 - Adds working signup/login functionality and stores authentication tokens in session storage
 - Adds working find-care page functionality where caregiver users are displayed in a user's local area
 - Adds working find-jobs page functionality where job posts are displayed in an easy to see, intuitive manner
@@ -24,6 +24,19 @@
 
 
 ## Setup Guide
+### Required Pre-Setup Installations
+- Node version manager such as nvm for macOS/linux or nodist for windows (latest version)
+- Install the latest node version and activate it with (nvm use <version>)
+- PostgreSQL (latest version)
+- Docker (latest version)
+- Go (latest version)
+
+### Required Node_Modules Installations
+- cd into the client folder
+- Run ``` npm i ```
+- Run ``` npm install -g @angular/cli ``` 
+- Run ``` npm install -D tailwindcss ```
+
 ### Starting Client Frontend
 - cd into client folder
 - **If on Windows run:**
