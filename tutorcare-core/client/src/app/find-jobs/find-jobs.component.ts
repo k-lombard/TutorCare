@@ -46,8 +46,8 @@ export class FindJobsComponent implements OnInit {
         id: 1,
         title: 'Create Job Posting',
       };
-      dialogConfig.height = "70%"
-      dialogConfig.width = "60%"
+      dialogConfig.height = "90%"
+      dialogConfig.width = "90%"
       const dialogRef = this.dialog.open(CreateJobDialog, dialogConfig);
 
       dialogRef.afterClosed().subscribe(
@@ -65,8 +65,8 @@ export class FindJobsComponent implements OnInit {
         title: 'Apply to this Job Posting',
         post: post
       };
-      dialogConfig.height = "40%"
-      dialogConfig.width = "50%"
+      dialogConfig.height = "90%"
+      dialogConfig.width = "90%"
       const dialogRef = this.dialog.open(ApplyJobDialog, dialogConfig);
 
       dialogRef.afterClosed().subscribe(

@@ -2,47 +2,90 @@
 @import "../../custom-theme.scss";
 @import "../../styles.scss";
 
-// .mat-icon {
-//     margin-left: -120px !important;
+[id="stock"] {
+  border-radius: 50% !important;
+  border: solid 1px #000 !important;
+  height: 75px;
+  width: 75px;
+}
+
+[id="bottomdiv"] {
+  bottom: 0;
+  position: absolute;
+  margin-bottom: 2%;
+}
+
+[id="outerdiv"] {
+  position: relative;
+}
+
+[id="messagebutton"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  margin-top: 2%;
+  margin-right: 2%;
+}
+
+// .mat-toolbar {
+//   height: 2% !important;
 // }
-
-
-.mat-list-item{
-    border-bottom: solid 1px #000;
-    height: auto !important;
-    width: 100% !important;
-    justify-content: flex-start !important;
+.mat-toolbar-row {
+  height: 100px;
 }
 
-// button {
-//     float: right !important;
-// }
+@media (max-width: 420px) {
 
+  [id="outerdiv"] {
+    position: relative;
+    height: 60% !important;
+    padding-bottom: 80px !important;
+  }
 
-.custom-a {
-  font-size: 16px !important;
-  // margin-bottom: 40px;
-  flex: 1 1 auto;
-  width: 16.6666%;
-  margin: 10px;
+  [id="bottomdiv"] {
+    bottom: 0;
+    position: absolute;
+    margin-bottom: 2%;
+    margin-top: 20% !important;
+  }
+
 }
 
-.mat-list .mat-list-item.left .mat-list-item-content{
-  justify-content: flex-start;
+@media (max-width: 290px) {
+
+  [id="outerdiv"] {
+    position: relative;
+    height: 60% !important;
+    padding-bottom: 80px !important;
+  }
+
+  [id="bottomdiv"] {
+    bottom: 0;
+    position: absolute;
+    margin-bottom: 2%;
+    margin-top: 20% !important;
+  }
+
+  [id="rowitem"] {
+    margin: 0% !important;
+    width: 100px;
+  }
+
+  [id="rowitem2"] {
+    margin: 0% !important;
+    width: 100px;
+    margin-top: 5% !important;
+  }
+
+  mat-form-field {
+    width: 100px;
+  }
+
+  [id="firstlast"] {
+    margin-top: 40% !important;
+  }
+
+
 }
 
-.mat-list-item {
-  background-color: #D6DBD4;
-}
-
-
-
-
-.mat-list-base .mat-list-item .mat-list-item-content {
-  padding: 0px !important
-}
-
-a {
-  font-size: 16px !important;
-  margin: 40%;
-}

@@ -5,14 +5,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-.mat-list-item {
-    border-bottom: solid 1px #000;
-}
-
-
 .custom-a {
-    float: right !important;
-    margin: 50px;
     padding: 10px;
     @apply shadow-md shadow-[#eaaa00];
 }
@@ -22,16 +15,14 @@
 }
 
 .row-item-div {
-  margin-left: 80px;
   // width: 150px;
-  width: 12.5%;
+  width: 23.75%;
 
 }
 
 .row-item-div-large {
-  margin-left: 80px;
-  width: 250px;
-
+  width: 28.3333333%;
+  margin: 5%;
 }
 
 h2 {
@@ -59,4 +50,5 @@ h2 {
   width: 95%;
   margin-left: 2.5%;
   margin-right: 2.5%;
+  height: 100%;
 }

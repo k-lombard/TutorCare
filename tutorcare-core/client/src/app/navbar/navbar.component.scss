@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import "../../custom-theme.scss"; 
+@import "../../custom-theme.scss";
 
 h1 {
     color: mat.get-color-from-palette($tutorcare-core-accent, A100);
@@ -17,3 +17,48 @@ h1 {
     font-size: 16px !important;
     margin-bottom: 25px !important;
 }
+
+.example-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-color: mat.get-color-from-palette($tutorcare-core-accent);
+}
+
+.example-sidenav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  background-color: mat.get-color-from-palette($tutorcare-core-primary);
+}
+
+a {
+  color: white !important;
+}
+
+@media (min-width: 1235px) {
+  .mat-sidenav-container {
+    display: none;
+  }
+  [id="hamburger"] {
+    display: none;
+  }
+}
+
+@media (max-width: 1235px) {
+  [id="menu-links"] {
+    display: none;
+  }
+  [id="hamburger"] {
+    float: right;
+    justify-self: center;
+    justify-content: center;
+    position: end;
+  }
+  .example-sidenav-content {
+    right: 0;
+    position: flex;
+  }
+}
+

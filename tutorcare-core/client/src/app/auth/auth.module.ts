@@ -84,7 +84,7 @@ import { ApplyJobDialog } from '../find-jobs/apply-job/apply-job.component';
         CreateJobDialog,
         ApplyJobDialog
     ],
-    exports: [LoginComponent],
+    exports: [LoginComponent, NavbarComponent],
     entryComponents: [CreateJobDialog]
 })
 export class AuthModule {
