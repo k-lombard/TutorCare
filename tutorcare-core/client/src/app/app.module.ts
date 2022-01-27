@@ -39,10 +39,12 @@ import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { FindJobsService } from './find-jobs/find-jobs.service';
 import { ApplyJobService } from './find-jobs/apply-job/apply-job.service';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AboutComponent
   ],
   imports: [
     RouterModule,
