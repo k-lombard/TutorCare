@@ -1,10 +1,12 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {UsersService} from '../users.service';
 import {SignupService} from '../signup/signup.service';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ParentErrorStateMatcher, PasswordValidator } from './validators/password.validator';
+import { HttpErrorResponse } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
 interface Option {
   value: string;
@@ -19,13 +21,14 @@ interface Option {
 })
 
 export class SignupComponent implements OnInit {
-  loading: boolean = false
   _usersObservable: Observable<Object[]> | undefined
   _signupObservable: Observable<Object[]> | undefined
   users: Object | undefined
   output: Object | undefined
   accountDetailsForm: FormGroup;
   matchingPasswordsGroup: FormGroup;
+  emailCodeForm: FormGroup;
+  hidden = true
   constructor(
     private router: Router, 
     private usersService: UsersService, 
@@ -42,7 +45,8 @@ export class SignupComponent implements OnInit {
     'email': [
       { type: 'required', message: 'Email is required' },
       { type: 'email', message: 'Enter a valid email' },
-      { type: 'pattern', message: 'Please use a Gatech email' }
+      { type: 'pattern', message: 'Please use a Gatech email' },
+      { type: 'exists', message: 'That email already has an account'}
     ],
     'confirm_password': [
       { type: 'required', message: 'Confirm password is required' },
@@ -50,8 +54,12 @@ export class SignupComponent implements OnInit {
     ],
     'password': [
       { type: 'required', message: 'Password is required' },
-      { type: 'minlength', message: 'Password must be at least 5 characters long' },
+      { type: 'minlength', message: 'Password must be at least 8 characters long' },
       { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, and one number' }
+    ],
+    'emailCode': [
+      { type: 'required', message: 'Password is required' },
+      { type: 'minlength', message: 'Email code must be at least 5 characters long' },
     ]
   }
 
@@ -65,7 +73,7 @@ export class SignupComponent implements OnInit {
     // matching passwords validation
     this.matchingPasswordsGroup = new FormGroup({
       password: new FormControl('', Validators.compose([
-        Validators.minLength(5),
+        Validators.minLength(8),
         Validators.required,
         Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$')/*^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$*/
       ])),
@@ -88,16 +96,23 @@ export class SignupComponent implements OnInit {
        ])),
       email: new FormControl('', Validators.compose([
         Validators.email,
-        //Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'), //Regex Email Pattern
-        Validators.pattern('^.*gatech.edu.*$'),
+        //Validators.pattern('^.*gatech.edu.*$'),
         Validators.required
       ])),
       matchingPasswords: this.matchingPasswordsGroup,
+    })
+
+    this.emailCodeForm = this.fb.group({
+      emailVerificationCode: new FormControl('', Validators.compose([
+        Validators.minLength(5),
+        Validators.required
+      ]))
     })
   }
 
   onSignupSubmit(value: any){
     console.log(value);
+    this.hidden = false
     this.signupFunc(
       this.accountDetailsForm.get('firstName').value, 
       this.accountDetailsForm.get('lastName').value, 
@@ -113,7 +128,6 @@ export class SignupComponent implements OnInit {
 
   getUsersFunc() {
     this._usersObservable = this.usersService.getUsers();
- 
     this._usersObservable.subscribe((data: any) => {
        this.users = JSON.parse(JSON.stringify(data));
        console.log(data)
@@ -121,12 +135,30 @@ export class SignupComponent implements OnInit {
   }
 
   signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string) {
+    try {
     this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category);
- 
-    this._signupObservable.subscribe((data: any) => {
-       this.output = JSON.parse(JSON.stringify(data));
-       console.log(data)
-    });
+    console.log(this._signupObservable)
+
+    this._signupObservable.subscribe(
+      (data: any) => {
+        this.output = JSON.parse(JSON.stringify(data));
+        console.log(data)
+      },
+      err => console.log("There was an error", err)
+    );
+    } catch(e) {
+      console.log("in catch", e)
+    }
+    console.log("done")
+    /*this.router.navigate(['/login'])*/
+  }
+
+  onVerifySubmit(value: any) {
+    //TODO: Check code matches
     this.router.navigate(['/login'])
+  }
+
+  onResendEmailSubmit() {
+    //TODO
   }
 }

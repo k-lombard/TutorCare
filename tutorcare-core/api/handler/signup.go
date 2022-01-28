@@ -62,6 +62,7 @@ func signupPage(c *gin.Context) {
 
 	switch {
 	case user.Email != "" && isUnique == true:
+		fmt.Println(models.SendEmailVerificationCode([]string{user.Email}))
 		userOut1, err2 := dbInstance.AddUser(user)
 		if err2 != nil {
 			c.JSON(http.StatusBadRequest, "Bad request")
@@ -69,7 +70,7 @@ func signupPage(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, userOut1)
 	case isUnique == false:
-		c.JSON(http.StatusInternalServerError, "Server error, unable to create your account. User with email already exists")
+		c.JSON(http.StatusConflict, "Email already has an account")
 		return
 	default:
 		http.Redirect(c.Writer, r, "/", 301)
