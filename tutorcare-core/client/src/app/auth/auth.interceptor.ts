@@ -27,28 +27,28 @@ isValid!: boolean
 accessToken!: string
 isLoggedIn!: boolean;
 constructor(private authService: AuthService, private toastr: ToastrService, private store: Store<AppState>, private router: Router){}
-    handleAuthError(error: any) {
-      console.log("error ", error);
-      let msg = "";
-      if (error !== undefined && typeof error === "string") {
-        msg = error;
-      } else if (error.error !== undefined && typeof error.error === "string") {
-        msg = error.error;
-      } else if (
-        error.error.error !== undefined &&
-        typeof error.error.error === "string"
-      ) {
-        msg = error.error.error;
-      } else {
-        msg = error.error.error.errors
-          ? error.error.error.errors[0].errorMessage
-          : "Something went wrong";
-      }
-      this.toastr.error(msg, "", {
-        timeOut: 3000,
-        positionClass: "toast-bottom-center",
-      });
-    }
+    // handleAuthError(error: any) {
+    //   console.log("error ", error);
+    //   let msg = "";
+    //   if (error !== undefined && typeof error === "string") {
+    //     msg = error;
+    //   } else if (error.error !== undefined && typeof error.error === "string") {
+    //     msg = error.error;
+    //   } else if (
+    //     error.error.error !== undefined &&
+    //     typeof error.error.error === "string"
+    //   ) {
+    //     msg = error.error.error;
+    //   } else {
+    //     msg = error.error.error.errors
+    //       ? error.error.error.errors[0].errorMessage
+    //       : "Something went wrong";
+    //   }
+    //   this.toastr.error(msg, "", {
+    //     timeOut: 3000,
+    //     positionClass: "toast-bottom-center",
+    //   });
+    // }
     intercept(r: HttpRequest<any>, nextReq: HttpHandler): Observable<HttpEvent<any>> {
       try {
         r = r.clone({

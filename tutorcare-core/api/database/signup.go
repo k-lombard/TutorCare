@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"main/models"
-
-	"github.com/google/uuid"
 )
 
 func (db Database) Signup(user *models.User) bool {
@@ -21,8 +19,8 @@ func (db Database) Signup(user *models.User) bool {
 	}
 }
 
-func (db Database) ValidateEmail(userID uuid.UUID) {
-	db.Conn.QueryRow(`UPDATE users SET status=$1 WHERE user_id=$2;`, true, userID)
+func (db Database) ValidateEmail(email string) {
+	db.Conn.QueryRow(`UPDATE users SET status=$1 WHERE email=$2;`, true, email)
 }
 
 func (db Database) Login(user *models.User) (models.UserWithTokens, bool) {

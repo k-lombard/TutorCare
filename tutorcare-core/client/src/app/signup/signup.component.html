@@ -40,14 +40,14 @@
                     </mat-error>
                   </mat-form-field>
 
-                  <mat-form-field appearance="fill">
+                  <!-- <mat-form-field appearance="fill">
                     <mat-label>Will you be:</mat-label>
                     <mat-select [(ngModel)]="selectedValue" name="option">
                       <mat-option *ngFor="let option of options" [value]="option.value">
                         {{option.viewValue}}
                       </mat-option>
                     </mat-select>
-                  </mat-form-field>
+                  </mat-form-field> -->
 
                 </div>
                 <button class="submit-btn, right-button" color="primary" mat-raised-button type="submit" [disabled]="!accountDetailsForm.valid" id ="signin-button">

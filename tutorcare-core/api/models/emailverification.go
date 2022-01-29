@@ -3,13 +3,11 @@ package models
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/google/uuid"
 )
 
 type EmailVerification struct {
-	UserID uuid.UUID `sql:",fk" json:"user_id"`
-	Code   int       `json:"application_id"`
+	Email string `json:"email"`
+	Code  int    `json:"code"`
 }
 
 type EmailVerificationList struct {
@@ -17,7 +15,7 @@ type EmailVerificationList struct {
 }
 
 func (i *EmailVerification) Bind(r *http.Request) error {
-	if i.Code == 0 || (i.UserID).String() == "" {
+	if i.Code == 0 || i.Email == "" {
 		return fmt.Errorf("Code and user_id are required fields.")
 	}
 	return nil

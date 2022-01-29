@@ -66,7 +66,7 @@ func signupPage(c *gin.Context) {
 		code := models.SendEmailVerificationCode([]string{user.Email})
 		now := time.Now()
 		end := time.Unix(time.Now().Add(time.Minute*20).Unix(), 0)
-		errCode := Client.Set(Client.Context(), user.UserID.String(), code, end.Sub(now)).Err()
+		errCode := Client.Set(Client.Context(), user.Email, code, end.Sub(now)).Err()
 		if errCode != nil {
 			c.JSON(http.StatusBadRequest, "Bad request")
 			return
@@ -92,7 +92,7 @@ func verifyEmailGatech(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
 		return
 	}
-	code, err := Client.Get(ctx, emailverification.UserID.String()).Result()
+	code, err := Client.Get(ctx, emailverification.Email).Result()
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
@@ -104,7 +104,9 @@ func verifyEmailGatech(c *gin.Context) {
 	}
 
 	if intCode == emailverification.Code {
-		dbInstance.ValidateEmail(emailverification.UserID)
+		dbInstance.ValidateEmail(emailverification.Email)
+		c.JSON(http.StatusOK, emailverification.Email+" successfully verified")
+		return
 	} else {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid verification code")
 		return

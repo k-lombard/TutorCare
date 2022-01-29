@@ -23,11 +23,13 @@ interface Option {
 export class SignupComponent implements OnInit {
   _usersObservable: Observable<Object[]> | undefined
   _signupObservable: Observable<Object[]> | undefined
+  _verifyObservable: Observable<string> | undefined
   users: Object | undefined
   output: Object | undefined
   accountDetailsForm: FormGroup;
   matchingPasswordsGroup: FormGroup;
   emailCodeForm: FormGroup;
+  email!: string
   userCategory!: string
   selectedValue!: string
   options: Option[] = [
@@ -103,7 +105,7 @@ export class SignupComponent implements OnInit {
        ])),
       email: new FormControl('', Validators.compose([
         Validators.email,
-        //Validators.pattern('^.*gatech.edu.*$'),
+        Validators.pattern('^.*gatech.edu.*$'),
         Validators.required
       ])),
       matchingPasswords: this.matchingPasswordsGroup,
@@ -119,7 +121,6 @@ export class SignupComponent implements OnInit {
 
   onSignupSubmit(value: any){
     console.log(value);
-    this.hidden = false
     console.log(this.selectedValue)
     if (this.selectedValue == "caregiver-0") {
       this.userCategory = "caregiver"
@@ -128,6 +129,7 @@ export class SignupComponent implements OnInit {
     } else {
       this.userCategory == "both"
     }
+    this.email =  this.accountDetailsForm.get('email').value
     this.signupFunc(
       this.accountDetailsForm.get('firstName').value,
       this.accountDetailsForm.get('lastName').value,
@@ -154,8 +156,12 @@ export class SignupComponent implements OnInit {
       (data: any) => {
         this.output = JSON.parse(JSON.stringify(data));
         console.log(data)
+        this.hidden = false
       },
-      err => console.log("There was an error", err)
+      err => {
+        console.log("There was an error", err)
+        this.hidden = true;
+      }
     );
     } catch(e) {
       console.log("in catch", e)
@@ -165,6 +171,12 @@ export class SignupComponent implements OnInit {
   }
 
   onVerifySubmit(value: any) {
+    this._verifyObservable = this.signupService.verifyCode(this.email, parseInt(this.emailCodeForm.get('emailVerificationCode').value))
+    this._verifyObservable.subscribe(
+      (data: any) => {
+        this.output = data;
+        console.log(data)
+    })
     this.router.navigate(['/login'])
   }
 
