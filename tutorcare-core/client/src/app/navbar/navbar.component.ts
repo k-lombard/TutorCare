@@ -15,6 +15,7 @@ import { getCurrUser } from '../auth/auth.selectors';
 export class NavbarComponent implements OnInit {
   user: User | undefined;
   name = "Account"
+  public isMenuOpen: boolean = false;
   constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit() {
@@ -26,6 +27,10 @@ export class NavbarComponent implements OnInit {
         this.user = data
         this.name = (this.user? this.user.first_name + " " + this.user.last_name: "Account")
       })
+  }
+
+  public onSidenavClick(): void {
+    this.isMenuOpen = false;
   }
 
   onHomeClick() {

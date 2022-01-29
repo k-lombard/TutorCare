@@ -1,6 +1,6 @@
 <div>
     <navbar></navbar>
-        
+
         <form [formGroup]="accountDetailsForm" novalidate (ngSubmit)="onSignupSubmit(accountDetailsForm.value)" *ngIf='hidden' id = "accountDetailsForm">
             <mat-card>
                 <mat-form-field class="full-width">
@@ -16,15 +16,15 @@
                       <mat-error class="error-message" *ngIf="accountDetailsForm.get('lastName').hasError(validation.type) && (accountDetailsForm.get('lastName').dirty || accountDetailsForm.get('lastName').touched)">{{validation.message}}</mat-error>
                     </mat-error>
                   </mat-form-field>
-        
+
                 <mat-form-field class="full-width">
                   <input matInput type="email" placeholder="Email" formControlName="email" required>
                   <mat-error *ngFor="let validation of account_validation_messages.email">
                     <mat-error class="error-message" *ngIf="accountDetailsForm.get('email').hasError(validation.type) && (accountDetailsForm.get('email').dirty || accountDetailsForm.get('email').touched)">{{validation.message}}</mat-error>
                   </mat-error>
                 </mat-form-field>
-        
-        
+
+
                 <div formGroupName="matchingPasswords">
                   <mat-form-field class="full-width">
                     <input matInput type="password" placeholder="Password" formControlName="password" required>
@@ -32,19 +32,28 @@
                       <mat-error class="error-message" *ngIf="accountDetailsForm.get('matchingPasswords').get('password').hasError(validation.type) && (accountDetailsForm.get('matchingPasswords').get('password').dirty || accountDetailsForm.get('matchingPasswords').get('password').touched)">{{validation.message}}</mat-error>
                     </mat-error>
                   </mat-form-field>
-        
+
                   <mat-form-field class="full-width">
                     <input matInput type="password" placeholder="Confirm Password" formControlName="confirm_password"  [errorStateMatcher]="parentErrorStateMatcher" required>
                     <mat-error *ngFor="let validation of account_validation_messages.confirm_password">
                       <mat-error class="error-message" *ngIf="(accountDetailsForm.get('matchingPasswords').get('confirm_password').hasError(validation.type)|| accountDetailsForm.get('matchingPasswords').hasError(validation.type)) && (accountDetailsForm.get('matchingPasswords').get('confirm_password').dirty || accountDetailsForm.get('matchingPasswords').get('confirm_password').touched)">{{validation.message}}</mat-error>
                     </mat-error>
                   </mat-form-field>
-        
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Will you be:</mat-label>
+                    <mat-select [(ngModel)]="selectedValue" name="option">
+                      <mat-option *ngFor="let option of options" [value]="option.value">
+                        {{option.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
                 </div>
                 <button class="submit-btn, right-button" color="primary" mat-raised-button type="submit" [disabled]="!accountDetailsForm.valid" id ="signin-button">
                     Sign In
                 </button>
-                
+
                 <button class="left-button" color="primary" mat-raised-button id="login-button">
                     <mat-icon aria-hidden="false" aria-label="Example home icon">login</mat-icon>
                     Login
@@ -61,11 +70,11 @@
             <mat-error class="error-message" *ngIf="accountDetailsForm.get('firstName').hasError(validation.type) && (accountDetailsForm.get('firstName').dirty || accountDetailsForm.get('firstName').touched)">{{validation.message}}</mat-error>
           </mat-error>
         </mat-form-field>
-      
+
         <button class="submit-btn, right-button" color="primary" mat-raised-button type="submit" [disabled]="!emailCodeForm.valid" id ="verify-button">
             Verify Email
         </button>
-        
+
         <button class="submit-btn, left-button" color="primary" mat-raised-button id="resend-button">
             Resend Email
         </button>

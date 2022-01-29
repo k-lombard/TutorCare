@@ -5,6 +5,7 @@
 mat-card {
     margin:  40px 20%;
     padding-bottom: 20px;
+    background-color: #D6DBD4;
 }
 
 mat-card-title {
@@ -37,4 +38,7 @@ mat-icon {
 
 .center {
     text-align: center;
+}
+.mat-raised-button {
+  @apply shadow-md shadow-[#eaaa00];
 }

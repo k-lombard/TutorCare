@@ -4,12 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "./serve.sh",
+    "start-windows": "ng serve --proxy-config proxy.config.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
   "private": true,
   "dependencies": {
+    "@angular-material-components/datetime-picker": "^7.0.1",
     "@angular/animations": "~13.1.0",
     "@angular/cdk": "^13.1.1",
     "@angular/common": "~13.1.0",
@@ -32,8 +34,10 @@
     "gopls": "^0.0.1-security.5",
     "ngrx-store-freeze": "^0.2.4",
     "ngx-bar-rating": "^2.0.0",
+    "ngx-material-timepicker": "^5.5.3",
     "ngx-toastr": "^14.2.1",
     "node-forge": "^1.2.0",
+    "postcss": "^8.4.5",
     "rxjs": "^6.3.2",
     "rxjs-compat": "^6.6.7",
     "sweetalert2": "^11.3.3",
@@ -52,7 +56,8 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "tailwindcss": "^3.0.15",
+    "stylelint-config-recommended": "^6.0.0",
+    "tailwindcss": "^3.0.16",
     "typescript": "~4.5.2"
   }
 }

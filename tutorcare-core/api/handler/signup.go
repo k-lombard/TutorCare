@@ -20,6 +20,7 @@ func (r routes) signup(rg *gin.RouterGroup) {
 	users := rg.Group("/")
 
 	users.POST("/", signupPage)
+	users.POST("/verify", verifyEmailGatech)
 }
 
 func (r routes) login(rg *gin.RouterGroup) {
@@ -62,7 +63,14 @@ func signupPage(c *gin.Context) {
 
 	switch {
 	case user.Email != "" && isUnique == true:
-		fmt.Println(models.SendEmailVerificationCode([]string{user.Email}))
+		code := models.SendEmailVerificationCode([]string{user.Email})
+		now := time.Now()
+		end := time.Unix(time.Now().Add(time.Minute*20).Unix(), 0)
+		errCode := Client.Set(Client.Context(), user.UserID.String(), code, end.Sub(now)).Err()
+		if errCode != nil {
+			c.JSON(http.StatusBadRequest, "Bad request")
+			return
+		}
 		userOut1, err2 := dbInstance.AddUser(user)
 		if err2 != nil {
 			c.JSON(http.StatusBadRequest, "Bad request")
@@ -74,6 +82,32 @@ func signupPage(c *gin.Context) {
 		return
 	default:
 		http.Redirect(c.Writer, r, "/", 301)
+	}
+}
+
+func verifyEmailGatech(c *gin.Context) {
+	r := c.Request
+	emailverification := &models.EmailVerification{}
+	if err := render.Bind(r, emailverification); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
+		return
+	}
+	code, err := Client.Get(ctx, emailverification.UserID.String()).Result()
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	intCode, err := strconv.Atoi(code)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+
+	if intCode == emailverification.Code {
+		dbInstance.ValidateEmail(emailverification.UserID)
+	} else {
+		c.JSON(http.StatusUnprocessableEntity, "Invalid verification code")
+		return
 	}
 }
 
@@ -91,6 +125,10 @@ func loginPage(c *gin.Context) {
 	userOut, isMatch := dbInstance.Login(user)
 	if isMatch == false {
 		c.JSON(http.StatusNotFound, "Resource not found")
+		return
+	}
+	if userOut.Status == false {
+		c.JSON(http.StatusUnauthorized, "User has not verified their gatech email yet.")
 		return
 	}
 	h := fnv.New64a()

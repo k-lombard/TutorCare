@@ -5,6 +5,7 @@ button {
 mat-card {
     margin:  40px 20%;
     padding-bottom: 20px;
+    background-color: #D6DBD4;
 }
 
 mat-card-title {
@@ -32,12 +33,12 @@ mat-icon {
     resize: none;
     box-shadow: transparent 0px 0px 0px 1px;
     overflow: auto;
-    overflow-y: hidden;  
+    overflow-y: hidden;
     overflow-x: hidden;
     border-radius: 3px;
     appearance: none;
     display: flex;
-    &:hover:not(:focus) {  
+    &:hover:not(:focus) {
         background-color: rgb(235, 236, 240);
         overflow-x: hidden;
         display: flex;
@@ -60,12 +61,12 @@ mat-icon {
     resize: none;
     box-shadow: transparent 0px 0px 0px 1px;
     overflow: auto;
-    overflow-y: hidden;  
+    overflow-y: hidden;
     overflow-x: hidden;
     border-radius: 3px;
     appearance: none;
     display: flex;
-    &:hover:not(:focus) {  
+    &:hover:not(:focus) {
         background-color: rgb(235, 236, 240);
         overflow-x: hidden;
         display: flex;
@@ -78,4 +79,7 @@ mat-icon {
         box-shadow: 0 0 0 1px #4c9aff;
         outline: none;
     }
+}
+.mat-raised-button {
+  @apply shadow-md shadow-[#eaaa00];
 }

@@ -37,15 +37,19 @@ import { BarRatingModule } from 'ngx-bar-rating';
 import { EditProfileService } from './account/edit-profile/edit-profile.service';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { FindJobsService } from './find-jobs/find-jobs.service';
+import { ApplyJobService } from './find-jobs/apply-job/apply-job.service';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AboutComponent
   ],
-  imports: [  
+  imports: [
     RouterModule,
     FormsModule,
-    BrowserModule,  
+    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
@@ -67,7 +71,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -28,10 +28,17 @@ export class SignupComponent implements OnInit {
   accountDetailsForm: FormGroup;
   matchingPasswordsGroup: FormGroup;
   emailCodeForm: FormGroup;
+  userCategory!: string
+  selectedValue!: string
+  options: Option[] = [
+    {value: 'caregiver-0', viewValue: 'Providing Care'},
+    {value: 'careseeker-1', viewValue: 'Seeking Care'},
+    {value: 'both-2', viewValue: 'Both'},
+  ];
   hidden = true
   constructor(
-    private router: Router, 
-    private usersService: UsersService, 
+    private router: Router,
+    private usersService: UsersService,
     private signupService: SignupService,
     private fb: FormBuilder) {}
   parentErrorStateMatcher = new ParentErrorStateMatcher();
@@ -63,7 +70,7 @@ export class SignupComponent implements OnInit {
     ]
   }
 
-  
+
 
   ngOnInit() {
     this.createForms();
@@ -113,17 +120,21 @@ export class SignupComponent implements OnInit {
   onSignupSubmit(value: any){
     console.log(value);
     this.hidden = false
+    console.log(this.selectedValue)
+    if (this.selectedValue == "caregiver-0") {
+      this.userCategory = "caregiver"
+    } else if (this.selectedValue == "careseeker-1") {
+      this.userCategory = "careseeker"
+    } else {
+      this.userCategory == "both"
+    }
     this.signupFunc(
-      this.accountDetailsForm.get('firstName').value, 
-      this.accountDetailsForm.get('lastName').value, 
-      this.accountDetailsForm.get('email').value, 
+      this.accountDetailsForm.get('firstName').value,
+      this.accountDetailsForm.get('lastName').value,
+      this.accountDetailsForm.get('email').value,
       this.accountDetailsForm.get('matchingPasswords').get('password').value,
       "caregiver" //user_catagory temp
       )
-  }
-
-  onLoginSubmit() {
-    this.router.navigate(['/login'])
   }
 
   getUsersFunc() {
@@ -154,11 +165,9 @@ export class SignupComponent implements OnInit {
   }
 
   onVerifySubmit(value: any) {
-    //TODO: Check code matches
     this.router.navigate(['/login'])
   }
 
   onResendEmailSubmit() {
-    //TODO
   }
 }

@@ -1,0 +1,29 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+button {
+    padding: 10px !important;
+}
+
+mat-card {
+    margin:  40px 20%;
+    padding-bottom: 20px;
+    background-color: #D6DBD4;
+}
+
+mat-card-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+mat-form-field {
+    display: block;
+}
+
+#login-button {
+    float: right;
+}
+
+.mat-raised-button {
+  @apply shadow-md shadow-[#eaaa00];
+}

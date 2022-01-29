@@ -1,0 +1,61 @@
+@use '@angular/material' as mat;
+@import "../../custom-theme.scss";
+@import "../../styles.scss";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.custom-a {
+    padding: 10px;
+    @apply shadow-md shadow-[#eaaa00];
+}
+
+.mat-raised-button {
+  @apply shadow-lg shadow-[#eaaa00];
+}
+
+.row-item-div {
+  // width: 150px;
+  width: 23.75%;
+
+}
+
+.row-item-div-large {
+  width: 28.3333333%;
+  margin: 5%;
+}
+
+h2 {
+  font-family: "Dosis";
+  font-size: 20px;
+}
+
+
+[id="stock"] {
+  border-radius: 50% !important;
+  border: solid 1px #000 !important;
+  height: 100px;
+  width: 100px;
+}
+
+// mat-card {
+//   margin:  10px 2.5%;
+//   // padding-bottom: 20px;
+//   width: 95%;
+// }
+
+.mat-card {
+  background-color: #D6DBD4;
+  margin-top: 10px;
+  width: 95%;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  height: 100%;
+  position: relative;
+}
+
+[id="rowone"] {
+  top: 0;
+  position: absolute;
+  margin-top: 20%;
+}

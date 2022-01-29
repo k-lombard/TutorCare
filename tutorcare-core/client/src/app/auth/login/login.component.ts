@@ -18,7 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'login-component',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
   loading: boolean = false
@@ -29,9 +29,14 @@ export class LoginComponent implements OnInit {
   currUser!: User
   email: string = ""
   pos: string | undefined
+  newpos!: any
   password: string = ""
   emailFC = new FormControl();
   passwordFC = new FormControl();
+  accuracy!: number
+  latitude!: number
+  longitude!: number
+  user_id!: string
   constructor(private authService: AuthService, private router:Router, private store: Store<AppState>, private toastr: ToastrService) {}
 
   ngOnInit() {
@@ -39,10 +44,10 @@ export class LoginComponent implements OnInit {
 
   onEmailChange() {
     this.email = this.emailFC.value
-  } 
+  }
   onPasswordChange() {
     this.password = this.passwordFC.value
-  } 
+  }
 
   onLoginSubmit() {
     this.loginFunc(this.email, this.password)
@@ -54,7 +59,7 @@ export class LoginComponent implements OnInit {
 
   // getUsersFunc() {
   //   this._usersObservable = this.usersService.getUsers();
- 
+
   //   this._usersObservable.subscribe((data: any) => {
   //      this.users = JSON.parse(JSON.stringify(data));
   //      console.log(data)
@@ -71,13 +76,21 @@ export class LoginComponent implements OnInit {
     .subscribe(resp => {
       console.log(resp)
       this.currUser = resp
+      this.user_id = this.currUser.user_id || ""
       setTimeout(async () => { await this.timeout(10000) }, 100000)
       this.router.navigate(['/home'])
       this.toastr.success("Successfully logged in as " + ((this.currUser.first_name || " ") + " " + (this.currUser.last_name || " ")[0]) + ".", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
     });
     this.authService.getPosition().subscribe(resp => {
       console.log(resp)
-    })
+      this.newpos = resp
+      this.accuracy = this.newpos.coords.accuracy
+      this.latitude = this.newpos.coords.latitude
+      this.longitude = this.newpos.coords.longitude
+      this.authService.createPosition(this.user_id, this.accuracy, this.latitude, this.longitude).subscribe(resp => {
+        console.log(resp)
+      });
+    });
   }
   timeout(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));

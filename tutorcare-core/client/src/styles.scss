@@ -1,9 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
 @import '~ngx-bar-rating/themes/br-stars-theme';
 @import '~ngx-toastr/toastr';
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -11,4 +11,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-family: "Dosis";
     src: url(assets/fonts/Dosis-SemiBold.ttf) format("truetype");
 }
-  
+
+mat-dialog-container {
+  background-color: #D6DBD4 !important;
+}
