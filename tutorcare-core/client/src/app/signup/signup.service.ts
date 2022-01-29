@@ -75,21 +75,7 @@ export class SignupService {
               },
               error => {return throwError(error)}
             );
-  });
-}
-
- private handleError(error: HttpErrorResponse) {
-
-  switch (error.status) {
-    case 0:
-      console.log("A client side or network error occurred:", error.error);
-      break
-    case 500:
-      console.log("That email already exists");
-      break
-    default:
-      console.log(`Backend returned an error. Code:  ${error.status}. Message: ${error.error}`,)
+    });
   }
-}
 
 }

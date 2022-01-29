@@ -1,39 +1,25 @@
-/*button {
-    margin: 2% 5%;
-}*/
+button {
+    padding: 10px;
+}
 
 mat-card {
-    margin:  40px 20%;
-    padding-bottom: 20px;
+    margin:  3% 20%;
+    padding: 2%;
     background-color: #D6DBD4;
 }
 
 mat-card-title {
     font-size: 2em;
-    margin-bottom: 20px;
+    margin-bottom: 1em;
 }
 
 mat-form-field {
     display: block;
-    margin: 2em;
+    margin-top: 1%;
 }
 
-.left-button {
-    float: left;
-    display: block;
-}
-
-.right-button {
+#signin-button {
     float: right;
-    display: block;
-}
-
-mat-icon {
-    margin: auto 5px;
-}
-
-.clear {
-    clear: both;
 }
 
 .center {

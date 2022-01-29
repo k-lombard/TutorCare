@@ -1,13 +1,10 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {UsersService} from '../users.service';
 import {SignupService} from '../signup/signup.service';
-import { Observable, throwError } from 'rxjs';
+import { Observable} from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ParentErrorStateMatcher, PasswordValidator } from './validators/password.validator';
-import { HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-
 interface Option {
   value: string;
   viewValue: string;
@@ -29,13 +26,12 @@ export class SignupComponent implements OnInit {
   accountDetailsForm: FormGroup;
   matchingPasswordsGroup: FormGroup;
   emailCodeForm: FormGroup;
-  email!: string
   userCategory!: string
   selectedValue!: string
   options: Option[] = [
-    {value: 'caregiver-0', viewValue: 'Providing Care'},
-    {value: 'careseeker-1', viewValue: 'Seeking Care'},
-    {value: 'both-2', viewValue: 'Both'},
+    {value: 'caregiver', viewValue: 'Provide Care'},
+    {value: 'careseeker', viewValue: 'Find Care'},
+    {value: 'both', viewValue: 'Both'},
   ];
   hidden = true
   constructor(
@@ -45,7 +41,7 @@ export class SignupComponent implements OnInit {
     private fb: FormBuilder) {}
   parentErrorStateMatcher = new ParentErrorStateMatcher();
 
-  account_validation_messages = {
+  validation_messages = {
     'name': [
       { type: 'required', message: 'Name is required' },
       { type: 'maxlength', message: 'Name cannot be more than 25 characters long' },
@@ -79,7 +75,7 @@ export class SignupComponent implements OnInit {
   }
 
   createForms() {
-    // matching passwords validation
+    // Matching passwords validation
     this.matchingPasswordsGroup = new FormGroup({
       password: new FormControl('', Validators.compose([
         Validators.minLength(8),
@@ -91,7 +87,7 @@ export class SignupComponent implements OnInit {
       return PasswordValidator.areEqual(formGroup);
     });
 
-    // account form validations
+    // Account form validations
     this.accountDetailsForm = this.fb.group({
       firstName: new FormControl('', Validators.compose([
        Validators.maxLength(25),
@@ -111,6 +107,7 @@ export class SignupComponent implements OnInit {
       matchingPasswords: this.matchingPasswordsGroup,
     })
 
+    // Email Form validations
     this.emailCodeForm = this.fb.group({
       emailVerificationCode: new FormControl('', Validators.compose([
         Validators.minLength(5),
@@ -119,23 +116,21 @@ export class SignupComponent implements OnInit {
     })
   }
 
+
+  onLoginSubmit() {
+    this.router.navigate(['/login'])
+  }
+
   onSignupSubmit(value: any){
-    console.log(value);
-    console.log(this.selectedValue)
-    if (this.selectedValue == "caregiver-0") {
-      this.userCategory = "caregiver"
-    } else if (this.selectedValue == "careseeker-1") {
-      this.userCategory = "careseeker"
-    } else {
-      this.userCategory == "both"
+    if (this.selectedValue == null) {
+      this.selectedValue = "caregiver"
     }
-    this.email =  this.accountDetailsForm.get('email').value
     this.signupFunc(
       this.accountDetailsForm.get('firstName').value,
       this.accountDetailsForm.get('lastName').value,
       this.accountDetailsForm.get('email').value,
       this.accountDetailsForm.get('matchingPasswords').get('password').value,
-      "caregiver" //user_catagory temp
+      this.selectedValue
       )
   }
 
@@ -148,7 +143,6 @@ export class SignupComponent implements OnInit {
   }
 
   signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string) {
-    try {
     this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category);
     console.log(this._signupObservable)
 
@@ -163,15 +157,10 @@ export class SignupComponent implements OnInit {
         this.hidden = true;
       }
     );
-    } catch(e) {
-      console.log("in catch", e)
-    }
-    console.log("done")
-    /*this.router.navigate(['/login'])*/
   }
 
   onVerifySubmit(value: any) {
-    this._verifyObservable = this.signupService.verifyCode(this.email, parseInt(this.emailCodeForm.get('emailVerificationCode').value))
+    this._verifyObservable = this.signupService.verifyCode(this.accountDetailsForm.get('email').value, parseInt(this.emailCodeForm.get('emailVerificationCode').value))
     this._verifyObservable.subscribe(
       (data: any) => {
         this.output = data;
@@ -181,5 +170,6 @@ export class SignupComponent implements OnInit {
   }
 
   onResendEmailSubmit() {
+    //TODO
   }
 }
