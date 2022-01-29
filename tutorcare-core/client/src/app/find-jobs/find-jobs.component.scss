@@ -51,4 +51,11 @@ h2 {
   margin-left: 2.5%;
   margin-right: 2.5%;
   height: 100%;
+  position: relative;
+}
+
+[id="rowone"] {
+  top: 0;
+  position: absolute;
+  margin-top: 20%;
 }

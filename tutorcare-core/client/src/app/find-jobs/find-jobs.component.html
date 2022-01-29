@@ -30,13 +30,13 @@
   <mat-list class="h-full w-full">
     <!-- <mat-list-item *ngFor="let loc of locs"> -->
       <mat-card *ngFor="let post of posts" class="w-full h-full justify-center items-center py-8">
-        <mat-list-item layout="row" class="justify-center items-center my-[5%]">
+        <mat-list-item id="rowone" layout="row" class="justify-center items-center my-[5%]">
           <div class="row-item-div"><img id="stock" src="../../assets/images/profile_picture.jpeg"/></div>
           <div class="row-item-div"><h2>Type of Care:</h2> {{post.care_type}}</div>
           <div class="row-item-div"> <h2>Job Description:</h2> {{post.care_description}}</div>
           <div class="row-item-div"> <h2>Date:</h2> {{ post.date_of_job }}</div>
         </mat-list-item>
-        <mat-list-item layout="row" class="justify-center items-center">
+        <mat-list-item id="rowtwo" layout="row" class="justify-center items-center">
           <div class="row-item-div"><h2>Start Time:</h2> {{ post.start_time }}</div>
           <div class="row-item-div"><h2>End Time:</h2> {{ post.end_time }}</div>
           <div class="row-item-div"><bar-rating [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating></div>
