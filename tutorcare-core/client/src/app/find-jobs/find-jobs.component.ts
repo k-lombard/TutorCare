@@ -28,7 +28,8 @@ export class FindJobsComponent implements OnInit {
     selectedValue: string | undefined
     rate: number = 4.5
     userCategory: string = ""
-    posts!: Post[]
+    posts: Post[] = []
+    div1: boolean = false;
     search: string =""
     filter_options: FilterOption[] = [
         {value: 'tutoring-0', viewValue: 'Type: Tutoring'},
@@ -61,23 +62,38 @@ export class FindJobsComponent implements OnInit {
       dialogConfig.disableClose = false;
       // dialogConfig.autoFocus = true;
       dialogConfig.data = {
-        id: 1,
-        title: 'Apply to this Job Posting',
-        post: post
+        id: 1 as number,
+        title: 'Apply to this Job Posting' as string,
+        post: post as Post,
+        posts: this.posts as Post[]
       };
       dialogConfig.height = "90%"
       dialogConfig.width = "90%"
       const dialogRef = this.dialog.open(ApplyJobDialog, dialogConfig);
 
       dialogRef.afterClosed().subscribe(
-        data => console.log("Dialog output:", data)
+        data => {
+          console.log("Dialog output:", data)
+        }
       );
+      console.log(dialogConfig.data.posts)
+      this.posts = dialogConfig.data.posts
+    }
+
+    div1Function(){
+      this.div1=!this.div1;
     }
 
     ngOnInit() {
         this.findJobs.getPosts().subscribe(data => {
             this.posts = data
+            var postsCopy: Post[] = []
             console.log(this.posts)
+            for (var post of this.posts) {
+              post.tagList = post.tags.split(" ")
+              postsCopy.push(post)
+            }
+            this.posts = postsCopy
         })
 
     }
@@ -114,6 +130,9 @@ export class CreateJobDialog implements OnInit{
   dayStr!: string
   monthStr!: string
   day!: number
+  title!: string
+  tags!: string
+
   _createJobObservable: Observable<Post> | undefined
   minDate = new Date()
   maxDate = new Date().setMonth(new Date().getMonth() + 3)
@@ -141,10 +160,13 @@ export class CreateJobDialog implements OnInit{
   ngOnInit() {
     this.form = this.fb.group({
       type_care: new FormControl(),
+      job_title: new FormControl(),
       job_desc: new FormControl(),
+      job_tags: new FormControl(),
       picker: new FormControl(new Date()),
       start_time: new FormControl(),
-      end_time: new FormControl()
+      end_time: new FormControl(),
+      posts: new FormControl()
     });
     this.store
         .pipe(
@@ -155,6 +177,7 @@ export class CreateJobDialog implements OnInit{
     })
 
   }
+
   save() {
     console.log(this.form.value)
     this.job_desc = this.form.value.job_desc
@@ -181,14 +204,19 @@ export class CreateJobDialog implements OnInit{
     this.date_of_job = this.form.value.start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
     this.start_time = this.form.value.start_time.getHours() + ':' + this.form.value.start_time.getMinutes()
     this.end_time = this.form.value.end_time.getHours() + ':' + this.form.value.end_time.getMinutes()
+    this.title = this.form.value.job_title
+    this.tags = this.form.value.job_tags
     console.log(this.start_time)
     console.log(this.form.value.start_time.getMonth())
     console.log(this.form.value.start_time.getDay())
-    this._createJobObservable = this.findJobs.createPost(this.userId, this.job_desc, this.type_care, this.date_of_job, this.start_time, this.end_time)
+    this._createJobObservable = this.findJobs.createPost(this.userId, this.title, this.job_desc, this.tags, this.type_care, this.date_of_job, this.start_time, this.end_time)
 
-    this._createJobObservable.subscribe((data: Post) => {
-        console.log(data)
-        this.post = data;
+    this._createJobObservable.subscribe((data2: Post) => {
+        this.post = data2
+        if (this.data.posts && this.data.posts instanceof Array) {
+          this.form.value.posts = this.data.posts.concat(this.post)
+        }
+
     });
     this.dialogRef.close(this.form.value);
   }

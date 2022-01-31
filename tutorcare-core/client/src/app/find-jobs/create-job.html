@@ -17,11 +17,36 @@
     </mat-card>
     <mat-card>
       <mat-form-field appearance="outline">
+          <mat-label>Job Title</mat-label>
+          <!-- <input formControlName="job_desc" matInput /> -->
+          <textarea id="title-field" matInput
+                    name="first"
+                    formControlName="job_title"
+                    cdkTextareaAutosize
+                    class="textarea-inline-control" >
+          </textarea>
+      </mat-form-field>
+    </mat-card>
+    <mat-card>
+      <mat-form-field appearance="outline">
           <mat-label>Job Description</mat-label>
           <!-- <input formControlName="job_desc" matInput /> -->
           <textarea id="desc-field" matInput
                     name="first"
                     formControlName="job_desc"
+                    cdkTextareaAutosize
+                    class="textarea-inline-control" >
+          </textarea>
+      </mat-form-field>
+    </mat-card>
+
+    <mat-card>
+      <mat-form-field appearance="outline">
+          <mat-label>Tags - Enter keywords separated by spaces</mat-label>
+          <!-- <input formControlName="job_desc" matInput /> -->
+          <textarea id="tags-field" matInput
+                    name="first"
+                    formControlName="job_tags"
                     cdkTextareaAutosize
                     class="textarea-inline-control" >
           </textarea>

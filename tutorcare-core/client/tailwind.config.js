@@ -3,7 +3,7 @@ module.exports = {
   purge: {
     content: [ './src/**/*.{html,ts}' ],
   },
-  darkMode: 'class',
+  darkMode: false,
   theme: {
     screens: {
       'tablet': '640px',

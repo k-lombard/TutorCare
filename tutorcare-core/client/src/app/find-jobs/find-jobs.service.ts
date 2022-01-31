@@ -34,13 +34,15 @@ export class FindJobsService {
     });
  }
 
- createPost(userId: string, careDesc: string, careType: string, date_of_job: string, start_time: string, end_time: string): Observable<Post> {
+ createPost(userId: string, jobTitle: string, careDesc: string, tags: string, careType: string, date_of_job: string, start_time: string, end_time: string): Observable<Post> {
   let url = `/api/posts/`;
   return new Observable((observer: any) => {
     // @ts-ignore
      this.http.post<any>(url, JSON.stringify({
          "user_id": userId,
+         "title": jobTitle,
          "care_description": careDesc,
+         "tags": tags,
          "care_type": careType,
          "date_of_job": date_of_job,
          "start_time": start_time,
