@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"main/database"
 	"net/http"
 	"strconv"
@@ -20,6 +21,7 @@ func (r routes) applications(rg *gin.RouterGroup) {
 	rg.GET("/:applicationid", getApplicationById)
 	rg.PUT("/:applicationid", updateApplication)
 	rg.DELETE("/:applicationid", deleteApplication)
+	rg.PUT("/accept/:applicationid", acceptApplication)
 }
 
 func addApplication(c *gin.Context) {
@@ -139,4 +141,44 @@ func updateApplication(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, app)
+}
+
+func acceptApplication(c *gin.Context) {
+	r := c.Request
+	applicationIDStr := c.Param("applicationid")
+	appID, errConv := strconv.Atoi(applicationIDStr)
+	if errConv != nil {
+		c.JSON(http.StatusBadRequest, "Error: Invalid ApplicationID Integer")
+		return
+	}
+	appData := models.Application{}
+	if err := render.Bind(r, &appData); err != nil {
+		c.JSON(http.StatusBadRequest, "Error: Bad request")
+		return
+	}
+	appData.Accepted = true
+	app, err := dbInstance.UpdateApplication(appID, appData)
+	if err != nil {
+		if err == database.ErrNoMatch {
+			c.JSON(http.StatusNotFound, "Error: Resource not found")
+		} else {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, err)
+		}
+		return
+	}
+	postData := models.Post{}
+	postData.PostID = app.PostID
+	postData.CaregiverID = app.UserID
+	post, err2 := dbInstance.AddApplicationToPost(app.PostID, postData)
+	if err2 != nil {
+		if err2 == database.ErrNoMatch {
+			c.JSON(http.StatusNotFound, "Error: Resource not found")
+		} else {
+			fmt.Println(err2)
+			c.JSON(http.StatusInternalServerError, err2)
+		}
+		return
+	}
+	c.JSON(http.StatusOK, post)
 }

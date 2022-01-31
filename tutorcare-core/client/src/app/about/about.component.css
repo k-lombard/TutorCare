@@ -1,0 +1,56 @@
+h1 {
+	padding: 50px;
+	font-family: Dosis;
+	font-size: 5em;
+}
+
+h2 {
+	font-size: 3em;
+}
+
+h3 {
+	font-size: 2em;
+}
+
+p {
+	font-size: 1.5em;
+	line-height: 1.5em;
+}
+
+.container {
+	padding-bottom: 50px;
+}
+
+.card {
+	color: white;
+	padding: 5em;
+	margin-top: 40px;
+	box-shadow: 3px 3px 5px gray;
+	border-radius: 10px;
+	margin: 1em;
+}
+
+#header-text {
+	text-align: center;
+}
+
+#motivation-card {
+	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("../../assets/images/drawing.jpg");
+	background-size: cover;
+}
+
+#challenge-card {
+	background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url("../../assets/images/daycare.jpg");
+	background-size: cover;
+}
+
+#approach-card {
+	background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url("../../assets/images/brainstorming.jpg");
+	background-size: cover;
+}
+
+@media screen and (max-width: 550px) {
+	p {
+		font-size: 1.2em;
+	}
+}

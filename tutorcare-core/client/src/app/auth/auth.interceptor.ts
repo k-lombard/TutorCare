@@ -1,4 +1,4 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from './auth.service';
 import { Injectable, OnInit } from '@angular/core';
@@ -10,6 +10,9 @@ import { Login } from './auth.actions';
 import 'rxjs/add/operator/catch';
 import { ToastrService } from 'ngx-toastr';
 import { isLoggedIn } from './auth.selectors';
+import { catchError, retry } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
 
 
 @Injectable()
@@ -23,18 +26,66 @@ prevUser!: User
 isValid!: boolean
 accessToken!: string
 isLoggedIn!: boolean;
-constructor(private authService: AuthService, private toastr: ToastrService, private store: Store<AppState>){}
-
+constructor(private authService: AuthService, private toastr: ToastrService, private store: Store<AppState>, private router: Router){}
+    // handleAuthError(error: any) {
+    //   console.log("error ", error);
+    //   let msg = "";
+    //   if (error !== undefined && typeof error === "string") {
+    //     msg = error;
+    //   } else if (error.error !== undefined && typeof error.error === "string") {
+    //     msg = error.error;
+    //   } else if (
+    //     error.error.error !== undefined &&
+    //     typeof error.error.error === "string"
+    //   ) {
+    //     msg = error.error.error;
+    //   } else {
+    //     msg = error.error.error.errors
+    //       ? error.error.error.errors[0].errorMessage
+    //       : "Something went wrong";
+    //   }
+    //   this.toastr.error(msg, "", {
+    //     timeOut: 3000,
+    //     positionClass: "toast-bottom-center",
+    //   });
+    // }
     intercept(r: HttpRequest<any>, nextReq: HttpHandler): Observable<HttpEvent<any>> {
-        try {
-            r = r.clone({
-                setHeaders: {
-                'Content-Type' : 'application/json; charset=utf-8',
-                'Accept'       : 'application/json',
-                'Authorization': `Bearer ${this.authService.getAccessToken()}`,
-                },
-            });
-            return nextReq.handle(r)
+      try {
+        r = r.clone({
+            setHeaders: {
+            'Content-Type' : 'application/json; charset=utf-8',
+            'Accept'       : 'application/json',
+            'Authorization': `Bearer ${this.authService.getAccessToken()}`,
+            },
+        });
+        return nextReq.handle(r)
+      // return nextReq.handle(r).pipe(retry(1), catchError((error: HttpErrorResponse) => {
+      //   if (error.error instanceof HttpErrorResponse) {
+      //     if(error.error instanceof ErrorEvent) {
+      //       console.log("Error Event")
+      //     } else {
+      //       console.log(`error status : ${error.status} ${JSON.stringify(error.error)}`);
+      //       switch (error.status) {
+      //         case 401:
+      //           this.router.navigateByUrl("/login");
+      //           break;
+      //         case 403:
+      //           this.router.navigateByUrl("/unauthorized");
+      //           break;
+      //         case 0:
+      //         case 400:
+      //         case 405:
+      //         case 406:
+      //         case 409:
+      //         case 500:
+      //           this.handleAuthError(error);
+      //           break;
+      //         }
+      //       }
+      // } else {
+      //   console.error("something else haappened");
+      // }
+      // return throwError(error) }))}
         } catch {
             this.store
             .pipe(
@@ -46,13 +97,13 @@ constructor(private authService: AuthService, private toastr: ToastrService, pri
             if (this.isLoggedIn == false) {
                 return nextReq.handle(r)
             } else {
-                this.prevUser = this.authService.getCurrUser()
-                this.accessToken = this.authService.getAccessToken()
-                this._boolObservable = this.authService.isTokenValid(this.authService.getAccessToken())
-                this._boolObservable.subscribe((data: any) => {
-                    this.isValid = data
-                    console.log(data)
-                })  
+                // this.prevUser = this.authService.getCurrUser()
+                // this.accessToken = this.authService.getAccessToken()
+                // this._boolObservable = this.authService.isTokenValid(this.authService.getAccessToken())
+                // this._boolObservable.subscribe((data: any) => {
+                //     this.isValid = data
+                //     console.log(data)
+                // })
                 this.toastr.error("Error", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
                 this._refreshObservable = this.authService.refreshToken(this.authService.getRefreshToken());
 
@@ -75,7 +126,7 @@ constructor(private authService: AuthService, private toastr: ToastrService, pri
                     });
                 }
                 return nextReq.handle(r);
-            }        
+            }
         }
         // .catch((err: any) => {
         //     if (err.status == 401) {
@@ -102,7 +153,7 @@ constructor(private authService: AuthService, private toastr: ToastrService, pri
         //         }
         //         return nextReq.handle(r);
         //     }
-        //     return nextReq.handle(r)  
-        // })   
-    }
+        //     return nextReq.handle(r)
+        // })
+  }
 }

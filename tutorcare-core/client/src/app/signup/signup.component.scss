@@ -1,25 +1,30 @@
 button {
-    margin: 50px;
+    padding: 10px;
 }
 
 mat-card {
-    margin:  40px 20%;
-    padding-bottom: 20px;
+    margin:  3% 20%;
+    padding: 2%;
+    background-color: #D6DBD4;
 }
 
 mat-card-title {
     font-size: 2em;
-    margin-bottom: 20px;
+    margin-bottom: 1em;
 }
 
 mat-form-field {
     display: block;
+    margin-top: 1%;
 }
 
-#login-button {
+#signin-button {
     float: right;
 }
 
-mat-icon {
-    margin: auto 5px;
+.center {
+    text-align: center;
+}
+.mat-raised-button {
+  @apply shadow-md shadow-[#eaaa00];
 }

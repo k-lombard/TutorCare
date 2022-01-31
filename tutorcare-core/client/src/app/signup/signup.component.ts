@@ -1,11 +1,10 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {UsersService} from '../users.service';
 import {SignupService} from '../signup/signup.service';
-import { Observable } from 'rxjs';
-import { FormControl } from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
+import { Observable} from 'rxjs';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { ParentErrorStateMatcher, PasswordValidator } from './validators/password.validator';
 interface Option {
   value: string;
   viewValue: string;
@@ -17,69 +16,126 @@ interface Option {
   styleUrls: ['./signup.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
+
 export class SignupComponent implements OnInit {
-  selectedValue: string | undefined
-  userCategory: string = ""
-  options: Option[] = [
-    {value: 'caregiver-0', viewValue: 'Providing Care'},
-    {value: 'careseeker-1', viewValue: 'Seeking Care'},
-    {value: 'both-2', viewValue: 'Both'},
-  ];
-  loading: boolean = false
   _usersObservable: Observable<Object[]> | undefined
   _signupObservable: Observable<Object[]> | undefined
+  _verifyObservable: Observable<string> | undefined
   users: Object | undefined
   output: Object | undefined
-  firstName: string = ""
-  lastName: string = ""
-  email: string = ""
-  password: string = ""
-  firstNameFC = new FormControl();
-  lastNameFC = new FormControl();
-  emailFC = new FormControl();
-  passwordFC = new FormControl();
-  constructor(private router: Router, private usersService: UsersService, private signupService: SignupService) {}
+  accountDetailsForm: FormGroup;
+  matchingPasswordsGroup: FormGroup;
+  emailCodeForm: FormGroup;
+  userCategory!: string
+  selectedValue!: string
+  options: Option[] = [
+    {value: 'caregiver', viewValue: 'Provide Care'},
+    {value: 'careseeker', viewValue: 'Find Care'},
+    {value: 'both', viewValue: 'Both'},
+  ];
+  hidden = true
+  constructor(
+    private router: Router,
+    private usersService: UsersService,
+    private signupService: SignupService,
+    private fb: FormBuilder) {}
+  parentErrorStateMatcher = new ParentErrorStateMatcher();
+
+  validation_messages = {
+    'name': [
+      { type: 'required', message: 'Name is required' },
+      { type: 'maxlength', message: 'Name cannot be more than 25 characters long' },
+      { type: 'pattern', message: 'Your name must contain only numbers and letters' }
+    ],
+    'email': [
+      { type: 'required', message: 'Email is required' },
+      { type: 'email', message: 'Enter a valid email' },
+      { type: 'pattern', message: 'Please use a Gatech email' },
+      { type: 'exists', message: 'That email already has an account'}
+    ],
+    'confirm_password': [
+      { type: 'required', message: 'Confirm password is required' },
+      { type: 'areEqual', message: 'Password mismatch' }
+    ],
+    'password': [
+      { type: 'required', message: 'Password is required' },
+      { type: 'minlength', message: 'Password must be at least 8 characters long' },
+      { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, and one number' }
+    ],
+    'emailCode': [
+      { type: 'required', message: 'Password is required' },
+      { type: 'minlength', message: 'Email code must be at least 5 characters long' },
+    ]
+  }
+
+
 
   ngOnInit() {
-    this.loading = true
-    this.getUsersFunc()
-    console.log(this.users)
+    this.createForms();
   }
 
-  onFirstNameChange() {
-    this.firstName = this.firstNameFC.value
-  } 
+  createForms() {
+    // Matching passwords validation
+    this.matchingPasswordsGroup = new FormGroup({
+      password: new FormControl('', Validators.compose([
+        Validators.minLength(8),
+        Validators.required,
+        Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$')/*^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$*/
+      ])),
+      confirm_password: new FormControl('', Validators.required)
+    }, (formGroup: FormGroup) => {
+      return PasswordValidator.areEqual(formGroup);
+    });
 
-  onLastNameChange() {
-    this.lastName = this.lastNameFC.value
-  } 
+    // Account form validations
+    this.accountDetailsForm = this.fb.group({
+      firstName: new FormControl('', Validators.compose([
+       Validators.maxLength(25),
+       Validators.pattern('^[a-zA-Z0-9_]*$'),
+       Validators.required
+      ])),
+      lastName: new FormControl('', Validators.compose([
+        Validators.maxLength(25),
+        Validators.pattern('^[a-zA-Z0-9_]*$'),
+        Validators.required
+       ])),
+      email: new FormControl('', Validators.compose([
+        Validators.email,
+        Validators.pattern('^.*gatech.edu.*$'),
+        Validators.required
+      ])),
+      matchingPasswords: this.matchingPasswordsGroup,
+    })
 
-  onEmailChange() {
-    this.email = this.emailFC.value
-  } 
-  onPasswordChange() {
-    this.password = this.passwordFC.value
-  } 
-
-  onSignupSubmit() {
-    console.log(this.selectedValue)
-    if (this.selectedValue == "caregiver-0") {
-      this.userCategory = "caregiver"
-    } else if (this.selectedValue == "careseeker-1") {
-      this.userCategory = "careseeker"
-    } else {
-      this.userCategory == "both"
-    }
-    this.signupFunc(this.firstName, this.lastName, this.email, this.password, this.userCategory)
+    // Email Form validations
+    this.emailCodeForm = this.fb.group({
+      emailVerificationCode: new FormControl('', Validators.compose([
+        Validators.minLength(5),
+        Validators.required
+      ]))
+    })
   }
+
 
   onLoginSubmit() {
     this.router.navigate(['/login'])
   }
 
+  onSignupSubmit(value: any){
+    if (this.selectedValue == null) {
+      this.selectedValue = "caregiver"
+    }
+    this.signupFunc(
+      this.accountDetailsForm.get('firstName').value,
+      this.accountDetailsForm.get('lastName').value,
+      this.accountDetailsForm.get('email').value,
+      this.accountDetailsForm.get('matchingPasswords').get('password').value,
+      this.selectedValue
+      )
+  }
+
   getUsersFunc() {
     this._usersObservable = this.usersService.getUsers();
- 
     this._usersObservable.subscribe((data: any) => {
        this.users = JSON.parse(JSON.stringify(data));
        console.log(data)
@@ -88,13 +144,32 @@ export class SignupComponent implements OnInit {
 
   signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string) {
     this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category);
- 
-    this._signupObservable.subscribe((data: any) => {
-       this.output = JSON.parse(JSON.stringify(data));
-       console.log(data)
-    });
+    console.log(this._signupObservable)
+
+    this._signupObservable.subscribe(
+      (data: any) => {
+        this.output = JSON.parse(JSON.stringify(data));
+        console.log(data)
+        this.hidden = false
+      },
+      err => {
+        console.log("There was an error", err)
+        this.hidden = true;
+      }
+    );
+  }
+
+  onVerifySubmit(value: any) {
+    this._verifyObservable = this.signupService.verifyCode(this.accountDetailsForm.get('email').value, parseInt(this.emailCodeForm.get('emailVerificationCode').value))
+    this._verifyObservable.subscribe(
+      (data: any) => {
+        this.output = data;
+        console.log(data)
+    })
     this.router.navigate(['/login'])
   }
 
-
+  onResendEmailSubmit() {
+    //TODO
+  }
 }

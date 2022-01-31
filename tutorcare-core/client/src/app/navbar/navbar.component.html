@@ -1,8 +1,8 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
+<mat-toolbar color="primary" class="focus:outline-none py-2 w-[100%] h-[5rem]">
+    <mat-toolbar-row class="desktop:flex items-center justify-left h-full">
       <h1 color="accent" class="mat-typography">TutorCare</h1>
       <span class="menu-spacer"></span>
-      <div>
+      <div id="menu-links">
         <a mat-button [routerLink]="'/home'" (click)="onHomeClick()"> Home </a>
         <a mat-button [routerLink]="'/find-care'" (click)="onFindCareClick()"> Find Care </a>
         <a mat-button [routerLink]="'/find-jobs'" (click)="onFindJobsClick()"> Find Jobs </a>
@@ -11,5 +11,41 @@
         <a mat-button [routerLink]="'/signup'" (click)="onSignupClick()"> Signup </a>
         <a mat-button [routerLink]="'/account'" (click)="onAccountClick()"> <mat-icon>account_circle</mat-icon> {{name}} </a>
       </div>
+      <div class="example-sidenav-content" position="end" float="right">
+        <button type="button" mat-button id="hamburger" (click)="sidenav.toggle()">
+          <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
+        </button>
+      </div>
+        <!-- <mat-sidenav-container class="sidenav-container h-full">
+          <mat-sidenav #sidenav autoFocus="false" mode="side" [(opened)]="isMenuOpen" class="sidenav" position="end" (click)="onSidenavClick()">
+            <a mat-button [routerLink]="'/home'" (click)="onHomeClick()"> Home </a>
+            <a mat-button [routerLink]="'/find-care'" (click)="onFindCareClick()"> Find Care </a>
+            <a mat-button [routerLink]="'/find-jobs'" (click)="onFindJobsClick()"> Find Jobs </a>
+            <a mat-button [routerLink]="'/about-us'" (click)="onAboutUsClick()"> About Us </a>
+            <a mat-button [routerLink]="'/login'" (click)="onLoginClick()"> Login </a>
+            <a mat-button [routerLink]="'/signup'" (click)="onSignupClick()"> Signup </a>
+            <a mat-button [routerLink]="'/account'" (click)="onAccountClick()"> <mat-icon>account_circle</mat-icon> {{name}} </a>
+          </mat-sidenav>
+          <mat-sidenav-content class="h-full">
+            <main class="h-full">
+              <router-outlet></router-outlet>
+            </main>
+          </mat-sidenav-content>
+        </mat-sidenav-container> -->
     </mat-toolbar-row>
 </mat-toolbar>
+<mat-sidenav-container class="example-container" color="primary">
+  <mat-sidenav #sidenav class="sidenav" color="primary" [fixedInViewport]="true"  mode="side" position="end" closed class="example-sidenav">
+    <mat-list>
+      <mat-list-item><a mat-button [routerLink]="'/home'" (click)="onHomeClick()"> Home </a> </mat-list-item>
+      <mat-list-item><a mat-button [routerLink]="'/find-care'" (click)="onFindCareClick()"> Find Care </a></mat-list-item>
+      <mat-list-item><a mat-button [routerLink]="'/find-jobs'" (click)="onFindJobsClick()"> Find Jobs </a></mat-list-item>
+      <mat-list-item><a mat-button [routerLink]="'/about-us'" (click)="onAboutUsClick()"> About Us</a> </mat-list-item>
+      <mat-list-item><a mat-button [routerLink]="'/login'" (click)="onLoginClick()"> Login </a></mat-list-item>
+      <mat-list-item><a mat-button [routerLink]="'/signup'" (click)="onSignupClick()"> Signup </a></mat-list-item>
+      <mat-list-item><a mat-button [routerLink]="'/account'" (click)="onAccountClick()"> <mat-icon>account_circle</mat-icon> {{name}} </a></mat-list-item>
+    </mat-list>
+    </mat-sidenav>
+<mat-sidenav-content color="primary">
+  </mat-sidenav-content>
+</mat-sidenav-container>

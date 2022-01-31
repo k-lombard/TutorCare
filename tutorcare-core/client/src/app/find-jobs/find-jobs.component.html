@@ -1,9 +1,9 @@
 <div>
-  <navbar>
+  <navbar class="flex w-[100%]">
   </navbar>
-  <mat-list>
-    <mat-list-item layout="row" [style.height]="'100px'" [style.padding-bottom]="'20px'">
-      <div [style.margin-left]="'100px'" class="row-item-div-large">
+  <!-- <mat-list class="h-full">
+    <mat-list-item layout="row" class="justify-center items-center h-full">
+      <div class="row-item-div-large justify-center items-center">
         <mat-form-field [style.font-size]="'16px'" appearance="fill">
           <mat-label>Filter By</mat-label>
               <mat-select [(ngModel)]="selectedValue" name="option">
@@ -13,38 +13,189 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="row-item-div-large">
+      <div class="row-item-div-large justify-center items-center">
         <form>
           <mat-form-field>
           <span matPrefix> </span>
           <input type="tel" matInput placeholder="Search" name= "search" [(ngModel)]= "search">
-          <button matSuffix mat-button><mat-icon [style.margin-top]="'-40px'" [style.margin-left]="'10px'" [style.transform]="'scale(1.4)'">search</mat-icon></button>
+          <button matSuffix mat-button><mat-icon [style.transform]="'scale(1.4)'">search</mat-icon></button>
           </mat-form-field>
         </form>
       </div>
-      <div class="row-item-div-large">
+      <div class="row-item-div-large justify-center items-center">
         <button class="custom-a" mat-raised-button color="primary" (click)="openDialog()"> <span>CREATE JOB POSTING</span></button>
       </div>
     </mat-list-item>
-  </mat-list>
-  <mat-list>
+  </mat-list> -->
+<div class="flex flex-row w-[100%]">
+  <div class="flex flex-col h-full w-64 h-screen px-4 py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
+    <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Find Jobs</h2>
+
+    <div class="relative mt-6 mx-2">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </span>
+
+        <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
+    </div>
+
+    <a class="flex items-center px-4 py-2 mt-5 text-gray-700 bg-gray-200 rounded-md dark:bg-gray-700 dark:text-gray-200" href="/find-jobs">
+      <mat-icon>topic</mat-icon>
+
+        <span class="mx-4 font-medium">Current Job Postings</span>
+    </a>
+
+
+    <div class="flex flex-col justify-between flex-1 mt-6">
+        <nav>
+          <h2 class="mx-4 font-lg">Careseeker</h2>
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <mat-icon>folder_copy</mat-icon>
+
+                <span class="mx-4 font-medium">My Job Postings</span>
+            </a>
+
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/applications-received">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+
+                <span class="mx-4 font-medium">Applications Received</span>
+            </a>
+
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <mat-icon>message</mat-icon>
+
+                <span class="mx-4 font-medium">Messages</span>
+            </a>
+
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/active-jobs">
+              <mat-icon>library_add_check</mat-icon>
+
+                <span class="mx-4 font-medium">Active Jobs</span>
+            </a>
+
+            <hr class="my-6 border-gray-200 dark:border-gray-600" />
+
+            <h2 class="mx-4 font-lg">Caregiver</h2>
+
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <mat-icon>assignment_turned_in</mat-icon>
+
+                <span class="mx-4 font-medium">Applied To</span>
+            </a>
+
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <mat-icon>message</mat-icon>
+
+                <span class="mx-4 font-medium">Messages</span>
+            </a>
+
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <mat-icon>library_add_check</mat-icon>
+
+                <span class="mx-4 font-medium">Active Jobs</span>
+            </a>
+        </nav>
+    </div>
     <!-- <mat-list-item *ngFor="let loc of locs"> -->
-      <mat-card *ngFor="let post of posts">
-        <mat-list-item layout="row" [style.height]="'120px'">
-          <div [style.margin-left]="'100px'" class="row-item-div"><img id="stock" src="../../assets/images/profile_picture.jpeg"/></div>
+      <!-- <mat-card *ngFor="let post of posts" class="w-full h-full justify-center items-center py-8">
+        <mat-list-item id="rowone" layout="row" class="justify-center items-center my-[5%]">
+          <div class="row-item-div"><img id="stock" src="../../assets/images/profile_picture.jpeg"/></div>
           <div class="row-item-div"><h2>Type of Care:</h2> {{post.care_type}}</div>
           <div class="row-item-div"> <h2>Job Description:</h2> {{post.care_description}}</div>
           <div class="row-item-div"> <h2>Date:</h2> {{ post.date_of_job }}</div>
+        </mat-list-item>
+        <mat-list-item id="rowtwo" layout="row" class="justify-center items-center">
           <div class="row-item-div"><h2>Start Time:</h2> {{ post.start_time }}</div>
           <div class="row-item-div"><h2>End Time:</h2> {{ post.end_time }}</div>
           <div class="row-item-div"><bar-rating [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating></div>
           <div class="row-item-div">
-            <button (click)="openApplyDialog(post)" class="custom-a" mat-raised-button color="accent">
+            <button mat-raised-button (click)="openApplyDialog(post)" class="custom-a shadow-md shadow-[#eaaa00]" color="accent">
               <span>APPLY</span>
             </button>
           </div>
-      </mat-list-item>
-    </mat-card>
+        </mat-list-item>
+    </mat-card> -->
+</div>
+<div id="rightcol" class="flex flex-col">
+<nav class="bg-white w-full shadow dark:bg-gray-800">
+  <div class="container flex items-center justify-left p-6 mx-4 text-gray-600 capitalize dark:text-gray-300">
 
-  </mat-list>
+    <button (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
+      <span id="createspan">CREATE JOB POST</span>
+    </button>
+    <div id="dropdown" class="flex items-center justify-center mx-4">
+      <div class="relative inline-block">
+          <!-- Dropdown toggle button -->
+          <button (click)="div1Function()" class="relative z-10 block p-2 text-gray-700 bg-white border border-gray rounded-md dark:text-white focus:border-blue-500 focus:ring-opacity-40 dark:focus:ring-opacity-40 focus:ring-blue-300 dark:focus:ring-blue-400 focus:ring dark:bg-gray-800 focus:outline-none">
+              <svg id="arrow" class="w-5 h-5 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+              <span id="filter" class="font-medium mx-2">Filter By</span>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div *ngIf="div1" class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
+            <a class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Type: Tutoring </a>
+            <a class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Type: Babysitting </a>
+            <a class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Type: Other </a>
+          </div>
+      </div>
+  </div>
+
+  </div>
+</nav>
+<!-- <div id="listitem" *ngFor="let post of posts" class="flex justify-center items-center w-1/6 h-1/2 rounded-md shadow-lg mr-[2rem] my-8 px-4 bg-cover card bg-base-200" style="background:  #D6DBD4">
+  <div class="card glass lg:card-side text-neutral-content">
+    <div class=" pt-8">
+      <bar-rating [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating>
+
+    <figure class="pb-0 mb-0">
+      <img id="stock" src="../../assets/images/profile_picture.jpeg"/>
+    </figure>
+    <div class="card-actions pt-8 pb-0 mb-0">
+      <button id="apply" mat-raised-button color="accent" ><span>APPLY</span></button>
+    </div>
+  </div>
+    <div class="max-w-full card-body pb-8">
+      <h2 class="card-title">Type of Care: {{post.care_type}}</h2>
+      <h3 id="date" >{{post.date_of_job}}</h3>
+      <div id="desc">
+      <h3 class="py-10"><h3 class="font-bold">Description:</h3>{{post.care_description}}</h3>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="grid desktop:grid-cols-4 gap-4 laptop:grid-cols-2 tablet:grid-cols-1">
+<div id="postcard" *ngFor="let post of posts" class="px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
+  <div class="flex items-center justify-between">
+      <span class="text-sm font-light text-gray-600 dark:text-gray-400">{{post.date_of_job}}</span>
+      <a id="type" class="px-3 py-1 text-sm font-bold text-white transition-colors duration-200 transform bg-gray-600 rounded cursor-pointer hover:bg-gray-500">{{post.care_type}}</a>
+  </div>
+  <div class="mt-2 flex flex-col min-h-[10em]">
+      <a href="#" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{post.title}}</a>
+      <p class="grow mt-2 text-gray-600 dark:text-gray-300">{{post.care_description}}</p>
+  </div>
+
+  <div id="row-bottom" class="flex items-center justify-between w-full mt-4">
+    <button id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>
+
+      <div class="h-full items-center">
+          <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->
+          <div class="flex flex-row">
+            <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
+              <div *ngFor="let tag of post.tagList" class="mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-2 text-xs leading-3">{{ tag }}</div>
+              <img id="stock" class="object-cover w-10 h-10 mx-2 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
 </div>

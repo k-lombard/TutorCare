@@ -16,6 +16,7 @@ import (
 func (r routes) posts(rg *gin.RouterGroup) {
 	rg.GET("/", getAllPosts)
 	rg.GET("/active", getActivePosts)
+	rg.GET("/active-jobs/:userid", getActivePostsWithCaregiver)
 	rg.POST("/", addPost)
 	rg.GET("/user/:userid", getPostsByUserId)
 	rg.GET("/:postid", getPostById)
@@ -49,6 +50,17 @@ func getAllPosts(c *gin.Context) {
 
 func getActivePosts(c *gin.Context) {
 	posts, err := dbInstance.GetActivePosts()
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusOK, posts)
+}
+
+func getActivePostsWithCaregiver(c *gin.Context) {
+	userID := uuid.MustParse(c.Param("userid"))
+	posts, err := dbInstance.GetActivePostsWithCaregiver(userID)
 	if err != nil {
 		fmt.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, err)

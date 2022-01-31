@@ -14,6 +14,7 @@ interface FilterOption {
 })
 export class FindCareComponent implements OnInit {
     markers: any[] | undefined;
+    start_index: number = 0
     zoom = 12
     center!: google.maps.LatLngLiteral
     options: google.maps.MapOptions = {
@@ -223,7 +224,7 @@ export class FindCareComponent implements OnInit {
         {value: 'first-5', viewValue: 'Least Recent'}
     ];
 
-    locs: GeolocationPositionWithUser[] | undefined
+    locs!: GeolocationPositionWithUser[]
     constructor(private router: Router, private findCare: FindCareService) {}
 
     ngOnInit() {

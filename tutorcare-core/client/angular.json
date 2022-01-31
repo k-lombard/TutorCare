@@ -33,7 +33,8 @@
             ],
             "styles": [
               "src/custom-theme.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "public/styles.scss"
             ],
             "scripts": []
           },

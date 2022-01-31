@@ -1,5 +1,5 @@
 
-   
+
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -10,7 +10,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { getCurrUser } from './auth.selectors';
 import { Token } from '../models/token.model';
-
+import { GeolocationPosition } from "../models/geolocationposition.model";
 
 
 
@@ -49,7 +49,7 @@ export class AuthService {
         return this.http.post<any>(url, JSON.stringify({
                "email": email,
                "password": password,
-               
+
            }), {headers: this.headers})
     }
 
@@ -87,6 +87,16 @@ export class AuthService {
           },
             error => observer.error(error));
         });
+    }
+
+    createPosition(user_id: string, accuracy: number, latitude: number, longitude: number): Observable<GeolocationPosition> {
+      let url = `/api/geolocationpositions/`;
+        return this.http.post<any>(url, JSON.stringify({
+               "user_id": user_id,
+               "accuracy": accuracy,
+               "latitude": latitude,
+               "longitude": longitude
+           }), {headers: this.headers})
     }
 
     getAccessToken(): string {

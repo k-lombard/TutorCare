@@ -1,19 +1,118 @@
 @use '@angular/material' as mat;
 @import "../../custom-theme.scss";
+
+#background-div {
+  height: 100vh;
+  background-image: url("../../assets/images/homepage.svg");
+  background-size: 100% 80%;
+  background-repeat: no-repeat;
+}
+
+img {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+h1, h2, h3 {
+  color: white;
+}
+
 h1 {
-    margin: 50px;
-    font-family: "Mako";
-    font-size: 86px;
+    font-family: "Dosis";
+    font-size: 5em;
     font-weight: normal;
     font-style: normal;
-    color: mat.get-color-from-palette($tutorcare-core-accent, A100);
+    /*color: mat.get-color-from-palette($tutorcare-core-accent, A100);*/
+    margin-top: 1.5em;
+}
+
+#graphic {
+  
 }
 
 h2 {
-    margin-top: 20px;
-    font-size: 40px;
+    margin-top: 0.5em;
+    font-size: 3em;
     font-family: "Dosis";
-    color: black;
     line-height: 40px;
+}
 
+h3 {
+  margin-top: 0.5em;
+  font-size: 2em;
+}
+
+.card h2, .card h3 {
+  color: white !important;
+}
+
+#second-container {
+  text-align: center;
+}
+
+#second-container h1{
+  margin-bottom: 30px;
+  color: black;
+}
+
+#second-container h2, #second-container h3 {
+  color: black;
+}
+
+#second-container h3 {
+  font-family: Helvetica;
+}
+
+#second-container .shadow-card {
+  padding: 20px;
+  box-shadow: 0px 0px 5px gray;
+  border-radius: 10px;
+  height: 25em;
+}
+
+.center-cropped {
+  height: 10em;
+  width: 10em;
+  margin: 0px auto;
+  border-radius: 50%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#care-card {
+  background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url("../../assets/images/heart.jpg");
+  background-size: cover;
+
+}
+
+
+#tutor-card {
+  background-image: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url('../../assets/images/classroom.jpg');
+  background-size: cover;
+}
+
+#convenience-card {
+  background-image: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url('../../assets/images/convenience.jpg');
+  background-size: cover;
+}
+
+@media screen and (max-width: 992px) {
+  #container {
+    background-size: 100% 100%;
+  }
+
+  #header-img {
+    display: none;
+  }
+}
+
+.card {
+  padding: 5em;
+  margin-top: 40px;
+  box-shadow: 3px 3px 5px gray;
+  border-radius: 10px;
+  margin: 1em;
+  background-size: cover;
 }

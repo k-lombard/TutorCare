@@ -38,6 +38,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { ApplyJobDialog } from '../find-jobs/apply-job/apply-job.component';
+import { ApplicationsReceivedComponent } from '../find-jobs/applications-received/applications-received.component';
+import { ActiveJobsComponent } from '../find-jobs/active-jobs/active-jobs.component';
 
 @NgModule({
     imports: [
@@ -82,9 +84,11 @@ import { ApplyJobDialog } from '../find-jobs/apply-job/apply-job.component';
         EditProfileComponent,
         FindJobsComponent,
         CreateJobDialog,
-        ApplyJobDialog
+        ApplyJobDialog,
+        ApplicationsReceivedComponent,
+        ActiveJobsComponent
     ],
-    exports: [LoginComponent],
+    exports: [LoginComponent, NavbarComponent],
     entryComponents: [CreateJobDialog]
 })
 export class AuthModule {

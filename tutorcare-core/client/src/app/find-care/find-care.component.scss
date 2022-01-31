@@ -1,37 +1,91 @@
 @use '@angular/material' as mat;
-@import "../../custom-theme.scss"; 
+@import "../../custom-theme.scss";
 @import "../../styles.scss";
-a {
-    margin-left: 120px;
-    font-size: 16px !important;
-    margin-bottom: 40px;
+
+[id="stock"] {
+  border-radius: 50% !important;
+  border: solid 1px #000 !important;
+  height: 75px;
+  width: 75px;
 }
 
-// .mat-icon {
-//     margin-left: -120px !important;
+[id="bottomdiv"] {
+  bottom: 0;
+  position: absolute;
+  margin-bottom: 2%;
+}
+
+[id="outerdiv"] {
+  position: relative;
+}
+
+[id="messagebutton"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  margin-top: 2%;
+  margin-right: 2%;
+}
+
+// .mat-toolbar {
+//   height: 2% !important;
 // }
-
-
-.mat-list-item {
-    border-bottom: solid 1px #000;
+.mat-toolbar-row {
+  height: 100px;
 }
 
-p {
-    margin-left: 305px !important; 
+@media (max-width: 420px) {
+
+  [id="outerdiv"] {
+    position: relative;
+    height: 60% !important;
+    padding-bottom: 80px !important;
+  }
+
+  [id="bottomdiv"] {
+    bottom: 0;
+    position: absolute;
+    margin-bottom: 2%;
+    margin-top: 20% !important;
+  }
+
 }
 
-button {
-    float: right !important;
-}
+@media (max-width: 290px) {
 
-.row-item-div {
-    margin-left: 80px;
+  [id="outerdiv"] {
+    position: relative;
+    height: 60% !important;
+    padding-bottom: 80px !important;
+  }
+
+  [id="bottomdiv"] {
+    bottom: 0;
+    position: absolute;
+    margin-bottom: 2%;
+    margin-top: 20% !important;
+  }
+
+  [id="rowitem"] {
+    margin: 0% !important;
     width: 100px;
+  }
+
+  [id="rowitem2"] {
+    margin: 0% !important;
+    width: 100px;
+    margin-top: 5% !important;
+  }
+
+  mat-form-field {
+    width: 100px;
+  }
+
+  [id="firstlast"] {
+    margin-top: 40% !important;
+  }
+
 
 }
 
-.custom-a {
-    margin-left: 0px !important;
-    font-size: 16px !important;
-    margin-bottom: 0px !important;
-}
