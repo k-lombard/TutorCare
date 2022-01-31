@@ -30,6 +30,7 @@ export class ApplicationsReceivedComponent implements OnInit {
     locs!: GeolocationPositionWithUser[]
     mySubscription!: any
     appId!: number
+    userType!: string
     private routeSub: Subscription;
     constructor(private router: Router, private appsRec: ApplicationsReceivedService, private store: Store<AppState>, private route: ActivatedRoute) {}
 
@@ -51,6 +52,7 @@ export class ApplicationsReceivedComponent implements OnInit {
         ).subscribe(data =>  {
             this.user = data
             this.userId = this.user.user_id || ""
+            this.userType = this.user.user_category
       })
       this.appsRec.getPostsByUserId(this.userId).subscribe(data => {
         this.posts = data
