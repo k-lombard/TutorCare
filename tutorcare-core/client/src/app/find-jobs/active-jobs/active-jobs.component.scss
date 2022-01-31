@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
-@import "../../custom-theme.scss";
-@import "../../styles.scss";
+@import "../../../custom-theme.scss";
+@import "../../../styles.scss";
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
@@ -42,11 +42,25 @@ h3 {
 [id="stock"] {
   border-radius: 50% !important;
   border: solid 1px #000 !important;
+  width: 100px;
+  height: 100px;
+  display: inline !important;
+}
+[id="theapp"] {
+  cursor: pointer;
+  text-overflow: ellipsis !important;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 [id="apply"] {
   padding: 16px;
   float: right;
+}
+
+[id="dateofjob"] {
+  float: right !important;
+  display: inline-block !important;
 }
 
 [id="desc"] {
@@ -68,6 +82,10 @@ bar-rating {
   width: 100% !important;
 }
 
+[id="stock"] {
+  border-radius: 50% !important;
+  border: solid 1px #000 !important;
+}
 
 [id="createclick"] {
   padding: 10px !important;
@@ -93,9 +111,44 @@ bar-rating {
   font-color: white !important;
 }
 
+[id="messagebutton"] {
+  padding: 5px;
+}
+
+
 [id="row-bottom"] {
   justify-self: baseline !important;
   align-self: flex-end !important;
 }
 
+@media (max-width: 1400px) {
+  [id="dateofjob"] {
+    display: none !important;
+  }
+}
 
+.pclass {
+  text-overflow: ellipsis !important;
+}
+
+@media (max-width: 810px) {
+  .pclass {
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    overflow-x: hidden !important;
+  }
+}
+
+[id="accept"] {
+  padding: 10px !important;
+  @apply shadow-md shadow-[#eaaa00];
+}
+
+[id="accepted"] {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  justify-content: center;
+  text-align: center;
+}

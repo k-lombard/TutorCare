@@ -71,15 +71,23 @@ func (db Database) AddApplication(app *models.Application) (models.Application, 
 	return appOut, nil
 }
 
-func (db Database) GetApplicationById(appId int) (models.Application, error) {
-	appOut := models.Application{}
+func (db Database) GetApplicationById(appId int) (models.ApplicationWithUser, error) {
+	appOut := models.ApplicationWithUser{}
 	query := `SELECT * FROM applications WHERE application_id = $1;`
 	row := db.Conn.QueryRow(query, appId)
 	switch err := row.Scan(&appOut.UserID, &appOut.ApplicationID, &appOut.PostID, &appOut.Message, &appOut.Accepted, &appOut.DateCreated); err {
 	case sql.ErrNoRows:
 		return appOut, ErrNoMatch
 	default:
-		return appOut, err
+		userOut := models.User{}
+		query2 := `SELECT * FROM users WHERE user_id = $1;`
+		row2 := db.Conn.QueryRow(query2, appOut.UserID)
+		err3 := row2.Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio)
+		if err3 != nil {
+			return appOut, err3
+		}
+		appOut.User = userOut
+		return appOut, nil
 	}
 }
 
@@ -135,9 +143,9 @@ func (db Database) DeleteApplication(applicationId int) error {
 
 func (db Database) UpdateApplication(applicationId int, appData models.Application) (models.Application, error) {
 	app := models.Application{}
-	query := `UPDATE applications SET message=$1, accepted=$2 WHERE application_id=$3 RETURNING user_id, application_id, post_id, message, accepted, date_created;`
+	query := `UPDATE applications SET message=$1, accepted=$2 WHERE application_id=$3 RETURNING user_id, post_id, application_id, message, accepted, date_created;`
 
-	query2 := `SELECT * FROM applications WHERE application_id = $1;`
+	query2 := `SELECT * FROM applications WHERE application_id=$1;`
 	app2 := models.Application{}
 	errTwo := db.Conn.QueryRow(query2, applicationId).Scan(&app2.UserID, &app2.ApplicationID, &app2.PostID, &app2.Message, &app2.Accepted, &app2.DateCreated)
 	if errTwo != nil {

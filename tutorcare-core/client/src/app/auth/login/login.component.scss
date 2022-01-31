@@ -1,23 +1,28 @@
-@import 'tailwindcss/base';
+/*@import 'tailwindcss/base';
 @import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import 'tailwindcss/utilities';*/
 button {
-    padding: 10px !important;
+    padding: 10px;
 }
 
 mat-card {
-    margin:  40px 20%;
-    padding-bottom: 20px;
+    margin:  3% 20%;
+    padding: 2%;
     background-color: #D6DBD4;
 }
 
 mat-card-title {
     font-size: 2em;
-    margin-bottom: 20px;
+    margin-bottom: 1em;
 }
 
 mat-form-field {
     display: block;
+    margin-top: 1%;
+}
+
+mat-icon {
+    margin: auto 5px;
 }
 
 #login-button {

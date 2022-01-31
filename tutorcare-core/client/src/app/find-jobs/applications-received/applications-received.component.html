@@ -1,0 +1,126 @@
+<div>
+  <navbar></navbar>
+  <div class="flex flex-row w-[100%]">
+    <div class="flex flex-col h-full w-64 h-screen px-4 py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
+      <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Find Jobs</h2>
+
+      <div class="relative mt-6 mx-2">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </span>
+
+        <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
+    </div>
+
+      <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs">
+        <mat-icon>topic</mat-icon>
+
+          <span class="mx-4 font-medium">Current Job Postings</span>
+      </a>
+
+
+      <div class="flex flex-col justify-between flex-1 mt-6">
+          <nav>
+            <h2 class="mx-4 font-lg">Careseeker</h2>
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <mat-icon>folder_copy</mat-icon>
+
+                  <span class="mx-4 font-medium">My Job Postings</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-700 bg-gray-200 rounded-md dark:bg-gray-700 dark:text-gray-200" href="/find-jobs/applications-received">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+
+                  <span class="mx-4 font-medium">Applications Received</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <mat-icon>message</mat-icon>
+
+                  <span class="mx-4 font-medium">Messages</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/active-jobs">
+                <mat-icon>library_add_check</mat-icon>
+
+                  <span class="mx-4 font-medium">Active Jobs</span>
+              </a>
+
+              <hr class="my-6 border-gray-200 dark:border-gray-600" />
+
+              <h2 class="mx-4 font-lg">Caregiver</h2>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <mat-icon>assignment_turned_in</mat-icon>
+
+                  <span class="mx-4 font-medium">Applied To</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <mat-icon>message</mat-icon>
+
+                  <span class="mx-4 font-medium">Messages</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+                <mat-icon>library_add_check</mat-icon>
+
+                  <span class="mx-4 font-medium">Active Jobs</span>
+              </a>
+          </nav>
+        </div>
+    </div>
+    <div id="rightcol" class="flex flex-col border-r">
+      <div class="grid grid-cols-1 gap-1">
+      <ul *ngFor="let post of posts" class="menu px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
+        <li class="menu-title">
+          <div class="flex flex-row items-stretch relative">
+                <h2>{{post.title}}</h2>
+                <h2 id="dateofjob" class="text-lg justify-self-end justify-end justify-items-end right-0 absolute">{{post.date_of_job}}</h2>
+          </div>
+        </li>
+        <li id="theapp" (click)="setApp(application)" [routerLink]="['/find-jobs/applications-received', application.application_id]" *ngFor="let application of post.applications" class="border border-gray py-2 my-2">
+          <a>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 mr-2 stroke-current">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+            </svg>
+                {{application.message}}
+          </a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div *ngIf="currApp" id="rightcol2" class="flex flex-col bg-[#D6DBD4] border border-black relative">
+      <div class="container px-6 py-8 mx-auto">
+        <div class="items-center lg:flex">
+            <div class="lg:w-1/2">
+              <div id="accepted" *ngIf="currApp.accepted" class="w-1/6 my-4 text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs right-0 absolute mx-8"><p class="justify-center items-center">ACCEPTED</p></div>
+                <div class="flex flex-row">
+                  <h2 class="pt-4 text-3xl font-bold text-gray-800 dark:text-gray-100">{{currApp.user.first_name}} {{currApp.user.last_name}}</h2>
+                  <img id="stock" class="object-cover mx-12 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+                </div>
+                <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">Application ID: {{currApp.application_id}}</h2>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Message:</h3>
+                <p class="pclass mt-1 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-4">
+                   {{currApp.message}}
+                </p>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Bio:</h3>
+                <p class="pclass mt-4 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-4">
+                  {{currApp.user.bio}}
+                </p>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Experience:</h3>
+                <p class="pclass mt-4 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-4">
+                  {{currApp.user.experience}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <button id="accept" class="mx-4" (click)="onAcceptApplication(currApp.application_id, currApp.post_id, currApp.user_id, currApp.message)" mat-raised-button color="accent"><span>ACCEPT</span></button>
+    </div>
+  </div>
+</div>

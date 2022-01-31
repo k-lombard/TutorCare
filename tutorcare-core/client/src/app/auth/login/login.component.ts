@@ -1,6 +1,6 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -37,24 +37,47 @@ export class LoginComponent implements OnInit {
   latitude!: number
   longitude!: number
   user_id!: string
+  loginForm : FormGroup
   constructor(private authService: AuthService, private router:Router, private store: Store<AppState>, private toastr: ToastrService) {}
 
+  validation_messages = {
+    
+    'email': [
+      { type: 'required', message: 'Email is required' },
+      { type: 'email', message: 'Enter a valid email' },
+      { type: 'pattern', message: 'Please use a Gatech email' }
+    ],
+    'password': [
+      { type: 'required', message: 'Password is required' },
+      { type: 'minlength', message: 'Password must be at least 8 characters long' }
+    ]
+  }
+
   ngOnInit() {
+    this.createForms();
   }
 
-  onEmailChange() {
-    this.email = this.emailFC.value
-  }
-  onPasswordChange() {
-    this.password = this.passwordFC.value
-  }
-
-  onLoginSubmit() {
+  onLoginSubmit(value: any) {
+    this.email = this.loginForm.get('email').value
+    this.password = this.loginForm.get('password').value
     this.loginFunc(this.email, this.password)
   }
 
   onSignupSubmit() {
     this.router.navigate(['/signup'])
+  }
+
+  createForms() {
+    this.loginForm = new FormGroup({
+      email: new FormControl('', Validators.compose([
+        Validators.email,
+        Validators.required
+      ])),
+      password: new FormControl('', Validators.compose([
+        Validators.minLength(8),
+        Validators.required
+      ]))
+    })
   }
 
   // getUsersFunc() {

@@ -1,3 +1,5 @@
+import { User } from "./user.model";
+
 export interface Application {
   user_id?: string
   application_id?: number
@@ -5,4 +7,5 @@ export interface Application {
   message?: string
   accepted?: boolean
   date_created?: string
+  user?: User
 }

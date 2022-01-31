@@ -42,7 +42,7 @@
             <div class="custom-a">
                 <mat-icon>message</mat-icon>
             </div> -->
-                <div tabindex="0" class="items-center justify-center mx-[5%] focus:outline-none py-8 w-[90%] h-full h-[20rem]" aria-label="group of caregivers">
+                <div *ngIf="locs" tabindex="0" class="items-center justify-center mx-[5%] focus:outline-none py-8 w-[90%] h-full h-[20rem]" aria-label="group of caregivers">
                   <div class="desktop:flex items-center justify-center w-full h-full">
                       <div *ngFor="let loc of locs.slice(start_index, start_index+3)" id="outerdiv" tabindex="0" aria-label="caregiver" class="mb-7 p-6 shadow-lg shadow-[#D6DBD4] rounded h-[18rem] bg-[#D6DBD4] my-4 focus:outline-none desktop:w-2/12 desktop:mr-7 desktop:mb-0">
                           <div class="flex items-center border-b border-gray-200 pb-6">
