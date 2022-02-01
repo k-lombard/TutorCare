@@ -37,11 +37,13 @@ export class FindJobsComponent implements OnInit {
     user!: User
     userId!: string
     isLoggedIn!: boolean
+    filtered: boolean = false
     filter_options: FilterOption[] = [
         {value: 'tutoring-0', viewValue: 'Type: Tutoring'},
         {value: 'babysitting-1', viewValue: 'Type: Babysitting'},
         {value: 'other-2', viewValue: 'Type: Other'}
     ];
+    displayedPosts: Post[] = []
     constructor(private router: Router, private findJobs: FindJobsService, public dialog: MatDialog, private route: ActivatedRoute, private store: Store<AppState>, private toastr: ToastrService) {}
 
     openDialog() {
@@ -65,7 +67,29 @@ export class FindJobsComponent implements OnInit {
         this.toastr.error("You must be logged in to do this.", "Error", {closeButton: true, timeOut: 5000, progressBar: true})
       }
     }
-
+    filter(value: string) {
+      this.filtered = true
+      if (value === 'tutoring-0') {
+        var postsCopy = this.posts
+        this.displayedPosts = postsCopy.filter(post => {
+          return post.care_type === "tutoring"
+        })
+      } else if (value === 'babysitting-1') {
+        var postsCopy = this.posts
+        this.displayedPosts = postsCopy.filter(post => {
+          return post.care_type === 'baby-sitting'
+        })
+      } else {
+        var postsCopy = this.posts
+        this.displayedPosts = postsCopy.filter(post => {
+          return post.care_type === 'other'
+        })
+      }
+    }
+    resetFilters() {
+      this.filtered = false
+      this.displayedPosts = this.posts
+    }
     openApplyDialog(post: Post) {
       if (this.isLoggedIn) {
         const dialogConfig = new MatDialogConfig();
@@ -125,6 +149,7 @@ export class FindJobsComponent implements OnInit {
               postsCopy.push(post)
             }
             this.posts = postsCopy
+            this.displayedPosts = postsCopy
         })
 
     }

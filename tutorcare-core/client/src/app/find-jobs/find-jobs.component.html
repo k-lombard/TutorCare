@@ -142,12 +142,11 @@
           </button>
 
           <!-- Dropdown menu -->
-          <div *ngIf="div1" class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
-            <a class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Type: Tutoring </a>
-            <a class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Type: Babysitting </a>
-            <a class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Type: Other </a>
+          <div matInput *ngIf="div1" class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
+              <mat-option (click)="filter(option.value)" *ngFor="let option of filter_options" [value]="option.value" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> {{option.viewValue}} </mat-option>
           </div>
       </div>
+      <button id="filterbutton" *ngIf="filtered" (click)="resetFilters()" mat-raised-button class="mx-8"><mat-icon>cancel</mat-icon> RESET FILTERS</button>
   </div>
 
   </div>
@@ -174,7 +173,7 @@
   </div>
 </div> -->
 <div class="grid desktop:grid-cols-4 gap-4 laptop:grid-cols-2 tablet:grid-cols-1">
-<div id="postcard" *ngFor="let post of posts" class="px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
+<div id="postcard" *ngFor="let post of displayedPosts" class="px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
   <div class="flex items-center justify-between">
     <div [style.display]="'block'">
       <span class="text-sm font-light text-gray-600 dark:text-gray-400">{{post.date_of_job}}</span>
