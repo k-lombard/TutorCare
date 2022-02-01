@@ -148,6 +148,10 @@ bar-rating {
   }
 }
 
+[id="jobcard"] {
+  cursor: pointer;
+}
+
 [id="edit"] {
   padding: 10px !important;
   @apply shadow-md shadow-[#eaaa00];
