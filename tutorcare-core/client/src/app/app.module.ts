@@ -42,6 +42,7 @@ import { ApplyJobService } from './find-jobs/apply-job/apply-job.service';
 import { AboutComponent } from './about/about.component';
 import { ApplicationsReceivedService } from './find-jobs/applications-received/applications-received.service';
 import { ActiveJobsService } from './find-jobs/active-jobs/active-jobs.service';
+import { MyJobPostingsService } from './find-jobs/my-job-postings/my-job-postings.service';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,7 @@ import { ActiveJobsService } from './find-jobs/active-jobs/active-jobs.service';
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

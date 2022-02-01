@@ -40,6 +40,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 import { ApplyJobDialog } from '../find-jobs/apply-job/apply-job.component';
 import { ApplicationsReceivedComponent } from '../find-jobs/applications-received/applications-received.component';
 import { ActiveJobsComponent } from '../find-jobs/active-jobs/active-jobs.component';
+import { MyJobPostingsComponent } from '../find-jobs/my-job-postings/my-job-postings.component';
 
 @NgModule({
     imports: [
@@ -86,7 +87,8 @@ import { ActiveJobsComponent } from '../find-jobs/active-jobs/active-jobs.compon
         CreateJobDialog,
         ApplyJobDialog,
         ApplicationsReceivedComponent,
-        ActiveJobsComponent
+        ActiveJobsComponent,
+        MyJobPostingsComponent
     ],
     exports: [LoginComponent, NavbarComponent],
     entryComponents: [CreateJobDialog]

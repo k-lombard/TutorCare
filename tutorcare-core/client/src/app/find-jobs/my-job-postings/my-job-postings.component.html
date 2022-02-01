@@ -81,49 +81,58 @@
     <div id="rightcol" class="flex flex-col border-r">
       <div class="grid grid-cols-1 gap-1">
       <ul *ngFor="let post of posts" class="menu px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
-        <li class="menu-title">
-          <div class="flex flex-row items-stretch relative">
-                <h2>{{post.title}}</h2>
-                <h2 id="dateofjob" class="text-lg justify-self-end justify-end justify-items-end right-0 absolute">{{post.date_of_job}}</h2>
+        <li class="menu-title" (click)="setPost(post)" [routerLink]="['/find-jobs/my-job-postings', post.post_id]">
+          <div class="flex flex-row items-stretch justify-between relative">
+                <h2 class="text-2xl">{{post.title}}</h2>
+                <div class="flex flex-col right-0 absolute" [style.display]="'block'">
+                  <h2 id="dateofjob" class="text-lg justify-self-end justify-end justify-items-end block">{{post.date_of_job}}</h2>
+                </div>
           </div>
-        </li>
-        <li id="theapp" (click)="setApp(application)" [routerLink]="['/find-jobs/applications-received', application.application_id]" *ngFor="let application of post.applications" class="border border-gray py-2 my-2">
-          <a>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 mr-2 stroke-current">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-            </svg>
-                {{application.message}}
-          </a>
+          <div class="flex flex-row relative">
+            <div>
+              <h2 class="mt-4 text-lg font-light">Description:</h2>
+              <p>{{post.care_description}}</p>
+            </div>
+            <p id="timeofjob" class="font-light justify-self-end justify-end justify-items-end inline right-0 absolute">Start: {{post.start_time}} | End: {{post.end_time}}</p>
+          </div>
         </li>
       </ul>
     </div>
     </div>
-    <div *ngIf="currApp" id="rightcol2" class="flex flex-col bg-[#D6DBD4] border border-black relative">
+    <div *ngIf="currPost" id="rightcol2" class="flex flex-col bg-[#D6DBD4] border border-black relative">
       <div class="container px-6 py-8 mx-auto">
         <div class="items-center lg:flex">
             <div class="lg:w-1/2">
-              <div id="accepted" *ngIf="currApp.accepted" class="w-1/6 my-4 text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs right-0 absolute mx-8"><p class="justify-center items-center">ACCEPTED</p></div>
-                <div class="flex flex-row">
-                  <h2 class="pt-4 text-3xl font-bold text-gray-800 dark:text-gray-100">{{currApp.user.first_name}} {{currApp.user.last_name}}</h2>
+              <div id="accepted" *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="w-1/6 text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs right-0 absolute mx-8"><p class="justify-center items-center">ACCEPTED</p></div>
+              <div id="accepted" *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" class="w-1/6 text-white items-center justify-center rounded bg-[#2F96B4] shadow-lg shadow-[#54585A] text-xs right-0 absolute mx-8"><p class="justify-center items-center">NO CAREGIVER ASSIGNED</p></div>
+                <div *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="flex flex-row">
+                  <div>
+                    <h2 class="pt-4 text-lg font-bold text-gray-800 dark:text-gray-100">Assigned Caregiver:</h2>
+                    <h2 class="pt-2 text-3xl font-bold text-gray-800 dark:text-gray-100">{{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}</h2>
+                  </div>
                   <img id="stock" class="object-cover mx-12 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
                 </div>
-                <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">Application ID: {{currApp.application_id}}</h2>
-                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Message:</h3>
-                <p class="pclass mt-1 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-4">
-                   {{currApp.message}}
-                </p>
-                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Bio:</h3>
-                <p class="pclass mt-4 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-4">
-                  {{currApp.user.bio}}
-                </p>
-                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Experience:</h3>
-                <p class="pclass mt-4 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-4">
-                  {{currApp.user.experience}}
-                </p>
+                <p class="text-gray-800 dark:text-gray-100 pt-8">Post ID: {{currPost.post_id}}</p>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Title:</h3>
+                <textarea [maxLength]="50"  [(ngModel)]="currPost.title" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-0">{{currPost.title}}</textarea>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Description:</h3>
+                <textarea [maxLength]="1023" [(ngModel)]="currPost.care_description" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-0">{{currPost.care_description}}</textarea>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Tags:</h3>
+                <textarea [maxLength]="255" [(ngModel)]="currPost.tags" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-0">{{currPost.tags}}</textarea>
+                <h3 ng-pattern="/^[A-Za-z0-9]{3}\ [0-9]{1,2}\ [0-9]{4}$/"class="mt-4 text-lg text-gray-800 dark:text-gray-100">Date of Job:</h3>
+                <textarea [(ngModel)]="currPost.date_of_job" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-0">{{currPost.date_of_job}}</textarea>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Start Time:</h3>
+                <textarea [(ngModel)]="currPost.start_time" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-0">{{currPost.start_time}}</textarea>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">End Time:</h3>
+                <textarea [(ngModel)]="currPost.end_time" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md border bg-white rounded p-0">{{currPost.end_time}}</textarea>
             </div>
         </div>
-    </div>
-    <button *ngIf="!currApp.accepted" id="accept" class="mx-4" (click)="onAcceptApplication(currApp.application_id, currApp.post_id, currApp.user_id, currApp.message)" mat-raised-button color="accent"><span>ACCEPT</span></button>
+      </div>
+      <div class="flex flex-row justify-between">
+        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" id="delete" (click)="onDeleteClick(currPost.post_id)" class="w-1/4 mx-4 shadow-lg shadow-[#BD362F] font-white" mat-raised-button>DELETE</button>
+        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && editable" id="edit" (click)="onEditClick()" class="w-1/4 mx-4 shadow-lg shadow-[#eaaa00]" mat-raised-button color="accent">EDIT</button>
+        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && !editable" id="save" (click)="onSaveClick()" class="w-1/4 mx-4 shadow-lg shadow-[#eaaa00]" mat-raised-button>SAVE</button>
+      </div>
     </div>
   </div>
 </div>

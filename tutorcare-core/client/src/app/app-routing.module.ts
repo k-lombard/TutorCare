@@ -12,6 +12,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { CreateJobDialog, FindJobsComponent } from './find-jobs/find-jobs.component';
 import { ApplicationsReceivedComponent } from './find-jobs/applications-received/applications-received.component';
 import { ActiveJobsComponent } from './find-jobs/active-jobs/active-jobs.component';
+import { MyJobPostingsComponent } from './find-jobs/my-job-postings/my-job-postings.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -26,6 +27,8 @@ const routes: Routes = [
   { path: 'find-jobs/applications-received', component: ApplicationsReceivedComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/applications-received/:id', component: ApplicationsReceivedComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/active-jobs', component: ActiveJobsComponent, canActivate: [AuthGuard]},
+  { path: 'find-jobs/my-job-postings', component: MyJobPostingsComponent, canActivate: [AuthGuard]},
+  { path: 'find-jobs/my-job-postings/:id', component: MyJobPostingsComponent, canActivate: [AuthGuard]},
   { path: '',   redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
   { path: '',   component: HomeComponent }

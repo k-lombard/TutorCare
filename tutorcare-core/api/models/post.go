@@ -53,6 +53,8 @@ type PostWithApplications struct {
 	EndTime         string                `json:"end_time"`
 	DatePosted      string                `json:"date_posted"`
 	Applications    []ApplicationWithUser `json:"applications"`
+	Caregiver       User                  `json:"caregiver"`
+	ApplicationID   int                   `json:"application_id"`
 }
 
 type PostList struct {

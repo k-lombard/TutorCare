@@ -28,7 +28,9 @@ h2 {
 .textarea-inline-control {
   flex: 1;
   border-color: transparent;
-  padding: 4rem 0px 40px;
+  padding: 2 0 100px;
+  padding-bottom: 3%;
+  min-height: 200px;
   line-height: 1.28;
   resize: none;
   height: 100%;

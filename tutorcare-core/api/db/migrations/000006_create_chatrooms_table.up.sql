@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS chatrooms(user1 uuid NOT NULL, user2 uuid NOT NULL, chatroom_id INT GENERATED ALWAYS AS IDENTITY, isDeleted boolean NOT NULL DEFAULT FALSE, date_created TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (chatroom_id), CONSTRAINT fk_user1 FOREIGN KEY (user1) REFERENCES users(user_id), CONSTRAINT fk_user2 FOREIGN KEY (user2) REFERENCES users(user_id));

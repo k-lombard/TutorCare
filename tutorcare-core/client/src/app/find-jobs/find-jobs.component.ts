@@ -14,6 +14,7 @@ import { ThisReceiver } from '@angular/compiler';
 import { Observable } from 'rxjs';
 import { ApplyJobDialog } from './apply-job/apply-job.component';
 import { ToastrService } from 'ngx-toastr';
+import { taggedTemplate } from '@angular/compiler/src/output/output_ast';
 
 
 interface FilterOption {
@@ -117,7 +118,10 @@ export class FindJobsComponent implements OnInit {
             var postsCopy: Post[] = []
             console.log(this.posts)
             for (var post of this.posts) {
-              post.tagList = post.tags.split(" ")
+              var tempTags = post.tags.split(" ")
+              tempTags = tempTags.filter(obj => obj.length < 18)
+
+              post.tagList = tempTags
               postsCopy.push(post)
             }
             this.posts = postsCopy
