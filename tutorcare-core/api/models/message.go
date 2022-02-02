@@ -8,11 +8,13 @@ import (
 )
 
 type Message struct {
-	Sender     uuid.UUID `sql:",fk" json:"sender"`
+	SenderID   uuid.UUID `sql:",fk" json:"sender_id"`
 	MessageID  int       `sql:",pk" json:"message_id"`
 	ChatroomID int       `sql:",fk" json:"chatroom_id"`
+	Message    string    `json:"message"`
 	IsDeleted  bool      `json:"is_deleted"`
 	Timestamp  string    `json:"timestamp"`
+	Sender     User      `json:"sender"`
 }
 
 type MessageList struct {
@@ -20,7 +22,7 @@ type MessageList struct {
 }
 
 func (i *Message) Bind(r *http.Request) error {
-	if i.Sender.String() == "" || i.ChatroomID == 0 || i.MessageID == 0 {
+	if i.SenderID.String() == "" || i.ChatroomID == 0 || i.Message == "" {
 		return fmt.Errorf("User1, user2, and chatroom_id are required fields.")
 	}
 	return nil

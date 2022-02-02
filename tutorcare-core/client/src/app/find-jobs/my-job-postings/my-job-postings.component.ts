@@ -99,6 +99,13 @@ export class MyJobPostingsComponent implements OnInit {
       console.log(this.editable)
     }
 
+    setSelected(i: number) {
+      this.myJobs.setSelectedIdx(i)
+    }
+
+    getSelected() {
+      return this.myJobs.getSelected()
+    }
 
     onSaveClick() {
       this.editable = true

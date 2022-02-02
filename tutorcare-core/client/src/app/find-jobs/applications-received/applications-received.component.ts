@@ -31,6 +31,7 @@ export class ApplicationsReceivedComponent implements OnInit {
     mySubscription!: any
     appId!: number
     userType!: string
+    selectedIdx!: number
     private routeSub: Subscription;
     constructor(private router: Router, private appsRec: ApplicationsReceivedService, private store: Store<AppState>, private route: ActivatedRoute) {}
 
@@ -66,6 +67,14 @@ export class ApplicationsReceivedComponent implements OnInit {
     })
     }
 
+    setSelected(i: number, post_id: number) {
+      this.appsRec.setSelectedIdx(i, post_id)
+    }
+
+    getSelected(post_id: number) {
+      return this.appsRec.getSelected(post_id)
+    }
+
     ngOnDestroy() {
       this.routeSub.unsubscribe();
     }
@@ -83,6 +92,9 @@ export class ApplicationsReceivedComponent implements OnInit {
         console.log(res)
       })
       this.currApp.accepted = true;
+      this.appsRec.createChatroom(this.userId, user_id).subscribe(chatroom => {
+        console.log(chatroom)
+      })
     }
 
 

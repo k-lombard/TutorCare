@@ -41,6 +41,7 @@ import { ApplyJobDialog } from '../find-jobs/apply-job/apply-job.component';
 import { ApplicationsReceivedComponent } from '../find-jobs/applications-received/applications-received.component';
 import { ActiveJobsComponent } from '../find-jobs/active-jobs/active-jobs.component';
 import { MyJobPostingsComponent } from '../find-jobs/my-job-postings/my-job-postings.component';
+import { ChatroomsComponent } from '../find-jobs/chatrooms/chatrooms.component';
 
 @NgModule({
     imports: [
@@ -88,7 +89,8 @@ import { MyJobPostingsComponent } from '../find-jobs/my-job-postings/my-job-post
         ApplyJobDialog,
         ApplicationsReceivedComponent,
         ActiveJobsComponent,
-        MyJobPostingsComponent
+        MyJobPostingsComponent,
+        ChatroomsComponent
     ],
     exports: [LoginComponent, NavbarComponent],
     entryComponents: [CreateJobDialog]

@@ -13,6 +13,7 @@ import { CreateJobDialog, FindJobsComponent } from './find-jobs/find-jobs.compon
 import { ApplicationsReceivedComponent } from './find-jobs/applications-received/applications-received.component';
 import { ActiveJobsComponent } from './find-jobs/active-jobs/active-jobs.component';
 import { MyJobPostingsComponent } from './find-jobs/my-job-postings/my-job-postings.component';
+import { ChatroomsComponent } from './find-jobs/chatrooms/chatrooms.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -29,6 +30,8 @@ const routes: Routes = [
   { path: 'find-jobs/active-jobs', component: ActiveJobsComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/my-job-postings', component: MyJobPostingsComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/my-job-postings/:id', component: MyJobPostingsComponent, canActivate: [AuthGuard]},
+  { path: 'find-jobs/messages', component: ChatroomsComponent, canActivate: [AuthGuard]},
+  { path: 'find-jobs/messages/:id', component: ChatroomsComponent, canActivate: [AuthGuard]},
   { path: '',   redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
   { path: '',   component: HomeComponent }

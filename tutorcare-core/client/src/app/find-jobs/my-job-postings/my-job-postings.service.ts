@@ -18,6 +18,7 @@ export class MyJobPostingsService {
   _applications: Application[] | undefined;
   _output: any[] | undefined;
   _post: Post | undefined
+  selectedIdx!: number
   _post_id: string | undefined
   headers = new HttpHeaders({
     'Content-Type': 'application/json'
@@ -94,6 +95,14 @@ editJobPost(user_id: string, post_id: number, title: string, tags: string, care_
          error => {return throwError(error)}
        );
   });
+}
+
+setSelectedIdx(i: number) {
+  this.selectedIdx = i
+}
+
+getSelected() {
+  return this.selectedIdx
 }
 
 getPostById(post_id: number): Observable<Post> {

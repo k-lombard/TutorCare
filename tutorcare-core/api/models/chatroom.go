@@ -8,11 +8,13 @@ import (
 )
 
 type Chatroom struct {
-	User1       uuid.UUID `sql:",fk" json:"user1"`
-	User2       uuid.UUID `sql:",fk" json:"user2"`
+	User1ID     uuid.UUID `sql:",fk" json:"user1_id"`
+	User2ID     uuid.UUID `sql:",fk" json:"user2_id"`
 	ChatroomID  int       `sql:",pk" json:"chatroom_id"`
 	IsDeleted   bool      `json:"is_deleted"`
 	DateCreated string    `json:"date_created"`
+	User1       User      `json:"user1"`
+	User2       User      `json:"user2"`
 }
 
 type ChatroomList struct {
@@ -20,8 +22,8 @@ type ChatroomList struct {
 }
 
 func (i *Chatroom) Bind(r *http.Request) error {
-	if i.User1.String() == "" || i.ChatroomID == 0 || (i.User2).String() == "" {
-		return fmt.Errorf("User1, user2, and chatroom_id are required fields.")
+	if i.User1ID.String() == "" || (i.User2ID).String() == "" {
+		return fmt.Errorf("User1ID, User2ID are required fields.")
 	}
 	return nil
 }

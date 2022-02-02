@@ -7,11 +7,13 @@ import { GeolocationPositionWithUser } from '../../models/geolocationposition.mo
 import { Post } from '../../models/post.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Application } from 'src/app/models/application.model';
+import { Chatroom } from 'src/app/models/chatroom.model';
 
 
 @Injectable()
 export class ApplicationsReceivedService {
   results:Object[];
+  selectedIdxMap: Map<number, number> = new Map<number,number>()
   _posts: Post[] | undefined;
   _applications: Application[] | undefined;
   _output: any[] | undefined;
@@ -64,6 +66,33 @@ getApplicationById(application_id: number): Observable<Application> {
          });
   });
 }
+
+createChatroom(user1_id: string, user2_id: string): Observable<Chatroom> {
+  let url = `/api/chatrooms/`;
+  return new Observable((observer: any) => {
+     this.http.post<any>(url, JSON.stringify({
+         "user1_id": user1_id,
+         "user2_id": user2_id
+     }), {headers: this.headers})
+         .pipe(map((res: any) => res))
+         .subscribe((data: any) => {
+            this._output = data
+
+            observer.next(this._output);
+            observer.complete();
+         });
+  });
+}
+
+setSelectedIdx(i: number, post_id: number) {
+  this.selectedIdxMap = new Map<number,number>()
+  this.selectedIdxMap.set(post_id, i)
+}
+
+getSelected(post_id: number) {
+  return this.selectedIdxMap.get(post_id)
+}
+
 
 acceptApplication(application_id?: number, post_id?: number, user_id?: string, message?: string): Observable<Post> {
   // let url = `${environment.serverUrl}/api/signup/`;

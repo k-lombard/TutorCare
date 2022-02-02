@@ -19,9 +19,38 @@
     @apply shadow-md shadow-[#eaaa00];
 }
 
-mat-raised-button {
-  @apply shadow-lg shadow-[#eaaa00];
+.messagearea {
+  display: flex;
+  flex-direction: column;
+  height: 60vh !important;
+  background-color: white !important;
+  width: 100% !important;
+  overflow-y: auto;
 }
+
+
+.mymessage {
+  background: rgb(255,127,42);
+  background: linear-gradient(270deg, rgba(255,127,42,1) 0%, rgba(234,170,0,1) 100%);
+}
+
+.theirmessage {
+  background: rgb(61,200,196);
+  background: linear-gradient(270deg, rgba(61,200,196,1) 0%, rgba(0,69,255,1) 100%);
+}
+
+[id="message"] {
+  background-color: #54585A;
+  @apply shadow-md shadow-[#54585A] hover:shadow-gray-600;
+
+
+}
+
+[id="send"] {
+  background-color: #eaaa00;
+  @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
+}
+
 
 
 .row-item-div-large {
