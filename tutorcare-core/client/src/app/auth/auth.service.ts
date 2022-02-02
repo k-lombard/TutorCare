@@ -1,16 +1,17 @@
 
 
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {Observable, throwError} from "rxjs";
 import {User} from "../models/user.model";
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { getCurrUser } from './auth.selectors';
 import { Token } from '../models/token.model';
 import { GeolocationPosition } from "../models/geolocationposition.model";
+import { ToastrService } from "ngx-toastr";
 
 
 
@@ -23,7 +24,7 @@ export class AuthService {
     _isValid: boolean | undefined
     access_token!: string
     refresh_token!: string
-    constructor(private http:HttpClient, private store: Store<AppState>) {
+    constructor(private http:HttpClient, private store: Store<AppState>, private toastr: ToastrService) {
         this.store
         .pipe(
             select(getCurrUser)
@@ -50,7 +51,13 @@ export class AuthService {
                "email": email,
                "password": password,
 
-           }), {headers: this.headers})
+           }), {headers: this.headers}).pipe(
+            map((res: any) => res),
+            catchError((err: HttpErrorResponse) => {
+              this.toastr.error("Error logging in.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
+              return throwError(err)
+            })
+          )
     }
 
     refreshToken(refresh_token: string): Observable<Token> {

@@ -2,26 +2,28 @@ import { Injectable } from '@angular/core';
 import {Http} from '@angular/http';
 import {environment} from '../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { GeolocationPositionWithUser } from '../../models/geolocationposition.model';
 import { Post } from '../../models/post.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Application } from 'src/app/models/application.model';
-import { Chatroom } from 'src/app/models/chatroom.model';
+import { throwError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable()
-export class ApplicationsReceivedService {
+export class MyJobPostingsService {
   results:Object[];
-  selectedIdxMap: Map<number, number> = new Map<number,number>()
   _posts: Post[] | undefined;
   _applications: Application[] | undefined;
   _output: any[] | undefined;
-  _application: Application | undefined
+  _post: Post | undefined
+  selectedIdx!: number
+  _post_id: string | undefined
   headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private toastr: ToastrService) {
     this.results = []
   }
 
@@ -53,46 +55,69 @@ export class ApplicationsReceivedService {
   });
 }
 
-getApplicationById(application_id: number): Observable<Application> {
-  let url = `/api/applications/${application_id}`;
+deletePost(post_id: number): Observable<string> {
+  let url = `/api/posts/${post_id}`;
+    return new Observable((observer: any) => {
+      this.http.delete<any>(url)
+         .pipe(map((res: any) => res))
+         .subscribe((data: string) => {
+            this._post_id = data
+
+            observer.next(this._post_id);
+            observer.complete();
+         });
+  });
+}
+
+editJobPost(user_id: string, post_id: number, title: string, tags: string, care_description: string, date_of_job: string, start_time: string, end_time: string, care_type: string): Observable<Post> {
+  let url = `/api/posts/${post_id}`;
+    return new Observable((observer: any) => {
+      this.http.put<any>(url, JSON.stringify({
+        "user_id": user_id,
+        "title": title,
+        "tags": tags,
+        "care_description": care_description,
+        "date_of_job": date_of_job,
+        "start_time": start_time,
+        "end_time": end_time,
+        "care_type": care_type
+    }), {headers: this.headers})
+         .pipe(map((res: any) => res),
+         catchError((err: HttpErrorResponse) => {
+          this.toastr.error("Invalid date or time format: " + err.status, "Error", {closeButton: true, timeOut: 5000, progressBar: true});
+          return throwError(err)
+        })
+         )
+         .subscribe((data: Post) => {
+            observer.next(data);
+            observer.complete();
+         },
+         error => {return throwError(error)}
+       );
+  });
+}
+
+setSelectedIdx(i: number) {
+  this.selectedIdx = i
+}
+
+getSelected() {
+  return this.selectedIdx
+}
+
+getPostById(post_id: number): Observable<Post> {
+  let url = `/api/posts/${post_id}`;
     return new Observable((observer: any) => {
       this.http.get(url)
          .pipe(map((res: any) => res))
-         .subscribe((data: Application) => {
-            this._application = data
+         .subscribe((data: Post) => {
+            this._post = data
 
-            observer.next(this._application);
+            observer.next(this._post);
             observer.complete();
          });
   });
 }
-
-createChatroom(user1_id: string, user2_id: string): Observable<Chatroom> {
-  let url = `/api/chatrooms/`;
-  return new Observable((observer: any) => {
-     this.http.post<any>(url, JSON.stringify({
-         "user1_id": user1_id,
-         "user2_id": user2_id
-     }), {headers: this.headers})
-         .pipe(map((res: any) => res))
-         .subscribe((data: any) => {
-            this._output = data
-
-            observer.next(this._output);
-            observer.complete();
-         });
-  });
-}
-
-setSelectedIdx(i: number, post_id: number) {
-  this.selectedIdxMap = new Map<number,number>()
-  this.selectedIdxMap.set(post_id, i)
-}
-
-getSelected(post_id: number) {
-  return this.selectedIdxMap.get(post_id)
-}
-
 
 acceptApplication(application_id?: number, post_id?: number, user_id?: string, message?: string): Observable<Post> {
   // let url = `${environment.serverUrl}/api/signup/`;

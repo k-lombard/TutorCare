@@ -101,7 +101,7 @@ export class SignupComponent implements OnInit {
        ])),
       email: new FormControl('', Validators.compose([
         Validators.email,
-        Validators.pattern('^.*gatech.edu.*$'),
+        // Validators.pattern('^.*gatech.edu.*$'),
         Validators.required
       ])),
       matchingPasswords: this.matchingPasswordsGroup,

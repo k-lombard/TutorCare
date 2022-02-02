@@ -19,9 +19,38 @@
     @apply shadow-md shadow-[#eaaa00];
 }
 
-.mat-raised-button {
-  @apply shadow-lg shadow-[#eaaa00];
+.messagearea {
+  display: flex;
+  flex-direction: column;
+  height: 60vh !important;
+  background-color: white !important;
+  width: 100% !important;
+  overflow-y: auto;
 }
+
+
+.mymessage {
+  background: rgb(255,127,42);
+  background: linear-gradient(270deg, rgba(255,127,42,1) 0%, rgba(234,170,0,1) 100%);
+}
+
+.theirmessage {
+  background: rgb(61,200,196);
+  background: linear-gradient(270deg, rgba(61,200,196,1) 0%, rgba(0,69,255,1) 100%);
+}
+
+[id="message"] {
+  background-color: #54585A;
+  @apply shadow-md shadow-[#54585A] hover:shadow-gray-600;
+
+
+}
+
+[id="send"] {
+  background-color: #eaaa00;
+  @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
+}
+
 
 
 .row-item-div-large {
@@ -36,6 +65,10 @@ h2 {
 
 h3 {
   font-size: 16px;
+}
+
+.selected {
+  background: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
 
@@ -53,6 +86,12 @@ h3 {
   overflow: hidden;
 }
 
+textarea {
+  border-style: none;
+  border-color: Transparent;
+  overflow: auto;
+}
+
 [id="apply"] {
   padding: 16px;
   float: right;
@@ -60,7 +99,7 @@ h3 {
 
 [id="dateofjob"] {
   float: right !important;
-  display: inline-block !important;
+  display: block !important;
 }
 
 [id="desc"] {
@@ -120,14 +159,24 @@ bar-rating {
   align-self: flex-end !important;
 }
 
+[id="timeofjob"] {
+  display: inline !important;
+}
+
+
 @media (max-width: 1400px) {
   [id="dateofjob"] {
+    display: none !important;
+  }
+  [id="timeofjob"] {
     display: none !important;
   }
 }
 
 .pclass {
   text-overflow: ellipsis !important;
+  padding-left: -20px !important;
+  margin-left: 0 !important;
 }
 
 @media (max-width: 810px) {
@@ -138,10 +187,35 @@ bar-rating {
   }
 }
 
-[id="accept"] {
-  padding: 10px !important;
-  @apply shadow-md shadow-[#eaaa00];
+[id="jobcard"] {
+  cursor: pointer;
 }
+@layer components {
+  [id="edit"] {
+    @apply shadow-sm shadow-[#eaaa00];
+    padding: 10px !important;
+  }
+}
+
+[id="delete"] {
+  background-color: #BD362F;
+  padding: 10px !important;
+  @apply shadow-md shadow-[#BD362F];
+  color: white !important;
+}
+
+
+[id="save"] {
+  background-color: #51A351;
+  padding: 10px !important;
+  @apply shadow-md shadow-[#BD362F];
+  color: white !important;
+}
+
+// [id="deletetext"] {
+//   font-color: white !important;
+//   color: white !important;
+// }
 
 [id="accepted"] {
   padding-left: 10px !important;
@@ -150,8 +224,4 @@ bar-rating {
   padding-bottom: 20px;
   justify-content: center;
   text-align: center;
-}
-
-.selected {
-  background: rgb(229 231 235 / var(--tw-bg-opacity));
 }

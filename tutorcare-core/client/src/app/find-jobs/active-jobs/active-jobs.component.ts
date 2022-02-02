@@ -28,6 +28,7 @@ export class ActiveJobsComponent implements OnInit {
     posts!: Post[]
     currApp!: Application
     locs!: GeolocationPositionWithUser[]
+    userType!: string
     mySubscription!: any
     constructor(private router: Router, private activeJobs: ActiveJobsService, private store: Store<AppState>) {}
 
@@ -39,6 +40,7 @@ export class ActiveJobsComponent implements OnInit {
         ).subscribe(data =>  {
             this.user = data
             this.userId = this.user.user_id || ""
+            this.userType = this.user.user_category
       })
       this.activeJobs.getActiveJobsByUserId(this.userId).subscribe(data => {
         this.posts = data

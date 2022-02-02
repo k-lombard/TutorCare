@@ -30,6 +30,8 @@ export class ApplicationsReceivedComponent implements OnInit {
     locs!: GeolocationPositionWithUser[]
     mySubscription!: any
     appId!: number
+    userType!: string
+    selectedIdx!: number
     private routeSub: Subscription;
     constructor(private router: Router, private appsRec: ApplicationsReceivedService, private store: Store<AppState>, private route: ActivatedRoute) {}
 
@@ -51,6 +53,7 @@ export class ApplicationsReceivedComponent implements OnInit {
         ).subscribe(data =>  {
             this.user = data
             this.userId = this.user.user_id || ""
+            this.userType = this.user.user_category
       })
       this.appsRec.getPostsByUserId(this.userId).subscribe(data => {
         this.posts = data
@@ -62,6 +65,14 @@ export class ApplicationsReceivedComponent implements OnInit {
         this.posts = postsCopy
         console.log(this.posts)
     })
+    }
+
+    setSelected(i: number, post_id: number) {
+      this.appsRec.setSelectedIdx(i, post_id)
+    }
+
+    getSelected(post_id: number) {
+      return this.appsRec.getSelected(post_id)
     }
 
     ngOnDestroy() {
@@ -81,6 +92,9 @@ export class ApplicationsReceivedComponent implements OnInit {
         console.log(res)
       })
       this.currApp.accepted = true;
+      this.appsRec.createChatroom(this.userId, user_id).subscribe(chatroom => {
+        console.log(chatroom)
+      })
     }
 
 

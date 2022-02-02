@@ -238,20 +238,22 @@ export class FindCareComponent implements OnInit {
             this.locs = data
             console.log(this.locs)
             let marks: any[] = []
-            for(const loc of this.locs) {
-                console.log(loc)
-                var marker = JSON.parse(JSON.stringify({
-                    "position": {
-                        "lat": loc.latitude,
-                        "lng": loc.longitude
-                    }
-                }))
-                console.log(marker)
-                marks.push(marker)
-                console.log(marks)
-            }
-            this.markers = marks
-            console.log(this.markers)
+            if (this.locs) {
+              for(const loc of this.locs) {
+                  console.log(loc)
+                  var marker = JSON.parse(JSON.stringify({
+                      "position": {
+                          "lat": loc.latitude,
+                          "lng": loc.longitude
+                      }
+                  }))
+                  console.log(marker)
+                  marks.push(marker)
+                  console.log(marks)
+              }
+              this.markers = marks
+              console.log(this.markers)
+          }
         })
 
     }

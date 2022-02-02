@@ -138,7 +138,7 @@ func updatePost(c *gin.Context) {
 		if err == database.ErrNoMatch {
 			c.JSON(http.StatusNotFound, "Error: Resource not found")
 		} else {
-			c.JSON(http.StatusInternalServerError, "Internal Server Error")
+			c.JSON(http.StatusInternalServerError, "Internal server error")
 		}
 		return
 	}

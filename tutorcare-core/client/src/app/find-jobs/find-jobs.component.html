@@ -50,8 +50,9 @@
 
     <div class="flex flex-col justify-between flex-1 mt-6">
         <nav>
+        <div *ngIf="userType === 'careseeker' || userType ==='both'">
           <h2 class="mx-4 font-lg">Careseeker</h2>
-            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/my-job-postings">
               <mat-icon>folder_copy</mat-icon>
 
                 <span class="mx-4 font-medium">My Job Postings</span>
@@ -66,7 +67,7 @@
                 <span class="mx-4 font-medium">Applications Received</span>
             </a>
 
-            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/messages">
               <mat-icon>message</mat-icon>
 
                 <span class="mx-4 font-medium">Messages</span>
@@ -79,7 +80,8 @@
             </a>
 
             <hr class="my-6 border-gray-200 dark:border-gray-600" />
-
+          </div>
+          <div *ngIf="userType === 'caregiver' || userType ==='both'">
             <h2 class="mx-4 font-lg">Caregiver</h2>
 
             <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
@@ -88,7 +90,7 @@
                 <span class="mx-4 font-medium">Applied To</span>
             </a>
 
-            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/messages">
               <mat-icon>message</mat-icon>
 
                 <span class="mx-4 font-medium">Messages</span>
@@ -99,6 +101,7 @@
 
                 <span class="mx-4 font-medium">Active Jobs</span>
             </a>
+          </div>
         </nav>
     </div>
     <!-- <mat-list-item *ngFor="let loc of locs"> -->
@@ -139,12 +142,11 @@
           </button>
 
           <!-- Dropdown menu -->
-          <div *ngIf="div1" class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
-            <a class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Type: Tutoring </a>
-            <a class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Type: Babysitting </a>
-            <a class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Type: Other </a>
+          <div matInput *ngIf="div1" class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
+              <mat-option (click)="filter(option.value)" *ngFor="let option of filter_options" [value]="option.value" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> {{option.viewValue}} </mat-option>
           </div>
       </div>
+      <button id="filterbutton" *ngIf="filtered" (click)="resetFilters()" mat-raised-button class="mx-8"><mat-icon>cancel</mat-icon> RESET FILTERS</button>
   </div>
 
   </div>
@@ -171,13 +173,16 @@
   </div>
 </div> -->
 <div class="grid desktop:grid-cols-4 gap-4 laptop:grid-cols-2 tablet:grid-cols-1">
-<div id="postcard" *ngFor="let post of posts" class="px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
+<div id="postcard" *ngFor="let post of displayedPosts" class="px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
   <div class="flex items-center justify-between">
+    <div [style.display]="'block'">
       <span class="text-sm font-light text-gray-600 dark:text-gray-400">{{post.date_of_job}}</span>
+      <span [style.display]="'block'" class="text-sm font-light text-gray-600 dark:text-gray-400">Start: {{post.start_time}} | End: {{post.end_time}}</span>
+    </div>
       <a id="type" class="px-3 py-1 text-sm font-bold text-white transition-colors duration-200 transform bg-gray-600 rounded cursor-pointer hover:bg-gray-500">{{post.care_type}}</a>
   </div>
   <div class="mt-2 flex flex-col min-h-[10em]">
-      <a href="#" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{post.title}}</a>
+      <a class="grow text-2xl font-bold text-gray-700 dark:text-white">{{post.title}}</a>
       <p class="grow mt-2 text-gray-600 dark:text-gray-300">{{post.care_description}}</p>
   </div>
 
@@ -188,7 +193,9 @@
           <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->
           <div class="flex flex-row">
             <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
-              <div *ngFor="let tag of post.tagList" class="mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-2 text-xs leading-3">{{ tag }}</div>
+              <div *ngIf="post.tagList.length > 0" class="flex flex-row">
+                <div *ngFor="let tag of post.tagList" class="mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-2 text-xs leading-3">{{ tag }}</div>
+              </div>
               <img id="stock" class="object-cover w-10 h-10 mx-2 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
             </div>
         </div>

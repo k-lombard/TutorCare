@@ -79,5 +79,9 @@ func RouteHandler(db database.Database) *gin.Engine {
 	r.posts(posts)
 	applications := api.Group("/applications", TokenAuthMiddleware())
 	r.applications(applications)
+	chatrooms := api.Group("/chatrooms", TokenAuthMiddleware())
+	r.chatrooms(chatrooms)
+	messages := api.Group("/messages", TokenAuthMiddleware())
+	r.messages(messages)
 	return r.router
 }

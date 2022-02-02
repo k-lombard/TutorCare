@@ -76,11 +76,11 @@
           </mat-error>
         </mat-form-field>
 
-        <button class="submit-btn, right-button" color="primary" mat-raised-button type="submit" [disabled]="!emailCodeForm.valid" id ="verify-button">
+        <button [style.float]="'right'" class="submit-btn, right-button" color="accent" mat-raised-button type="submit" [disabled]="!emailCodeForm.valid" id ="verify-button">
             Verify Email
         </button>
 
-        <button class="submit-btn, left-button" color="primary" mat-raised-button id="resend-button">
+        <button class="submit-btn, left-button" color="accent" mat-raised-button id="resend-button">
             Resend Email
         </button>
         <div class ="clear"></div>

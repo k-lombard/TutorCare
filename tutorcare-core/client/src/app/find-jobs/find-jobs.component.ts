@@ -8,11 +8,13 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { getCurrUser } from '../auth/auth.selectors';
+import { getCurrUser, isLoggedIn } from '../auth/auth.selectors';
 import { User } from '../models/user.model';
 import { ThisReceiver } from '@angular/compiler';
 import { Observable } from 'rxjs';
 import { ApplyJobDialog } from './apply-job/apply-job.component';
+import { ToastrService } from 'ngx-toastr';
+import { taggedTemplate } from '@angular/compiler/src/output/output_ast';
 
 
 interface FilterOption {
@@ -31,53 +33,89 @@ export class FindJobsComponent implements OnInit {
     posts: Post[] = []
     div1: boolean = false;
     search: string =""
+    userType!: string
+    user!: User
+    userId!: string
+    isLoggedIn!: boolean
+    filtered: boolean = false
     filter_options: FilterOption[] = [
         {value: 'tutoring-0', viewValue: 'Type: Tutoring'},
         {value: 'babysitting-1', viewValue: 'Type: Babysitting'},
         {value: 'other-2', viewValue: 'Type: Other'}
     ];
-    constructor(private router: Router, private findJobs: FindJobsService, public dialog: MatDialog, private route: ActivatedRoute) {}
+    displayedPosts: Post[] = []
+    constructor(private router: Router, private findJobs: FindJobsService, public dialog: MatDialog, private route: ActivatedRoute, private store: Store<AppState>, private toastr: ToastrService) {}
 
     openDialog() {
-      const dialogConfig = new MatDialogConfig();
+      if (this.isLoggedIn) {
+        const dialogConfig = new MatDialogConfig();
 
-      dialogConfig.disableClose = false;
-      // dialogConfig.autoFocus = true;
-      dialogConfig.data = {
-        id: 1,
-        title: 'Create Job Posting',
-      };
-      dialogConfig.height = "90%"
-      dialogConfig.width = "90%"
-      const dialogRef = this.dialog.open(CreateJobDialog, dialogConfig);
+        dialogConfig.disableClose = false;
+        // dialogConfig.autoFocus = true;
+        dialogConfig.data = {
+          id: 1,
+          title: 'Create Job Posting',
+        };
+        dialogConfig.height = "90%"
+        dialogConfig.width = "90%"
+        const dialogRef = this.dialog.open(CreateJobDialog, dialogConfig);
 
-      dialogRef.afterClosed().subscribe(
-        data => console.log("Dialog output:", data)
-      );
+        dialogRef.afterClosed().subscribe(
+          data => console.log("Dialog output:", data)
+        );
+      } else {
+        this.toastr.error("You must be logged in to do this.", "Error", {closeButton: true, timeOut: 5000, progressBar: true})
+      }
     }
-
+    filter(value: string) {
+      this.filtered = true
+      if (value === 'tutoring-0') {
+        var postsCopy = this.posts
+        this.displayedPosts = postsCopy.filter(post => {
+          return post.care_type === "tutoring"
+        })
+      } else if (value === 'babysitting-1') {
+        var postsCopy = this.posts
+        this.displayedPosts = postsCopy.filter(post => {
+          return post.care_type === 'baby-sitting'
+        })
+      } else {
+        var postsCopy = this.posts
+        this.displayedPosts = postsCopy.filter(post => {
+          return post.care_type === 'other'
+        })
+      }
+    }
+    resetFilters() {
+      this.filtered = false
+      this.displayedPosts = this.posts
+    }
     openApplyDialog(post: Post) {
-      const dialogConfig = new MatDialogConfig();
+      if (this.isLoggedIn) {
+        const dialogConfig = new MatDialogConfig();
 
-      dialogConfig.disableClose = false;
-      // dialogConfig.autoFocus = true;
-      dialogConfig.data = {
-        id: 1 as number,
-        title: 'Apply to this Job Posting' as string,
-        post: post as Post,
-        posts: this.posts as Post[]
-      };
-      dialogConfig.height = "90%"
-      dialogConfig.width = "90%"
-      const dialogRef = this.dialog.open(ApplyJobDialog, dialogConfig);
+        dialogConfig.disableClose = false;
+        // dialogConfig.autoFocus = true;
+        dialogConfig.data = {
+          id: 1 as number,
+          title: 'Apply to this Job Posting' as string,
+          post: post as Post,
+          posts: this.posts as Post[]
+        };
+        dialogConfig.height = "90%"
+        dialogConfig.width = "90%"
+        const dialogRef = this.dialog.open(ApplyJobDialog, dialogConfig);
 
-      dialogRef.afterClosed().subscribe(
-        data => {
-          console.log("Dialog output:", data)
-        }
-      );
-      console.log(dialogConfig.data.posts)
-      this.posts = dialogConfig.data.posts
+        dialogRef.afterClosed().subscribe(
+          data => {
+            console.log("Dialog output:", data)
+          }
+        );
+        console.log(dialogConfig.data.posts)
+        this.posts = dialogConfig.data.posts
+      } else {
+        this.toastr.error("You must be logged in to do this.", "Error", {closeButton: true, timeOut: 5000, progressBar: true})
+      }
     }
 
     div1Function(){
@@ -85,15 +123,33 @@ export class FindJobsComponent implements OnInit {
     }
 
     ngOnInit() {
+      this.store
+      .pipe(
+        select(isLoggedIn)
+      ).subscribe(data2 => {
+        this.isLoggedIn = data2
+      })
+      this.store
+        .pipe(
+            select(getCurrUser)
+        ).subscribe(data =>  {
+            this.user = data
+            this.userId = this.user.user_id || ""
+            this.userType = this.user.user_category
+      })
         this.findJobs.getPosts().subscribe(data => {
             this.posts = data
             var postsCopy: Post[] = []
             console.log(this.posts)
             for (var post of this.posts) {
-              post.tagList = post.tags.split(" ")
+              var tempTags = post.tags.split(" ")
+              tempTags = tempTags.filter(obj => obj.length < 18)
+
+              post.tagList = tempTags
               postsCopy.push(post)
             }
             this.posts = postsCopy
+            this.displayedPosts = postsCopy
         })
 
     }

@@ -23,8 +23,10 @@
 
       <div class="flex flex-col justify-between flex-1 mt-6">
           <nav>
+
+          <div *ngIf="userType === 'careseeker' || userType ==='both'">
             <h2 class="mx-4 font-lg">Careseeker</h2>
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/my-job-postings">
                 <mat-icon>folder_copy</mat-icon>
 
                   <span class="mx-4 font-medium">My Job Postings</span>
@@ -39,7 +41,7 @@
                   <span class="mx-4 font-medium">Applications Received</span>
               </a>
 
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/messages">
                 <mat-icon>message</mat-icon>
 
                   <span class="mx-4 font-medium">Messages</span>
@@ -50,9 +52,9 @@
 
                   <span class="mx-4 font-medium">Active Jobs</span>
               </a>
-
               <hr class="my-6 border-gray-200 dark:border-gray-600" />
-
+            </div>
+            <div *ngIf="userType ==='caregiver' || userType ==='both'">
               <h2 class="mx-4 font-lg">Caregiver</h2>
 
               <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
@@ -61,7 +63,7 @@
                   <span class="mx-4 font-medium">Applied To</span>
               </a>
 
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/messages">
                 <mat-icon>message</mat-icon>
 
                   <span class="mx-4 font-medium">Messages</span>
@@ -72,6 +74,7 @@
 
                   <span class="mx-4 font-medium">Active Jobs</span>
               </a>
+            </div>
           </nav>
         </div>
     </div>
@@ -84,8 +87,8 @@
                 <h2 id="dateofjob" class="text-lg justify-self-end justify-end justify-items-end right-0 absolute">{{post.date_of_job}}</h2>
           </div>
         </li>
-        <li id="theapp" (click)="setApp(application)" [routerLink]="['/find-jobs/applications-received', application.application_id]" *ngFor="let application of post.applications" class="border border-gray py-2 my-2">
-          <a>
+        <li id="theapp" (click)="setApp(application)" [class.selected]="currApp === application || getSelected(post.post_id) === i" (click)="setSelected(i, post.post_id)" [routerLink]="['/find-jobs/applications-received', application.application_id]" *ngFor="let application of post.applications; let i = index" class="border rounded border-gray py-2 my-2 hover:bg-gray-200">
+          <a class="px-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 mr-2 stroke-current">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
             </svg>
@@ -95,7 +98,7 @@
       </ul>
     </div>
     </div>
-    <div *ngIf="currApp" id="rightcol2" class="flex flex-col bg-[#D6DBD4] border border-black relative">
+    <div *ngIf="currApp" id="rightcol2" class="flex flex-col shadow-lg shadow-[#D6DBD4] bg-[#D6DBD4] relative">
       <div class="container px-6 py-8 mx-auto">
         <div class="items-center lg:flex">
             <div class="lg:w-1/2">
@@ -120,7 +123,7 @@
             </div>
         </div>
     </div>
-    <button id="accept" class="mx-4" (click)="onAcceptApplication(currApp.application_id, currApp.post_id, currApp.user_id, currApp.message)" mat-raised-button color="accent"><span>ACCEPT</span></button>
+    <button *ngIf="!currApp.accepted" id="accept" class="mx-4" (click)="onAcceptApplication(currApp.application_id, currApp.post_id, currApp.user_id, currApp.message)" mat-raised-button color="accent"><span>ACCEPT</span></button>
     </div>
   </div>
 </div>
