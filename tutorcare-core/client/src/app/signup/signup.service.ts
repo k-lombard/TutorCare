@@ -78,4 +78,26 @@ export class SignupService {
     });
   }
 
+  resendCode(email: string): Observable<string> {
+    // let url = `${environment.serverUrl}/api/signup/`;
+    console.log("resendEmailCode function")
+    let url = `/api/signup/resendemail/${email}`;
+    return new Observable((observer: any) => {
+       this.http.post<any>(
+            url,
+            JSON.stringify({
+              "email": email
+            }),
+            {headers: this.headers}, )
+              .pipe(
+                map((res: any) => {
+                  console.log(res.status)}
+                ),
+                catchError((err: HttpErrorResponse) => {
+                  return throwError(err)
+                })
+              )
+      });
+    }
+
 }

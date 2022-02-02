@@ -21,6 +21,7 @@ func (r routes) signup(rg *gin.RouterGroup) {
 
 	users.POST("/", signupPage)
 	users.POST("/verify", verifyEmailGatech)
+	users.POST("/resendemail/:email", sendEmailCode)
 }
 
 func (r routes) login(rg *gin.RouterGroup) {
@@ -109,6 +110,18 @@ func verifyEmailGatech(c *gin.Context) {
 		return
 	} else {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid verification code")
+		return
+	}
+}
+
+func sendEmailCode(c *gin.Context) {
+	email := c.Param("email")
+	code := models.SendEmailVerificationCode([]string{email})
+	now := time.Now()
+	end := time.Unix(time.Now().Add(time.Minute*20).Unix(), 0)
+	errCode := Client.Set(Client.Context(), email, code, end.Sub(now)).Err()
+	if errCode != nil {
+		c.JSON(http.StatusBadRequest, "Bad request")
 		return
 	}
 }

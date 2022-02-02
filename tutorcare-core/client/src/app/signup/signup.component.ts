@@ -159,7 +159,7 @@ export class SignupComponent implements OnInit {
     );
   }
 
-  onVerifySubmit(value: any) {
+  onVerifySubmit() {
     this._verifyObservable = this.signupService.verifyCode(this.accountDetailsForm.get('email').value, parseInt(this.emailCodeForm.get('emailVerificationCode').value))
     this._verifyObservable.subscribe(
       (data: any) => {
@@ -170,6 +170,7 @@ export class SignupComponent implements OnInit {
   }
 
   onResendEmailSubmit() {
-    //TODO
+    console.log("Resend Email")
+    this.signupService.resendCode(this.accountDetailsForm.get('email').value)
   }
 }

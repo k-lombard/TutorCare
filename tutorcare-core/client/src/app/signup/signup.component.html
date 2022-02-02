@@ -56,7 +56,7 @@
                   </mat-form-field>
 
                 </div>
-                <button color="accent" mat-raised-button type="submit" [disabled]="!accountDetailsForm.valid" id ="signin-button">
+                <button color="accent" class = "float-right" mat-raised-button type="submit" [disabled]="!accountDetailsForm.valid" id ="signin-button">
                     Sign Up
                 </button>
 
@@ -66,7 +66,7 @@
                 </button>
         </mat-card>
     </form>
-    <form [formGroup] = "emailCodeForm" novalidate (ngSubmit)="onVerifySubmit(emailCodeForm.value)" *ngIf="!hidden">
+    <form [formGroup] = "emailCodeForm" novalidate (ngSubmit)="onVerifySubmit()" *ngIf="hidden">
       <mat-card>
         <h3 class="center">Thank you for signing up with TutorCare! <br>Please check your email for a verification code</h3>
         <mat-form-field class="full-width">
@@ -76,11 +76,11 @@
           </mat-error>
         </mat-form-field>
 
-        <button [style.float]="'right'" class="submit-btn, right-button" color="accent" mat-raised-button type="submit" [disabled]="!emailCodeForm.valid" id ="verify-button">
+        <button class="float-right" color="accent" mat-raised-button (click) = "onVerifySubmit()" [disabled]="!emailCodeForm.valid" id ="verify-button">
             Verify Email
         </button>
 
-        <button class="submit-btn, left-button" color="accent" mat-raised-button id="resend-button">
+        <button color="accent" mat-raised-button id="resend-button" (click) = "onResendEmailSubmit()">
             Resend Email
         </button>
         <div class ="clear"></div>
