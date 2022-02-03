@@ -5,6 +5,7 @@ import { Observable} from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ParentErrorStateMatcher, PasswordValidator } from './validators/password.validator';
+
 interface Option {
   value: string;
   viewValue: string;
@@ -157,20 +158,6 @@ export class SignupComponent implements OnInit {
         this.hidden = true;
       }
     );
-  }
-
-  onVerifySubmit() {
-    this._verifyObservable = this.signupService.verifyCode(this.accountDetailsForm.get('email').value, parseInt(this.emailCodeForm.get('emailVerificationCode').value))
-    this._verifyObservable.subscribe(
-      (data: any) => {
-        this.output = data;
-        console.log(data)
-    })
-    this.router.navigate(['/login'])
-  }
-
-  onResendEmailSubmit() {
-    console.log("Resend Email")
-    this.signupService.resendCode(this.accountDetailsForm.get('email').value)
+    this.router.navigate(['/verify'])
   }
 }

@@ -1,0 +1,38 @@
+<div>
+  <navbar></navbar>
+  <div class="flex flex-col w-full h-1/2 my-4">
+  <h2 class="my-4 center text-center text-3xl">Thank you for signing up with TutorCare!</h2>
+  <form [formGroup] = "emailCodeForm" novalidate *ngIf="hidden" class="w-[100%] h-[30%] flex justify-center items-center">
+    <mat-card class="w-[50%] h-[30%] mx-[25%] my-[2.5%] flex">
+      <h3 class="my-2 text-lg text-center">Please check your email for a verification code</h3>
+      <mat-form-field class="my-2 w-full items-center justify-center text-center">
+        <input matInput maxlength="25" placeholder="Email Code" formControlName="emailVerificationCode" required class="items-center justify-center text-center">
+        <mat-error *ngFor="let validation of validation_messages.emailCode">
+          <mat-error class="error-message" *ngIf="emailCodeForm.get('emailVerificationCode').hasError(validation.type) && (emailCodeForm.get('emailVerificationCode').dirty || emailCodeForm.get('emailVerificationCode').touched)">{{validation.message}}</mat-error>
+        </mat-error>
+      </mat-form-field>
+
+      <button class="px-4 py-3 my-2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none" (click)="onVerifySubmit()" [disabled]="!emailCodeForm.valid" id ="verify-button">
+          Verify Email
+      </button>
+      <div class ="clear"></div>
+    </mat-card>
+  </form>
+  <form [formGroup] = "resendCodeForm" novalidate *ngIf="hidden" class="w-[100%] h-[30%] flex justify-center items-center">
+    <mat-card class="w-[50%] h-[30%] flex mx-[25%] my-[2.5%]">
+      <h3 class="my-2 text-lg text-center">Enter your email to resend a new verification code.</h3>
+      <mat-form-field class="my-2 w-full items-center justify-center">
+        <input matInput maxlength="25" placeholder="Email Address" formControlName="email" required class="items-center justify-center">
+        <mat-error *ngFor="let validation of validation_messages.email">
+          <mat-error class="error-message" *ngIf="resendCodeForm.get('email').hasError(validation.type) && (resendCodeForm.get('email').dirty || resendCodeForm.get('email').touched)">{{validation.message}}</mat-error>
+        </mat-error>
+      </mat-form-field>
+
+      <button class="px-4 py-3 my-2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none" id="resend-button" (click)="onResendEmailSubmit()">
+          Resend Email
+      </button>
+      <div class ="clear"></div>
+    </mat-card>
+  </form>
+</div>
+</div>

@@ -19,6 +19,7 @@ func (r routes) chatrooms(rg *gin.RouterGroup) {
 	rg.GET("/:chatroomid", getChatroomById)
 	// rg.PUT("/:chatroomid", updateChatroom)
 	rg.DELETE("/:chatroomid", deleteChatroom)
+	rg.GET("/users/:userid1/:userid2", getChatroomByTwoUsers)
 }
 
 func addChatroom(c *gin.Context) {
@@ -76,6 +77,21 @@ func getChatroomsByUserId(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, chatrooms)
+}
+
+func getChatroomByTwoUsers(c *gin.Context) {
+	userID1 := uuid.MustParse(c.Param("userid1"))
+	userID2 := uuid.MustParse(c.Param("userid2"))
+	chatroom, err := dbInstance.GetChatroomByTwoUsers(userID1, userID2)
+	if err != nil {
+		if err == database.ErrNoMatch {
+			c.JSON(http.StatusNotFound, "Error: Resource not found")
+		} else {
+			c.JSON(http.StatusBadRequest, err.Error())
+		}
+		return
+	}
+	c.JSON(http.StatusOK, chatroom)
 }
 
 func deleteChatroom(c *gin.Context) {

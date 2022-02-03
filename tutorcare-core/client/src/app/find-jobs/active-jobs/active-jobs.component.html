@@ -172,7 +172,7 @@
           <div class="flex flex-row">
             <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
               <a [routerLink]="['/find-jobs/applications-received', post.application_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline bottom-0 absolute mb-4">Caregiver: {{post.caregiver.first_name}} {{post.caregiver.last_name}}</a>
-              <button mat-raised-button id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00] right-0 bottom-1 absolute mx-8 mb-4">
+              <button mat-raised-button (click)="onMessageClick(post.caregiver.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00] right-0 bottom-1 absolute mx-8 mb-4">
                 <mat-icon>message</mat-icon>
               </button>
             </div>

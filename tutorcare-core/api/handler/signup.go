@@ -18,10 +18,9 @@ import (
 
 func (r routes) signup(rg *gin.RouterGroup) {
 	users := rg.Group("/")
-
 	users.POST("/", signupPage)
 	users.POST("/verify", verifyEmailGatech)
-	users.POST("/resendemail/:email", sendEmailCode)
+	users.GET("/resendemail/:email", sendEmailCode)
 }
 
 func (r routes) login(rg *gin.RouterGroup) {
@@ -124,6 +123,7 @@ func sendEmailCode(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Bad request")
 		return
 	}
+	c.JSON(http.StatusOK, "Successfully sent new email verification code.")
 }
 
 func loginPage(c *gin.Context) {

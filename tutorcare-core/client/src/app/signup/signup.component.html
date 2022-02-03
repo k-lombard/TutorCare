@@ -1,6 +1,5 @@
 <div>
     <navbar></navbar>
-
         <form [formGroup]="accountDetailsForm" novalidate (ngSubmit)="onSignupSubmit(accountDetailsForm.value)" *ngIf='hidden'>
             <mat-card>
                 <mat-card-title>Sign Up</mat-card-title>
@@ -65,25 +64,5 @@
                     Login
                 </button>
         </mat-card>
-    </form>
-    <form [formGroup] = "emailCodeForm" novalidate (ngSubmit)="onVerifySubmit()" *ngIf="hidden">
-      <mat-card>
-        <h3 class="center">Thank you for signing up with TutorCare! <br>Please check your email for a verification code</h3>
-        <mat-form-field class="full-width">
-          <input matInput maxlength="25" placeholder="Email Code" formControlName="emailVerificationCode" required>
-          <mat-error *ngFor="let validation of validation_messages.emailCode">
-            <mat-error class="error-message" *ngIf="emailCodeForm.get('emailVerificationCode').hasError(validation.type) && (emailCodeForm.get('emailVerificationCode').dirty || emailCodeForm.get('emailVerificationCode').touched)">{{validation.message}}</mat-error>
-          </mat-error>
-        </mat-form-field>
-
-        <button class="float-right" color="accent" mat-raised-button (click) = "onVerifySubmit()" [disabled]="!emailCodeForm.valid" id ="verify-button">
-            Verify Email
-        </button>
-
-        <button color="accent" mat-raised-button id="resend-button" (click) = "onResendEmailSubmit()">
-            Resend Email
-        </button>
-        <div class ="clear"></div>
-      </mat-card>
     </form>
 </div>

@@ -42,6 +42,8 @@ import { ApplicationsReceivedComponent } from '../find-jobs/applications-receive
 import { ActiveJobsComponent } from '../find-jobs/active-jobs/active-jobs.component';
 import { MyJobPostingsComponent } from '../find-jobs/my-job-postings/my-job-postings.component';
 import { ChatroomsComponent } from '../find-jobs/chatrooms/chatrooms.component';
+import { VerifyComponent } from '../signup/verify/verify.component';
+import { SimplebarAngularModule } from 'simplebar-angular';
 
 @NgModule({
     imports: [
@@ -56,6 +58,7 @@ import { ChatroomsComponent } from '../find-jobs/chatrooms/chatrooms.component';
         ReactiveFormsModule,
         NgxMaterialTimepickerModule,
         HttpModule,
+        SimplebarAngularModule,
         MatToolbarModule,
         MatSidenavModule,
         NgxMatDatetimePickerModule,
@@ -90,7 +93,8 @@ import { ChatroomsComponent } from '../find-jobs/chatrooms/chatrooms.component';
         ApplicationsReceivedComponent,
         ActiveJobsComponent,
         MyJobPostingsComponent,
-        ChatroomsComponent
+        ChatroomsComponent,
+        VerifyComponent
     ],
     exports: [LoginComponent, NavbarComponent],
     entryComponents: [CreateJobDialog]

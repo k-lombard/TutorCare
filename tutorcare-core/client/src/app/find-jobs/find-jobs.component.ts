@@ -141,15 +141,18 @@ export class FindJobsComponent implements OnInit {
             this.posts = data
             var postsCopy: Post[] = []
             console.log(this.posts)
-            for (var post of this.posts) {
-              var tempTags = post.tags.split(" ")
-              tempTags = tempTags.filter(obj => obj.length < 18)
+            if (this.posts) {
+              for (var post of this.posts) {
+                var tempTags = post.tags.split(" ")
+                tempTags = tempTags.filter(obj => obj.length < 18)
 
-              post.tagList = tempTags
-              postsCopy.push(post)
+                post.tagList = tempTags
+                postsCopy.push(post)
+              }
             }
             this.posts = postsCopy
             this.displayedPosts = postsCopy
+
         })
 
     }

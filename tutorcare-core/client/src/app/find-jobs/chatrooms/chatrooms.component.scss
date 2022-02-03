@@ -4,7 +4,8 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
+@import 'simplebar';
+@import 'simplebar/dist/simplebar.css';
 [id="listitem"] {
   display: inline-block !important;
 }
@@ -26,6 +27,7 @@
   background-color: white !important;
   width: 100% !important;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 
@@ -34,10 +36,10 @@
   background: linear-gradient(270deg, rgba(255,127,42,1) 0%, rgba(234,170,0,1) 100%);
 }
 
-.theirmessage {
-  background: rgb(61,200,196);
-  background: linear-gradient(270deg, rgba(61,200,196,1) 0%, rgba(0,69,255,1) 100%);
-}
+// .theirmessage {
+//   background: rgb(61,200,196);
+//   background: linear-gradient(270deg, rgba(61,200,196,1) 0%, rgba(0,69,255,1) 100%);
+// }
 
 [id="message"] {
   background-color: #54585A;
@@ -71,6 +73,17 @@ h3 {
   background: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  background-image: linear-gradient( yellow , red) !important;
+}
+
+.simplebar-track.simplebar-vertical {
+  background-color: orange !important;
+}
+
+::ng-deep .simplebar-scrollbar::before {
+  background-image: linear-gradient( yellow , red) !important;
+}
 
 [id="stock"] {
   border-radius: 50% !important;

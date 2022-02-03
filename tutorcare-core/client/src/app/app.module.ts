@@ -44,6 +44,9 @@ import { ApplicationsReceivedService } from './find-jobs/applications-received/a
 import { ActiveJobsService } from './find-jobs/active-jobs/active-jobs.service';
 import { MyJobPostingsService } from './find-jobs/my-job-postings/my-job-postings.service';
 import { ChatroomsService } from './find-jobs/chatrooms/chatrooms.service';
+import { VerifyService } from './signup/verify/verify.service';
+import { SimplebarAngularModule } from 'simplebar-angular';
+import { ThemeService } from './theme.service';
 
 @NgModule({
   declarations: [
@@ -66,6 +69,7 @@ import { ChatroomsService } from './find-jobs/chatrooms/chatrooms.service';
     HttpModule,
     MatToolbarModule,
     MatSidenavModule,
+    SimplebarAngularModule,
     MatListModule,
     MatIconModule,
     MatGridListModule,
@@ -75,7 +79,7 @@ import { ChatroomsService } from './find-jobs/chatrooms/chatrooms.service';
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ThemeService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

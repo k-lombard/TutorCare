@@ -5,18 +5,18 @@ import { User } from '../models/user.model';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { getCurrUser } from '../auth/auth.selectors';
+import { ThemeService } from '../theme.service';
 
 @Component({
   selector: 'navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+  styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
   user: User | undefined;
   name = "Account"
   public isMenuOpen: boolean = false;
-  constructor(private router: Router, private store: Store<AppState>) {}
+  constructor(private router: Router, private store: Store<AppState>, private theme: ThemeService) {}
 
   ngOnInit() {
     this.name = "Account"
@@ -59,6 +59,10 @@ export class NavbarComponent implements OnInit {
 
   onSignupClick() {
     this.router.navigate(['/signup'])
+  }
+
+  setDarkMode() {
+    this.theme.toggleTheme()
   }
 
 

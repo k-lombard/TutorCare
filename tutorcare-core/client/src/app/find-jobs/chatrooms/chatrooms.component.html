@@ -168,11 +168,11 @@
                   <img id="stock" class="object-cover mx-12 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
                 </div>
                 <p class="text-gray-800 font-bold dark:text-gray-100 pt-8">Chatroom ID: {{currChatroom.chatroom_id}}</p>
-                <div #scrollMe id="messagearea" class="flex flex-col messagearea w-full mt-4 bg-white rounded-lg px-2 h-full py-8">
+                <ngx-simplebar [options]="options" #scrollMe id="messagearea" class="flex flex-col messagearea w-full mt-4 bg-white rounded-lg px-2 h-full py-8">
                   <div *ngFor="let message of messages; let i = index">
                     <div *ngIf="message.sender_id === userId" [style.float]="'right'" class="bg-none flex flex-row text-center py-4 px-6 lg:px-4 w-2/3">
                       <p class="pt-7 px-2 font-light">{{message.timestamp}}</p>
-                      <div class="mymessage py-8 px-10 bg-indigo-800 items-center text-white rounded-full leading-none lg:rounded-full flex-1 flex lg:inline-flex" role="alert">
+                      <div class="mymessage py-8 px-10 items-center text-white rounded-full leading-none lg:rounded-full flex-1 flex lg:inline-flex" role="alert">
                         <p class="font-semibold mr-2 text-left flex-auto">{{message.message}}</p>
                       </div>
                     </div>
@@ -180,14 +180,14 @@
                     <div *ngIf="message.sender_id !== userId" [style.float]="'left'" class="bg-none flex flex-row text-center py-4 px-6 lg:px-4 w-2/3">
                       <div class="flex flex-col">
                         <p class="font-light">{{message.sender.first_name}} {{message.sender.last_name}}</p>
-                        <div class="theirmessage py-8 px-10 bg-indigo-800 items-center text-white leading-none rounded-full lg:rounded-full flex flex-1 lg:inline-flex" role="alert">
+                        <div class="theirmessage py-8 px-10 bg-gray-700 items-center text-white leading-none rounded-full lg:rounded-full flex flex-1 lg:inline-flex" role="alert">
                           <p class="font-semibold mr-2 text-left flex-auto">{{message.message}}</p>
                         </div>
                       </div>
                       <p class="pt-12 px-2 font-light">{{message.timestamp}}</p>
                     </div>
-                  </div>
-                </div>
+                    </div>
+                </ngx-simplebar>
                 <form [formGroup]="messageForm" class="py-8">
                   <div class="flex flex-row w-full p-1 overflow-hidden rounded-lg dark:border-gray-600 lg:flex-row dark:focus-within:border-blue-300 focus-within:ring focus-within:ring-opacity-40 focus-within:border-blue-400 focus-within:ring-blue-300">
                       <input formControlName="message" matInput class="w-full px-6 py-2 text-gray-700 placeholder-gray-500 bg-white rounded-full mx-2 outline-none dark:bg-gray-800 dark:placeholder-gray-400 focus:placeholder-transparent dark:focus:placeholder-transparent" type="text" name="email" placeholder="Send a message..." aria-label="Enter your email">

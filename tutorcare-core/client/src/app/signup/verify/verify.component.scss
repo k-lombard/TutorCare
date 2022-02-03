@@ -1,0 +1,15 @@
+button {
+  background-color: #eaaa00;
+  @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
+}
+
+h2 {
+  font-family: "Dosis";
+  font-size: 40px;
+  line-height: 60px;
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 40px;
+}

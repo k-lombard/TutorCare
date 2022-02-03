@@ -9,20 +9,21 @@ import { AppState } from './reducers';
 import { Router } from '@angular/router';
 import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
 import { Logout } from './auth/auth.actions';
+import { ThemeService } from './theme.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   isLoggedIn$: Observable<boolean> | undefined;
 
   isLoggedOut$: Observable<boolean> | undefined;
-  constructor(private store: Store<AppState>, private router: Router) {}
+  constructor(private store: Store<AppState>, private router: Router, private theme: ThemeService) {}
 
   ngOnInit() {
-
+    // this.theme.setTheme()
     this.isLoggedIn$ = this.store
       .pipe(
         select(isLoggedIn)

@@ -11,6 +11,7 @@ import { throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Chatroom } from 'src/app/models/chatroom.model';
 import { Message } from 'src/app/models/message.model';
+import { ThisReceiver } from '@angular/compiler';
 
 
 @Injectable()
@@ -72,6 +73,28 @@ export class ChatroomsService {
             observer.complete();
          });
   });
+}
+
+getChatroomByTwoUsers(user1_id: string, user2_id: string) {
+  let url = `/api/chatrooms/users/${user1_id}/${user2_id}`;
+  return new Observable((observer: any) => {
+     this.http.get(url)
+         .pipe(map((res: any) => res))
+         .subscribe((data: Chatroom) => {
+            this._chatroom = data
+
+            observer.next(this._chatroom);
+            observer.complete();
+         });
+  });
+}
+
+setSelected(chatRoomId: number) {
+  for (let i = 0; i < this._chatrooms?.length; i++) {
+    if (this._chatrooms[i]?.chatroom_id === chatRoomId) {
+      this.selectedIdx = i;
+    }
+  }
 }
 
 
