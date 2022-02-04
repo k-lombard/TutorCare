@@ -29,7 +29,7 @@ func (db Database) GetAllChatrooms() (*models.ChatroomList, error) {
 func (db Database) AddChatroom(chatroom *models.Chatroom) (models.Chatroom, error) {
 	var id int
 	chatroomOut := models.Chatroom{}
-	switch errLatest := db.Conn.QueryRow(`SELECT chatroom_id FROM chatrooms WHERE user1 = $1 AND user2 = $1 OR user1 = $2 AND user2 = $1;`, &chatroom.User1ID, &chatroom.User2ID).Scan(&id); errLatest {
+	switch errLatest := db.Conn.QueryRow(`SELECT chatroom_id FROM chatrooms WHERE user1 = $1 AND user2 = $2 OR user1 = $2 AND user2 = $1;`, &chatroom.User1ID, &chatroom.User2ID).Scan(&id); errLatest {
 	case sql.ErrNoRows:
 		sqlStatement := `INSERT INTO chatrooms (user1, user2) VALUES ($1, $2) RETURNING chatroom_id, is_deleted, date_created;`
 		var chatroom_id int
@@ -82,7 +82,7 @@ func (db Database) GetChatroomById(chatroomId int) (models.Chatroom, error) {
 
 func (db Database) GetChatroomByTwoUsers(userid1 uuid.UUID, userid2 uuid.UUID) (models.Chatroom, error) {
 	chatroomOut := models.Chatroom{}
-	query := `SELECT * FROM chatrooms WHERE user1 = $1 AND user2 = $1 OR user1 = $2 AND user2 = $1;`
+	query := `SELECT * FROM chatrooms WHERE user1 = $1 AND user2 = $2 OR user1 = $2 AND user2 = $1;`
 	row := db.Conn.QueryRow(query, userid1, userid2)
 	switch err := row.Scan(&chatroomOut.User1ID, &chatroomOut.User2ID, &chatroomOut.ChatroomID, &chatroomOut.IsDeleted, &chatroomOut.DateCreated); err {
 	case sql.ErrNoRows:
