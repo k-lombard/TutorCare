@@ -117,7 +117,7 @@ func (db Database) GetPostsAppliedTo(caregiverId uuid.UUID) (*models.PostWithApp
 	}
 	for rows.Next() {
 		application := models.ApplicationWithUser{}
-		err5 := rows.Scan(&application.UserID, &application.ApplicationID, &application.PostID, &application.Message, &application.Accepted, &application.DateCreated)
+		err5 := rows.Scan(&application.UserID, &application.PostID, &application.ApplicationID, &application.Message, &application.Accepted, &application.DateCreated)
 		if err5 != nil {
 			return list, err5
 		}
