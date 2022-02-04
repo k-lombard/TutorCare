@@ -44,6 +44,7 @@ export class ChatroomsComponent implements OnInit {
     messageForm: FormGroup
     otherUser: User
     otherUserId: string
+    menuVisible: boolean
     options: any = {classNames: {
       // defaults
       content: 'simplebar-content',
@@ -135,6 +136,14 @@ export class ChatroomsComponent implements OnInit {
       }
     }
 
+    back() {
+      this.currChatroom = undefined
+    }
+
+    backToMenu() {
+      this.currChatroom = undefined
+      this.menuVisible = true
+    }
 
     onEditClick() {
       this.editable = false

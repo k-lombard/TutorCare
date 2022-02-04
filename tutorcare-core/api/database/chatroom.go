@@ -27,23 +27,29 @@ func (db Database) GetAllChatrooms() (*models.ChatroomList, error) {
 }
 
 func (db Database) AddChatroom(chatroom *models.Chatroom) (models.Chatroom, error) {
-	sqlStatement := `INSERT INTO chatrooms (user1, user2) VALUES ($1, $2) RETURNING chatroom_id, is_deleted, date_created;`
-	var chatroom_id int
-	var is_deleted bool
-	var date_created string
+	var id int
 	chatroomOut := models.Chatroom{}
+	switch errLatest := db.Conn.QueryRow(`SELECT chatroom_id FROM chatrooms WHERE user1 = $1 AND user2 = $1 OR user1 = $2 AND user2 = $1;`, &chatroom.User1ID, &chatroom.User2ID).Scan(&id); errLatest {
+	case sql.ErrNoRows:
+		sqlStatement := `INSERT INTO chatrooms (user1, user2) VALUES ($1, $2) RETURNING chatroom_id, is_deleted, date_created;`
+		var chatroom_id int
+		var is_deleted bool
+		var date_created string
 
-	err := db.Conn.QueryRow(sqlStatement, &chatroom.User1ID, &chatroom.User2ID).Scan(&chatroom_id, &is_deleted, &date_created)
+		err := db.Conn.QueryRow(sqlStatement, &chatroom.User1ID, &chatroom.User2ID).Scan(&chatroom_id, &is_deleted, &date_created)
 
-	if err != nil {
-		return chatroomOut, err
+		if err != nil {
+			return chatroomOut, err
+		}
+		err2 := db.Conn.QueryRow(`SELECT * FROM chatrooms WHERE chatroom_id = $1;`, chatroom_id).Scan(&chatroomOut.User1ID, &chatroomOut.User2ID, &chatroomOut.ChatroomID, &chatroomOut.IsDeleted, &chatroomOut.DateCreated)
+		if err2 != nil {
+			return chatroomOut, err2
+		}
+		fmt.Println("New chatroom record created with chatroomID and timestamp: ", chatroom_id, date_created)
+		return chatroomOut, nil
+	default:
+		return chatroomOut, ErrDuplicate
 	}
-	err2 := db.Conn.QueryRow(`SELECT * FROM chatrooms WHERE chatroom_id = $1;`, chatroom_id).Scan(&chatroomOut.User1ID, &chatroomOut.User2ID, &chatroomOut.ChatroomID, &chatroomOut.IsDeleted, &chatroomOut.DateCreated)
-	if err2 != nil {
-		return chatroomOut, err2
-	}
-	fmt.Println("New chatroom record created with chatroomID and timestamp: ", chatroom_id, date_created)
-	return chatroomOut, nil
 }
 
 func (db Database) GetChatroomById(chatroomId int) (models.Chatroom, error) {

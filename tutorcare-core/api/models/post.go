@@ -37,6 +37,7 @@ type PostWithCaregiver struct {
 	DatePosted      string    `json:"date_posted"`
 	Caregiver       User      `json:"caregiver"`
 	ApplicationID   int       `json:"application_id"`
+	User            User      `json:"user"`
 }
 
 type PostWithApplications struct {

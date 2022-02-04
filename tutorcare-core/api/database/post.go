@@ -83,6 +83,57 @@ func (db Database) GetActivePostsWithCaregiver(userId uuid.UUID) (*models.PostWi
 	return list, nil
 }
 
+func (db Database) GetActivePostsForCaregiverView(caregiverId uuid.UUID) (*models.PostWithCaregiverList, error) {
+	list := &models.PostWithCaregiverList{}
+	rows, err := db.Conn.Query(`SELECT *, TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy'), TO_CHAR(start_time :: TIME, 'hh12:mi AM'), TO_CHAR(end_time :: TIME, 'hh12:mi AM') FROM posts WHERE caregiver_id=$1 ORDER BY post_id DESC;`, caregiverId)
+	if err != nil {
+		return list, err
+	}
+	for rows.Next() {
+		post := models.PostWithCaregiver{}
+		err5 := rows.Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post.Title, &post.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted, &post.DateOfJob, &post.StartTime, &post.EndTime)
+		if err5 != nil {
+			return list, err5
+		}
+		if post.Completed == false && (post.CaregiverID).String() != "00000000-0000-0000-0000-000000000000" {
+			careUser := models.User{}
+			row5 := db.Conn.QueryRow(`SELECT * FROM users WHERE user_id=$1;`, post.UserID)
+			errNew := row5.Scan(&careUser.UserID, &careUser.FirstName, &careUser.LastName, &careUser.Email, &careUser.Password, &careUser.DateJoined, &careUser.Status, &careUser.UserCategory, &careUser.Experience, &careUser.Bio)
+			if errNew != nil {
+				return list, errNew
+			}
+			post.User = careUser
+			list.Posts = append(list.Posts, post)
+		}
+	}
+	return list, nil
+}
+
+func (db Database) GetPostsAppliedTo(caregiverId uuid.UUID) (*models.PostWithApplicationsList, error) {
+	list := &models.PostWithApplicationsList{}
+	rows, err := db.Conn.Query(`SELECT * FROM applications WHERE user_id=$1 ORDER BY application_id DESC;`, caregiverId)
+	if err != nil {
+		return list, err
+	}
+	for rows.Next() {
+		application := models.ApplicationWithUser{}
+		err5 := rows.Scan(&application.UserID, &application.ApplicationID, &application.PostID, &application.Message, &application.Accepted, &application.DateCreated)
+		if err5 != nil {
+			return list, err5
+		}
+		post := models.PostWithApplications{}
+		err2 := db.Conn.QueryRow(`SELECT * FROM posts WHERE post_id=$1;`, application.PostID).Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post.Title, &post.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted, &post.DateOfJob, &post.StartTime, &post.EndTime)
+		if err2 != nil {
+			return list, err2
+		}
+		if post.Completed == false && (post.CaregiverID).String() == "00000000-0000-0000-0000-000000000000" {
+			post.Applications = append(post.Applications, application)
+			list.Posts = append(list.Posts, post)
+		}
+	}
+	return list, nil
+}
+
 func (db Database) AddPost(post *models.Post) (models.Post, error) {
 	sqlStatement := `INSERT INTO posts (user_id, title, tags, care_description, care_type, date_of_job, start_time, end_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING caregiver_id, post_id, completed, date_posted;`
 	var caregiver_id uuid.UUID
@@ -223,12 +274,16 @@ func (db Database) AddApplicationToPost(postId int, postData models.Post) (model
 		}
 		return post, errTwo
 	}
-	err := db.Conn.QueryRow(query, postData.CaregiverID, postId).Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post2.Title, &post2.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return post, ErrNoMatch
+	if postData.CaregiverID != post2.UserID {
+		err := db.Conn.QueryRow(query, postData.CaregiverID, postId).Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post2.Title, &post2.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				return post, ErrNoMatch
+			}
+			return post, err
 		}
-		return post, err
+		return post, nil
+	} else {
+		return post, ErrSameUser
 	}
-	return post, nil
 }

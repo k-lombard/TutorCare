@@ -17,7 +17,7 @@ func (db Database) GetAllApplications() (*models.ApplicationList, error) {
 	}
 	for rows.Next() {
 		var app models.Application
-		err := rows.Scan(&app.UserID, &app.ApplicationID, &app.PostID, &app.Message, &app.Accepted, &app.DateCreated)
+		err := rows.Scan(&app.UserID, &app.PostID, &app.ApplicationID, &app.Message, &app.Accepted, &app.DateCreated)
 		if err != nil {
 			return list, err
 		}
@@ -52,30 +52,46 @@ func (db Database) GetAllApplications() (*models.ApplicationList, error) {
 // }
 
 func (db Database) AddApplication(app *models.Application) (models.Application, error) {
-	sqlStatement := `INSERT INTO applications (user_id, post_id, message) VALUES ($1, $2, $3) RETURNING application_id, accepted, date_created;`
-	var application_id int
-	var accepted bool
-	var date_created string
+	var poster uuid.UUID
 	appOut := models.Application{}
-
-	err := db.Conn.QueryRow(sqlStatement, &app.UserID, &app.PostID, &app.Message).Scan(&application_id, &accepted, &date_created)
-
-	if err != nil {
-		return appOut, err
+	errLatest := db.Conn.QueryRow(`SELECT user_id FROM posts where post_id=$1`, &app.PostID).Scan(&poster)
+	if errLatest != nil {
+		return appOut, errLatest
 	}
-	err2 := db.Conn.QueryRow(`SELECT * FROM applications WHERE application_id = $1;`, application_id).Scan(&appOut.UserID, &appOut.ApplicationID, &appOut.PostID, &appOut.Message, &appOut.Accepted, &appOut.DateCreated)
-	if err2 != nil {
-		return appOut, err2
+
+	var userType string
+	errFinal := db.Conn.QueryRow(`SELECT user_category from users where user_id=$1`, app.UserID).Scan(&userType)
+	if errFinal != nil {
+		return appOut, errFinal
 	}
-	fmt.Println("New post record created with applicationID and timestamp: ", application_id, date_created)
-	return appOut, nil
+
+	if poster != app.UserID && userType != "careseeker" {
+		sqlStatement := `INSERT INTO applications (user_id, post_id, message) VALUES ($1, $2, $3) RETURNING application_id, accepted, date_created;`
+		var application_id int
+		var accepted bool
+		var date_created string
+
+		err := db.Conn.QueryRow(sqlStatement, &app.UserID, &app.PostID, &app.Message).Scan(&application_id, &accepted, &date_created)
+
+		if err != nil {
+			return appOut, err
+		}
+		err2 := db.Conn.QueryRow(`SELECT * FROM applications WHERE application_id = $1;`, application_id).Scan(&appOut.UserID, &appOut.PostID, &appOut.ApplicationID, &appOut.Message, &appOut.Accepted, &appOut.DateCreated)
+		if err2 != nil {
+			return appOut, err2
+		}
+		fmt.Println("New post record created with applicationID and timestamp: ", application_id, date_created)
+		return appOut, nil
+	} else {
+		return appOut, ErrSameUser
+	}
 }
 
 func (db Database) GetApplicationById(appId int) (models.ApplicationWithUser, error) {
 	appOut := models.ApplicationWithUser{}
 	query := `SELECT * FROM applications WHERE application_id = $1;`
 	row := db.Conn.QueryRow(query, appId)
-	switch err := row.Scan(&appOut.UserID, &appOut.ApplicationID, &appOut.PostID, &appOut.Message, &appOut.Accepted, &appOut.DateCreated); err {
+	switch err := row.Scan(&appOut.UserID, &appOut.PostID, &appOut.ApplicationID, &appOut.Message, &appOut.Accepted, &appOut.DateCreated); err {
 	case sql.ErrNoRows:
 		return appOut, ErrNoMatch
 	default:
@@ -99,7 +115,7 @@ func (db Database) GetApplicationsByPostId(postId int) (*models.ApplicationList,
 	}
 	for rows.Next() {
 		var appOut models.Application
-		err := rows.Scan(&appOut.UserID, &appOut.ApplicationID, &appOut.PostID, &appOut.Message, &appOut.Accepted, &appOut.DateCreated)
+		err := rows.Scan(&appOut.UserID, &appOut.PostID, &appOut.ApplicationID, &appOut.Message, &appOut.Accepted, &appOut.DateCreated)
 		if err != nil {
 			return list, err
 		}
@@ -116,7 +132,7 @@ func (db Database) GetApplicationsByUserId(userId uuid.UUID) (*models.Applicatio
 	}
 	for rows.Next() {
 		var appOut models.Application
-		err := rows.Scan(&appOut.UserID, &appOut.ApplicationID, &appOut.PostID, &appOut.Message, &appOut.Accepted, &appOut.DateCreated)
+		err := rows.Scan(&appOut.UserID, &appOut.PostID, &appOut.ApplicationID, &appOut.Message, &appOut.Accepted, &appOut.DateCreated)
 		if err != nil {
 			return list, err
 		}
@@ -147,14 +163,14 @@ func (db Database) UpdateApplication(applicationId int, appData models.Applicati
 
 	query2 := `SELECT * FROM applications WHERE application_id=$1;`
 	app2 := models.Application{}
-	errTwo := db.Conn.QueryRow(query2, applicationId).Scan(&app2.UserID, &app2.ApplicationID, &app2.PostID, &app2.Message, &app2.Accepted, &app2.DateCreated)
+	errTwo := db.Conn.QueryRow(query2, applicationId).Scan(&app2.UserID, &app2.PostID, &app2.ApplicationID, &app2.Message, &app2.Accepted, &app2.DateCreated)
 	if errTwo != nil {
 		if errTwo == sql.ErrNoRows {
 			return app, ErrNoMatch
 		}
 		return app, errTwo
 	}
-	err := db.Conn.QueryRow(query, appData.Message, appData.Accepted, applicationId).Scan(&app.UserID, &app.ApplicationID, &app.PostID, &app.Message, &app.Accepted, &app.DateCreated)
+	err := db.Conn.QueryRow(query, appData.Message, appData.Accepted, applicationId).Scan(&app.UserID, &app.PostID, &app.ApplicationID, &app.Message, &app.Accepted, &app.DateCreated)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return app, ErrNoMatch

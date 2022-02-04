@@ -53,6 +53,13 @@
   @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
 }
 
+[id="back"] {
+  background-color: #eaaa00;
+  @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
+  display: none;
+}
+
+
 
 
 .row-item-div-large {
@@ -127,11 +134,11 @@ bar-rating {
 }
 
 [id="rightcol"] {
-  width: calc(40% - 72px) !important;
+  width: calc(40% - 72px);
 }
 
 [id="rightcol2"] {
-  width: calc(60% - 72px) !important;
+  width: calc(60% - 72px);
 }
 
 .navbar {
@@ -237,4 +244,196 @@ bar-rating {
   padding-bottom: 20px;
   justify-content: center;
   text-align: center;
+}
+
+
+@media (max-width: 1420px) {
+  .backbutton {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
+
+  .backbutton2 {
+    display: none;
+  }
+  .visible {
+    width: calc(100% - 16rem) !important;
+    display: flex !important;
+    min-width: calc(100% - 16rem) !important;
+    max-width: calc(100% - 16rem) !important;
+    margin: 0px;
+    padding: 0px;
+    height: 100% !important;
+  }
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none;
+  }
+  [id="rightcol"] {
+    width: calc(100% - 72px);
+  }
+  .messagecol {
+    max-width: 0px;
+    width: 0px;
+    height: 0px;
+    display: none;
+  }
+
+  // .messagecontainer {
+  //   max-width: 0px !important;
+  //   width: 0px !important;
+  //   height: 0px !important;
+  //   padding: 0px !important;
+  // }
+
+  // [id="messagearea"] {
+  //   max-width: 0px !important;
+  //   width: 0px !important;
+  //   height: 0px !important;
+  //   padding: 0px !important;
+  // }
+
+  .chatroomcol {
+    width: 100%;
+    display: flex;
+    min-width: 100%;
+  }
+
+  .chatroomcard {
+    width: 100%;
+    display: flex;
+  }
+}
+
+@media (max-width: 750px) {
+  .chatroomid {
+    font-size: 12px !important;
+  }
+  [id="message"] {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
+  [id="stock"] {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  .backbutton {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
+
+  .backbutton2 {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
+
+  .menu {
+    width: 100% !important;
+    min-width: 100% !important;
+    display: flex !important;
+    .sidenav {
+      width: 100% !important;
+      min-width: 100% !important;
+      display: flex !important;
+    }
+  }
+
+  .showmenu {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+
+  input,
+  input::-webkit-input-placeholder {
+    font-size: 12px;
+    line-height: 4;
+  }
+  [id="messagearea"] {
+    overflow-x: auto;
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+
+  .msgbox {
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+  .mymessage {
+    padding: 2px !important;
+  }
+  .theirmessage {
+    padding: 4px;
+  }
+  .msgfont {
+    font-size: 12px;
+  }
+  .sidenav {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+  .visible {
+    width: calc(100%) !important;
+    display: flex !important;
+    min-width: calc(100%) !important;
+    max-width: calc(100%) !important;
+    margin: 0px;
+    padding: 0px;
+    height: 100% !important;
+  }
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none;
+  }
+  [id="rightcol"] {
+    width: 100%;
+  }
+  .messagecol {
+    max-width: 0px;
+    width: 0px;
+    height: 0px;
+    display: none;
+  }
+
+  // .messagecontainer {
+  //   max-width: 0px !important;
+  //   width: 0px !important;
+  //   height: 0px !important;
+  //   padding: 0px !important;
+  // }
+
+  // [id="messagearea"] {
+  //   max-width: 0px !important;
+  //   width: 0px !important;
+  //   height: 0px !important;
+  //   padding: 0px !important;
+  // }
+
+  .chatroomcol {
+    width: 100% !important;
+    display: flex;
+    min-width: 100%;
+  }
+
+  .chatroomcard {
+    width: 100%;
+    display: flex;
+  }
+
+
 }

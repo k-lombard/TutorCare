@@ -19,4 +19,5 @@ export interface Post {
   applications?: Application[]
   caregiver?: User
   application_id?: number
+  user?: User
 }

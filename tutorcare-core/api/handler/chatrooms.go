@@ -26,12 +26,12 @@ func addChatroom(c *gin.Context) {
 	chatroom := &models.Chatroom{}
 	r := c.Request
 	if err := render.Bind(r, chatroom); err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
 	chatroomOut, err := dbInstance.AddChatroom(chatroom)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
 	c.JSON(http.StatusOK, chatroomOut)

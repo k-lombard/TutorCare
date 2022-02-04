@@ -1,15 +1,10 @@
 @use '@angular/material' as mat;
 @import "../../../custom-theme.scss";
-mat-dialog-content {
-  position: relative !important;
-}
+// mat-dialog-content {
+//   position: relative !important;
+// }
 .mat-dialog {
   background-color: #D6DBD4;
-}
-mat-card {
-  width: 90%;
-  margin-top: 20px;
-  position: relative !important;
 }
 mat-form-field {
   width: 100%;
@@ -30,7 +25,7 @@ h2 {
   border-color: transparent;
   padding: 2 0 100px;
   padding-bottom: 3%;
-  min-height: 200px;
+  min-height: 100px;
   line-height: 1.28;
   resize: none;
   height: 100%;
@@ -54,20 +49,6 @@ h2 {
       box-shadow: 0 0 0 1px #4c9aff;
       outline: none;
   }
-}
-
-[id="create-button"] {
-  float: right !important;
-  right: 0 !important;
-  margin-right: 20% !important;
-  position: absolute !important;
-}
-
-[id="close-button"] {
-  float: left !important;
-  left: 0 !important;
-  margin-left: 20% !important;
-  position: absolute !important;
 }
 
 button {

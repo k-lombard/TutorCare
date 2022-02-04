@@ -1,7 +1,7 @@
 <div>
   <navbar></navbar>
   <div class="flex flex-row w-[100%]">
-    <div class="flex flex-col h-full w-64 h-screen px-4 py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
       <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Find Jobs</h2>
 
       <div class="relative mt-6 mx-2">
@@ -69,7 +69,7 @@
                   <span class="mx-4 font-medium">Messages</span>
               </a>
 
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/active-jobs">
                 <mat-icon>library_add_check</mat-icon>
 
                   <span class="mx-4 font-medium">Active Jobs</span>
@@ -78,9 +78,10 @@
           </nav>
         </div>
     </div>
-    <div id="rightcol" class="flex flex-col border-r">
+    <div id="rightcol" [class.showmenu]="menuVisible" [class.hiddencol]="currPost" class="postcol flex flex-col border-r">
+      <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
       <div class="grid grid-cols-1 gap-1">
-          <ul *ngFor="let post of posts; let i = index" [class.selected]="getSelected() == i || currPost == post" (click)="setSelected(i)" (click)="setPost(post)" [routerLink]="['/find-jobs/my-job-postings', post.post_id]" id="jobcard" class="menu px-8 py-4 my-4 mx-4 bg-white border-gray border hover:bg-gray-200 rounded-lg shadow-md dark:bg-gray-800">
+          <ul *ngFor="let post of posts; let i = index" [class.selected]="getSelected() == i || currPost == post" (click)="setSelected(i)" (click)="setPost(post)" [routerLink]="['/find-jobs/my-job-postings', post.post_id]" id="jobcard" class="postcard menu px-8 py-4 my-4 mx-4 bg-white border-gray border hover:bg-gray-200 rounded-lg shadow-md dark:bg-gray-800">
             <li class="menu-title">
               <div class="flex flex-row items-stretch justify-between relative">
                     <h2 class="text-2xl">{{post.title}}</h2>
@@ -99,13 +100,16 @@
           </ul>
       </div>
     </div>
-    <div *ngIf="currPost" id="rightcol2" class="flex flex-col bg-[#D6DBD4] shadow-lg shadow-[#D6DBD4] relative">
+    <div *ngIf="currPost" [class.visible]="currPost" id="rightcol2" class="flex flex-col bg-[#D6DBD4] shadow-lg shadow-[#D6DBD4] relative">
       <div class="container px-6 py-8 mx-auto">
         <div class="items-center lg:flex">
             <div class="lg:w-1/2">
-              <div id="accepted" *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="w-1/6 text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs right-0 absolute mx-8"><p class="justify-center items-center">ACCEPTED</p></div>
-              <div id="accepted" *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" class="w-1/6 text-white items-center justify-center rounded bg-[#2F96B4] shadow-lg shadow-[#54585A] text-xs right-0 absolute mx-8"><p class="justify-center items-center">NO CAREGIVER ASSIGNED</p></div>
-                <div *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="flex flex-row">
+              <div class="flex flex-row justify-between my-10">
+                <button (click)="back()" id="back" class="justify-center items-center backbutton text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
+                <div id="accepted" *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="statusbutton w-full text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs mx-8 px-4"><p class="justify-center items-center">ACCEPTED</p></div>
+                <div id="accepted" *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" class="statusbutton w-full text-white items-center justify-center rounded bg-[#2F96B4] shadow-lg shadow-[#54585A] text-xs mx-8 px-4"><p class="justify-center items-center">NO CAREGIVER ASSIGNED</p></div>
+              </div>
+                <div *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="flex flex-row justify-between">
                   <div>
                     <h2 class="pt-4 text-lg font-bold text-gray-800 dark:text-gray-100">Assigned Caregiver:</h2>
                     <h2 class="pt-2 text-3xl font-bold text-gray-800 dark:text-gray-100">{{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}</h2>
@@ -129,9 +133,9 @@
         </div>
       </div>
       <div class="flex flex-row justify-between">
-        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" id="delete" (click)="onDeleteClick(currPost.post_id)" class="w-1/4 mx-4 shadow shadow-[#BD362F] font-white" mat-raised-button>DELETE</button>
-        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && editable" id="edit" (click)="onEditClick()" class="w-1/4 mx-4 shadow shadow-[#eaaa00]" mat-raised-button color="accent">EDIT</button>
-        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && !editable" id="save" (click)="onSaveClick()" class="w-1/4 mx-4 shadow shadow-[#eaaa00]" mat-raised-button>SAVE</button>
+        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" id="delete" (click)="onDeleteClick(currPost.post_id)" class="w-1/4 mx-4 shadow shadow-[#BD362F] font-white my-2" mat-raised-button>DELETE</button>
+        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && editable" id="edit" (click)="onEditClick()" class="w-1/4 mx-4 shadow shadow-[#eaaa00] my-2" mat-raised-button color="accent">EDIT</button>
+        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && !editable" id="save" (click)="onSaveClick()" class="w-1/4 mx-4 shadow shadow-[#eaaa00] my-2" mat-raised-button>SAVE</button>
       </div>
     </div>
   </div>
