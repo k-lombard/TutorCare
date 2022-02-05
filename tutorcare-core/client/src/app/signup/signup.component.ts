@@ -66,6 +66,21 @@ export class SignupComponent implements OnInit {
     'emailCode': [
       { type: 'required', message: 'Password is required' },
       { type: 'minlength', message: 'Email code must be at least 5 characters long' },
+    ],
+    'city': [
+      { type: 'required', message: 'City is required' },
+      { type: 'email', message: 'Enter a valid city' },
+      { type: 'pattern', message: 'Please enter a valid city' },
+    ],
+    'zipcode': [
+      { type: 'required', message: 'Zipcode is required' },
+      { type: 'email', message: 'Enter a valid zipcode' },
+      { type: 'pattern', message: 'Please enter a valid zipcode' },
+    ],
+    'address': [
+      { type: 'required', message: 'Address is required' },
+      { type: 'email', message: 'Enter a valid address' },
+      { type: 'pattern', message: 'Please enter a valid address' },
     ]
   }
 
@@ -105,7 +120,22 @@ export class SignupComponent implements OnInit {
         // Validators.pattern('^.*gatech.edu.*$'),
         Validators.required
       ])),
-      matchingPasswords: this.matchingPasswordsGroup,
+      city: new FormControl('', Validators.compose([
+        Validators.maxLength(25),
+        Validators.pattern('^[a-zA-Z_ ]*$'),
+        Validators.required
+       ])),
+      zipcode: new FormControl('', Validators.compose([
+        Validators.maxLength(20),
+        Validators.pattern('^[0-9_]*$'),
+        Validators.required
+       ])),
+      address: new FormControl('', Validators.compose([
+        Validators.maxLength(40),
+        Validators.pattern('^[a-zA-Z0-9_ ]*$'),
+        Validators.required
+       ])),
+      matchingPasswords: this.matchingPasswordsGroup
     })
 
     // Email Form validations
@@ -131,7 +161,10 @@ export class SignupComponent implements OnInit {
       this.accountDetailsForm.get('lastName').value,
       this.accountDetailsForm.get('email').value,
       this.accountDetailsForm.get('matchingPasswords').get('password').value,
-      this.selectedValue
+      this.selectedValue,
+      this.accountDetailsForm.get('city').value,
+      this.accountDetailsForm.get('zipcode').value,
+      this.accountDetailsForm.get('address').value,
       )
   }
 
@@ -143,8 +176,8 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string) {
-    this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category);
+  signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string, city: string, zipcode: string, address: string) {
+    this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category, city, zipcode, address);
     console.log(this._signupObservable)
 
     this._signupObservable.subscribe(

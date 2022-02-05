@@ -15,7 +15,7 @@ export class SignupService {
     this.results = []
   }
 
-  signup(firstName: string, lastName: string, email: string, password: string, user_category: string): Observable<Object[]> {
+  signup(firstName: string, lastName: string, email: string, password: string, user_category: string, city: string, zipcode: string, address: string): Observable<Object[]> {
     // let url = `${environment.serverUrl}/api/signup/`;
     let url = `/api/signup/`;
     return new Observable((observer: any) => {
@@ -26,7 +26,10 @@ export class SignupService {
               "last_name": lastName,
               "email": email,
               "password": password,
-              "user_category": user_category
+              "user_category": user_category,
+              "city": city,
+              "zipcode": zipcode,
+              "address": address
             }),
             {headers: this.headers})
               .pipe(

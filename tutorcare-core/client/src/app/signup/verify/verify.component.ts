@@ -63,9 +63,15 @@ export class VerifyComponent implements OnInit {
       { type: 'minlength', message: 'Password must be at least 8 characters long' },
       { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, and one number' }
     ],
-    'emailCode': [
+    'emailVerificationCode': [
       { type: 'required', message: 'Verification code is required' },
       { type: 'minlength', message: 'Email code must be at least 5 characters long' },
+    ],
+    'email2': [
+      { type: 'required', message: 'Email is required' },
+      { type: 'email', message: 'Enter a valid email' },
+      { type: 'pattern', message: 'Please use a Gatech email' },
+      { type: 'exists', message: 'That email already has an account'}
     ]
   }
 
@@ -89,12 +95,16 @@ export class VerifyComponent implements OnInit {
       emailVerificationCode: new FormControl('', Validators.compose([
         Validators.minLength(5),
         Validators.required
+      ])),
+      email2: new FormControl('', Validators.compose([
+        Validators.email,
+        Validators.required
       ]))
     })
   }
 
-  onVerifySubmit() {
-    this._verifyObservable = this.verifyService.verifyCode(this.emailCodeForm.get('email').value, parseInt(this.emailCodeForm.get('emailVerificationCode').value))
+  onVerifySubmit(value: any) {
+    this._verifyObservable = this.verifyService.verifyCode(this.emailCodeForm.get('email2').value, parseInt(this.emailCodeForm.get('emailVerificationCode').value))
     this._verifyObservable.subscribe(
       (data: any) => {
         this.output = data;

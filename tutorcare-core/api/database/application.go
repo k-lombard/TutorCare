@@ -98,7 +98,7 @@ func (db Database) GetApplicationById(appId int) (models.ApplicationWithUser, er
 		userOut := models.User{}
 		query2 := `SELECT * FROM users WHERE user_id = $1;`
 		row2 := db.Conn.QueryRow(query2, appOut.UserID)
-		err3 := row2.Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio)
+		err3 := row2.Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio, &userOut.Preferences, &userOut.Country, &userOut.State, &userOut.City, &userOut.Zipcode, &userOut.Address)
 		if err3 != nil {
 			return appOut, err3
 		}

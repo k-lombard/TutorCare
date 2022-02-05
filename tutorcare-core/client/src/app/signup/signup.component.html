@@ -27,6 +27,30 @@
                   </mat-error>
                 </mat-form-field>
 
+                <mat-form-field class="full-width" appearance="outline">
+                  <input matInput maxlength="25" placeholder="City" formControlName="city" required>
+                  <mat-label>City</mat-label>
+                  <mat-error *ngFor="let validation of validation_messages.city">
+                    <mat-error class="error-message" *ngIf="accountDetailsForm.get('city').hasError(validation.type) && (accountDetailsForm.get('city').dirty || accountDetailsForm.get('city').touched)">{{validation.message}}</mat-error>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" appearance="outline">
+                  <input matInput maxlength="25" placeholder="Zipcode" formControlName="zipcode" required>
+                  <mat-label>Zipcode</mat-label>
+                  <mat-error *ngFor="let validation of validation_messages.zipcode">
+                    <mat-error class="error-message" *ngIf="accountDetailsForm.get('zipcode').hasError(validation.type) && (accountDetailsForm.get('zipcode').dirty || accountDetailsForm.get('zipcode').touched)">{{validation.message}}</mat-error>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" appearance="outline">
+                  <input matInput maxlength="25" placeholder="Address" formControlName="address" required>
+                  <mat-label>Address</mat-label>
+                  <mat-error *ngFor="let validation of validation_messages.address">
+                    <mat-error class="error-message" *ngIf="accountDetailsForm.get('address').hasError(validation.type) && (accountDetailsForm.get('address').dirty || accountDetailsForm.get('address').touched)">{{validation.message}}</mat-error>
+                  </mat-error>
+                </mat-form-field>
+
 
                 <div formGroupName="matchingPasswords">
                   <mat-form-field class="full-width" appearance="outline">

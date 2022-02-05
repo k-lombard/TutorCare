@@ -9,6 +9,7 @@ export interface User {
     user_category?: string
     experience?: string
     bio?: string
+    preferences?: string
     access_token?: string
     refresh_token?: string
 }

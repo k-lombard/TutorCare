@@ -8,7 +8,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { EditProfileService } from './edit-profile.service';
 import { Observable, pipe } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Login } from 'src/app/auth/auth.actions';
+import { Login, Logout } from 'src/app/auth/auth.actions';
+import { AuthService } from 'src/app/auth/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface Option {
     value: string;
@@ -76,15 +78,15 @@ export class EditProfileComponent implements OnInit {
 
     onEmailChange() {
         this.email = this.emailFC.value
-    } 
+    }
 
     onExperienceChange() {
         this.experience = this.emailFC.value
-    } 
+    }
 
     onBioChange() {
         this.bio = this.emailFC.value
-    } 
+    }
 
     onCancelSubmit() {
         this.router.navigate(['account'])
@@ -105,7 +107,7 @@ export class EditProfileComponent implements OnInit {
 
     editProfileFunc(user_id: string | undefined, email: string | undefined, experience: string | undefined, user_category: string | undefined, bio: string | undefined, password: string | undefined) {
         this._editProfileObservable = this.editProfileService.editProfile(user_id, email, experience, user_category, bio, password);
-     
+
         this._editProfileObservable.subscribe((data: User) => {
             console.log(data)
             this.user = data;
@@ -115,6 +117,5 @@ export class EditProfileComponent implements OnInit {
         });
         this.router.navigate(['/account'])
     }
-
 
 }
