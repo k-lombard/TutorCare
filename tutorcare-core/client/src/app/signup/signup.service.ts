@@ -49,25 +49,6 @@ export class SignupService {
     });
  }
 
- getCoordinates(address: string, city: string) {
-   return new Observable((observer: any) => {
-     this.http.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address},
-      ${city},+GA&key=AIzaSyAMUXK-aOyr4EfczJOq_h6r9XshkMQR41Q`, {headers: this.headers}).pipe(
-        map(res => res),
-        catchError((err: HttpErrorResponse) => {
-          return throwError(err)
-        })
-      )
-      .subscribe(
-        (data: any) => {
-          observer.next(data);
-          observer.complete();
-        },
-        error => {return throwError(error)}
-      );
-   })
- }
-
  verifyCode(email: string, code: number): Observable<string> {
   // let url = `${environment.serverUrl}/api/signup/`;
   let url = `/api/signup/verify`;
