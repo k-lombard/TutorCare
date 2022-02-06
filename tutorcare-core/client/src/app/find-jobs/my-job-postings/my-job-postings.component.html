@@ -112,9 +112,9 @@
                 <div *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="flex flex-row justify-between">
                   <div>
                     <h2 class="pt-4 text-lg font-bold text-gray-800 dark:text-gray-100">Assigned Caregiver:</h2>
-                    <h2 class="pt-2 text-3xl font-bold text-gray-800 dark:text-gray-100">{{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}</h2>
+                    <h2 class="pt-2 text-3xl font-bold text-gray-800 dark:text-gray-100 hover:underline hover:cursor-pointer hover:text-gray-600" [routerLink]="['/profile/', currPost.caregiver.user_id]">{{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}</h2>
                   </div>
-                  <img id="stock" class="object-cover mx-12 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+                  <img id="stock" class="object-cover mx-12 rounded-full sm:block hover:opacity-50 hover:cursor-pointer" [routerLink]="['/profile/', currPost.caregiver.user_id]" src="../../assets/images/profile_picture.jpeg" alt="avatar">
                 </div>
                 <p class="text-gray-800 font-bold dark:text-gray-100 pt-8">Post ID: {{currPost.post_id}}</p>
                 <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Title:</h3>

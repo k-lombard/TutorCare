@@ -196,7 +196,7 @@
               <div *ngIf="post.tagList.length > 0" class="flex flex-row">
                 <div *ngFor="let tag of post.tagList" class="mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-2 text-xs leading-3">{{ tag }}</div>
               </div>
-              <img id="stock" class="object-cover w-10 h-10 mx-2 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+              <img id="stock" class="object-cover w-10 h-10 mx-2 rounded-full sm:block hover:opacity-50" src="../../assets/images/profile_picture.jpeg" alt="avatar" [routerLink]="['/profile/', post.user_id]">
             </div>
         </div>
       </div>

@@ -55,6 +55,10 @@ github.com/google/uuid
 # github.com/json-iterator/go v1.1.10
 ## explicit; go 1.12
 github.com/json-iterator/go
+# github.com/kelvins/geocoder v0.0.0-20200113010004-f579500e9e27
+## explicit
+github.com/kelvins/geocoder
+github.com/kelvins/geocoder/structs
 # github.com/leodido/go-urn v1.2.0
 ## explicit; go 1.13
 github.com/leodido/go-urn

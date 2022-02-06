@@ -21,19 +21,19 @@
         </div>
       </mat-grid-tile>
     </mat-grid-list> -->
-    <div id="outercard" class="w-[90%] px-8 py-4 mx-auto mt-16 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+    <div id="outercard" class="w-[90%] px-8 py-4 mx-auto mt-16 bg-white rounded-lg shadow-lg">
       <div class="flex justify-end -mt-16 md:justify-end">
-          <img class="object-cover w-50 h-50 border-2 border-blue-500 rounded-full dark:border-blue-400" alt="profile avatar" src="../../assets/images/profile_picture.jpeg">
+          <img class="object-cover w-50 h-50 border-2 border-blue-500 rounded-full" alt="profile avatar" src="../../assets/images/profile_picture.jpeg">
       </div>
 
-      <h2 class="mt-2 text-2xl font-semibold text-gray-800 dark:text-white md:mt-0 md:text-3xl">{{user_type}}</h2>
+      <h2 class="mt-2 text-2xl font-semibold text-gray-800 md:mt-0 md:text-3xl">{{user_type}}</h2>
 
-      <h3 class="mt-2 text-xl font-semibold text-gray-800 dark:text-white md:mt-0 md:text-3xl">Bio: </h3><p class="mt-2 text-gray-600 dark:text-gray-200">{{bio}}</p>
-      <h3 class="mt-2 text-xl font-semibold text-gray-800 dark:text-white md:mt-0 md:text-3xl">Experience: </h3><p class="mt-2 text-gray-600 dark:text-gray-200">{{exp}}</p>
+      <h3 class="mt-2 text-xl font-semibold text-gray-800 md:mt-0 md:text-3xl">Bio: </h3><p class="mt-2 text-gray-600">{{bio}}</p>
+      <h3 class="mt-2 text-xl font-semibold text-gray-800 md:mt-0 md:text-3xl">Experience: </h3><p class="mt-2 text-gray-600">{{exp}}</p>
       <button (click)="onEditProfileClick()" color="Primary" class="edit-profile" mat-raised-button>Edit Profile <mat-icon>edit_icon</mat-icon></button>
       <button (click)="logoutFunc()" color="Primary" class="edit-profile" mat-raised-button>Logout <mat-icon>logout</mat-icon></button>
       <div class="flex justify-end">
-          <a href="#" class="pb-12 object-right text-4xl font-medium text-blue-500 dark:text-blue-300">{{first_name}} {{last_name}}</a>
+          <a href="#" class="pb-12 object-right text-4xl font-medium text-blue-500">{{first_name}} {{last_name}}</a>
           <bar-rating class="object-right-bottom px-8" [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating>
       </div>
     </div>

@@ -3,11 +3,11 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-
+import { User } from '../models/user.model';
 @Injectable()
 export class SignupService {
   results:Object[];
-  _output: any[] | undefined;
+  _output: User | undefined;
   headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });
@@ -15,7 +15,7 @@ export class SignupService {
     this.results = []
   }
 
-  signup(firstName: string, lastName: string, email: string, password: string, user_category: string, city: string, zipcode: string, address: string): Observable<Object[]> {
+  signup(firstName: string, lastName: string, email: string, password: string, user_category: string, city: string, zipcode: string, address: string): Observable<User> {
     // let url = `${environment.serverUrl}/api/signup/`;
     let url = `/api/signup/`;
     return new Observable((observer: any) => {
@@ -33,21 +33,39 @@ export class SignupService {
             }),
             {headers: this.headers})
               .pipe(
-                map((res: any) => res),
+                map((res: User) => res),
                 catchError((err: HttpErrorResponse) => {
                   this.toastr.error("Error " + err.status + " " + err.error, "Error", {closeButton: true, timeOut: 5000, progressBar: true});
                   return throwError(err)
                 })
               )
               .subscribe(
-                (data: any) => {
-                  this._output = data
-                  observer.next(this._output);
+                (data: User) => {
+                  observer.next(data);
                   observer.complete();
                 },
                 error => {return throwError(error)}
               );
     });
+ }
+
+ getCoordinates(address: string, city: string) {
+   return new Observable((observer: any) => {
+     this.http.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address},
+      ${city},+GA&key=AIzaSyAMUXK-aOyr4EfczJOq_h6r9XshkMQR41Q`, {headers: this.headers}).pipe(
+        map(res => res),
+        catchError((err: HttpErrorResponse) => {
+          return throwError(err)
+        })
+      )
+      .subscribe(
+        (data: any) => {
+          observer.next(data);
+          observer.complete();
+        },
+        error => {return throwError(error)}
+      );
+   })
  }
 
  verifyCode(email: string, code: number): Observable<string> {

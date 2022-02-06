@@ -92,7 +92,7 @@
             <div class="w-1/3 bg-cover" style="background-image: url('../../assets/images/profile_picture.jpeg')"></div>
 
             <div *ngIf="chatroom.user2_id !== userId" class="w-2/3 p-4 md:p-4">
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{chatroom.user2.first_name}} {{chatroom.user2.last_name}}</h1>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white hover:text-gray-600 hover:underline hover:cursor-pointer" [routerLink]="['/profile/', chatroom.user2.user_id]">{{chatroom.user2.first_name}} {{chatroom.user2.last_name}}</h1>
 
                 <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Recent: "{{messages?.slice(-1)[0].message}}"</p>
 
@@ -124,7 +124,7 @@
                 </div>
             </div>
             <div *ngIf="chatroom.user1_id !== userId" class="w-2/3 p-4 md:p-4">
-              <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{chatroom.user1.first_name}} {{chatroom.user1.last_name}}</h1>
+              <h1 class="text-2xl font-bold text-gray-800 dark:text-white hover:text-gray-400 hover:text-underline hover:cursor-pointer" [routerLink]="['/profile/', chatroom.user1.user_id]">{{chatroom.user1.first_name}} {{chatroom.user1.last_name}}</h1>
 
               <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Recent: "{{messages?.slice(-1)[0].message}}"</p>
 
@@ -165,9 +165,9 @@
                 <div *ngIf="currChatroom.user2_id != '00000000-0000-0000-0000-000000000000' && currChatroom.user2_id != '00000000-0000-0000-0000-000000000000'" class="flex flex-row justify-between">
                   <button (click)="back()" id="back" class="justify-center items-center backbutton text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
                   <div>
-                    <h2 class="pt-2 text-3xl font-bold text-gray-800 dark:text-gray-100">{{otherUser.first_name}} {{otherUser.last_name}}</h2>
+                    <h2 class="pt-2 text-3xl font-bold text-gray-800 dark:text-gray-100 hover:cursor-pointer hover:text-gray-200 hover:underline" [routerLink]="['/profile/', otherUser.user_id]">{{otherUser.first_name}} {{otherUser.last_name}}</h2>
                   </div>
-                  <img id="stock" class="object-cover mx-12 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+                  <img id="stock" class="object-cover mx-12 rounded-full sm:block hover:opacity-50 hover:cursor-pointer" [routerLink]="['/profile/', otherUser.user_id]" src="../../assets/images/profile_picture.jpeg" alt="avatar">
                 </div>
                 <p class="text-gray-800 font-bold dark:text-gray-100 pt-8">Chatroom ID: {{currChatroom.chatroom_id}}</p>
                 <ngx-simplebar [options]="options" #scrollMe id="messagearea" class="flex flex-col messagearea w-full mt-4 bg-white rounded-lg px-2 h-full py-8">

@@ -13,6 +13,7 @@ import (
 	"github.com/go-chi/render"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/kelvins/geocoder"
 	uuid "github.com/nu7hatch/gouuid"
 )
 
@@ -76,6 +77,34 @@ func signupPage(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, "Bad request")
 			return
 		}
+
+		geocoder.ApiKey = "AIzaSyAMUXK-aOyr4EfczJOq_h6r9XshkMQR41Q"
+		address := geocoder.Address{
+			Street:  user.Address,
+			City:    user.City,
+			State:   "GA",
+			Country: "United States",
+		}
+		location, errLoc := geocoder.Geocoding(address)
+
+		if errLoc != nil {
+			fmt.Println("Could not get the location: ", errLoc.Error())
+			c.JSON(http.StatusBadRequest, errLoc.Error())
+			return
+		} else {
+			fmt.Println("Latitude: ", location.Latitude)
+			fmt.Println("Longitude: ", location.Longitude)
+		}
+		newGeoLocation := &models.GeolocationPosition{}
+		newGeoLocation.UserID = userOut1.UserID
+		newGeoLocation.Latitude = location.Latitude
+		newGeoLocation.Longitude = location.Longitude
+		geolocationPositionOut, errGeo := dbInstance.AddGeolocationPosition(newGeoLocation)
+		if errGeo != nil {
+			c.JSON(http.StatusBadRequest, errGeo.Error())
+			return
+		}
+		fmt.Println("Geolocationposition success: ", geolocationPositionOut)
 		c.JSON(http.StatusOK, userOut1)
 	case isUnique == false:
 		c.JSON(http.StatusConflict, "Email already has an account")

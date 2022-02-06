@@ -93,12 +93,13 @@ export class AuthService {
 
     refreshToken(refresh_token: string): Observable<Token> {
         // let url = `${environment.serverUrl}/api/login/`;
+        console.log(refresh_token)
         let url = `/api/token/refresh`;
         return new Observable((observer: any) => {
           this.http.post<any>(url, JSON.stringify({
                "refresh_token": refresh_token
            }), {headers: this.headers})
-          .pipe(map((res: any) => res),
+          .pipe(map((res: Token) => res),
           catchError((err: HttpErrorResponse) => {
             this.toastr.error("Error refreshing access token. Please log back in.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
             this.logout()
@@ -111,14 +112,18 @@ export class AuthService {
             return throwError(err)
           })
           )
-          .subscribe((data: any) => {
+          .subscribe((data: Token) => {
+            console.log(this.output)
+            console.log(this.prevUser.access_token)
+            console.log(this.prevUser.refresh_token)
             this.output = data
             if (this.output && this.output.access_token && this.output.refresh_token) {
+              let newUser = {...this.prevUser}
               this.new_access_token = this.output?.access_token || ""
               this.new_refresh_token = this.output?.refresh_token || ""
-              this.prevUser.access_token = this.new_access_token
-              this.prevUser.refresh_token = this.new_refresh_token
-              this.store.dispatch(new Login({user: this.prevUser}));
+              newUser.access_token = this.new_access_token
+              newUser.refresh_token = this.new_refresh_token
+              this.store.dispatch(new Login({user: newUser}));
               this.toastr.success("Successfully refreshed access token.", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
             }
             observer.next(data);

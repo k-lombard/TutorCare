@@ -6,11 +6,11 @@ import { Token } from '../models/token.model';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { User } from '../models/user.model';
-import { Login } from './auth.actions';
+import { Login, Logout } from './auth.actions';
 import 'rxjs/add/operator/catch';
 import { ToastrService } from 'ngx-toastr';
 import { isLoggedIn } from './auth.selectors';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import 'rxjs/add/operator/do';
@@ -157,30 +157,53 @@ constructor(private authService: AuthService, private toastr: ToastrService, pri
             }, (err: any) => {
               if (err instanceof HttpErrorResponse) {
                 if (err.status === 401 && this.authService.isLoggedInFunc()) {
-                  this._refreshObservable = this.authService.refreshToken(this.authService.getRefreshToken());
-                  this._refreshObservable.subscribe((data: any) => {
-                      this.output = data;
-                      console.log(data)
-                    if (this.output && this.output.access_token && this.output.refresh_token) {
-                        this.new_access_token = this.output?.access_token || ""
-                        this.new_refresh_token = this.output?.refresh_token || ""
-                        this.prevUser.access_token = this.new_access_token
-                        this.prevUser.refresh_token = this.new_refresh_token
-                        this.store.dispatch(new Login({user: this.prevUser}));
-                        this.toastr.success("Successfully refreshed access token.", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
-                    }
-                  });
-                  return
-                } else {
+                  this.authService.refreshToken(this.authService.getRefreshToken()).subscribe(out => {
+                    console.log("successfully refreshed access token")
+                  })
+                } else if (err.status === 403 && this.authService.isLoggedInFunc()){
+                  this.authService.logout().pipe(
+                    tap(user => {
+                      this.store.dispatch(new Logout());
+                    })
+                  )
                   this.router.navigate(['/login'])
                   this.toastr.error("Refresh token expired. Could not refresh access token.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
                 }
               }
           })
         } else {
-          return nextReq.handle(r)
+          r = r.clone({
+            setHeaders: {
+            'Content-Type' : 'application/json; charset=utf-8',
+            'Accept'       : 'application/json',
+            },
+          });
+
+          return nextReq.handle(r).do((event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {
+              console.log("Authorized")
+            }
+          }, (err: any) => {
+            if (err instanceof HttpErrorResponse) {
+              this.router.navigate(['/login'])
+              this.toastr.error("Please login or create an account.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
+              return undefined
+            }
+          })
         }
       }
+
+
+      // else if (r.url.indexOf("login") !== -1){
+      //   return nextReq.handle(r)
+      // } else {
+      //   this.router.navigate(['/login'])
+      //   this.toastr.error("Please login or create an account.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
+      //   return undefined
+      // }
+
+
+
           // return nextReq.handle(r)
           // return nextReq.handle(r).pipe(retry(1), catchError((error: HttpErrorResponse) => {
           //   if (error.error instanceof HttpErrorResponse) {

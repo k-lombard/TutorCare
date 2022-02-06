@@ -8,7 +8,7 @@
         [options]="options"
     >
 
-    <map-marker *ngFor="let marker of markers" [position]="marker.position"></map-marker>
+    <map-marker [clickable]="true" *ngFor="let marker of markers" [position]="marker.position" ng-click="markerClick(marker.user_id)" (click)="markerClick(marker.user_id)" (mapClick)="markerClick(marker.user_id)" href="/profile/marker.user_id" [routerLink]="'/profile/marker.user_id'" [options]="marker.options"></map-marker>
     </google-map>
     <mat-toolbar color="primary" class="focus:outline-none py-8 w-full h-[10rem]">
         <mat-toolbar-row class="desktop:flex items-center justify-center">
@@ -46,13 +46,13 @@
                   <div class="desktop:flex items-center justify-center w-full h-full">
                       <div *ngFor="let loc of locs.slice(start_index, start_index+3)" id="outerdiv" tabindex="0" aria-label="caregiver" class="mb-7 p-6 shadow-lg shadow-[#D6DBD4] rounded h-[18rem] bg-[#D6DBD4] my-4 focus:outline-none desktop:w-2/12 desktop:mr-7 desktop:mb-0">
                           <div class="flex items-center border-b border-gray-200 pb-6">
-                            <img id="stock" src="../../assets/images/profile_picture.jpeg" class="shadow-md shadow-black w-12 h-12 rounded-full" />
+                            <img id="stock" src="../../assets/images/profile_picture.jpeg" [routerLink]="['/profile/', loc.user.user_id]" class="shadow-sm shadow-black w-12 h-12 rounded-full hover:opacity-50 hover:cursor-pointer" />
                               <div class="flex items-start justify-between w-full">
                                   <div class="pl-3 w-full">
-                                      <p id="firstlast" class="font-medium leading-5 text-gray-800 focus:outline-none text-xl" tabindex="0">{{loc.user.first_name}} {{loc.user.last_name}}</p>
+                                      <a id="firstlast" [routerLink]="['/profile/', loc.user.user_id]" class="font-medium leading-5 text-gray-800 focus:outline-none text-xl dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline" tabindex="0">{{loc.user.first_name}} {{loc.user.last_name}}</a>
                                       <p class="leading-normal pt-2 text-gray-500 focus:outline-none text-sm" tabindex="0">{{ loc.user.bio }}</p>
                                   </div>
-                                  <button id="messagebutton" (click)="onMessageClick(loc.user.user_id)" mat-raised-button color="accent" aria-label="message" class="color-[#eaaa00] shadow-lg shadow-[#eaaa00]">
+                                  <button *ngIf="userId !== loc.user.user_id" id="messagebutton" (click)="onMessageClick(loc.user.user_id)" mat-raised-button color="accent" aria-label="message" class="color-[#eaaa00] shadow-lg shadow-[#eaaa00]">
                                     <mat-icon>message</mat-icon>
                                   </button>
                               </div>

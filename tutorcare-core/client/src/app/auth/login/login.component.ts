@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router:Router, private store: Store<AppState>, private toastr: ToastrService) {}
 
   validation_messages = {
-    
+
     'email': [
       { type: 'required', message: 'Email is required' },
       { type: 'email', message: 'Enter a valid email' },
@@ -104,16 +104,16 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/home'])
       this.toastr.success("Successfully logged in as " + ((this.currUser.first_name || " ") + " " + (this.currUser.last_name || " ")[0]) + ".", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
     });
-    this.authService.getPosition().subscribe(resp => {
-      console.log(resp)
-      this.newpos = resp
-      this.accuracy = this.newpos.coords.accuracy
-      this.latitude = this.newpos.coords.latitude
-      this.longitude = this.newpos.coords.longitude
-      this.authService.createPosition(this.user_id, this.accuracy, this.latitude, this.longitude).subscribe(resp => {
-        console.log(resp)
-      });
-    });
+    // this.authService.getPosition().subscribe(resp => {
+    //   console.log(resp)
+    //   this.newpos = resp
+    //   this.accuracy = this.newpos.coords.accuracy
+    //   this.latitude = this.newpos.coords.latitude
+    //   this.longitude = this.newpos.coords.longitude
+    //   this.authService.createPosition(this.user_id, this.accuracy, this.latitude, this.longitude).subscribe(resp => {
+    //     console.log(resp)
+    //   });
+    // });
   }
   timeout(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));

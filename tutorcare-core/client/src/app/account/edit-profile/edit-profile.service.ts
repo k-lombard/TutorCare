@@ -17,7 +17,7 @@ export class EditProfileService {
     this.results = []
   }
 
-  editProfile(user_id?: string, email?: string, experience?: string, user_category?: string, bio?: string, password?: string): Observable<User> {
+  editProfile(user_id?: string, email?: string, experience?: string, user_category?: string, bio?: string, password?: string, preferences?: string): Observable<User> {
     // let url = `${environment.serverUrl}/api/signup/`;
     let url = `/api/profile/${user_id}`;
     return new Observable((observer: any) => {
@@ -27,7 +27,7 @@ export class EditProfileService {
            "experience": experience,
            "bio": bio,
            "password": password,
-           "preferences": ""
+           "preferences": preferences
        }), {headers: this.headers})
            .pipe(map((res: any) => res))
            .subscribe((data: any) => {

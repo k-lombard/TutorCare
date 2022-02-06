@@ -254,7 +254,13 @@ export class FindCareComponent implements OnInit {
                       "position": {
                           "lat": loc.latitude,
                           "lng": loc.longitude
+                      },
+                      "user_id": loc.user_id,
+                      "options": {
+                        zIndex: 1000,
+                        icon: "../../assets/images/location_pin.png"
                       }
+
                   }))
                   console.log(marker)
                   marks.push(marker)
@@ -273,6 +279,11 @@ export class FindCareComponent implements OnInit {
             this.userType = this.user.user_category
       })
 
+    }
+
+    markerClick(user_id: string) {
+      console.log(user_id)
+      this.router.navigate([`/profile/${user_id}`])
     }
     onFindCareClick() {
         this.router.navigate(['/find-care'])

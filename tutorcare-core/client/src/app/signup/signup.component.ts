@@ -5,6 +5,7 @@ import { Observable} from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ParentErrorStateMatcher, PasswordValidator } from './validators/password.validator';
+import { User } from '../models/user.model';
 
 interface Option {
   value: string;
@@ -20,10 +21,10 @@ interface Option {
 
 export class SignupComponent implements OnInit {
   _usersObservable: Observable<Object[]> | undefined
-  _signupObservable: Observable<Object[]> | undefined
+  _signupObservable: Observable<User> | undefined
   _verifyObservable: Observable<string> | undefined
   users: Object | undefined
-  output: Object | undefined
+  output: User
   accountDetailsForm: FormGroup;
   matchingPasswordsGroup: FormGroup;
   emailCodeForm: FormGroup;
@@ -178,11 +179,10 @@ export class SignupComponent implements OnInit {
 
   signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string, city: string, zipcode: string, address: string) {
     this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category, city, zipcode, address);
-    console.log(this._signupObservable)
 
     this._signupObservable.subscribe(
-      (data: any) => {
-        this.output = JSON.parse(JSON.stringify(data));
+      (data: User) => {
+        this.output = data;
         console.log(data)
         this.hidden = false
       },
@@ -191,6 +191,7 @@ export class SignupComponent implements OnInit {
         this.hidden = true;
       }
     );
+
     this.router.navigate(['/verify'])
   }
 }

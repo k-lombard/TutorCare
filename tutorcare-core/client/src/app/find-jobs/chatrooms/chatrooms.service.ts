@@ -12,6 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Chatroom } from 'src/app/models/chatroom.model';
 import { Message } from 'src/app/models/message.model';
 import { ThisReceiver } from '@angular/compiler';
+import { ApplicationsReceivedService } from '../applications-received/applications-received.service';
+import { Router } from '@angular/router';
 
 
 @Injectable()
@@ -26,7 +28,7 @@ export class ChatroomsService {
   headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  constructor(private http: HttpClient, private toastr: ToastrService) {
+  constructor(private http: HttpClient, private toastr: ToastrService, private applicationsService: ApplicationsReceivedService, private router: Router) {
     this.results = []
   }
 
@@ -79,7 +81,15 @@ getChatroomByTwoUsers(user1_id: string, user2_id: string) {
   let url = `/api/chatrooms/users/${user1_id}/${user2_id}`;
   return new Observable((observer: any) => {
      this.http.get(url)
-         .pipe(map((res: any) => res))
+         .pipe(map((res: any) => res),
+         catchError((err: HttpErrorResponse) => {
+           this.applicationsService.createChatroom(user1_id, user2_id).subscribe((chat: Chatroom) => {
+            this.toastr.success("Success: New chatroom created with ID: " + chat.chatroom_id, "Success", {closeButton: true, timeOut: 5000, progressBar: true});
+            this.router.navigate([`/find-jobs/messages/${chat.chatroom_id}`])
+          })
+          return throwError(err)
+        })
+         )
          .subscribe((data: Chatroom) => {
             this._chatroom = data
 
