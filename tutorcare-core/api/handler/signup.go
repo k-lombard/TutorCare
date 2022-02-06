@@ -78,7 +78,7 @@ func signupPage(c *gin.Context) {
 			return
 		}
 
-		geocoder.ApiKey = "AIzaSyAMUXK-aOyr4EfczJOq_h6r9XshkMQR41Q"
+		geocoder.ApiKey = os.Getenv("API_KEY")
 		address := geocoder.Address{
 			Street:  user.Address,
 			City:    user.City,
@@ -222,6 +222,7 @@ func NewToken(userid uint64) (*models.TokenDetails, error) {
 	accessTokenClaims["exp"] = td.AtExpires
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessTokenClaims)
 	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	fmt.Println(td.AccessToken)
 	if err != nil {
 		return td, err
 	}
@@ -231,6 +232,7 @@ func NewToken(userid uint64) (*models.TokenDetails, error) {
 	refreshTokenClaims["exp"] = td.RtExpires
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshTokenClaims)
 	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))
+	fmt.Println(td.RefreshToken)
 	if err != nil {
 		return nil, err
 	}
