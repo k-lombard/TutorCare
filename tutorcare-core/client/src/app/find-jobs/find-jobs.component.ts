@@ -37,6 +37,7 @@ export class FindJobsComponent implements OnInit {
     userType!: string
     user!: User
     userId!: string
+    filteredSearch: boolean = false
     isLoggedIn!: boolean
     filtered: boolean = false
     filter_options: FilterOption[] = [
@@ -87,9 +88,37 @@ export class FindJobsComponent implements OnInit {
         })
       }
     }
+    searchPosts() {
+      if (this.search.length > 2) {
+        var newPosts: Post[] = []
+        for (let post of this.posts) {
+          for (let tag of post.tagList) {
+            console.log(tag)
+            if (tag.indexOf(this.search) !== -1) {
+              newPosts.push(post)
+              break
+            }
+          }
+          if (post.title.indexOf(this.search) !== -1 && !newPosts.includes(post)) {
+            newPosts.push(post)
+          }
+          if (post.care_type.indexOf(this.search) !== -1 && !newPosts.includes(post)) {
+            newPosts.push(post)
+          }
+        }
+        this.filteredSearch = true
+        this.displayedPosts = newPosts
+      }
+    }
     resetFilters() {
       this.filtered = false
       this.displayedPosts = this.posts
+    }
+
+    resetSearchFilter() {
+      this.filtered = false
+      this.displayedPosts = this.posts
+      this.search = ""
     }
     openApplyDialog(post: Post) {
       if (this.isLoggedIn) {
