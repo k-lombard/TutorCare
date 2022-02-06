@@ -1,6 +1,5 @@
 <div>
     <navbar></navbar>
-
         <form [formGroup]="accountDetailsForm" novalidate (ngSubmit)="onSignupSubmit(accountDetailsForm.value)" *ngIf='hidden'>
             <mat-card>
                 <mat-card-title>Sign Up</mat-card-title>
@@ -25,6 +24,30 @@
                   <mat-label>Email</mat-label>
                   <mat-error *ngFor="let validation of validation_messages.email">
                     <mat-error class="error-message" *ngIf="accountDetailsForm.get('email').hasError(validation.type) && (accountDetailsForm.get('email').dirty || accountDetailsForm.get('email').touched)">{{validation.message}}</mat-error>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" appearance="outline">
+                  <input matInput maxlength="25" placeholder="City" formControlName="city" required>
+                  <mat-label>City</mat-label>
+                  <mat-error *ngFor="let validation of validation_messages.city">
+                    <mat-error class="error-message" *ngIf="accountDetailsForm.get('city').hasError(validation.type) && (accountDetailsForm.get('city').dirty || accountDetailsForm.get('city').touched)">{{validation.message}}</mat-error>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" appearance="outline">
+                  <input matInput maxlength="25" placeholder="Zipcode" formControlName="zipcode" required>
+                  <mat-label>Zipcode</mat-label>
+                  <mat-error *ngFor="let validation of validation_messages.zipcode">
+                    <mat-error class="error-message" *ngIf="accountDetailsForm.get('zipcode').hasError(validation.type) && (accountDetailsForm.get('zipcode').dirty || accountDetailsForm.get('zipcode').touched)">{{validation.message}}</mat-error>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" appearance="outline">
+                  <input matInput maxlength="25" placeholder="Address" formControlName="address" required>
+                  <mat-label>Address</mat-label>
+                  <mat-error *ngFor="let validation of validation_messages.address">
+                    <mat-error class="error-message" *ngIf="accountDetailsForm.get('address').hasError(validation.type) && (accountDetailsForm.get('address').dirty || accountDetailsForm.get('address').touched)">{{validation.message}}</mat-error>
                   </mat-error>
                 </mat-form-field>
 
@@ -56,7 +79,7 @@
                   </mat-form-field>
 
                 </div>
-                <button color="accent" mat-raised-button type="submit" [disabled]="!accountDetailsForm.valid" id ="signin-button">
+                <button color="accent" class = "float-right" mat-raised-button type="submit" [disabled]="!accountDetailsForm.valid" id ="signin-button">
                     Sign Up
                 </button>
 
@@ -65,25 +88,5 @@
                     Login
                 </button>
         </mat-card>
-    </form>
-    <form [formGroup] = "emailCodeForm" novalidate (ngSubmit)="onVerifySubmit(emailCodeForm.value)" *ngIf="!hidden">
-      <mat-card>
-        <h3 class="center">Thank you for signing up with TutorCare! <br>Please check your email for a verification code</h3>
-        <mat-form-field class="full-width">
-          <input matInput maxlength="25" placeholder="Email Code" formControlName="emailVerificationCode" required>
-          <mat-error *ngFor="let validation of validation_messages.emailCode">
-            <mat-error class="error-message" *ngIf="emailCodeForm.get('emailVerificationCode').hasError(validation.type) && (emailCodeForm.get('emailVerificationCode').dirty || emailCodeForm.get('emailVerificationCode').touched)">{{validation.message}}</mat-error>
-          </mat-error>
-        </mat-form-field>
-
-        <button [style.float]="'right'" class="submit-btn, right-button" color="accent" mat-raised-button type="submit" [disabled]="!emailCodeForm.valid" id ="verify-button">
-            Verify Email
-        </button>
-
-        <button class="submit-btn, left-button" color="accent" mat-raised-button id="resend-button">
-            Resend Email
-        </button>
-        <div class ="clear"></div>
-      </mat-card>
     </form>
 </div>

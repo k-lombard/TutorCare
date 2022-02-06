@@ -146,7 +146,7 @@ func Logout(c *gin.Context) {
 func Refresh(c *gin.Context) {
 	mapToken := map[string]string{}
 	if err := c.ShouldBindJSON(&mapToken); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusForbidden, err.Error())
 		return
 	}
 	rT := mapToken["refresh_token"]
@@ -158,28 +158,28 @@ func Refresh(c *gin.Context) {
 		return []byte(os.Getenv("REFRESH_SECRET")), nil
 	})
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, "Refresh token expired")
+		c.JSON(http.StatusForbidden, "Refresh token expired")
 		return
 	}
 	if _, ok := tokenParsed.Claims.(jwt.Claims); !ok && !tokenParsed.Valid {
-		c.JSON(http.StatusUnauthorized, err)
+		c.JSON(http.StatusForbidden, err)
 		return
 	}
 	parsedClaims, ok := tokenParsed.Claims.(jwt.MapClaims)
 	if ok && tokenParsed.Valid {
 		refreshUuid, ok := parsedClaims["refresh_uuid"].(string)
 		if !ok {
-			c.JSON(http.StatusUnprocessableEntity, err)
+			c.JSON(http.StatusForbidden, err)
 			return
 		}
 		userId, err := strconv.ParseUint(fmt.Sprintf("%.f", parsedClaims["user_id"]), 10, 64)
 		if err != nil {
-			c.JSON(http.StatusUnprocessableEntity, "Error occurred")
+			c.JSON(http.StatusForbidden, "Error occurred")
 			return
 		}
 		deleted, delErr := DeleteAuthentication(refreshUuid)
 		if delErr != nil || deleted == 0 {
-			c.JSON(http.StatusUnauthorized, "No valid authentication; unauthorized")
+			c.JSON(http.StatusForbidden, "No valid authentication; unauthorized")
 			return
 		}
 		ts, createErr := NewToken(userId)
@@ -198,6 +198,6 @@ func Refresh(c *gin.Context) {
 		}
 		c.JSON(http.StatusCreated, tokens)
 	} else {
-		c.JSON(http.StatusUnauthorized, "Refresh token expired.")
+		c.JSON(http.StatusForbidden, "Refresh token expired.")
 	}
 }

@@ -66,7 +66,7 @@ func (db Database) GetActivePostsWithCaregiver(userId uuid.UUID) (*models.PostWi
 		if post.Completed == false && (post.CaregiverID).String() != "00000000-0000-0000-0000-000000000000" {
 			careUser := models.User{}
 			row5 := db.Conn.QueryRow(`SELECT * FROM users WHERE user_id=$1;`, post.CaregiverID)
-			errNew := row5.Scan(&careUser.UserID, &careUser.FirstName, &careUser.LastName, &careUser.Email, &careUser.Password, &careUser.DateJoined, &careUser.Status, &careUser.UserCategory, &careUser.Experience, &careUser.Bio)
+			errNew := row5.Scan(&careUser.UserID, &careUser.FirstName, &careUser.LastName, &careUser.Email, &careUser.Password, &careUser.DateJoined, &careUser.Status, &careUser.UserCategory, &careUser.Experience, &careUser.Bio, &careUser.Preferences, &careUser.Country, &careUser.State, &careUser.City, &careUser.Zipcode, &careUser.Address)
 			if errNew != nil {
 				return list, errNew
 			}
@@ -77,6 +77,57 @@ func (db Database) GetActivePostsWithCaregiver(userId uuid.UUID) (*models.PostWi
 				return list, errFinal
 			}
 			post.Caregiver = careUser
+			list.Posts = append(list.Posts, post)
+		}
+	}
+	return list, nil
+}
+
+func (db Database) GetActivePostsForCaregiverView(caregiverId uuid.UUID) (*models.PostWithCaregiverList, error) {
+	list := &models.PostWithCaregiverList{}
+	rows, err := db.Conn.Query(`SELECT *, TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy'), TO_CHAR(start_time :: TIME, 'hh12:mi AM'), TO_CHAR(end_time :: TIME, 'hh12:mi AM') FROM posts WHERE caregiver_id=$1 ORDER BY post_id DESC;`, caregiverId)
+	if err != nil {
+		return list, err
+	}
+	for rows.Next() {
+		post := models.PostWithCaregiver{}
+		err5 := rows.Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post.Title, &post.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted, &post.DateOfJob, &post.StartTime, &post.EndTime)
+		if err5 != nil {
+			return list, err5
+		}
+		if post.Completed == false && (post.CaregiverID).String() != "00000000-0000-0000-0000-000000000000" {
+			careUser := models.User{}
+			row5 := db.Conn.QueryRow(`SELECT * FROM users WHERE user_id=$1;`, post.UserID)
+			errNew := row5.Scan(&careUser.UserID, &careUser.FirstName, &careUser.LastName, &careUser.Email, &careUser.Password, &careUser.DateJoined, &careUser.Status, &careUser.UserCategory, &careUser.Experience, &careUser.Bio, &careUser.Preferences, &careUser.Country, &careUser.State, &careUser.City, &careUser.Zipcode, &careUser.Address)
+			if errNew != nil {
+				return list, errNew
+			}
+			post.User = careUser
+			list.Posts = append(list.Posts, post)
+		}
+	}
+	return list, nil
+}
+
+func (db Database) GetPostsAppliedTo(caregiverId uuid.UUID) (*models.PostWithApplicationsList, error) {
+	list := &models.PostWithApplicationsList{}
+	rows, err := db.Conn.Query(`SELECT * FROM applications WHERE user_id=$1 ORDER BY application_id DESC;`, caregiverId)
+	if err != nil {
+		return list, err
+	}
+	for rows.Next() {
+		application := models.ApplicationWithUser{}
+		err5 := rows.Scan(&application.UserID, &application.PostID, &application.ApplicationID, &application.Message, &application.Accepted, &application.DateCreated)
+		if err5 != nil {
+			return list, err5
+		}
+		post := models.PostWithApplications{}
+		err2 := db.Conn.QueryRow(`SELECT * FROM posts WHERE post_id=$1;`, application.PostID).Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post.Title, &post.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted, &post.DateOfJob, &post.StartTime, &post.EndTime)
+		if err2 != nil {
+			return list, err2
+		}
+		if post.Completed == false && (post.CaregiverID).String() == "00000000-0000-0000-0000-000000000000" {
+			post.Applications = append(post.Applications, application)
 			list.Posts = append(list.Posts, post)
 		}
 	}
@@ -115,7 +166,7 @@ func (db Database) GetPostById(postId int) (models.PostWithCaregiver, error) {
 		if (postOut.CaregiverID).String() != "00000000-0000-0000-0000-000000000000" {
 			var newUser models.User
 			query := `SELECT * FROM users WHERE user_id = $1;`
-			err4 := db.Conn.QueryRow(query, postOut.CaregiverID).Scan(&newUser.UserID, &newUser.FirstName, &newUser.LastName, &newUser.Email, &newUser.Password, &newUser.DateJoined, &newUser.Status, &newUser.UserCategory, &newUser.Experience, &newUser.Bio)
+			err4 := db.Conn.QueryRow(query, postOut.CaregiverID).Scan(&newUser.UserID, &newUser.FirstName, &newUser.LastName, &newUser.Email, &newUser.Password, &newUser.DateJoined, &newUser.Status, &newUser.UserCategory, &newUser.Experience, &newUser.Bio, &newUser.Preferences, &newUser.Country, &newUser.State, &newUser.City, &newUser.Zipcode, &newUser.Address)
 			if err4 != nil {
 				return postOut, err4
 			}
@@ -150,7 +201,7 @@ func (db Database) GetPostsByUserId(userId uuid.UUID) (*models.PostWithApplicati
 			}
 			var newUser models.User
 			query := `SELECT * FROM users WHERE user_id = $1;`
-			err4 := db.Conn.QueryRow(query, app.UserID).Scan(&newUser.UserID, &newUser.FirstName, &newUser.LastName, &newUser.Email, &newUser.Password, &newUser.DateJoined, &newUser.Status, &newUser.UserCategory, &newUser.Experience, &newUser.Bio)
+			err4 := db.Conn.QueryRow(query, app.UserID).Scan(&newUser.UserID, &newUser.FirstName, &newUser.LastName, &newUser.Email, &newUser.Password, &newUser.DateJoined, &newUser.Status, &newUser.UserCategory, &newUser.Experience, &newUser.Bio, &newUser.Preferences, &newUser.Country, &newUser.State, &newUser.City, &newUser.Zipcode, &newUser.Address)
 			if err4 != nil {
 				return list, err4
 			}
@@ -159,7 +210,7 @@ func (db Database) GetPostsByUserId(userId uuid.UUID) (*models.PostWithApplicati
 		}
 		if (post.CaregiverID.String()) != "00000000-0000-0000-0000-000000000000" {
 			var newUser2 models.User
-			err3 := db.Conn.QueryRow("SELECT * FROM users WHERE user_id = $1;", &post.CaregiverID).Scan(&newUser2.UserID, &newUser2.FirstName, &newUser2.LastName, &newUser2.Email, &newUser2.Password, &newUser2.DateJoined, &newUser2.Status, &newUser2.UserCategory, &newUser2.Experience, &newUser2.Bio)
+			err3 := db.Conn.QueryRow("SELECT * FROM users WHERE user_id = $1;", &post.CaregiverID).Scan(&newUser2.UserID, &newUser2.FirstName, &newUser2.LastName, &newUser2.Email, &newUser2.Password, &newUser2.DateJoined, &newUser2.Status, &newUser2.UserCategory, &newUser2.Experience, &newUser2.Bio, &newUser2.Preferences, &newUser2.Country, &newUser2.State, &newUser2.City, &newUser2.Zipcode, &newUser2.Address)
 			if err3 != nil {
 				return list, err3
 			}
@@ -223,12 +274,16 @@ func (db Database) AddApplicationToPost(postId int, postData models.Post) (model
 		}
 		return post, errTwo
 	}
-	err := db.Conn.QueryRow(query, postData.CaregiverID, postId).Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post2.Title, &post2.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return post, ErrNoMatch
+	if postData.CaregiverID != post2.UserID {
+		err := db.Conn.QueryRow(query, postData.CaregiverID, postId).Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post2.Title, &post2.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				return post, ErrNoMatch
+			}
+			return post, err
 		}
-		return post, err
+		return post, nil
+	} else {
+		return post, ErrSameUser
 	}
-	return post, nil
 }

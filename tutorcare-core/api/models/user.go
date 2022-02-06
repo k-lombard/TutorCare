@@ -18,6 +18,12 @@ type User struct {
 	UserCategory string    `json:"user_category"`
 	Experience   string    `json:"experience"`
 	Bio          string    `json:"bio"`
+	Preferences  string    `json:"preferences"`
+	Country      string    `json:"country"`
+	State        string    `json:"state"`
+	City         string    `json:"city"`
+	Zipcode      string    `json:"zipcode"`
+	Address      string    `json:"address"`
 }
 
 type UserWithTokens struct {
@@ -31,6 +37,12 @@ type UserWithTokens struct {
 	UserCategory string    `json:"user_category"`
 	Experience   string    `json:"experience"`
 	Bio          string    `json:"bio"`
+	Preferences  string    `json:"preferences"`
+	Country      string    `json:"country"`
+	State        string    `json:"state"`
+	City         string    `json:"city"`
+	Zipcode      string    `json:"zipcode"`
+	Address      string    `json:"address"`
 	AccessToken  string    `json:"access_token"`
 	RefreshToken string    `json:"refresh_token"`
 }

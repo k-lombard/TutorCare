@@ -5,6 +5,8 @@ import { Observable} from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ParentErrorStateMatcher, PasswordValidator } from './validators/password.validator';
+import { User } from '../models/user.model';
+
 interface Option {
   value: string;
   viewValue: string;
@@ -19,10 +21,10 @@ interface Option {
 
 export class SignupComponent implements OnInit {
   _usersObservable: Observable<Object[]> | undefined
-  _signupObservable: Observable<Object[]> | undefined
+  _signupObservable: Observable<User> | undefined
   _verifyObservable: Observable<string> | undefined
   users: Object | undefined
-  output: Object | undefined
+  output: User
   accountDetailsForm: FormGroup;
   matchingPasswordsGroup: FormGroup;
   emailCodeForm: FormGroup;
@@ -65,6 +67,21 @@ export class SignupComponent implements OnInit {
     'emailCode': [
       { type: 'required', message: 'Password is required' },
       { type: 'minlength', message: 'Email code must be at least 5 characters long' },
+    ],
+    'city': [
+      { type: 'required', message: 'City is required' },
+      { type: 'email', message: 'Enter a valid city' },
+      { type: 'pattern', message: 'Please enter a valid city' },
+    ],
+    'zipcode': [
+      { type: 'required', message: 'Zipcode is required' },
+      { type: 'email', message: 'Enter a valid zipcode' },
+      { type: 'pattern', message: 'Please enter a valid zipcode' },
+    ],
+    'address': [
+      { type: 'required', message: 'Address is required' },
+      { type: 'email', message: 'Enter a valid address' },
+      { type: 'pattern', message: 'Please enter a valid address' },
     ]
   }
 
@@ -104,7 +121,22 @@ export class SignupComponent implements OnInit {
         // Validators.pattern('^.*gatech.edu.*$'),
         Validators.required
       ])),
-      matchingPasswords: this.matchingPasswordsGroup,
+      city: new FormControl('', Validators.compose([
+        Validators.maxLength(25),
+        Validators.pattern('^[a-zA-Z_ ]*$'),
+        Validators.required
+       ])),
+      zipcode: new FormControl('', Validators.compose([
+        Validators.maxLength(20),
+        Validators.pattern('^[0-9_]*$'),
+        Validators.required
+       ])),
+      address: new FormControl('', Validators.compose([
+        Validators.maxLength(40),
+        Validators.pattern('^[a-zA-Z0-9_ ]*$'),
+        Validators.required
+       ])),
+      matchingPasswords: this.matchingPasswordsGroup
     })
 
     // Email Form validations
@@ -130,7 +162,10 @@ export class SignupComponent implements OnInit {
       this.accountDetailsForm.get('lastName').value,
       this.accountDetailsForm.get('email').value,
       this.accountDetailsForm.get('matchingPasswords').get('password').value,
-      this.selectedValue
+      this.selectedValue,
+      this.accountDetailsForm.get('city').value,
+      this.accountDetailsForm.get('zipcode').value,
+      this.accountDetailsForm.get('address').value,
       )
   }
 
@@ -142,13 +177,12 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string) {
-    this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category);
-    console.log(this._signupObservable)
+  signupFunc(firstName: string, lastName: string, email: string, password: string, user_category: string, city: string, zipcode: string, address: string) {
+    this._signupObservable = this.signupService.signup(firstName, lastName, email, password, user_category, city, zipcode, address);
 
     this._signupObservable.subscribe(
-      (data: any) => {
-        this.output = JSON.parse(JSON.stringify(data));
+      (data: User) => {
+        this.output = data;
         console.log(data)
         this.hidden = false
       },
@@ -157,19 +191,7 @@ export class SignupComponent implements OnInit {
         this.hidden = true;
       }
     );
-  }
 
-  onVerifySubmit(value: any) {
-    this._verifyObservable = this.signupService.verifyCode(this.accountDetailsForm.get('email').value, parseInt(this.emailCodeForm.get('emailVerificationCode').value))
-    this._verifyObservable.subscribe(
-      (data: any) => {
-        this.output = data;
-        console.log(data)
-    })
-    this.router.navigate(['/login'])
-  }
-
-  onResendEmailSubmit() {
-    //TODO
+    this.router.navigate(['/verify'])
   }
 }

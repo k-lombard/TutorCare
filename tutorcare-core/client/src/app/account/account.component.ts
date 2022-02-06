@@ -4,6 +4,10 @@ import { AppState } from '../reducers';
 import { User } from '../models/user.model';
 import { getCurrUser } from '../auth/auth.selectors';
 import { Router, ActivatedRoute, NavigationExtras} from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { tap } from 'rxjs/operators';
+import { Logout } from '../auth/auth.actions';
 
 @Component({
     selector: 'account-component',
@@ -18,7 +22,7 @@ export class AccountComponent implements OnInit {
     user_type: string | undefined
     exp!: string
     bio!: string
-    constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute) {}
+    constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private authService: AuthService, private toastr: ToastrService) {}
 
     ngOnInit() {
         this.store
@@ -37,6 +41,21 @@ export class AccountComponent implements OnInit {
     onEditProfileClick() {
         this.router.navigate(['edit-profile'], {relativeTo: this.route})
     }
+
+    logoutFunc() {
+      this.authService.logout()
+      .pipe(
+        tap(user => {
+          this.store.dispatch(new Logout());
+        })
+      )
+      .subscribe(resp => {
+        console.log(resp)
+        this.router.navigate(['/home'])
+        this.toastr.success("Successfully logged out.", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
+      });
+    }
+
 
 
 

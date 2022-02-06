@@ -8,12 +8,19 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { EditProfileService } from './edit-profile.service';
 import { Observable, pipe } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Login } from 'src/app/auth/auth.actions';
+import { Login, Logout } from 'src/app/auth/auth.actions';
+import { AuthService } from 'src/app/auth/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface Option {
     value: string;
     viewValue: string;
-  }
+}
+
+interface Preference {
+  display: string,
+  value: string
+}
 
 @Component({
     selector: 'edit-profile-component',
@@ -49,6 +56,9 @@ export class EditProfileComponent implements OnInit {
     catVal!: string
     access_token!: string
     refresh_token!: string
+    selectedPreferences: string[] = []
+    preferenceString: string = ""
+    items: Preference[] = [{display: 'Tutoring', value: 'Tutoring'}, {display: 'Baby-sitting', value: 'Baby-sitting'}, {display: 'Dog-sitting', value: 'Dog-sitting'}, {display: 'House-sitting', value: 'House-sitting'}]
     constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private editProfileService: EditProfileService) {}
 
     ngOnInit() {
@@ -57,7 +67,6 @@ export class EditProfileComponent implements OnInit {
             select(getCurrUser)
         ).subscribe(data =>  {
             this.user = data
-            console.log(this.user)
             this.emailVal = this.user.email || ""
             this.catVal = this.user.user_category || ""
             this.expVal = this.user.experience || ""
@@ -71,27 +80,34 @@ export class EditProfileComponent implements OnInit {
             } else if (this.catVal == 'both') {
                 this.selectedValue = 'both-2'
             }
+            if (this.user.preferences) {
+              var prefCopy: string[] = []
+              for (let str of this.user.preferences.split(" ")) {
+                var tempStr = (str.slice(0,1).toUpperCase() + str.slice(1))
+                prefCopy.push(tempStr)
+              }
+              this.selectedPreferences = prefCopy
+            }
         })
     }
 
     onEmailChange() {
         this.email = this.emailFC.value
-    } 
+    }
 
     onExperienceChange() {
         this.experience = this.emailFC.value
-    } 
+    }
 
     onBioChange() {
         this.bio = this.emailFC.value
-    } 
+    }
 
     onCancelSubmit() {
         this.router.navigate(['account'])
     }
 
     onSave() {
-        console.log(this.selectedValue)
         if (this.selectedValue == 'caregiver-0') {
           this.userCategory = "caregiver"
         } else if (this.selectedValue == 'careseeker-1') {
@@ -99,15 +115,20 @@ export class EditProfileComponent implements OnInit {
         } else if (this.selectedValue == 'both-2') {
           this.userCategory = "both"
         }
-        console.log(this.userCategory)
-        this.editProfileFunc(this.user.user_id, this.emailVal, this.expVal, this.userCategory, this.bioVal, this.user.password)
+        for (let val of this.selectedPreferences) {
+          if (this.preferenceString === "") {
+            this.preferenceString = val.toLowerCase()
+          } else {
+            this.preferenceString = this.preferenceString + " " + val.toLowerCase()
+          }
+        }
+        this.editProfileFunc(this.user.user_id, this.emailVal, this.expVal, this.userCategory, this.bioVal, this.user.password, this.preferenceString)
     }
 
-    editProfileFunc(user_id: string | undefined, email: string | undefined, experience: string | undefined, user_category: string | undefined, bio: string | undefined, password: string | undefined) {
-        this._editProfileObservable = this.editProfileService.editProfile(user_id, email, experience, user_category, bio, password);
-     
+    editProfileFunc(user_id: string | undefined, email: string | undefined, experience: string | undefined, user_category: string | undefined, bio: string | undefined, password: string | undefined, preferences: string | undefined) {
+        this._editProfileObservable = this.editProfileService.editProfile(user_id, email, experience, user_category, bio, password, preferences);
+
         this._editProfileObservable.subscribe((data: User) => {
-            console.log(data)
             this.user = data;
             this.user.refresh_token = this.refresh_token
             this.user.access_token = this.access_token
@@ -115,6 +136,5 @@ export class EditProfileComponent implements OnInit {
         });
         this.router.navigate(['/account'])
     }
-
 
 }

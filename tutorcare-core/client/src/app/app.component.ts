@@ -13,7 +13,7 @@ import { Logout } from './auth/auth.actions';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   isLoggedIn$: Observable<boolean> | undefined;
@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<AppState>, private router: Router) {}
 
   ngOnInit() {
-
+    // this.theme.setTheme()
     this.isLoggedIn$ = this.store
       .pipe(
         select(isLoggedIn)

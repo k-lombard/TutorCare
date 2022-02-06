@@ -9,8 +9,7 @@ import { getCurrUser } from '../auth/auth.selectors';
 @Component({
   selector: 'navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+  styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
   user: User | undefined;
@@ -60,6 +59,5 @@ export class NavbarComponent implements OnInit {
   onSignupClick() {
     this.router.navigate(['/signup'])
   }
-
 
 }

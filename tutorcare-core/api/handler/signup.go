@@ -13,14 +13,15 @@ import (
 	"github.com/go-chi/render"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/kelvins/geocoder"
 	uuid "github.com/nu7hatch/gouuid"
 )
 
 func (r routes) signup(rg *gin.RouterGroup) {
 	users := rg.Group("/")
-
 	users.POST("/", signupPage)
 	users.POST("/verify", verifyEmailGatech)
+	users.GET("/resendemail/:email", sendEmailCode)
 }
 
 func (r routes) login(rg *gin.RouterGroup) {
@@ -76,6 +77,34 @@ func signupPage(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, "Bad request")
 			return
 		}
+
+		geocoder.ApiKey = os.Getenv("API_KEY")
+		address := geocoder.Address{
+			Street:  user.Address,
+			City:    user.City,
+			State:   "GA",
+			Country: "United States",
+		}
+		location, errLoc := geocoder.Geocoding(address)
+
+		if errLoc != nil {
+			fmt.Println("Could not get the location: ", errLoc.Error())
+			c.JSON(http.StatusBadRequest, errLoc.Error())
+			return
+		} else {
+			fmt.Println("Latitude: ", location.Latitude)
+			fmt.Println("Longitude: ", location.Longitude)
+		}
+		newGeoLocation := &models.GeolocationPosition{}
+		newGeoLocation.UserID = userOut1.UserID
+		newGeoLocation.Latitude = location.Latitude
+		newGeoLocation.Longitude = location.Longitude
+		geolocationPositionOut, errGeo := dbInstance.AddGeolocationPosition(newGeoLocation)
+		if errGeo != nil {
+			c.JSON(http.StatusBadRequest, errGeo.Error())
+			return
+		}
+		fmt.Println("Geolocationposition success: ", geolocationPositionOut)
 		c.JSON(http.StatusOK, userOut1)
 	case isUnique == false:
 		c.JSON(http.StatusConflict, "Email already has an account")
@@ -111,6 +140,19 @@ func verifyEmailGatech(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid verification code")
 		return
 	}
+}
+
+func sendEmailCode(c *gin.Context) {
+	email := c.Param("email")
+	code := models.SendEmailVerificationCode([]string{email})
+	now := time.Now()
+	end := time.Unix(time.Now().Add(time.Minute*20).Unix(), 0)
+	errCode := Client.Set(Client.Context(), email, code, end.Sub(now)).Err()
+	if errCode != nil {
+		c.JSON(http.StatusBadRequest, "Bad request")
+		return
+	}
+	c.JSON(http.StatusOK, "Successfully sent new email verification code.")
 }
 
 func loginPage(c *gin.Context) {
@@ -180,6 +222,7 @@ func NewToken(userid uint64) (*models.TokenDetails, error) {
 	accessTokenClaims["exp"] = td.AtExpires
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessTokenClaims)
 	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	fmt.Println(td.AccessToken)
 	if err != nil {
 		return td, err
 	}
@@ -189,6 +232,7 @@ func NewToken(userid uint64) (*models.TokenDetails, error) {
 	refreshTokenClaims["exp"] = td.RtExpires
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshTokenClaims)
 	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))
+	fmt.Println(td.RefreshToken)
 	if err != nil {
 		return nil, err
 	}

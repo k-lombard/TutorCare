@@ -27,23 +27,29 @@ func (db Database) GetAllChatrooms() (*models.ChatroomList, error) {
 }
 
 func (db Database) AddChatroom(chatroom *models.Chatroom) (models.Chatroom, error) {
-	sqlStatement := `INSERT INTO chatrooms (user1, user2) VALUES ($1, $2) RETURNING chatroom_id, is_deleted, date_created;`
-	var chatroom_id int
-	var is_deleted bool
-	var date_created string
+	var id int
 	chatroomOut := models.Chatroom{}
+	switch errLatest := db.Conn.QueryRow(`SELECT chatroom_id FROM chatrooms WHERE user1 = $1 AND user2 = $2 OR user1 = $2 AND user2 = $1;`, &chatroom.User1ID, &chatroom.User2ID).Scan(&id); errLatest {
+	case sql.ErrNoRows:
+		sqlStatement := `INSERT INTO chatrooms (user1, user2) VALUES ($1, $2) RETURNING chatroom_id, is_deleted, date_created;`
+		var chatroom_id int
+		var is_deleted bool
+		var date_created string
 
-	err := db.Conn.QueryRow(sqlStatement, &chatroom.User1ID, &chatroom.User2ID).Scan(&chatroom_id, &is_deleted, &date_created)
+		err := db.Conn.QueryRow(sqlStatement, &chatroom.User1ID, &chatroom.User2ID).Scan(&chatroom_id, &is_deleted, &date_created)
 
-	if err != nil {
-		return chatroomOut, err
+		if err != nil {
+			return chatroomOut, err
+		}
+		err2 := db.Conn.QueryRow(`SELECT * FROM chatrooms WHERE chatroom_id = $1;`, chatroom_id).Scan(&chatroomOut.User1ID, &chatroomOut.User2ID, &chatroomOut.ChatroomID, &chatroomOut.IsDeleted, &chatroomOut.DateCreated)
+		if err2 != nil {
+			return chatroomOut, err2
+		}
+		fmt.Println("New chatroom record created with chatroomID and timestamp: ", chatroom_id, date_created)
+		return chatroomOut, nil
+	default:
+		return chatroomOut, ErrDuplicate
 	}
-	err2 := db.Conn.QueryRow(`SELECT * FROM chatrooms WHERE chatroom_id = $1;`, chatroom_id).Scan(&chatroomOut.User1ID, &chatroomOut.User2ID, &chatroomOut.ChatroomID, &chatroomOut.IsDeleted, &chatroomOut.DateCreated)
-	if err2 != nil {
-		return chatroomOut, err2
-	}
-	fmt.Println("New chatroom record created with chatroomID and timestamp: ", chatroom_id, date_created)
-	return chatroomOut, nil
 }
 
 func (db Database) GetChatroomById(chatroomId int) (models.Chatroom, error) {
@@ -57,7 +63,7 @@ func (db Database) GetChatroomById(chatroomId int) (models.Chatroom, error) {
 		userOut := models.User{}
 		query2 := `SELECT * FROM users WHERE user_id = $1;`
 		row2 := db.Conn.QueryRow(query2, chatroomOut.User1ID)
-		err3 := row2.Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio)
+		err3 := row2.Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio, &userOut.Preferences, &userOut.Country, &userOut.State, &userOut.City, &userOut.Zipcode, &userOut.Address)
 		if err3 != nil {
 			return chatroomOut, err3
 		}
@@ -65,7 +71,35 @@ func (db Database) GetChatroomById(chatroomId int) (models.Chatroom, error) {
 		userOut2 := models.User{}
 		query3 := `SELECT * FROM users WHERE user_id = $1;`
 		row3 := db.Conn.QueryRow(query3, chatroomOut.User2ID)
-		err4 := row3.Scan(&userOut2.UserID, &userOut2.FirstName, &userOut2.LastName, &userOut2.Email, &userOut2.Password, &userOut2.DateJoined, &userOut2.Status, &userOut2.UserCategory, &userOut2.Experience, &userOut2.Bio)
+		err4 := row3.Scan(&userOut2.UserID, &userOut2.FirstName, &userOut2.LastName, &userOut2.Email, &userOut2.Password, &userOut2.DateJoined, &userOut2.Status, &userOut2.UserCategory, &userOut2.Experience, &userOut2.Bio, &userOut2.Preferences, &userOut2.Country, &userOut2.State, &userOut2.City, &userOut2.Zipcode, &userOut2.Address)
+		if err4 != nil {
+			return chatroomOut, err4
+		}
+		chatroomOut.User2 = userOut2
+		return chatroomOut, nil
+	}
+}
+
+func (db Database) GetChatroomByTwoUsers(userid1 uuid.UUID, userid2 uuid.UUID) (models.Chatroom, error) {
+	chatroomOut := models.Chatroom{}
+	query := `SELECT * FROM chatrooms WHERE user1 = $1 AND user2 = $2 OR user1 = $2 AND user2 = $1;`
+	row := db.Conn.QueryRow(query, userid1, userid2)
+	switch err := row.Scan(&chatroomOut.User1ID, &chatroomOut.User2ID, &chatroomOut.ChatroomID, &chatroomOut.IsDeleted, &chatroomOut.DateCreated); err {
+	case sql.ErrNoRows:
+		return chatroomOut, ErrNoMatch
+	default:
+		userOut := models.User{}
+		query2 := `SELECT * FROM users WHERE user_id = $1;`
+		row2 := db.Conn.QueryRow(query2, chatroomOut.User1ID)
+		err3 := row2.Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio, &userOut.Preferences, &userOut.Country, &userOut.State, &userOut.City, &userOut.Zipcode, &userOut.Address)
+		if err3 != nil {
+			return chatroomOut, err3
+		}
+		chatroomOut.User1 = userOut
+		userOut2 := models.User{}
+		query3 := `SELECT * FROM users WHERE user_id = $1;`
+		row3 := db.Conn.QueryRow(query3, chatroomOut.User2ID)
+		err4 := row3.Scan(&userOut2.UserID, &userOut2.FirstName, &userOut2.LastName, &userOut2.Email, &userOut2.Password, &userOut2.DateJoined, &userOut2.Status, &userOut2.UserCategory, &userOut2.Experience, &userOut2.Bio, &userOut2.Preferences, &userOut2.Country, &userOut2.State, &userOut2.City, &userOut2.Zipcode, &userOut2.Address)
 		if err4 != nil {
 			return chatroomOut, err4
 		}
@@ -89,7 +123,7 @@ func (db Database) GetChatroomsByUserId(userId uuid.UUID) (*models.ChatroomList,
 		userOut := models.User{}
 		query2 := `SELECT * FROM users WHERE user_id = $1;`
 		row2 := db.Conn.QueryRow(query2, chatroomOut.User1ID)
-		err3 := row2.Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio)
+		err3 := row2.Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio, &userOut.Preferences, &userOut.Country, &userOut.State, &userOut.City, &userOut.Zipcode, &userOut.Address)
 		if err3 != nil {
 			return list, err3
 		}
@@ -97,7 +131,7 @@ func (db Database) GetChatroomsByUserId(userId uuid.UUID) (*models.ChatroomList,
 		userOut2 := models.User{}
 		query3 := `SELECT * FROM users WHERE user_id = $1;`
 		row3 := db.Conn.QueryRow(query3, chatroomOut.User2ID)
-		err4 := row3.Scan(&userOut2.UserID, &userOut2.FirstName, &userOut2.LastName, &userOut2.Email, &userOut2.Password, &userOut2.DateJoined, &userOut2.Status, &userOut2.UserCategory, &userOut2.Experience, &userOut2.Bio)
+		err4 := row3.Scan(&userOut2.UserID, &userOut2.FirstName, &userOut2.LastName, &userOut2.Email, &userOut2.Password, &userOut2.DateJoined, &userOut2.Status, &userOut2.UserCategory, &userOut2.Experience, &userOut2.Bio, &userOut2.Preferences, &userOut2.Country, &userOut2.State, &userOut2.City, &userOut2.Zipcode, &userOut2.Address)
 		if err4 != nil {
 			return list, err4
 		}

@@ -5,13 +5,15 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {Observable, throwError} from "rxjs";
 import {User} from "../models/user.model";
 import { environment } from 'src/environments/environment';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { getCurrUser } from './auth.selectors';
+import { getCurrUser, isLoggedIn } from './auth.selectors';
 import { Token } from '../models/token.model';
 import { GeolocationPosition } from "../models/geolocationposition.model";
 import { ToastrService } from "ngx-toastr";
+import { Router } from "@angular/router";
+import { Login, Logout } from "./auth.actions";
 
 
 
@@ -24,7 +26,24 @@ export class AuthService {
     _isValid: boolean | undefined
     access_token!: string
     refresh_token!: string
-    constructor(private http:HttpClient, private store: Store<AppState>, private toastr: ToastrService) {
+    isLoggedIn: boolean
+    output: Token
+    new_access_token: string
+    new_refresh_token: string
+    prevUser: User
+    constructor(private http:HttpClient, private store: Store<AppState>, private toastr: ToastrService, private router: Router) {
+      this.store
+      .pipe(
+          select(getCurrUser)
+      ).subscribe(data =>  {
+          this.prevUser = data
+    })
+      this.store
+      .pipe(
+        select(isLoggedIn)
+      ).subscribe(data => {
+        this.isLoggedIn = data
+      })
         this.store
         .pipe(
             select(getCurrUser)
@@ -60,12 +79,61 @@ export class AuthService {
           )
     }
 
+    logout(): Observable<any> {
+      // let url = `${environment.serverUrl}/api/login/`;
+      let url = `/api/logout/`;
+      return this.http.post<any>(url, JSON.stringify({}), {headers: this.headers}).pipe(
+          map((res: any) => res),
+          catchError((err: HttpErrorResponse) => {
+            this.toastr.error("Error logging out.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
+            return throwError(err)
+          })
+        )
+  }
+
     refreshToken(refresh_token: string): Observable<Token> {
         // let url = `${environment.serverUrl}/api/login/`;
+        console.log(refresh_token)
         let url = `/api/token/refresh`;
-        return this.http.post<any>(url, JSON.stringify({
+        return new Observable((observer: any) => {
+          this.http.post<any>(url, JSON.stringify({
                "refresh_token": refresh_token
            }), {headers: this.headers})
+          .pipe(map((res: Token) => res),
+          catchError((err: HttpErrorResponse) => {
+            this.toastr.error("Error refreshing access token. Please log back in.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
+            this.logout()
+            .pipe(
+              tap(user => {
+                this.store.dispatch(new Logout());
+              })
+            )
+            this.router.navigate['/login']
+            return throwError(err)
+          })
+          )
+          .subscribe((data: Token) => {
+            console.log(this.output)
+            console.log(this.prevUser.access_token)
+            console.log(this.prevUser.refresh_token)
+            this.output = data
+            if (this.output && this.output.access_token && this.output.refresh_token) {
+              let newUser = {...this.prevUser}
+              this.new_access_token = this.output?.access_token || ""
+              this.new_refresh_token = this.output?.refresh_token || ""
+              newUser.access_token = this.new_access_token
+              newUser.refresh_token = this.new_refresh_token
+              this.store.dispatch(new Login({user: newUser}));
+              this.toastr.success("Successfully refreshed access token.", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
+            }
+            observer.next(data);
+            observer.complete();
+          })
+        })
+    }
+
+    isLoggedInFunc() {
+      return this.isLoggedIn
     }
 
     isTokenValid(access_token: string): Observable<Object> {

@@ -96,7 +96,7 @@
                 <span class="mx-4 font-medium">Messages</span>
             </a>
 
-            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/active-jobs">
               <mat-icon>library_add_check</mat-icon>
 
                 <span class="mx-4 font-medium">Active Jobs</span>
@@ -128,7 +128,7 @@
 <nav class="bg-white w-full shadow dark:bg-gray-800">
   <div class="container flex items-center justify-left p-6 mx-4 text-gray-600 capitalize dark:text-gray-300">
 
-    <button (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
+    <button *ngIf="userType === 'careseeker' || userType === 'both'" (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
       <span id="createspan">CREATE JOB POST</span>
     </button>
     <div id="dropdown" class="flex items-center justify-center mx-4">
@@ -187,7 +187,7 @@
   </div>
 
   <div id="row-bottom" class="flex items-center justify-between w-full mt-4">
-    <button id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>
+    <button *ngIf="userId !== post.user_id" id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>
 
       <div class="h-full items-center">
           <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->
@@ -196,7 +196,7 @@
               <div *ngIf="post.tagList.length > 0" class="flex flex-row">
                 <div *ngFor="let tag of post.tagList" class="mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-2 text-xs leading-3">{{ tag }}</div>
               </div>
-              <img id="stock" class="object-cover w-10 h-10 mx-2 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+              <img id="stock" class="object-cover w-10 h-10 mx-2 rounded-full sm:block hover:opacity-50" src="../../assets/images/profile_picture.jpeg" alt="avatar" [routerLink]="['/profile/', post.user_id]">
             </div>
         </div>
       </div>

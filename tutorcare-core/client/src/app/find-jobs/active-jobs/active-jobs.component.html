@@ -97,7 +97,7 @@
                 <span class="mx-4 font-medium">Messages</span>
             </a>
 
-            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-700 bg-gray-200 rounded-md dark:bg-gray-700 dark:text-gray-200" href="/find-jobs/active-jobs">
               <mat-icon>library_add_check</mat-icon>
 
                 <span class="mx-4 font-medium">Active Jobs</span>
@@ -161,7 +161,8 @@
       </div>
   </div>
   <div class="mt-2 flex flex-col min-h-[10em]">
-      <a [routerLink]="['/find-jobs/my-job-postings', post.post_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{post.title}}</a>
+      <a *ngIf="userType === 'careseeker'" [routerLink]="['/find-jobs/my-job-postings', post.post_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{post.title}}</a>
+      <a *ngIf="userType === 'caregiver'" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{post.title}}</a>
       <p class="grow mt-2 text-gray-600 dark:text-gray-300">{{post.care_description}}</p>
   </div>
 
@@ -171,8 +172,12 @@
           <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->
           <div class="flex flex-row">
             <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
-              <a [routerLink]="['/find-jobs/applications-received', post.application_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline bottom-0 absolute mb-4">Caregiver: {{post.caregiver.first_name}} {{post.caregiver.last_name}}</a>
-              <button mat-raised-button id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00] right-0 bottom-1 absolute mx-8 mb-4">
+              <a *ngIf="userType === 'careseeker'" [routerLink]="['/find-jobs/applications-received', post.application_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline bottom-0 absolute mb-4">Caregiver: {{post.caregiver.first_name}} {{post.caregiver.last_name}}</a>
+              <a *ngIf="userType === 'caregiver'" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline bottom-0 absolute mb-4">Job Poster: {{post.user.first_name}} {{post.user.last_name}}</a>
+              <button *ngIf="userType === 'careseeker'" mat-raised-button (click)="onMessageClick(post.caregiver.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00] right-0 bottom-1 absolute mx-8 mb-4">
+                <mat-icon>message</mat-icon>
+              </button>
+              <button *ngIf="userType === 'caregiver'" mat-raised-button (click)="onMessageClick(post.user.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00] right-0 bottom-1 absolute mx-8 mb-4">
                 <mat-icon>message</mat-icon>
               </button>
             </div>

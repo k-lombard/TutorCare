@@ -39,7 +39,7 @@ func (db Database) GetCaregiverLocations() (*models.GeolocationPositionWithUserL
 			return list, err5
 		}
 		var us models.User
-		err2 := db.Conn.QueryRow(`SELECT * FROM users WHERE user_id = $1;`, loc.UserID).Scan(&us.UserID, &us.FirstName, &us.LastName, &us.Email, &us.Password, &us.DateJoined, &us.Status, &us.UserCategory, &us.Experience, &us.Bio)
+		err2 := db.Conn.QueryRow(`SELECT * FROM users WHERE user_id = $1;`, loc.UserID).Scan(&us.UserID, &us.FirstName, &us.LastName, &us.Email, &us.Password, &us.DateJoined, &us.Status, &us.UserCategory, &us.Experience, &us.Bio, &us.Preferences, &us.Country, &us.State, &us.City, &us.Zipcode, &us.Address)
 		if err2 != nil {
 			return list, err2
 		}

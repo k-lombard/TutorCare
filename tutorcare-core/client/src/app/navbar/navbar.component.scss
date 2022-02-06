@@ -12,6 +12,16 @@ h1 {
     font-family: "Dosis" !important;
 }
 
+.nightmode {
+  background: rgb(0,92,89);
+  background: linear-gradient(270deg, rgba(0,92,89,1) 0%, rgba(65,1,83,1) 100%);
+  border: 1 solid white !important;
+  border-color: white !important;
+  float: right !important;
+  right: 0;
+  position: absolute;
+}
+
 .mat-button {
     margin: 30px;
     font-size: 16px !important;
@@ -37,16 +47,24 @@ a {
   color: white !important;
 }
 
-@media (min-width: 1235px) {
+@media (min-width: 1361px) {
   .mat-sidenav-container {
     display: none;
   }
   [id="hamburger"] {
     display: none;
   }
+  [id="nightmode2"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
 }
 
-@media (max-width: 1235px) {
+@media (max-width: 1360px) {
+  [id="nightmode2"] {
+    display: flex !important;
+    visibility: visible !important;
+  }
   [id="menu-links"] {
     display: none;
   }
@@ -59,6 +77,13 @@ a {
   .example-sidenav-content {
     right: 0;
     position: flex;
+  }
+}
+
+@media (max-width: 360px) {
+  [id="nightmode2"] {
+    display: none !important;
+    visibility: hidden !important;
   }
 }
 

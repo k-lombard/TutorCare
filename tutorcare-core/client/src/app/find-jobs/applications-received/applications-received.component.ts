@@ -1,7 +1,7 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { DefaultGlobalConfig } from 'ngx-toastr';
+import { DefaultGlobalConfig, ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { getCurrUser } from 'src/app/auth/auth.selectors';
@@ -33,7 +33,7 @@ export class ApplicationsReceivedComponent implements OnInit {
     userType!: string
     selectedIdx!: number
     private routeSub: Subscription;
-    constructor(private router: Router, private appsRec: ApplicationsReceivedService, private store: Store<AppState>, private route: ActivatedRoute) {}
+    constructor(private router: Router, private appsRec: ApplicationsReceivedService, private store: Store<AppState>, private route: ActivatedRoute, private toastr: ToastrService) {}
 
 
     ngOnInit() {
@@ -41,12 +41,6 @@ export class ApplicationsReceivedComponent implements OnInit {
         this.appId = params['id']
         console.log(this.appId)
       });
-      if (this.appId) {
-        this.appsRec.getApplicationById(this.appId).subscribe(application => {
-          console.log(application)
-          this.currApp = application
-        })
-      }
       this.store
         .pipe(
             select(getCurrUser)
@@ -55,16 +49,27 @@ export class ApplicationsReceivedComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      this.appsRec.getPostsByUserId(this.userId).subscribe(data => {
-        this.posts = data
-        var postsCopy: Post[] = []
-        for (var post of this.posts) {
-          post.tagList = post.tags.split(" ")
-          postsCopy.push(post)
+      if (this.userType !== "caregiver") {
+        if (this.appId) {
+          this.appsRec.getApplicationById(this.appId).subscribe(application => {
+            console.log(application)
+            this.currApp = application
+          })
         }
-        this.posts = postsCopy
-        console.log(this.posts)
-    })
+        this.appsRec.getPostsByUserId(this.userId).subscribe(data => {
+          this.posts = data
+          var postsCopy: Post[] = []
+          for (var post of this.posts) {
+            post.tagList = post.tags.split(" ")
+            postsCopy.push(post)
+          }
+          this.posts = postsCopy
+          console.log(this.posts)
+        })
+      } else {
+        this.toastr.error("Error: caregiver users cannot access this page.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
+        this.router.navigate(["/home"])
+      }
     }
 
     setSelected(i: number, post_id: number) {
@@ -94,7 +99,9 @@ export class ApplicationsReceivedComponent implements OnInit {
       this.currApp.accepted = true;
       this.appsRec.createChatroom(this.userId, user_id).subscribe(chatroom => {
         console.log(chatroom)
-      })
+        this.toastr.success("Success: application accepted and new chatroom created with ID: " + chatroom.chatroom_id, "Success", {closeButton: true, timeOut: 5000, progressBar: true});
+      }
+      )
     }
 
 

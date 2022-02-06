@@ -1,0 +1,19 @@
+
+<div *ngIf="userOut">
+  <navbar></navbar>
+  <div id="outercard" class="w-[90%] px-8 py-4 mx-auto mt-16 bg-white rounded-lg shadow-lg">
+    <div class="flex justify-end -mt-16 md:justify-end">
+        <img class="object-cover w-50 h-50 border-2 border-blue-500 rounded-full" alt="profile avatar" src="../../assets/images/profile_picture.jpeg">
+    </div>
+
+    <h2 class="mt-2 text-2xl font-semibold text-gray-800 md:mt-0 md:text-3xl">{{userOut.user_category}}</h2>
+
+    <h3 class="mt-2 text-xl font-semibold text-gray-800 md:mt-0 md:text-3xl">Bio: </h3><p class="mt-2 text-gray-600">{{userOut.bio}}</p>
+    <h3 class="mt-2 text-xl font-semibold text-gray-800 md:mt-0 md:text-3xl">Experience: </h3><p class="mt-2 text-gray-600">{{userOut.experience}}</p>
+    <div class="flex justify-end">
+        <a class="pb-12 object-right text-4xl font-medium text-blue-500">{{userOut.first_name}} {{userOut.last_name}}</a>
+        <bar-rating class="object-right-bottom px-8" [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating>
+    </div>
+  </div>
+</div>
+

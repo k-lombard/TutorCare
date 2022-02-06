@@ -44,6 +44,14 @@ export class ChatroomsComponent implements OnInit {
     messageForm: FormGroup
     otherUser: User
     otherUserId: string
+    menuVisible: boolean
+    options: any = {classNames: {
+      // defaults
+      content: 'simplebar-content',
+      scrollContent: 'simplebar-scroll-content',
+      scrollbar: 'simplebar-scrollbar',
+      track: 'simplebar-track'
+    }}
     private routeSub: Subscription;
     constructor(private router: Router, private chatroomService: ChatroomsService, private store: Store<AppState>, private route: ActivatedRoute, private toastr: ToastrService, private fb: FormBuilder) {}
     @ViewChild('scrollMe') private myScrollContainer: ElementRef;
@@ -55,9 +63,20 @@ export class ChatroomsComponent implements OnInit {
         this.chatroomId = params['id']
         console.log(this.chatroomId)
       });
+      this.store
+      .pipe(
+          select(getCurrUser)
+      ).subscribe(data =>  {
+          this.user = data
+          this.userId = this.user.user_id || ""
+          this.userType = this.user.user_category
+    })
+    this.chatroomService.getChatroomsByUserId(this.userId).subscribe(data => {
+      this.chatrooms = data
+
+  })
       if (this.chatroomId) {
         this.chatroomService.getChatroomById(this.chatroomId).subscribe(chatroom => {
-          console.log(chatroom)
           this.currChatroom = chatroom
           this.user1 = chatroom.user1
           this.user2 = chatroom.user2
@@ -72,24 +91,13 @@ export class ChatroomsComponent implements OnInit {
           }
         })
       }
-      this.chatroomService.getMessagesByChatroomId(this.chatroomId).subscribe(messages => {
-        console.log(messages)
-        this.messages = messages.reverse()
-      })
-      this.store
-        .pipe(
-            select(getCurrUser)
-        ).subscribe(data =>  {
-            this.user = data
-            this.userId = this.user.user_id || ""
-            this.userType = this.user.user_category
-      })
-      this.chatroomService.getChatroomsByUserId(this.userId).subscribe(data => {
-        this.chatrooms = data
-
-    })
-    this.scrollToBottom();
-    }
+      if (this.chatroomId) {
+        this.chatroomService.getMessagesByChatroomId(this.chatroomId).subscribe(messages => {
+          console.log(messages)
+          this.messages = messages.reverse()
+        })
+      }
+  }
 
     ngOnDestroy() {
       this.routeSub.unsubscribe();
@@ -107,12 +115,12 @@ export class ChatroomsComponent implements OnInit {
     }
 
     setChatroom(chatroom: Chatroom) {
-      console.log(chatroom, this.userId)
       this.currChatroom = chatroom
       this.user1 = chatroom.user1
       this.user2 = chatroom.user2
       this.user1_id = chatroom.user1_id
       this.user2_id = chatroom.user2_id
+      this.chatroomId = this.currChatroom.chatroom_id
       if (this.user1_id === this.userId) {
         this.otherUser = this.user2
         this.otherUserId = this.user2_id
@@ -120,28 +128,27 @@ export class ChatroomsComponent implements OnInit {
         this.otherUser = this.user1
         this.otherUserId = this.user1_id
       }
-      if (!this.messages || this.messages.length === 0) {
-        this.chatroomService.getMessagesByChatroomId(this.chatroomId).subscribe(messages => {
+      if ((!this.messages || this.messages.length === 0)) {
+        this.chatroomService.getMessagesByChatroomId(this.currChatroom.chatroom_id).subscribe(messages => {
           console.log(messages)
           this.messages = messages.reverse()
         })
       }
     }
 
-    ngAfterViewChecked() {
-      this.scrollToBottom();
-  }
+    back() {
+      this.currChatroom = undefined
+    }
+
+    backToMenu() {
+      this.currChatroom = undefined
+      this.menuVisible = true
+    }
 
     onEditClick() {
       this.editable = false
       console.log(this.editable)
     }
-
-    scrollToBottom(): void {
-      try {
-          this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-      } catch(err) { }
-  }
 
     setSelected(i: number) {
       this.chatroomService.setSelectedIdx(i)

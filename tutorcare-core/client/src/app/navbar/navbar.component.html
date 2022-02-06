@@ -11,7 +11,7 @@
         <a mat-button [routerLink]="'/signup'" (click)="onSignupClick()"> Signup </a>
         <a mat-button [routerLink]="'/account'" (click)="onAccountClick()"> <mat-icon>account_circle</mat-icon> {{name}} </a>
       </div>
-      <div class="example-sidenav-content" position="end" float="right">
+      <div class="example-sidenav-content flex flex-row" position="end" float="right">
         <button type="button" mat-button id="hamburger" (click)="sidenav.toggle()">
           <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
         </button>

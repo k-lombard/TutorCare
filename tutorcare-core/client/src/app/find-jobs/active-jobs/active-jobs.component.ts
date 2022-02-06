@@ -6,10 +6,12 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { getCurrUser } from 'src/app/auth/auth.selectors';
 import { Application } from 'src/app/models/application.model';
+import { Chatroom } from 'src/app/models/chatroom.model';
 import { Post } from 'src/app/models/post.model';
 import { User } from 'src/app/models/user.model';
 import { AppState } from 'src/app/reducers';
 import { GeolocationPositionWithUser } from '../../models/geolocationposition.model';
+import { ChatroomsService } from '../chatrooms/chatrooms.service';
 import { ActiveJobsService } from './active-jobs.service';
 
 @Component({
@@ -30,7 +32,7 @@ export class ActiveJobsComponent implements OnInit {
     locs!: GeolocationPositionWithUser[]
     userType!: string
     mySubscription!: any
-    constructor(private router: Router, private activeJobs: ActiveJobsService, private store: Store<AppState>) {}
+    constructor(private router: Router, private activeJobs: ActiveJobsService, private store: Store<AppState>, private chatroomService: ChatroomsService) {}
 
 
     ngOnInit() {
@@ -42,17 +44,33 @@ export class ActiveJobsComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      this.activeJobs.getActiveJobsByUserId(this.userId).subscribe(data => {
-        this.posts = data
-        var postsCopy: Post[] = []
-        for (var post of this.posts) {
-          post.tagList = post.tags.split(" ")
-          postsCopy.push(post)
-        }
-        this.posts = postsCopy
-        console.log(this.posts)
+      if (this.userType == "careseeker") {
+        this.activeJobs.getActiveJobsByUserId(this.userId).subscribe(data => {
+          this.posts = data
+          var postsCopy: Post[] = []
+          for (var post of this.posts) {
+            post.tagList = post.tags.split(" ")
+            postsCopy.push(post)
+          }
+          this.posts = postsCopy
+          console.log(this.posts)
+        })
+      } else if (this.userType == "caregiver") {
+        this.activeJobs.getActiveJobsByCaregiverId(this.userId).subscribe(data => {
+          this.posts = data
+          var postsCopy: Post[] = []
+          for (var post of this.posts) {
+            post.tagList = post.tags.split(" ")
+            postsCopy.push(post)
+          }
+        })
+      }
+    }
+
+    onMessageClick(userid1: string) {
+      this.chatroomService.getChatroomByTwoUsers(userid1, this.userId).subscribe((chatroom: Chatroom) => {
+        this.router.navigate([`/find-jobs/messages/${chatroom.chatroom_id}`])
+        this.chatroomService.setSelected(chatroom.chatroom_id)
       })
-
-
     }
 }

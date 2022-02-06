@@ -1,6 +1,12 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { getCurrUser } from '../auth/auth.selectors';
+import { ChatroomsService } from '../find-jobs/chatrooms/chatrooms.service';
+import { Chatroom } from '../models/chatroom.model';
 import { GeolocationPositionWithUser } from '../models/geolocationposition.model';
+import { User } from '../models/user.model';
+import { AppState } from '../reducers';
 import { FindCareService } from './find-care.service';
 
 interface FilterOption {
@@ -13,6 +19,9 @@ interface FilterOption {
   styleUrls: ['./find-care.component.scss']
 })
 export class FindCareComponent implements OnInit {
+    user!: User
+    userId!: string
+    userType!: string
     markers: any[] | undefined;
     start_index: number = 0
     zoom = 12
@@ -225,7 +234,7 @@ export class FindCareComponent implements OnInit {
     ];
 
     locs!: GeolocationPositionWithUser[]
-    constructor(private router: Router, private findCare: FindCareService) {}
+    constructor(private router: Router, private findCare: FindCareService, private chatroomService: ChatroomsService, private store: Store<AppState>) {}
 
     ngOnInit() {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -245,7 +254,13 @@ export class FindCareComponent implements OnInit {
                       "position": {
                           "lat": loc.latitude,
                           "lng": loc.longitude
+                      },
+                      "user_id": loc.user_id,
+                      "options": {
+                        zIndex: 1000,
+                        icon: "../../assets/images/location_pin.png"
                       }
+
                   }))
                   console.log(marker)
                   marks.push(marker)
@@ -255,10 +270,30 @@ export class FindCareComponent implements OnInit {
               console.log(this.markers)
           }
         })
+        this.store
+        .pipe(
+            select(getCurrUser)
+        ).subscribe(data =>  {
+            this.user = data
+            this.userId = this.user.user_id || ""
+            this.userType = this.user.user_category
+      })
 
+    }
+
+    markerClick(user_id: string) {
+      console.log(user_id)
+      this.router.navigate([`/profile/${user_id}`])
     }
     onFindCareClick() {
         this.router.navigate(['/find-care'])
+    }
+
+    onMessageClick(userid1: string) {
+      this.chatroomService.getChatroomByTwoUsers(userid1, this.userId).subscribe((chatroom: Chatroom) => {
+        this.router.navigate([`/find-jobs/messages/${chatroom.chatroom_id}`])
+        this.chatroomService.setSelected(chatroom.chatroom_id)
+      })
     }
 
 

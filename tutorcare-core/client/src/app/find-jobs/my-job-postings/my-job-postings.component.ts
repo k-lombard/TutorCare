@@ -27,6 +27,7 @@ export class MyJobPostingsComponent implements OnInit {
     userId!: string
     posts!: Post[]
     currPost!: Post
+    menuVisible: boolean
     locs!: GeolocationPositionWithUser[]
     mySubscription!: any
     postId!: number
@@ -41,12 +42,6 @@ export class MyJobPostingsComponent implements OnInit {
         this.postId = params['id']
         console.log(this.postId)
       });
-      if (this.postId) {
-        this.myJobs.getPostById(this.postId).subscribe(post => {
-          console.log(post)
-          this.currPost = post
-        })
-      }
       this.store
         .pipe(
             select(getCurrUser)
@@ -55,16 +50,27 @@ export class MyJobPostingsComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      this.myJobs.getPostsByUserId(this.userId).subscribe(data => {
-        this.posts = data
-        var postsCopy: Post[] = []
-        for (var post of this.posts) {
-          post.tagList = post.tags.split(" ")
-          postsCopy.push(post)
+      if (this.userType != "caregiver") {
+        if (this.postId) {
+          this.myJobs.getPostById(this.postId).subscribe(post => {
+            console.log(post)
+            this.currPost = post
+          })
         }
-        this.posts = postsCopy
-        console.log(this.posts)
-    })
+        this.myJobs.getPostsByUserId(this.userId).subscribe(data => {
+          this.posts = data
+          var postsCopy: Post[] = []
+          for (var post of this.posts) {
+            post.tagList = post.tags.split(" ")
+            postsCopy.push(post)
+          }
+          this.posts = postsCopy
+          console.log(this.posts)
+        })
+      } else {
+        this.toastr.error("Error: caregiver users cannot access this page.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
+        this.router.navigate(["/home"])
+      }
     }
 
     ngOnDestroy() {
@@ -105,6 +111,15 @@ export class MyJobPostingsComponent implements OnInit {
 
     getSelected() {
       return this.myJobs.getSelected()
+    }
+
+    back() {
+      this.currPost= undefined
+    }
+
+    backToMenu() {
+      this.currPost = undefined
+      this.menuVisible = true
     }
 
     onSaveClick() {

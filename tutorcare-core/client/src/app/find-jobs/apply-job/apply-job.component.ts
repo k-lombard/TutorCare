@@ -58,7 +58,7 @@ export class ApplyJobDialog implements OnInit{
     console.log(this.form.value)
     this.message = this.form.value.message
     this.postId = this.post.post_id || 0
-    this._applyJobObservable = this.applyJobService.applyJob(this.userId, this.postId, this.message)
+    this._applyJobObservable = this.applyJobService.applyJob(this.userId, this.postId, this.message, this.post.user_id)
 
     this._applyJobObservable.subscribe((data: Application) => {
         console.log(data)

@@ -19,24 +19,28 @@ export class ApplyJobService {
   }
 
 
- applyJob(userId: string, postId: number, message: string): Observable<Application> {
-  let url = `/api/applications/`;
-  return new Observable((observer: any) => {
-    // @ts-ignore
-     this.http.post<any>(url, JSON.stringify({
-         "user_id": userId,
-         "post_id": postId,
-         "message": message
-     }), {headers: this.headers})
-         .pipe(map((res: any) => res))
-         .subscribe((data: any) => {
-            this._output = data
+ applyJob(userId: string, postId: number, message: string, poster: string): Observable<Application> {
+  if (poster !== userId) {
+    let url = `/api/applications/`;
+    return new Observable((observer: any) => {
+      // @ts-ignore
+      this.http.post<any>(url, JSON.stringify({
+          "user_id": userId,
+          "post_id": postId,
+          "message": message
+      }), {headers: this.headers})
+          .pipe(map((res: any) => res))
+          .subscribe((data: any) => {
+              this._output = data
 
-            observer.next(this._output);
-            observer.complete();
+              observer.next(this._output);
+              observer.complete();
 
-         });
-  });
+          });
+    });
+  } else {
+    return undefined
+  }
 }
 
 //  getPosition(): Observable<any> {

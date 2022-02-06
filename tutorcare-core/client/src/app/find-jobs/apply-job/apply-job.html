@@ -1,15 +1,15 @@
 <div class="h-full">
   <h2 mat-dialog-title>Apply to this Job Posting</h2>
-  <mat-dialog-content [formGroup]="form" class="h-full justify-center items-center w-full">
-    <mat-card class="h-[40%] w-[90%] justify-center items-center m-[5%]">
-      <mat-form-field class="h-[40%] w-[90%]" appearance="outline">
+  <mat-dialog-content [formGroup]="form" class="justify-center items-center">
+    <mat-card class="h-[50%] w-[90%] m-[5%] justify-center items-center">
+      <mat-form-field class="h-[50%] w-[90%]" appearance="outline">
           <mat-label>Message</mat-label>
           <!-- <input formControlName="job_desc" matInput /> -->
           <textarea id="desc-field" matInput
                     name="first"
                     formControlName="message"
                     cdkTextareaAutosize
-                    class="h-[40%] w-[90%] textarea-inline-control" ></textarea>
+                    class="h-[50%] w-[90%] textarea-inline-control" ></textarea>
       </mat-form-field>
     </mat-card>
       <!-- <mat-form-field id="dashboardComponent">
@@ -20,9 +20,9 @@
         <mat-datepicker-toggle matSuffix [for]="matDatepicker"></mat-datepicker-toggle>
         <mat-datepicker #matDatepicker></mat-datepicker>
       </mat-form-field> -->
-      <mat-dialog-actions>
+      <div class="flex flex-row justify-between w-full">
         <button id="close-button" class="mat-raised-button mat-primary create-button"(click)="close()">CLOSE</button>
-        <button id="create-button" class="mat-raised-button mat-accent create-button"(click)="save()">APPLY</button>
-      </mat-dialog-actions>
+        <button id="create-button" class="float-right mat-raised-button mat-accent create-button"(click)="save()">APPLY</button>
+    </div>
   </mat-dialog-content>
 </div>

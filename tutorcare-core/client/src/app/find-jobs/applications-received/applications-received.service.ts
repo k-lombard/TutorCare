@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import {Http} from '@angular/http';
 import {environment} from '../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { GeolocationPositionWithUser } from '../../models/geolocationposition.model';
 import { Post } from '../../models/post.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Application } from 'src/app/models/application.model';
 import { Chatroom } from 'src/app/models/chatroom.model';
+import { throwError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable()
@@ -21,7 +23,7 @@ export class ApplicationsReceivedService {
   headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private toastr: ToastrService) {
     this.results = []
   }
 
@@ -74,7 +76,12 @@ createChatroom(user1_id: string, user2_id: string): Observable<Chatroom> {
          "user1_id": user1_id,
          "user2_id": user2_id
      }), {headers: this.headers})
-         .pipe(map((res: any) => res))
+         .pipe(map((res: any) => res),
+         catchError((err: HttpErrorResponse) => {
+          this.toastr.success("Success: application accepted.", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
+          return throwError(err)
+        })
+         )
          .subscribe((data: any) => {
             this._output = data
 
@@ -111,7 +118,9 @@ acceptApplication(application_id?: number, post_id?: number, user_id?: string, m
 
             observer.next(this._output);
             observer.complete();
-         });
+         },
+         error => {return throwError(error)}
+         );
   });
 }
 
