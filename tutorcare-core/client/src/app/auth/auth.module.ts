@@ -46,6 +46,7 @@ import { VerifyComponent } from '../signup/verify/verify.component';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ProfileComponent } from '../profile/profile.component';
+import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component';
 
 
 @NgModule({
@@ -99,7 +100,8 @@ import { ProfileComponent } from '../profile/profile.component';
         MyJobPostingsComponent,
         ChatroomsComponent,
         VerifyComponent,
-        ProfileComponent
+        ProfileComponent,
+        AppliedToComponent
     ],
     exports: [LoginComponent, NavbarComponent],
     entryComponents: [CreateJobDialog]

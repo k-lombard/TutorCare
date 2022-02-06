@@ -1,0 +1,403 @@
+@use '@angular/material' as mat;
+@import "../../../custom-theme.scss";
+@import "../../../styles.scss";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+[id="listitem"] {
+  display: inline-block !important;
+}
+
+[id="date"] {
+  display: inline-block !important;
+  float: none;
+  display: flex;
+}
+.custom-a {
+    padding: 10px;
+    @apply shadow-md shadow-[#eaaa00];
+}
+
+mat-raised-button {
+  @apply shadow-lg shadow-[#eaaa00];
+}
+
+
+.row-item-div-large {
+  width: 28.3333333%;
+  margin: 5%;
+}
+
+h2 {
+  font-family: "Dosis";
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+.selected {
+  background: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
+
+[id="stock"] {
+  border-radius: 50% !important;
+  border: solid 1px #000 !important;
+  width: 100px;
+  height: 100px;
+  display: inline !important;
+}
+[id="theapp"] {
+  cursor: pointer;
+  text-overflow: ellipsis !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+textarea {
+  border-style: none;
+  border-color: Transparent;
+  overflow: auto;
+}
+
+[id="apply"] {
+  padding: 16px;
+  float: right;
+}
+
+[id="dateofjob"] {
+  float: right !important;
+  display: block !important;
+}
+
+[id="back"] {
+  background-color: #eaaa00;
+  @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
+  display: none;
+}
+
+[id="desc"] {
+  white-space: pre;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  overflow-wrap: break-all;
+}
+
+bar-rating {
+  float: right;
+}
+
+[id="rightcol"] {
+  width: calc(40% - 72px);
+}
+
+[id="rightcol2"] {
+  width: calc(60% - 72px);
+}
+
+.navbar {
+  width: 100% !important;
+}
+
+[id="stock"] {
+  border-radius: 50% !important;
+  border: solid 1px #000 !important;
+}
+
+[id="createclick"] {
+  padding: 10px !important;
+}
+
+.mat-raised-button {
+  @apply shadow-md shadow-[#eaaa00];
+}
+
+
+[id="dropdown"] {
+  float: right;
+}
+[id="filter"] {
+  display: inline !important;
+}
+
+[id="arrow"] {
+  display: inline !important;
+}
+
+[id="type"] {
+  font-color: white !important;
+}
+
+[id="row-bottom"] {
+  justify-self: baseline !important;
+  align-self: flex-end !important;
+}
+
+[id="timeofjob"] {
+  display: inline !important;
+}
+
+
+@media (max-width: 1400px) {
+  [id="dateofjob"] {
+    display: none !important;
+  }
+  [id="timeofjob"] {
+    display: none !important;
+  }
+}
+
+.pclass {
+  text-overflow: ellipsis !important;
+  padding-left: -20px !important;
+  margin-left: 0 !important;
+}
+
+@media (max-width: 810px) {
+  .pclass {
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    overflow-x: hidden !important;
+  }
+}
+
+[id="jobcard"] {
+  cursor: pointer;
+}
+@layer components {
+  [id="edit"] {
+    @apply shadow-sm shadow-[#eaaa00];
+    padding: 10px !important;
+  }
+}
+
+[id="delete"] {
+  background-color: #BD362F;
+  padding: 10px !important;
+  @apply shadow-md shadow-[#BD362F];
+  color: white !important;
+}
+
+
+[id="save"] {
+  background-color: #51A351;
+  padding: 10px !important;
+  @apply shadow-md shadow-[#BD362F];
+  color: white !important;
+}
+
+// [id="deletetext"] {
+//   font-color: white !important;
+//   color: white !important;
+// }
+
+[id="accepted"] {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 1420px) {
+  .backbutton {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
+
+  .backbutton2 {
+    display: none;
+  }
+  .visible {
+    width: calc(100% - 16rem) !important;
+    display: flex !important;
+    min-width: calc(100% - 16rem) !important;
+    max-width: calc(100% - 16rem) !important;
+    margin: 0px;
+    padding: 0px;
+    height: 100% !important;
+  }
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none !important;
+  }
+  [id="rightcol"] {
+    width: calc(100% - 16rem);
+  }
+  [id="rightcol2"] {
+    max-width: 0px;
+    width: 0px;
+    height: 0px;
+    display: none;
+  }
+
+  // .messagecontainer {
+  //   max-width: 0px !important;
+  //   width: 0px !important;
+  //   height: 0px !important;
+  //   padding: 0px !important;
+  // }
+
+  // [id="messagearea"] {
+  //   max-width: 0px !important;
+  //   width: 0px !important;
+  //   height: 0px !important;
+  //   padding: 0px !important;
+  // }
+
+  .postcol {
+    width: calc(100% - 16rem);
+    display: flex;
+    min-width: calc(100% - 16rem);
+  }
+
+  .postcard {
+    width: calc(100% - 20px);
+    display: flex;
+    margin: 10px;
+  }
+}
+
+@media (max-width: 750px) {
+  .statusbutton {
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 50%;
+  }
+  .chatroomid {
+    font-size: 12px !important;
+  }
+  [id="message"] {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
+  [id="stock"] {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  .backbutton {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
+
+  .backbutton2 {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
+
+  .menu {
+    width: 100% !important;
+    min-width: 100% !important;
+    display: flex !important;
+    .sidenav {
+      width: 100% !important;
+      min-width: 100% !important;
+      display: flex !important;
+    }
+  }
+
+  .showmenu {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+
+  input,
+  input::-webkit-input-placeholder {
+    font-size: 12px;
+    line-height: 4;
+  }
+  [id="messagearea"] {
+    overflow-x: auto;
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+
+  .msgbox {
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+  .mymessage {
+    padding: 2px !important;
+  }
+  .theirmessage {
+    padding: 4px;
+  }
+  .msgfont {
+    font-size: 12px;
+  }
+  .sidenav {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+  .visible {
+    width: calc(100%) !important;
+    display: flex !important;
+    min-width: calc(100%) !important;
+    max-width: calc(100%) !important;
+    margin: 0px;
+    padding: 0px;
+    height: calc(100% - 1rem) !important;
+  }
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none !important;
+  }
+  [id="rightcol"] {
+    width: 100%;
+  }
+  [id="rightcol2"] {
+    max-width: 0px;
+    width: 0px;
+    height: 0px;
+    display: none;
+  }
+
+  // .messagecontainer {
+  //   max-width: 0px !important;
+  //   width: 0px !important;
+  //   height: 0px !important;
+  //   padding: 0px !important;
+  // }
+
+  // [id="messagearea"] {
+  //   max-width: 0px !important;
+  //   width: 0px !important;
+  //   height: 0px !important;
+  //   padding: 0px !important;
+  // }
+
+  .postcol {
+    width: 100% !important;
+    display: flex;
+    min-width: 100%;
+  }
+
+  .postcard {
+    width: calc(100% - 20px) !important;
+    margin: 10px !important;
+    display: flex;
+    min-width: 0px !important;
+  }
+
+
+}

@@ -222,7 +222,7 @@ func NewToken(userid uint64) (*models.TokenDetails, error) {
 	accessTokenClaims["exp"] = td.AtExpires
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessTokenClaims)
 	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
-	fmt.Println(td.AccessToken)
+	fmt.Println(os.Getenv("ACCESS_SECRET"))
 	if err != nil {
 		return td, err
 	}
@@ -232,7 +232,7 @@ func NewToken(userid uint64) (*models.TokenDetails, error) {
 	refreshTokenClaims["exp"] = td.RtExpires
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshTokenClaims)
 	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))
-	fmt.Println(td.RefreshToken)
+	fmt.Println(os.Getenv("REFRESH_SECRET"))
 	if err != nil {
 		return nil, err
 	}

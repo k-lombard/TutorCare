@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 import { ApplyJobDialog } from './apply-job/apply-job.component';
 import { ToastrService } from 'ngx-toastr';
 import { taggedTemplate } from '@angular/compiler/src/output/output_ast';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 interface FilterOption {
@@ -144,9 +145,14 @@ export class FindJobsComponent implements OnInit {
             if (this.posts) {
               for (var post of this.posts) {
                 var tempTags = post.tags.split(" ")
-                tempTags = tempTags.filter(obj => obj.length < 18)
-
-                post.tagList = tempTags
+                tempTags = tempTags.filter(obj => obj.length < 40)
+                var tempTags2: string[] = []
+                for (var tag of tempTags){
+                  tag = tag.replace("_", " ")
+                  tempTags2.push(tag)
+                }
+                console.log(tempTags2)
+                post.tagList = tempTags2
                 postsCopy.push(post)
               }
             }
@@ -161,6 +167,10 @@ export class FindJobsComponent implements OnInit {
     }
 
 
+}
+interface Tag {
+  display: string,
+  value: string
 }
 @Component({
   selector: 'create-job',
@@ -191,6 +201,37 @@ export class CreateJobDialog implements OnInit{
   day!: number
   title!: string
   tags!: string
+  selectedTags: string[] = []
+  tagString: string = ""
+  items: Tag[] =
+  [
+    {display: 'Tutoring', value: 'Tutoring'},
+    {display: 'Baby-sitting', value: 'Baby-sitting'},
+    {display: 'Dog-sitting', value: 'Dog-sitting'},
+    {display: 'House-sitting', value: 'House-sitting'},
+    {display: 'Math', value: 'Math'},
+    {display: 'Chemistry', value: 'Chemistry'},
+    {display: 'Biology', value: 'Biology'},
+    {display: 'Calculus', value: 'Calculus'},
+    {display: 'Physics', value: 'Physics'},
+    {display: 'Algebra', value: 'Algebra'},
+    {display: 'Geometry', value: 'Geometry'},
+    {display: 'Computer Science', value: 'Computer_Science'},
+    {display: 'Mechanical Engineering', value: 'Mechanical_Engineering'},
+    {display: 'Neuroscience', value: 'Neuroscience'},
+    {display: 'Chemical Engineering', value: 'Chemical_Engineering'},
+    {display: 'Industrial Engineering', value: 'Industrial_Engineering'},
+    {display: 'Aeronautical Engineering', value: 'Aeuronautical_Engineering'},
+    {display: 'Industrial Engineering', value: 'Industrial_Engineering'},
+    {display: 'Business', value: 'Business'},
+    {display: 'Linear Algebra', value: 'Linear_Algebra'},
+    {display: 'Multivariable Calculus', value: 'Multivariable_Calculus'},
+    {display: 'Ages 0-2', value: 'Ages_0-2'},
+    {display: 'Ages 3-6', value: 'Ages_3-6'},
+    {display: 'Ages 7-10', value: 'Ages_7-10'},
+    {display: 'Ages 11-14', value: 'Ages_11-14'},
+    {display: 'Ages 15-17', value: 'Ages_15-17'},
+  ]
 
   _createJobObservable: Observable<Post> | undefined
   minDate = new Date()
@@ -260,11 +301,18 @@ export class CreateJobDialog implements OnInit{
     } else {
       this.dayStr = this.day.toString()
     }
+    for (let val of this.selectedTags) {
+      if (this.tagString === "") {
+        this.tagString = val.toLowerCase()
+      } else {
+        this.tagString = this.tagString + " " + val.toLowerCase()
+      }
+    }
     this.date_of_job = this.form.value.start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
     this.start_time = this.form.value.start_time.getHours() + ':' + this.form.value.start_time.getMinutes()
     this.end_time = this.form.value.end_time.getHours() + ':' + this.form.value.end_time.getMinutes()
     this.title = this.form.value.job_title
-    this.tags = this.form.value.job_tags
+    this.tags = this.tagString
     console.log(this.start_time)
     console.log(this.form.value.start_time.getMonth())
     console.log(this.form.value.start_time.getDay())

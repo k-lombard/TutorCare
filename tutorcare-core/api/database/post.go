@@ -122,11 +122,17 @@ func (db Database) GetPostsAppliedTo(caregiverId uuid.UUID) (*models.PostWithApp
 			return list, err5
 		}
 		post := models.PostWithApplications{}
-		err2 := db.Conn.QueryRow(`SELECT * FROM posts WHERE post_id=$1;`, application.PostID).Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post.Title, &post.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted, &post.DateOfJob, &post.StartTime, &post.EndTime)
+		err2 := db.Conn.QueryRow(`SELECT *, TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy'), TO_CHAR(start_time :: TIME, 'hh12:mi AM'), TO_CHAR(end_time :: TIME, 'hh12:mi AM') FROM posts WHERE post_id=$1;`, application.PostID).Scan(&post.UserID, &post.CaregiverID, &post.PostID, &post.Title, &post.Tags, &post.CareDescription, &post.CareType, &post.Completed, &post.DateOfJob, &post.StartTime, &post.EndTime, &post.DatePosted, &post.DateOfJob, &post.StartTime, &post.EndTime)
 		if err2 != nil {
 			return list, err2
 		}
 		if post.Completed == false && (post.CaregiverID).String() == "00000000-0000-0000-0000-000000000000" {
+			userOut := models.User{}
+			errFin := db.Conn.QueryRow(`SELECT * FROM users WHERE user_id=$1;`, post.UserID).Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio, &userOut.Preferences, &userOut.Country, &userOut.State, &userOut.City, &userOut.Zipcode, &userOut.Address)
+			if errFin != nil {
+				return list, errFin
+			}
+			post.User = userOut
 			post.Applications = append(post.Applications, application)
 			list.Posts = append(list.Posts, post)
 		}

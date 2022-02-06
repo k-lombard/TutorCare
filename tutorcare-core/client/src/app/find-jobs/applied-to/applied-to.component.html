@@ -1,0 +1,150 @@
+<div>
+  <navbar></navbar>
+  <div class="flex flex-row w-[100%]">
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white border-r">
+      <h2 class="text-3xl font-semibold text-gray-800 px-4">Find Jobs</h2>
+
+      <div class="relative mt-6 mx-2">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
+                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </span>
+
+        <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
+    </div>
+
+      <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md hover:bg-gray-200  hover:text-gray-700" href="/find-jobs">
+        <mat-icon>topic</mat-icon>
+
+          <span class="mx-4 font-medium">Current Job Postings</span>
+      </a>
+
+
+      <div class="flex flex-col justify-between flex-1 mt-6">
+          <nav>
+
+          <div *ngIf="userType === 'careseeker' || userType ==='both'">
+            <h2 class="mx-4 font-lg">Careseeker</h2>
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md hover:bg-gray-200  hover:text-gray-700" href="/find-jobs/my-job-postings">
+                <mat-icon>folder_copy</mat-icon>
+
+                  <span class="mx-4 font-medium">My Job Postings</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md hover:bg-gray-200 hover:text-gray-700" href="/find-jobs/applications-received">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+
+                  <span class="mx-4 font-medium">Applications Received</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md hover:bg-gray-200 hover:text-gray-700" href="/find-jobs/messages">
+                <mat-icon>message</mat-icon>
+
+                  <span class="mx-4 font-medium">Messages</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md hover:bg-gray-200 hover:text-gray-700" href="/find-jobs/active-jobs">
+                <mat-icon>library_add_check</mat-icon>
+
+                  <span class="mx-4 font-medium">Active Jobs</span>
+              </a>
+              <hr class="my-6 border-gray-200 dark:border-gray-600" />
+            </div>
+            <div *ngIf="userType ==='caregiver' || userType ==='both'">
+              <h2 class="mx-4 font-lg">Caregiver</h2>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-700 bg-gray-200 rounded-md" href="/find-jobs/applied-to">
+                <mat-icon>assignment_turned_in</mat-icon>
+
+                  <span class="mx-4 font-medium">Applied To</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md hover:bg-gray-200  hover:text-gray-700" href="/find-jobs/messages">
+                <mat-icon>message</mat-icon>
+
+                  <span class="mx-4 font-medium">Messages</span>
+              </a>
+
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md hover:bg-gray-200 hover:text-gray-700" href="/find-jobs/active-jobs">
+                <mat-icon>library_add_check</mat-icon>
+
+                  <span class="mx-4 font-medium">Active Jobs</span>
+              </a>
+            </div>
+          </nav>
+        </div>
+    </div>
+    <div id="rightcol" [class.showmenu]="menuVisible" [class.hiddencol]="currPost" class="postcol flex flex-col border-r">
+      <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
+      <div class="grid grid-cols-1 gap-1">
+          <ul *ngFor="let post of posts; let i = index" [class.selected]="getSelected() == i || currPost == post" (click)="setSelected(i)" (click)="setPost(post)" id="jobcard" class="postcard menu px-8 py-4 my-4 mx-4 bg-white border-gray border hover:bg-gray-200 rounded-lg shadow-md dark:bg-gray-800">
+            <li class="menu-title">
+              <div class="flex flex-row items-stretch justify-between relative">
+                    <h2 class="text-2xl">{{post.title}}</h2>
+                    <div class="flex flex-col right-0 absolute" [style.display]="'block'">
+                      <h2 id="dateofjob" class="text-lg justify-self-end justify-end justify-items-end block">{{post.date_of_job}}</h2>
+                    </div>
+              </div>
+              <div class="flex flex-row relative">
+                <div>
+                  <h2 class="mt-4 text-lg font-light">Description:</h2>
+                  <p>{{post.care_description}}</p>
+                </div>
+                <p id="timeofjob" class="font-light justify-self-end justify-end justify-items-end inline right-0 absolute">Start: {{post.start_time}} | End: {{post.end_time}}</p>
+              </div>
+              <div class="flex items-center justify-start w-full">
+                <div class="relative inline-block w-full">
+                    <!-- Dropdown toggle button -->
+                    <button (click)="toggleDropdown()" class="mt-2 relative z-10 block p-2 text-gray-700 bg-white border border-transparent rounded-md dark:text-white focus:border-blue-500 focus:ring-opacity-40 dark:focus:ring-opacity-40 focus:ring-blue-300 dark:focus:ring-blue-400 focus:ring dark:bg-gray-800 focus:outline-none">
+                        <svg class="w-5 h-5 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown menu -->
+                    <div *ngIf="shown" class="absolute left-0 z-20 w-full py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
+                    <h2 class="block px-4 py-3 text-gray-800">Your Application: </h2><a class="block px-4 py-3 text-sm text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> {{post.applications[0].message}} </a>
+                    </div>
+                </div>
+            </div>
+            </li>
+          </ul>
+      </div>
+    </div>
+    <div *ngIf="currPost" [class.visible]="currPost" id="rightcol2" class="flex flex-col bg-[#D6DBD4] shadow-lg shadow-[#D6DBD4] relative">
+      <div class="container px-6 py-8 mx-auto">
+        <div class="items-center lg:flex">
+            <div class="lg:w-1/2">
+              <div class="flex flex-row justify-between my-10 w-full">
+                <button (click)="back()" id="back" class="justify-center items-center w-1/4 py-4 backbutton text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
+              </div>
+                <div class="flex flex-row justify-between">
+                  <div>
+                    <h2 class="pt-4 text-lg font-bold text-gray-800 dark:text-gray-100">Job Poster:</h2>
+                    <h2 class="pt-2 text-3xl font-bold text-gray-800 dark:text-gray-100 hover:underline hover:cursor-pointer hover:text-gray-600" [routerLink]="['/profile/', currPost.user_id]">{{currPost.user.first_name}} {{currPost.user.last_name}}</h2>
+                  </div>
+                  <img id="stock" class="object-cover mx-12 rounded-full sm:block hover:opacity-50 hover:cursor-pointer" [routerLink]="['/profile/', currPost.user_id]" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+                </div>
+                <p class="text-gray-800 font-bold dark:text-gray-100 pt-8">Post ID: {{currPost.post_id}}</p>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Title:</h3>
+                <textarea [maxLength]="50"  [(ngModel)]="currPost.title" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md shadow-md shadow-[#FFFFFF] bg-white rounded px-2"> {{currPost.title}}</textarea>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Description:</h3>
+                <textarea [maxLength]="1023" [(ngModel)]="currPost.care_description" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.care_description}}</textarea>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Tags:</h3>
+                <textarea [maxLength]="255" [(ngModel)]="currPost.tags" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.tags}}</textarea>
+                <h3 ng-pattern="/^[A-Za-z0-9]{3}\ [0-9]{1,2}\ [0-9]{4}$/"class="mt-4 text-lg text-gray-800 dark:text-gray-100">Date of Job:</h3>
+                <textarea [(ngModel)]="currPost.date_of_job" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.date_of_job}}</textarea>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Start Time:</h3>
+                <textarea [(ngModel)]="currPost.start_time" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.start_time}}</textarea>
+                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">End Time:</h3>
+                <textarea [(ngModel)]="currPost.end_time" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.end_time}}</textarea>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

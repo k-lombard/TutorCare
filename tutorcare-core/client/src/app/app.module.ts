@@ -48,6 +48,7 @@ import { VerifyService } from './signup/verify/verify.service';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ProfileService } from './profile/profile.service';
+import { AppliedToService } from './find-jobs/applied-to/applied-to.service';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,7 @@ import { ProfileService } from './profile/profile.service';
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
