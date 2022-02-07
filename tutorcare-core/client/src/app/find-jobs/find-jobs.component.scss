@@ -38,6 +38,10 @@ h3 {
   font-size: 16px;
 }
 
+.taglist{
+  overflow-x: hidden !important;
+}
+
 
 [id="stock"] {
   border-radius: 50% !important;
@@ -102,5 +106,6 @@ bar-rating {
   justify-self: baseline !important;
   align-self: flex-end !important;
 }
-
-
+[id="bottomdiv"] {
+  overflow-x: hidden !important;
+}

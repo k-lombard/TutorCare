@@ -50,7 +50,7 @@
                     class="textarea-inline-control" >
           </textarea>
       </mat-form-field> -->
-      <ng-select matInput [multiple]="true" [(ngModel)]="selectedTags" [ngModelOptions]="{standalone: true}">
+      <ng-select placeholder="Type of Care Tags" class="custom" matInput [multiple]="true" [maxSelectedItems]="5" [(ngModel)]="selectedTags" [ngModelOptions]="{standalone: true}">
         <ng-option *ngFor="let tag of items" [value]="tag.value" >{{tag.display}}</ng-option>
       </ng-select>
     </mat-card>
