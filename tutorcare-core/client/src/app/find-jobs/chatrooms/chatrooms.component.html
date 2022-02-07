@@ -170,20 +170,20 @@
                   <img id="stock" class="object-cover mx-12 rounded-full sm:block hover:opacity-50 hover:cursor-pointer" [routerLink]="['/profile/', otherUser.user_id]" src="../../assets/images/profile_picture.jpeg" alt="avatar">
                 </div>
                 <p class="text-gray-800 font-bold dark:text-gray-100 pt-8">Chatroom ID: {{currChatroom.chatroom_id}}</p>
-                <ngx-simplebar [options]="options" #scrollMe id="messagearea" class="flex flex-col messagearea w-full mt-4 bg-white rounded-lg px-2 h-full py-8">
+                <ngx-simplebar #scrollMe [options]="options" id="messagearea" class="flex flex-col messagearea w-full mt-4 bg-white rounded-lg px-2 h-full py-8">
                   <div *ngFor="let message of messages; let i = index">
-                    <div *ngIf="message.sender_id === userId" [style.float]="'right'" class="msgbox bg-none flex flex-row text-center py-4 px-6 lg:px-4 w-2/3">
+                    <div *ngIf="message?.sender_id === userId" [style.float]="'right'" class="msgbox bg-none flex flex-row text-center py-4 px-6 lg:px-4 w-2/3">
                       <p class="pt-7 px-2 font-light">{{message.timestamp}}</p>
                       <div class="mymessage py-8 px-10 items-center text-white rounded-lg leading-none flex-1 flex lg:inline-flex" role="alert">
-                        <p class="font-semibold mr-2 text-left flex-auto msgfont">{{message.message}}</p>
+                        <p class="msg font-semibold mr-2 text-left flex-auto msgfont">{{message.message}}</p>
                       </div>
                     </div>
 
-                    <div *ngIf="message.sender_id !== userId" [style.float]="'left'" class="msgbox bg-none flex flex-row text-center py-4 px-6 lg:px-4 w-2/3">
+                    <div *ngIf="message?.sender_id !== userId" [style.float]="'left'" class="msgbox bg-none flex flex-row text-center py-4 px-6 lg:px-4 w-2/3">
                       <div class="flex flex-col">
                         <p class="font-light">{{message.sender.first_name}} {{message.sender.last_name}}</p>
                         <div class="theirmessage py-8 px-10 bg-gray-700 items-center text-white leading-none rounded-lg flex flex-1 lg:inline-flex" role="alert">
-                          <p class="font-semibold mr-2 text-left flex-auto msgfont">{{message.message}}</p>
+                          <p class="msg font-semibold mr-2 text-left flex-auto msgfont">{{message.message}}</p>
                         </div>
                       </div>
                       <p class="pt-12 px-2 font-light">{{message.timestamp}}</p>

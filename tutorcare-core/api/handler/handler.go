@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"main/database"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"gopkg.in/olahol/melody.v1"
 )
 
 var dbInstance database.Database
@@ -53,13 +55,14 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-func RouteHandler(db database.Database) *gin.Engine {
+func RouteHandler(db database.Database, m *melody.Melody) *gin.Engine {
 	dbInstance = db
 	router.Use(ginBodyLogMiddleware)
 	r := routes{
 		router: gin.Default(),
 	}
-	r.router.Use(CORSMiddleware())
+	// r.router.Use(CORSMiddleware())
+	r.router.Use(cors.Default())
 	api := r.router.Group("/api", CORSMiddleware())
 	geolocationpositions := api.Group("/geolocationpositions")
 	r.geolocationpositions(geolocationpositions)
@@ -83,5 +86,14 @@ func RouteHandler(db database.Database) *gin.Engine {
 	r.chatrooms(chatrooms)
 	messages := api.Group("/messages", TokenAuthMiddleware())
 	r.messages(messages)
+	api.GET("/:chatroomid/ws", func(c *gin.Context) {
+		m.HandleRequest(c.Writer, c.Request)
+	})
+
+	m.HandleMessage(func(s *melody.Session, msg []byte) {
+		m.BroadcastFilter(msg, func(q *melody.Session) bool {
+			return q.Request.URL.Path == s.Request.URL.Path
+		})
+	})
 	return r.router
 }

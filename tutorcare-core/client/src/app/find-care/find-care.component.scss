@@ -19,6 +19,12 @@
   position: relative;
 }
 
+.cancelbutton {
+  color: black !important;
+  z-index: 100 !important;
+}
+
+
 [id="messagebutton"] {
   position: absolute;
   top: 0;

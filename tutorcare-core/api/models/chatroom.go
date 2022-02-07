@@ -15,6 +15,7 @@ type Chatroom struct {
 	DateCreated string    `json:"date_created"`
 	User1       User      `json:"user1"`
 	User2       User      `json:"user2"`
+	Messages    []Message `json:"messages"`
 }
 
 type ChatroomList struct {

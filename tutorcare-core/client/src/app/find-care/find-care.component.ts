@@ -2,6 +2,7 @@ import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { getCurrUser } from '../auth/auth.selectors';
+import { ApplicationsReceivedService } from '../find-jobs/applications-received/applications-received.service';
 import { ChatroomsService } from '../find-jobs/chatrooms/chatrooms.service';
 import { Chatroom } from '../models/chatroom.model';
 import { GeolocationPositionWithUser } from '../models/geolocationposition.model';
@@ -234,7 +235,10 @@ export class FindCareComponent implements OnInit {
     ];
 
     locs!: GeolocationPositionWithUser[]
-    constructor(private router: Router, private findCare: FindCareService, private chatroomService: ChatroomsService, private store: Store<AppState>) {}
+    savedLocs!: GeolocationPositionWithUser[]
+    search: string = ""
+    filteredSearch: boolean = false
+    constructor(private router: Router, private findCare: FindCareService, private chatroomService: ChatroomsService, private store: Store<AppState>, private applicationsService: ApplicationsReceivedService) {}
 
     ngOnInit() {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -245,6 +249,7 @@ export class FindCareComponent implements OnInit {
         })
         this.findCare.getLocs().subscribe(data => {
             this.locs = data
+            this.savedLocs = data
             console.log(this.locs)
             let marks: any[] = []
             if (this.locs) {
@@ -279,6 +284,34 @@ export class FindCareComponent implements OnInit {
             this.userType = this.user.user_category
       })
 
+    }
+
+    searchPosts() {
+      this.filteredSearch = true
+      if (this.search.length > 2) {
+        var newLocs: GeolocationPositionWithUser[] = []
+        for (let loc of this.locs) {
+          for (let pref of loc.user?.preferences?.split(" ")) {
+            if (pref.indexOf(this.search) !== -1) {
+              newLocs.push(loc)
+              break
+            }
+          }
+          if (loc.user.first_name.indexOf(this.search) !== -1 && !newLocs.includes(loc)) {
+            newLocs.push(loc)
+          }
+          if (loc.user.last_name.indexOf(this.search) !== -1 && !newLocs.includes(loc)) {
+            newLocs.push(loc)
+          }
+        }
+        this.locs = newLocs
+      }
+    }
+
+    resetSearchFilter() {
+      this.filteredSearch = false
+      this.locs = this.savedLocs
+      this.search = ""
     }
 
     markerClick(user_id: string) {
