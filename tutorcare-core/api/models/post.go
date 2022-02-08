@@ -56,6 +56,7 @@ type PostWithApplications struct {
 	Applications    []ApplicationWithUser `json:"applications"`
 	Caregiver       User                  `json:"caregiver"`
 	ApplicationID   int                   `json:"application_id"`
+	User            User                  `json:"user"`
 }
 
 type PostList struct {

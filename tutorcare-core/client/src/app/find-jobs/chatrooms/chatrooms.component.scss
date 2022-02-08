@@ -129,6 +129,18 @@ textarea {
   overflow-wrap: break-all;
 }
 
+.msgbox {
+  padding-left: 1px !important;
+  padding-right: 1px !important;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.msg {
+  overflow-wrap: break-word !important;
+  word-break: break-word;
+  hyphens: auto !important;
+}
+
 bar-rating {
   float: right;
 }
@@ -255,6 +267,19 @@ bar-rating {
     margin-right: 10px;
   }
 
+  .msgbox {
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+
+  .msg {
+    overflow-wrap: break-word !important;
+    word-break: break-word;
+    hyphens: auto !important;
+  }
+
   .backbutton2 {
     display: none;
   }
@@ -370,6 +395,12 @@ bar-rating {
     padding-right: 1px !important;
     margin-left: 0px !important;
     margin-right: 0px !important;
+  }
+
+  .msg {
+    overflow-wrap: break-word !important;
+    word-break: break-word;
+    hyphens: auto !important;
   }
   .mymessage {
     padding: 2px !important;

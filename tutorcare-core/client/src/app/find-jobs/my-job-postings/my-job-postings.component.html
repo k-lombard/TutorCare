@@ -21,11 +21,17 @@
       </a>
 
 
-      <div class="flex flex-col justify-between flex-1 mt-6">
+      <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/messages">
+        <mat-icon>message</mat-icon>
+
+          <span class="mx-4 font-medium">Messages</span>
+      </a>
+
+
+      <div class="flex flex-col justify-between flex-1">
           <nav>
 
-          <div *ngIf="userType === 'careseeker' || userType ==='both'">
-            <h2 class="mx-4 font-lg">Careseeker</h2>
+          <div>
               <a class="flex items-center px-4 py-2 mt-5 text-gray-700 bg-gray-200 rounded-md dark:bg-gray-700 dark:text-gray-200" href="/find-jobs/my-job-postings">
                 <mat-icon>folder_copy</mat-icon>
 
@@ -41,38 +47,18 @@
                   <span class="mx-4 font-medium">Applications Received</span>
               </a>
 
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/messages">
-                <mat-icon>message</mat-icon>
-
-                  <span class="mx-4 font-medium">Messages</span>
-              </a>
-
               <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/active-jobs">
                 <mat-icon>library_add_check</mat-icon>
 
                   <span class="mx-4 font-medium">Active Jobs</span>
               </a>
-              <hr class="my-6 border-gray-200 dark:border-gray-600" />
             </div>
-            <div *ngIf="userType ==='caregiver' || userType ==='both'">
-              <h2 class="mx-4 font-lg">Caregiver</h2>
+            <div>
 
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="#">
+              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/applied-to">
                 <mat-icon>assignment_turned_in</mat-icon>
 
                   <span class="mx-4 font-medium">Applied To</span>
-              </a>
-
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/messages">
-                <mat-icon>message</mat-icon>
-
-                  <span class="mx-4 font-medium">Messages</span>
-              </a>
-
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/active-jobs">
-                <mat-icon>library_add_check</mat-icon>
-
-                  <span class="mx-4 font-medium">Active Jobs</span>
               </a>
             </div>
           </nav>
@@ -80,7 +66,8 @@
     </div>
     <div id="rightcol" [class.showmenu]="menuVisible" [class.hiddencol]="currPost" class="postcol flex flex-col border-r">
       <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
-      <div class="grid grid-cols-1 gap-1">
+      <h2 class="text-gray-300 text-3xl italic justify-center items-center w-full flex text-center pt-[5%]" *ngIf="!posts">You haven't created any job posts.</h2>
+      <div class="grid grid-cols-1 gap-1" *ngIf="posts">
           <ul *ngFor="let post of posts; let i = index" [class.selected]="getSelected() == i || currPost == post" (click)="setSelected(i)" (click)="setPost(post)" [routerLink]="['/find-jobs/my-job-postings', post.post_id]" id="jobcard" class="postcard menu px-8 py-4 my-4 mx-4 bg-white border-gray border hover:bg-gray-200 rounded-lg shadow-md dark:bg-gray-800">
             <li class="menu-title">
               <div class="flex flex-row items-stretch justify-between relative">

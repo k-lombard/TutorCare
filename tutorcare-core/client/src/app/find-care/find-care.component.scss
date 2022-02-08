@@ -19,6 +19,18 @@
   position: relative;
 }
 
+.cancelbutton {
+  color: black !important;
+  z-index: 100 !important;
+}
+
+[id="type"] {
+  font-color: white !important;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+}
+
+
 [id="messagebutton"] {
   position: absolute;
   top: 0;
@@ -35,8 +47,16 @@
   height: 100px;
 }
 
-@media (max-width: 420px) {
+@media(max-width: 600px) {
+  .prefs {
+    display: none;
+  }
+}
 
+@media (max-width: 420px) {
+  .prefs {
+    display: none;
+  }
   [id="outerdiv"] {
     position: relative;
     height: 60% !important;
@@ -53,7 +73,9 @@
 }
 
 @media (max-width: 290px) {
-
+  .prefs {
+    display: none;
+  }
   [id="outerdiv"] {
     position: relative;
     height: 60% !important;

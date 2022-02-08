@@ -50,27 +50,24 @@ export class MyJobPostingsComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      if (this.userType != "caregiver") {
-        if (this.postId) {
-          this.myJobs.getPostById(this.postId).subscribe(post => {
-            console.log(post)
-            this.currPost = post
-          })
-        }
-        this.myJobs.getPostsByUserId(this.userId).subscribe(data => {
-          this.posts = data
-          var postsCopy: Post[] = []
+      if (this.postId) {
+        this.myJobs.getPostById(this.postId).subscribe(post => {
+          console.log(post)
+          this.currPost = post
+        })
+      }
+      this.myJobs.getPostsByUserId(this.userId).subscribe(data => {
+        this.posts = data
+        var postsCopy: Post[] = []
+        if (this.posts) {
           for (var post of this.posts) {
             post.tagList = post.tags.split(" ")
             postsCopy.push(post)
           }
           this.posts = postsCopy
           console.log(this.posts)
-        })
-      } else {
-        this.toastr.error("Error: caregiver users cannot access this page.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
-        this.router.navigate(["/home"])
-      }
+       }
+      })
     }
 
     ngOnDestroy() {

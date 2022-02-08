@@ -43,8 +43,8 @@
                     cdkTextareaAutosize>
                 </textarea>
             </mat-form-field>
-
-            <ng-select matInput [multiple]="true" [(ngModel)]="selectedPreferences" [ngModelOptions]="{standalone: true}">
+            <h2 class="text-sm font-bold py-0 mt-4 pt-8">Care Preferences:</h2>
+            <ng-select class="custom" matInput [multiple]="true" [(ngModel)]="selectedPreferences" [ngModelOptions]="{standalone: true}">
               <ng-option *ngFor="let pref of items" [value]="pref.value" >{{pref.display}}</ng-option>
             </ng-select>
 

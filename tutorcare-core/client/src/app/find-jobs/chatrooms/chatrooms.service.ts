@@ -83,7 +83,7 @@ getChatroomByTwoUsers(user1_id: string, user2_id: string) {
      this.http.get(url)
          .pipe(map((res: any) => res),
          catchError((err: HttpErrorResponse) => {
-           this.applicationsService.createChatroom(user1_id, user2_id).subscribe((chat: Chatroom) => {
+           this.createChatroom(user1_id, user2_id).subscribe((chat: Chatroom) => {
             this.toastr.success("Success: New chatroom created with ID: " + chat.chatroom_id, "Success", {closeButton: true, timeOut: 5000, progressBar: true});
             this.router.navigate([`/find-jobs/messages/${chat.chatroom_id}`])
           })
@@ -94,6 +94,27 @@ getChatroomByTwoUsers(user1_id: string, user2_id: string) {
             this._chatroom = data
 
             observer.next(this._chatroom);
+            observer.complete();
+         });
+  });
+}
+
+createChatroom(user1_id: string, user2_id: string): Observable<Chatroom> {
+  let url = `/api/chatrooms/`;
+  return new Observable((observer: any) => {
+     this.http.post<any>(url, JSON.stringify({
+         "user1_id": user1_id,
+         "user2_id": user2_id
+     }), {headers: this.headers})
+         .pipe(map((res: any) => res),
+         catchError((err: HttpErrorResponse) => {
+          return throwError(err)
+        })
+         )
+         .subscribe((data: any) => {
+            this._output = data
+
+            observer.next(this._output);
             observer.complete();
          });
   });

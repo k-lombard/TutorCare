@@ -44,6 +44,7 @@ testem.log
 .env
 /api/pgdata
 /client/.angular
+test_data
 
 # System Files
 .DS_Store

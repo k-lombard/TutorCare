@@ -6,9 +6,10 @@
         <a mat-button [routerLink]="'/home'" (click)="onHomeClick()"> Home </a>
         <a mat-button [routerLink]="'/find-care'" (click)="onFindCareClick()"> Find Care </a>
         <a mat-button [routerLink]="'/find-jobs'" (click)="onFindJobsClick()"> Find Jobs </a>
+        <a mat-button [routerLink]="'/find-jobs/messages'" (click)="onMessagesClick()"> Messages </a>
         <a mat-button [routerLink]="'/about-us'" (click)="onAboutUsClick()"> About Us </a>
-        <a mat-button [routerLink]="'/login'" (click)="onLoginClick()"> Login </a>
-        <a mat-button [routerLink]="'/signup'" (click)="onSignupClick()"> Signup </a>
+        <a *ngIf="!isLoggedIn" mat-button [routerLink]="'/login'" (click)="onLoginClick()"> Login </a>
+        <a *ngIf="!isLoggedIn" mat-button [routerLink]="'/signup'" (click)="onSignupClick()"> Signup </a>
         <a mat-button [routerLink]="'/account'" (click)="onAccountClick()"> <mat-icon>account_circle</mat-icon> {{name}} </a>
       </div>
       <div class="example-sidenav-content flex flex-row" position="end" float="right">

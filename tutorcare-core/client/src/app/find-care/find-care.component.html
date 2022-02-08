@@ -14,7 +14,15 @@
         <mat-toolbar-row class="desktop:flex items-center justify-center">
           <span class="menu-spacer"></span>
           <div id="rowitem"  class="laptop:m-24 m-4">
-            <a mat-raised-button class="laptop:m-24 m-4" [routerLink]="'/find-care'" (click)="onFindCareClick()"> <mat-icon>arrow_back</mat-icon> </a>
+            <div class="relative mt-6 mx-2">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                  <svg (click)="searchPosts()" class="w-5 h-5 text-gray-400 hover:cursor-pointer hover:text-gray-800" viewBox="0 0 24 24" fill="none">
+                      <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+              </span>
+              <mat-icon mat-button *ngIf="filteredSearch" (click)="resetSearchFilter()" class="cancelbutton absolute inset-y-0 right-0 flex items-center mr-2 pt-4 justify-center z-index-3 hover:cursor-pointer hover:text-gray-400">cancel</mat-icon>
+              <input [(ngModel)]="search" (keyup.enter)="searchPosts()" type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
+          </div>
             <!-- <a> Name </a>
             <a> Rating </a>
             <a> Jobs </a>
@@ -50,6 +58,9 @@
                               <div class="flex items-start justify-between w-full">
                                   <div class="pl-3 w-full">
                                       <a id="firstlast" [routerLink]="['/profile/', loc.user.user_id]" class="font-medium leading-5 text-gray-800 focus:outline-none text-xl dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline" tabindex="0">{{loc.user.first_name}} {{loc.user.last_name}}</a>
+                                      <div class="prefs flex flex-row mt-2" *ngIf="loc.user?.preferences">
+                                        <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded cursor-pointer hover:bg-gray-500">{{pref}}</a>
+                                      </div>
                                       <p class="leading-normal pt-2 text-gray-500 focus:outline-none text-sm" tabindex="0">{{ loc.user.bio }}</p>
                                   </div>
                                   <button *ngIf="userId !== loc.user.user_id" id="messagebutton" (click)="onMessageClick(loc.user.user_id)" mat-raised-button color="accent" aria-label="message" class="color-[#eaaa00] shadow-lg shadow-[#eaaa00]">
@@ -59,9 +70,11 @@
                           </div>
                           <div class="px-2">
                               <p class="focus:outline-none text-sm leading-5 py-4 text-gray-600" tabindex="0">{{ loc.user.experience }}</p>
-                              <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
-                                  <div class="py-2 text-[#eaaa00] px-4 text-xs leading-3 rounded-full bg-[#54585A] shadow-lg shadow-[#54585A]"><mat-icon>check_circle</mat-icon></div>
-                                  <div class="py-2 leading-3 text-[#eaaa00] px-4 ml-3 text-xs rounded-full bg-[#54585A] shadow-lg shadow-[#54585A]"><mat-icon>local_fire_department</mat-icon></div>
+                              <div class="flex flex-row">
+                                <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
+                                    <div class="py-2 text-[#eaaa00] px-4 text-xs leading-3 rounded-full bg-[#54585A] shadow-lg shadow-[#54585A]"><mat-icon>check_circle</mat-icon></div>
+                                    <div class="py-2 leading-3 text-[#eaaa00] px-4 ml-3 text-xs rounded-full bg-[#54585A] shadow-lg shadow-[#54585A]"><mat-icon>local_fire_department</mat-icon></div>
+                                </div>
                               </div>
                           </div>
                       </div>
@@ -71,6 +84,9 @@
                             <div class="flex items-start justify-between w-full">
                                 <div class="pl-3 w-full">
                                     <p tabindex="0"  id="firstlast" class="leading-5 text-gray-800 focus:outline-none text-xl font-medium">{{loc.user.first_name}} {{loc.user.last_name}}</p>
+                                    <div class="prefs flex flex-row mt-2" *ngIf="loc.user?.preferences">
+                                      <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded cursor-pointer hover:bg-gray-500">{{pref}}</a>
+                                    </div>
                                     <p tabindex="0" class="pt-2 text-gray-500 focus:outline-none text-sm leading-normal">{{ loc.user.bio }}</p>
                                 </div>
                                 <button mat-raised-button (click)="onMessageClick(loc.user.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00]">
@@ -80,10 +96,12 @@
                         </div>
                         <div class="px-2">
                             <p class="focus:outline-none text-sm leading-5 py-4 text-gray-600" tabindex="0">{{ loc.user.experience }}</p>
-                            <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
-                              <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 text-xs leading-3"><mat-icon>check_circle</mat-icon></div>
-                              <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 ml-3 text-xs leading-3"><mat-icon>local_fire_department</mat-icon></div>
-                            </div>
+                            <div class="flex flex-row">
+                              <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
+                                <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 text-xs leading-3"><mat-icon>check_circle</mat-icon></div>
+                                <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 ml-3 text-xs leading-3"><mat-icon>local_fire_department</mat-icon></div>
+                              </div>
+                          </div>
                         </div>
                     </div>
                   </div>
@@ -94,6 +112,9 @@
                           <div class="flex items-start justify-between w-full">
                               <div class="pl-3 w-full">
                                   <p id="firstlast" class="leading-5 text-gray-800 focus:outline-none text-xl font-medium" tabindex="0">{{loc.user.first_name}} {{loc.user.last_name}}</p>
+                                  <div class="prefs flex flex-row mt-2" *ngIf="loc.user?.preferences">
+                                    <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded cursor-pointer hover:bg-gray-500">{{pref}}</a>
+                                  </div>
                                   <p class="text-gray-500 focus:outline-none text-sm leading-normal pt-2" tabindex="0">{{ loc.user.bio }}</p>
                               </div>
                               <button mat-raised-button (click)="onMessageClick(loc.user.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00]">
@@ -103,10 +124,12 @@
                       </div>
                       <div class="px-2">
                         <p class="py-4 text-gray-600 focus:outline-none text-sm leading-5" tabindex="0">{{ loc.user.experience }}</p>
-                        <div class="flex focus:outline-none" id="bottomdiv" tabindex="0">
-                          <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 text-xs leading-3"><mat-icon>check_circle</mat-icon></div>
-                          <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 ml-3 text-xs leading-3"><mat-icon>local_fire_department</mat-icon></div>
-                        </div>
+                        <div class="flex flex-row">
+                          <div class="flex focus:outline-none" id="bottomdiv" tabindex="0">
+                            <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 text-xs leading-3"><mat-icon>check_circle</mat-icon></div>
+                            <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 ml-3 text-xs leading-3"><mat-icon>local_fire_department</mat-icon></div>
+                          </div>
+                      </div>
                     </div>
                   </div>
             </div>

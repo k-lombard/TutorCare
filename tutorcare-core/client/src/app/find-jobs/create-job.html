@@ -41,16 +41,18 @@
     </mat-card>
 
     <mat-card>
-      <mat-form-field appearance="outline">
+      <!-- <mat-form-field appearance="outline">
           <mat-label>Tags - Enter keywords separated by spaces</mat-label>
-          <!-- <input formControlName="job_desc" matInput /> -->
           <textarea id="tags-field" matInput
                     name="first"
                     formControlName="job_tags"
                     cdkTextareaAutosize
                     class="textarea-inline-control" >
           </textarea>
-      </mat-form-field>
+      </mat-form-field> -->
+      <ng-select placeholder="Type of Care Tags" class="custom" matInput [multiple]="true" [maxSelectedItems]="5" [(ngModel)]="selectedTags" [ngModelOptions]="{standalone: true}">
+        <ng-option *ngFor="let tag of items" [value]="tag.value" >{{tag.display}}</ng-option>
+      </ng-select>
     </mat-card>
       <!-- <mat-form-field id="dashboardComponent">
         <input matInput
