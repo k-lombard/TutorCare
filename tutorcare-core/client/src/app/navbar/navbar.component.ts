@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { User } from '../models/user.model';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { getCurrUser } from '../auth/auth.selectors';
+import { getCurrUser, isLoggedIn } from '../auth/auth.selectors';
 
 @Component({
   selector: 'navbar',
@@ -14,6 +14,7 @@ import { getCurrUser } from '../auth/auth.selectors';
 export class NavbarComponent implements OnInit {
   user: User | undefined;
   name = "Account"
+  isLoggedIn: boolean = false
   public isMenuOpen: boolean = false;
   constructor(private router: Router, private store: Store<AppState>) {}
 
@@ -26,6 +27,12 @@ export class NavbarComponent implements OnInit {
         this.user = data
         this.name = (this.user? this.user.first_name + " " + this.user.last_name: "Account")
       })
+    this.store
+    .pipe(
+      select(isLoggedIn)
+    ).subscribe(loggedIn => {
+      this.isLoggedIn = loggedIn
+    })
   }
 
   public onSidenavClick(): void {
