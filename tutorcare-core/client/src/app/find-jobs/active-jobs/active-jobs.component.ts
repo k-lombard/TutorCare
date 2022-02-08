@@ -44,27 +44,30 @@ export class ActiveJobsComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      if (this.userType == "careseeker") {
+      var postsCopy: Post[] = []
+      if (this.userType == "careseeker" || this.userType == "both") {
         this.activeJobs.getActiveJobsByUserId(this.userId).subscribe(data => {
           this.posts = data
-          var postsCopy: Post[] = []
-          for (var post of this.posts) {
-            post.tagList = post.tags.split(" ")
-            postsCopy.push(post)
+          if (this.posts) {
+            for (var post of this.posts) {
+              post.tagList = post.tags.split(" ")
+              postsCopy.push(post)
+            }
+            console.log(this.posts)
           }
-          this.posts = postsCopy
-          console.log(this.posts)
         })
-      } else if (this.userType == "caregiver") {
+      } else if (this.userType == "caregiver" || this.userType == "both") {
         this.activeJobs.getActiveJobsByCaregiverId(this.userId).subscribe(data => {
           this.posts = data
-          var postsCopy: Post[] = []
-          for (var post of this.posts) {
-            post.tagList = post.tags.split(" ")
-            postsCopy.push(post)
+          if (this.posts) {
+            for (var post of this.posts) {
+              post.tagList = post.tags.split(" ")
+              postsCopy.push(post)
+            }
           }
         })
       }
+      this.posts = postsCopy
     }
 
     onMessageClick(userid1: string) {

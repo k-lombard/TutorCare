@@ -49,27 +49,24 @@ export class ApplicationsReceivedComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      if (this.userType !== "caregiver") {
-        if (this.appId) {
-          this.appsRec.getApplicationById(this.appId).subscribe(application => {
-            console.log(application)
-            this.currApp = application
-          })
-        }
-        this.appsRec.getPostsByUserId(this.userId).subscribe(data => {
-          this.posts = data
-          var postsCopy: Post[] = []
+      if (this.appId) {
+        this.appsRec.getApplicationById(this.appId).subscribe(application => {
+          console.log(application)
+          this.currApp = application
+        })
+      }
+      this.appsRec.getPostsByUserId(this.userId).subscribe(data => {
+        this.posts = data
+        var postsCopy: Post[] = []
+        if (this.posts) {
           for (var post of this.posts) {
             post.tagList = post.tags.split(" ")
             postsCopy.push(post)
           }
           this.posts = postsCopy
           console.log(this.posts)
-        })
-      } else {
-        this.toastr.error("Error: caregiver users cannot access this page.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
-        this.router.navigate(["/home"])
-      }
+        }
+      })
     }
 
     setSelected(i: number, post_id: number) {

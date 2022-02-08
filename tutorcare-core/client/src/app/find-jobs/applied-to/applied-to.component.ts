@@ -53,26 +53,23 @@ export class AppliedToComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      if (this.userType != "careseeker") {
-        if (this.postId) {
-          this.appliedToService.getPostById(this.postId).subscribe(post => {
-            console.log(post)
-            this.currPost = post
-          })
-        }
+      if (this.postId) {
+        this.appliedToService.getPostById(this.postId).subscribe(post => {
+          console.log(post)
+          this.currPost = post
+        })
         this.appliedToService.getPostsAppliedTo(this.userId).subscribe(data => {
           this.posts = data
           var postsCopy: Post[] = []
-          for (var post of this.posts) {
-            post.tagList = post.tags.split(" ")
-            postsCopy.push(post)
+          if (this.posts) {
+            for (var post of this.posts) {
+              post.tagList = post.tags.split(" ")
+              postsCopy.push(post)
+            }
+            this.posts = postsCopy
+            console.log(this.posts)
           }
-          this.posts = postsCopy
-          console.log(this.posts)
         })
-      } else {
-        this.toastr.error("Error: caregiver users cannot access this page.", "Error", {closeButton: true, timeOut: 5000, progressBar: true});
-        this.router.navigate(["/home"])
       }
     }
 
