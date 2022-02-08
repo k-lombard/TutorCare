@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, HostListener, ElementRef, ViewChild} from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { DefaultGlobalConfig, ToastrService } from 'ngx-toastr';
@@ -35,7 +35,9 @@ export class AppliedToComponent implements OnInit {
     editable: boolean = true
     shown: boolean = false
     private routeSub: Subscription;
-    constructor(private router: Router, private appliedToService: AppliedToService, private store: Store<AppState>, private route: ActivatedRoute, private toastr: ToastrService) {}
+    constructor(private router: Router, private appliedToService: AppliedToService, private store: Store<AppState>, private route: ActivatedRoute, private toastr: ToastrService, private _elementRef : ElementRef) {}
+    @ViewChild('dropDown') dropdown: ElementRef;
+    @ViewChild('postCard') postcard: ElementRef;
 
 
     ngOnInit() {
@@ -74,8 +76,9 @@ export class AppliedToComponent implements OnInit {
       }
     }
 
-    toggleDropdown() {
+    toggleDropdown(event) {
       this.shown = !this.shown
+      event.stopPropagation()
     }
 
     ngOnDestroy() {

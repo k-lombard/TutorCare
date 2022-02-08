@@ -81,8 +81,8 @@
     <div id="rightcol" [class.showmenu]="menuVisible" [class.hiddencol]="currPost" class="postcol flex flex-col border-r">
       <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
       <div class="grid grid-cols-1 gap-1">
-          <ul *ngFor="let post of posts; let i = index" [class.selected]="getSelected() == i || currPost == post" (click)="setSelected(i)" (click)="setPost(post)" id="jobcard" class="postcard menu px-8 py-4 my-4 mx-4 bg-white border-gray border hover:bg-gray-200 rounded-lg shadow-md dark:bg-gray-800">
-            <li class="menu-title">
+          <ul #postCard *ngFor="let post of posts; let i = index" [class.selected]="getSelected() == i || currPost == post" (click)="setSelected(i)" (click)="setPost(post)" id="jobcard" class="postcard menu px-8 py-4 my-4 mx-4 bg-white border-gray border hover:bg-gray-200 rounded-lg shadow-md dark:bg-gray-800">
+            <li class="menu-title w-full">
               <div class="flex flex-row items-stretch justify-between relative">
                     <h2 class="text-2xl">{{post.title}}</h2>
                     <div class="flex flex-col right-0 absolute" [style.display]="'block'">
@@ -98,16 +98,14 @@
               </div>
               <div class="flex items-center justify-start w-full">
                 <div class="relative inline-block w-full">
-                    <!-- Dropdown toggle button -->
-                    <button (click)="toggleDropdown()" class="mt-2 relative z-10 block p-2 text-gray-700 bg-white border border-transparent rounded-md dark:text-white focus:border-blue-500 focus:ring-opacity-40 dark:focus:ring-opacity-40 focus:ring-blue-300 dark:focus:ring-blue-400 focus:ring dark:bg-gray-800 focus:outline-none">
+                    <button #dropDown (click)="toggleDropdown($event)" class="dropdownbutton mt-2 relative z-10 block p-2 text-gray-700 bg-white border border-transparent rounded-md dark:text-white focus:border-blue-500 focus:ring-opacity-40 dark:focus:ring-opacity-40 focus:ring-blue-300 dark:focus:ring-blue-400 focus:ring dark:bg-gray-800 focus:outline-none">
                         <svg class="w-5 h-5 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </button>
 
-                    <!-- Dropdown menu -->
-                    <div *ngIf="shown" class="absolute left-0 z-20 w-full py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
-                    <h2 class="block px-4 py-3 text-gray-800">Your Application: </h2><a class="block px-4 py-3 text-sm text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> {{post.applications[0].message}} </a>
+                    <div *ngIf="shown" class="dropdowntab absolute left-0 z-3 w-full py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
+                      <h2 class="block px-4 py-3 text-gray-800 w-full">Your Application: </h2><a class="appmessage w-full block px-4 py-3 text-sm text-gray-800 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> {{post.applications[0].message}} </a>
                     </div>
                 </div>
             </div>

@@ -140,6 +140,18 @@ bar-rating {
   display: inline !important;
 }
 
+.dropdownbutton {
+    z-index: 100 !important;
+}
+
+
+.dropdowntab {
+  width: 100% !important;
+  .appmessage {
+    width: 100% !important;
+  }
+}
+
 
 @media (max-width: 1400px) {
   [id="dateofjob"] {
@@ -148,6 +160,13 @@ bar-rating {
   [id="timeofjob"] {
     display: none !important;
   }
+  .dropdowntab {
+    width: 100% !important;
+    .appmessage {
+      width: 100% !important;
+    }
+  }
+
 }
 
 .pclass {
@@ -162,6 +181,13 @@ bar-rating {
     white-space: nowrap !important;
     overflow-x: hidden !important;
   }
+  .dropdowntab {
+    width: 100% !important;
+    .appmessage {
+      width: 100% !important;
+    }
+  }
+
 }
 
 [id="jobcard"] {
@@ -209,6 +235,15 @@ bar-rating {
     padding-left: 10px;
     padding-right: 10px;
     margin-right: 10px;
+  }
+
+  .dropdowntab {
+    width: 100% !important;
+    max-width: 100% !important;
+    .appmessage {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
   }
 
   .backbutton2 {
@@ -271,6 +306,15 @@ bar-rating {
     margin-left: 0px;
     margin-right: 0px;
     width: 50%;
+  }
+
+  .dropdowntab {
+    width: 100% !important;
+    max-width: 100% !important;
+    .appmessage {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
   }
   .chatroomid {
     font-size: 12px !important;
