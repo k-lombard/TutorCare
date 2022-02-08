@@ -51,6 +51,10 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/find-jobs'])
   }
 
+  onMessagesClick() {
+    this.router.navigate(['/find-jobs/messages'])
+  }
+
   onAboutUsClick() {
     this.router.navigate(['/about-us'])
   }
