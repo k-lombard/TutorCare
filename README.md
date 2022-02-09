@@ -15,12 +15,19 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/k-lombard/TutorCare)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)
 
+
+# Release Notes
 ## Version 0.1.0
 ### New Features
 - Adds working signup/login functionality and stores authentication tokens in session storage
 - Adds working find-care page functionality where caregiver users are displayed in a user's local area
 - Adds working find-jobs page functionality where job posts are displayed in an easy to see, intuitive manner
 - Adds account page and edit profile functionality, to change a user's email, bio, experience, and user-type. 
+
+### Known Issues
+- Backend uses explicit SQL queries so it is vulnerable to SQL injection
+- Chatroom doesn't scroll to bottom on page load
+- Find-Care page's grid layout is not mobile responsive and does not work past a certain number of caregiver users
 
 
 ## Setup Guide
