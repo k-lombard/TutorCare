@@ -6,11 +6,11 @@ import (
 	"main/models"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/google/uuid"
 )
 
 var ctx = context.TODO()
@@ -31,11 +31,11 @@ func IsAccessTokenValid(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, false)
 		return
 	}
-	num, err2 := GetAuthentication(tokenMetaData)
+	str, err2 := GetAuthentication(tokenMetaData)
 	if err2 != nil {
 		c.JSON(http.StatusUnauthorized, false)
 		return
-	} else if num == 0 {
+	} else if str == "" {
 		c.JSON(http.StatusOK, false)
 		return
 	}
@@ -99,10 +99,8 @@ func ExtractTokenMetadata(r *http.Request) (*models.AccessDetails, error) {
 		if !ok {
 			return nil, err
 		}
-		userId, err := strconv.ParseUint(fmt.Sprintf("%.f", claims["user_id"]), 10, 64)
-		if err != nil {
-			return nil, err
-		}
+		userId := fmt.Sprintf("%.f", claims["user_id"])
+
 		return &models.AccessDetails{
 			AccessUuid: accessUuid,
 			UserId:     userId,
@@ -111,13 +109,12 @@ func ExtractTokenMetadata(r *http.Request) (*models.AccessDetails, error) {
 	return nil, err
 }
 
-func GetAuthentication(authD *models.AccessDetails) (uint64, error) {
+func GetAuthentication(authD *models.AccessDetails) (string, error) {
 	userid, err := Client.Get(ctx, authD.AccessUuid).Result()
 	if err != nil {
-		return 0, err
+		return "", err
 	}
-	userID, _ := strconv.ParseUint(userid, 10, 64)
-	return userID, nil
+	return userid, nil
 }
 
 func DeleteAuthentication(givenUuid string) (int64, error) {
@@ -172,17 +169,15 @@ func Refresh(c *gin.Context) {
 			c.JSON(http.StatusForbidden, err)
 			return
 		}
-		userId, err := strconv.ParseUint(fmt.Sprintf("%.f", parsedClaims["user_id"]), 10, 64)
-		if err != nil {
-			c.JSON(http.StatusForbidden, "Error occurred")
-			return
-		}
+		// userId, err := strconv.ParseUint(fmt.Sprintf("%.f", parsedClaims["user_id"]), 10, 64)
+		userId := fmt.Sprintf("%.f", parsedClaims["user_id"])
+
 		deleted, delErr := DeleteAuthentication(refreshUuid)
 		if delErr != nil || deleted == 0 {
 			c.JSON(http.StatusForbidden, "No valid authentication; unauthorized")
 			return
 		}
-		ts, createErr := NewToken(userId)
+		ts, createErr := NewToken(userId, 20)
 		if createErr != nil {
 			c.JSON(http.StatusForbidden, createErr.Error())
 			return
@@ -200,4 +195,18 @@ func Refresh(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusForbidden, "Refresh token expired.")
 	}
+}
+
+func GetWebsocketToken(c *gin.Context) {
+	userId := uuid.MustParse(c.Param("userid"))
+	ts, err := NewToken(userId.String(), 5)
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	saveErr := AuthFuncWebsocket(userId.String(), ts)
+	if saveErr != nil {
+		c.JSON(http.StatusUnprocessableEntity, saveErr.Error())
+	}
+	c.JSON(http.StatusOK, ts.AccessToken)
 }

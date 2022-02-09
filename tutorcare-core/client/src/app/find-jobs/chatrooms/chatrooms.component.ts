@@ -24,7 +24,7 @@ import { ChatroomsService } from './chatrooms.service';
 })
 export class ChatroomsComponent implements OnInit{
 
-    public acceptSubject: Subject<boolean> = new BehaviorSubject<boolean>(false);
+		public acceptSubject: Subject<boolean> = new BehaviorSubject<boolean>(false);
     public acceptActive = this.acceptSubject.asObservable();
     selectedValue: string | undefined
     userCategory: string = ""
@@ -47,6 +47,7 @@ export class ChatroomsComponent implements OnInit{
     otherUser: User
     otherUserId: string
     menuVisible: boolean
+    chatToken!: string
     url: string = ""
     options: any = {classNames: {
       // defaults
@@ -58,24 +59,26 @@ export class ChatroomsComponent implements OnInit{
     private routeSub: Subscription;
     constructor(private router: Router, private chatroomService: ChatroomsService, private store: Store<AppState>, private route: ActivatedRoute, private toastr: ToastrService, private fb: FormBuilder, public elementRef: ElementRef) {}
     @ViewChild('scrollMe', { read: SimpleBar }) public myScrollContainer: SimpleBar;
-    ngOnInit() {
+    async ngOnInit() {
 
       this.messageForm = new FormGroup({
         message: new FormControl('')
+      })
+      this.store
+      .pipe(
+          select(getCurrUser)
+      ).subscribe(async data =>  {
+          this.user = data
+          this.userId = this.user.user_id || ""
+          this.userType = this.user.user_category
+          console.log(this.userId)
+          console.log(this.chatToken)
       })
       this.routeSub = this.route.params.subscribe(params => {
         this.chatroomId = params['id']
         console.log(this.chatroomId)
       });
-      this.store
-      .pipe(
-          select(getCurrUser)
-      ).subscribe(data =>  {
-          this.user = data
-          this.userId = this.user.user_id || ""
-          this.userType = this.user.user_category
-          console.log(this.userId)
-      })
+
       this.chatroomService.getChatroomsByUserId(this.userId).subscribe(data => {
         this.chatrooms = data
 
@@ -95,25 +98,33 @@ export class ChatroomsComponent implements OnInit{
             this.otherUserId = this.user1_id
           }
         })
-      }
-      if (this.chatroomId) {
         this.chatroomService.getMessagesByChatroomId(this.chatroomId).subscribe(messages => {
           console.log(messages)
           this.messages = messages.reverse()
         })
-        this.url = "ws://" + "localhost:8080" + "/api/" + this.chatroomId + "/ws";
-        console.log(this.url)
-        this.ws = new WebSocket(this.url)
-        console.log(this.ws)
-        this.ws.onopen = () => console.log('websocket connected!');
-        this.ws.onmessage = (msg) => {
-          const socket = msg.target as WebSocket;
-          if (socket.url !== this.url) return socket.close();
-          const d = JSON.parse(msg.data);
-          this.messages = [...this.messages, d];
-        }
-        this.ws.onclose = () => console.log("websocket closed");
-        window.addEventListener('beforeunload', () => this.ws.close())
+      }
+      if (this.chatroomId) {
+        this.chatroomService.getChatroomToken(this.userId).then((res: string) => {
+          this.url = "ws://" + "localhost:8080" + "/api/" + this.chatroomId + "/ws";
+          console.log(this.url)
+          this.ws = new WebSocket(this.url)
+          console.log(this.ws)
+          this.ws.onmessage = (msg) => {
+            const socket = msg.target as WebSocket;
+            if (socket.url !== this.url) return socket.close();
+            const d = JSON.parse(msg.data);
+            this.messages = [...this.messages, d];
+          }
+          this.ws.onopen = () => {
+            console.log('websocket connected!');
+            this.ws.send(JSON.stringify({
+              "user_id": this.userId,
+              "token": res
+            }))
+          }
+          // this.ws.onclose = () => console.log("websocket closed");
+          // window.addEventListener('beforeunload', () => this.ws.close())
+        })
       }
   }
 
@@ -127,12 +138,12 @@ export class ChatroomsComponent implements OnInit{
 
   ngOnDestroy() {
     this.routeSub.unsubscribe();
-    if (this.ws) {
-      this.ws.close()
-    }
-    return () => {
-      window.removeEventListener('beforeunload', () => this.ws.close())
-    }
+    // if (this.ws) {
+    //   this.ws.close()
+    // }
+    // return () => {
+    //   window.removeEventListener('beforeunload', () => this.ws.close())
+    // }
   }
 
     sendMessage() {

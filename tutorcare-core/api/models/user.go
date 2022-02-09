@@ -58,7 +58,7 @@ type TokenDetails struct {
 
 type AccessDetails struct {
 	AccessUuid string `json:"access_uuid"`
-	UserId     uint64 `json:"user_id"`
+	UserId     string `json:"user_id"`
 }
 
 type UserList struct {

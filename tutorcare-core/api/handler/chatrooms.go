@@ -20,6 +20,7 @@ func (r routes) chatrooms(rg *gin.RouterGroup) {
 	// rg.PUT("/:chatroomid", updateChatroom)
 	rg.DELETE("/:chatroomid", deleteChatroom)
 	rg.GET("/users/:userid1/:userid2", getChatroomByTwoUsers)
+	rg.GET("/websocket/:userid", GetWebsocketToken)
 }
 
 func addChatroom(c *gin.Context) {
