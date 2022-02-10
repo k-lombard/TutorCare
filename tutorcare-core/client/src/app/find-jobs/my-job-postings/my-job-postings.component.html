@@ -80,6 +80,9 @@
                 <div>
                   <h2 class="mt-4 text-lg font-light">Description:</h2>
                   <p>{{post.care_description}}</p>
+                  <button (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
+                  <span id="createspan">EDIT JOB POST</span>
+                </button>
                 </div>
                 <p id="timeofjob" class="font-light justify-self-end justify-end justify-items-end inline right-0 absolute">Start: {{post.start_time}} | End: {{post.end_time}}</p>
               </div>
