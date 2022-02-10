@@ -11,17 +11,15 @@ import (
 
 func (db Database) GetAllMessages() (*models.MessageList, error) {
 	list := &models.MessageList{}
-	rows, err := db.Conn.Query("SELECT *, TO_CHAR(timestamp, 'FMDay, FMDD  HH12:MI') FROM messages ORDER BY message_id DESC")
+	err := db.Conn.Order("message_id desc").Find(&list.Messages).Error
 	if err != nil {
 		return list, err
 	}
-	for rows.Next() {
-		var message models.Message
-		err := rows.Scan(&message.SenderID, &message.MessageID, &message.ChatroomID, &message.Message, &message.IsDeleted, &message.Timestamp, &message.Timestamp)
-		if err != nil {
-			return list, err
+	for _, message := range list.Messages {
+		errThree := db.Conn.Select("TO_CHAR(timestamp, 'FMDay, FMDD  HH12:MI')").First(&message.Timestamp, "message_id = ?", message.MessageID).Error
+		if errThree != nil {
+			return list, errThree
 		}
-		list.Messages = append(list.Messages, message)
 	}
 	return list, nil
 }

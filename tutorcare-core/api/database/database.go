@@ -1,11 +1,12 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 const (
@@ -14,7 +15,7 @@ const (
 )
 
 type Database struct {
-	Conn *sql.DB
+	Conn *gorm.DB
 }
 
 var ErrNoMatch = fmt.Errorf("Error: no matching table record")
@@ -26,15 +27,11 @@ var ErrSameUser = fmt.Errorf("Error: two users are the same")
 func InitializeDatabase(username, password, database string) (Database, error) {
 	db := Database{}
 	dsn := "postgres://user:password@db/tutorcare_core?sslmode=disable"
-	conn, err := sql.Open("postgres", dsn)
+	conn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return db, err
 	}
 	db.Conn = conn
-	err = db.Conn.Ping()
-	if err != nil {
-		return db, err
-	}
 	log.Println("Database connection established")
 	return db, nil
 }

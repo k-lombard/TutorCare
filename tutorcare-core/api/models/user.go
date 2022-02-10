@@ -5,15 +5,17 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type User struct {
-	UserID       uuid.UUID `sql:",pk" json:"user_id"`
+	gorm.Model
+	UserID       uuid.UUID `sql:",pk" json:"user_id" gorm:"primaryKey"`
 	FirstName    string    `json:"first_name"`
 	LastName     string    `json:"last_name"`
 	Email        string    `json:"email"`
 	Password     string    `json:"password"`
-	DateJoined   string    `json:"date_joined"`
+	DateJoined   string    `json:"date_joined" gorm:"autoCreateTime"`
 	Status       bool      `json:"status"`
 	UserCategory string    `json:"user_category"`
 	Experience   string    `json:"experience"`
@@ -24,27 +26,8 @@ type User struct {
 	City         string    `json:"city"`
 	Zipcode      string    `json:"zipcode"`
 	Address      string    `json:"address"`
-}
-
-type UserWithTokens struct {
-	UserID       uuid.UUID `sql:",pk" json:"user_id"`
-	FirstName    string    `json:"first_name"`
-	LastName     string    `json:"last_name"`
-	Email        string    `json:"email"`
-	Password     string    `json:"password"`
-	DateJoined   string    `json:"date_joined"`
-	Status       bool      `json:"status"`
-	UserCategory string    `json:"user_category"`
-	Experience   string    `json:"experience"`
-	Bio          string    `json:"bio"`
-	Preferences  string    `json:"preferences"`
-	Country      string    `json:"country"`
-	State        string    `json:"state"`
-	City         string    `json:"city"`
-	Zipcode      string    `json:"zipcode"`
-	Address      string    `json:"address"`
-	AccessToken  string    `json:"access_token"`
-	RefreshToken string    `json:"refresh_token"`
+	AccessToken  string    `json:"access_token" gorm:"-"`
+	RefreshToken string    `json:"refresh_token" gorm:"-"`
 }
 
 type TokenDetails struct {
@@ -66,13 +49,6 @@ type UserList struct {
 }
 
 func (i *User) Bind(r *http.Request) error {
-	if i.Email == "" || i.Password == "" {
-		return fmt.Errorf("Email and password are required fields.")
-	}
-	return nil
-}
-
-func (i *UserWithTokens) Bind(r *http.Request) error {
 	if i.Email == "" || i.Password == "" {
 		return fmt.Errorf("Email and password are required fields.")
 	}
