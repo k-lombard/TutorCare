@@ -8,8 +8,7 @@ import (
 
 func (db Database) Signup(user *models.User) bool {
 	userOut := models.User{}
-	row := db.Conn.QueryRow("SELECT email FROM users WHERE email=$1", &user.Email)
-	switch err := row.Scan(&userOut.Email); err {
+	switch err := db.Conn.Select("email").First(&userOut.Email, "email = ?", &user.Email).Error; err {
 	case sql.ErrNoRows:
 		fmt.Println("Email doesn't already exist; proceed with registration.")
 		return true
@@ -20,14 +19,14 @@ func (db Database) Signup(user *models.User) bool {
 }
 
 func (db Database) ValidateEmail(email string) {
-	db.Conn.QueryRow(`UPDATE users SET status=$1 WHERE email=$2;`, true, email)
+	db.Conn.Model(&models.User{}).Updates(models.User{Email: email, Status: true})
 }
 
-func (db Database) Login(user *models.User) (models.UserWithTokens, bool) {
+func (db Database) Login(user *models.User) (models.User, bool) {
 
-	userOut := models.UserWithTokens{}
+	userOut := models.User{}
 
-	db.Conn.QueryRow("SELECT * FROM users WHERE email = $1;", user.Email).Scan(&userOut.UserID, &userOut.FirstName, &userOut.LastName, &userOut.Email, &userOut.Password, &userOut.DateJoined, &userOut.Status, &userOut.UserCategory, &userOut.Experience, &userOut.Bio, &userOut.Preferences, &userOut.Country, &userOut.State, &userOut.City, &userOut.Zipcode, &userOut.Address)
+	db.Conn.First(&userOut, "email = ?", user.Email)
 	isMatch := comparePasswords(userOut.Password, []byte(user.Password))
 	if isMatch == true {
 		return userOut, true
