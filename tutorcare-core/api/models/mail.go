@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/smtp"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -22,10 +23,11 @@ func SendEmailVerificationCode(to []string) int {
 
 	subject := "TutorCare Email Verification Code"
 	body := "<p>Your validation code is <b>" + strconv.Itoa(code) + "</b></p>"
+	pass := os.Getenv("EMAIL_PASS")
 
 	request := mail{
 		Sender:  "tutorcaregatech@gmail.com",
-		Pass:    "tutorcareemailpassword",
+		Pass:    pass,
 		To:      to,
 		Subject: subject,
 		Body:    body,
