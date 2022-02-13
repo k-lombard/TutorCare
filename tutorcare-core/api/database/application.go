@@ -101,5 +101,12 @@ func (db Database) UpdateApplication(applicationId int, appData models.Applicati
 		}
 		return app, err
 	}
+	errOut := db.Conn.First(&app, "application_id = ?", applicationId).Error
+	if errOut != nil {
+		if errOut == sql.ErrNoRows {
+			return app, ErrNoMatch
+		}
+		return app, errOut
+	}
 	return app, nil
 }

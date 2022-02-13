@@ -108,5 +108,12 @@ func (db Database) UpdateGeolocationPosition(userId uuid.UUID, locData models.Ge
 		}
 		return loc, err
 	}
+	errOut := db.Conn.First(&loc, "user_id = ?", userId).Error
+	if errOut != nil {
+		if errOut == sql.ErrNoRows {
+			return loc, ErrNoMatch
+		}
+		return loc, errOut
+	}
 	return loc, nil
 }

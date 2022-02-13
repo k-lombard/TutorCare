@@ -128,5 +128,12 @@ func (db Database) UpdateMessage(messageId int, messageData models.Message) (mod
 		}
 		return msg, err
 	}
+	errOut := db.Conn.First(&msg, "message_id = ?", messageId).Error
+	if errOut != nil {
+		if errOut == sql.ErrNoRows {
+			return msg, ErrNoMatch
+		}
+		return msg, errOut
+	}
 	return msg, nil
 }

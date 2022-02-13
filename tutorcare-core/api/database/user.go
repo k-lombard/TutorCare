@@ -86,6 +86,13 @@ func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.Us
 		}
 		return user, err
 	}
+	errFinal := db.Conn.First(&user, "user_id = ?", userId).Error
+	if errFinal != nil {
+		if errFinal == sql.ErrNoRows {
+			return user, ErrNoMatch
+		}
+		return user, errFinal
+	}
 	return user, nil
 }
 
@@ -99,12 +106,19 @@ func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.User) (mo
 		}
 		return user, errTwo
 	}
-	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{Email: userData.Email, UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences, City: userData.City, Zipcode: userData.Zipcode, Address: userData.Address}).Error
+	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{Email: userData.Email, UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences}).Error
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return user, ErrNoMatch
 		}
 		return user, err
+	}
+	errFinal := db.Conn.First(&user, "user_id = ?", userId).Error
+	if errFinal != nil {
+		if errFinal == sql.ErrNoRows {
+			return user, ErrNoMatch
+		}
+		return user, errFinal
 	}
 	return user, nil
 }
