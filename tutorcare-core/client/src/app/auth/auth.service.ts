@@ -113,16 +113,17 @@ export class AuthService {
           })
           )
           .subscribe((data: Token) => {
-            console.log(this.output)
             console.log(this.prevUser.access_token)
             console.log(this.prevUser.refresh_token)
             this.output = data
+            console.log(this.output)
             if (this.output && this.output.access_token && this.output.refresh_token) {
               let newUser = {...this.prevUser}
               this.new_access_token = this.output?.access_token || ""
               this.new_refresh_token = this.output?.refresh_token || ""
               newUser.access_token = this.new_access_token
               newUser.refresh_token = this.new_refresh_token
+              console.log(newUser)
               this.store.dispatch(new Login({user: newUser}));
               this.toastr.success("Successfully refreshed access token.", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
             }

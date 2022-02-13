@@ -25,24 +25,11 @@ func (db Database) AddApplication(app *models.Application) (models.Application, 
 	if errLatest != nil {
 		return appOut, errLatest
 	}
-
-	var userType string
-	errFinal := db.Conn.Select("user_category").First(&userType, "user_id = ?", app.UserID).Error
-	if errFinal != nil {
-		return appOut, errFinal
-	}
-
 	if postOut.UserID != app.UserID {
 		err := db.Conn.Create(&app).Error
 		if err != nil {
 			return appOut, err
 		}
-		// err2 := db.Conn.First(&appOut, "user_id = ? AND post_id = ?", app.UserID, app.PostID).Error
-		// if err2 != nil {
-		// 	return appOut, err2
-		// }
-		// fmt.Println("New post record created with applicationID and timestamp: ", appOut.ApplicationID, appOut.CreatedAt)
-		// return appOut, nil
 		return *app, nil
 	} else {
 		return appOut, ErrSameUser
@@ -107,7 +94,7 @@ func (db Database) UpdateApplication(applicationId int, appData models.Applicati
 		}
 		return app, errTwo
 	}
-	err := db.Conn.Model(&app).Updates(models.Application{ApplicationID: applicationId, Message: appData.Message, Accepted: appData.Accepted}).Error
+	err := db.Conn.Model(&app).Where("application_id = ?", applicationId).Updates(models.Application{Message: appData.Message, Accepted: appData.Accepted}).Error
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return app, ErrNoMatch

@@ -16,8 +16,8 @@ import (
 func (r routes) posts(rg *gin.RouterGroup) {
 	rg.GET("/", getAllPosts)
 	rg.GET("/active", getActivePosts)
-	rg.GET("/active-jobs/:userid", getActivePostsWithCaregiver)
-	rg.GET("/active-jobs/caregiver/:caregiverid", getActivePostsForCaregiverView)
+	rg.GET("/active-jobs/:userid", getActivePostsView)
+	// rg.GET("/active-jobs/caregiver/:caregiverid", getActivePostsForCaregiverView)
 	rg.GET("/applied-to/:caregiverid", getPostsAppliedTo)
 	rg.POST("/", addPost)
 	rg.GET("/user/:userid", getPostsByUserId)
@@ -60,9 +60,9 @@ func getActivePosts(c *gin.Context) {
 	c.JSON(http.StatusOK, posts)
 }
 
-func getActivePostsWithCaregiver(c *gin.Context) {
+func getActivePostsView(c *gin.Context) {
 	userID := uuid.MustParse(c.Param("userid"))
-	posts, err := dbInstance.GetActivePostsWithCaregiver(userID)
+	posts, err := dbInstance.GetActivePostsView(userID)
 	if err != nil {
 		fmt.Println(err.Error())
 		c.JSON(http.StatusInternalServerError, err)
@@ -71,16 +71,16 @@ func getActivePostsWithCaregiver(c *gin.Context) {
 	c.JSON(http.StatusOK, posts)
 }
 
-func getActivePostsForCaregiverView(c *gin.Context) {
-	caregiverID := uuid.MustParse(c.Param("caregiverid"))
-	posts, err := dbInstance.GetActivePostsForCaregiverView(caregiverID)
-	if err != nil {
-		fmt.Println(err.Error())
-		c.JSON(http.StatusInternalServerError, err)
-		return
-	}
-	c.JSON(http.StatusOK, posts)
-}
+// func getActivePostsForCaregiverView(c *gin.Context) {
+// 	caregiverID := uuid.MustParse(c.Param("caregiverid"))
+// 	posts, err := dbInstance.GetActivePostsForCaregiverView(caregiverID)
+// 	if err != nil {
+// 		fmt.Println(err.Error())
+// 		c.JSON(http.StatusInternalServerError, err)
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, posts)
+// }
 
 func getPostsAppliedTo(c *gin.Context) {
 	caregiverID := uuid.MustParse(c.Param("caregiverid"))

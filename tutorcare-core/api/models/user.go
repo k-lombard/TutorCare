@@ -5,17 +5,15 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
-	UserID       uuid.UUID `sql:",pk" json:"user_id" gorm:"primaryKey"`
+	UserID       uuid.UUID `sql:",pk" json:"user_id" gorm:"type:uuid;primaryKey;"`
 	FirstName    string    `json:"first_name"`
 	LastName     string    `json:"last_name"`
 	Email        string    `json:"email"`
 	Password     string    `json:"password"`
-	DateJoined   string    `json:"date_joined" gorm:"autoCreateTime"`
+	DateJoined   string    `json:"date_joined" gorm:"-"`
 	Status       bool      `json:"status"`
 	UserCategory string    `json:"user_category"`
 	Experience   string    `json:"experience"`

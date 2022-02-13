@@ -5,17 +5,15 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type Message struct {
-	gorm.Model
-	SenderID   uuid.UUID `sql:",fk" json:"sender_id"`
-	MessageID  int       `sql:",pk" json:"message_id" gorm:"primaryKey"`
+	SenderID   uuid.UUID `sql:",fk" json:"sender_id" gorm:"type:uuid;column:sender;"`
+	MessageID  int       `sql:",pk" json:"message_id" gorm:"primaryKey;"`
 	ChatroomID int       `sql:",fk" json:"chatroom_id"`
 	Message    string    `json:"message"`
 	IsDeleted  bool      `json:"is_deleted"`
-	Timestamp  string    `json:"timestamp" gorm:"autoCreateTime"`
+	Timestamp  string    `json:"timestamp" gorm:"default:null"`
 	Sender     User      `json:"sender" gorm:"-"`
 }
 

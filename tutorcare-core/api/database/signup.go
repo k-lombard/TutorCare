@@ -19,7 +19,7 @@ func (db Database) Signup(user *models.User) bool {
 }
 
 func (db Database) ValidateEmail(email string) {
-	db.Conn.Model(&models.User{}).Updates(models.User{Email: email, Status: true})
+	db.Conn.Model(&models.User{}).Where("email = ?", email).Updates(models.User{Status: true})
 }
 
 func (db Database) Login(user *models.User) (models.User, bool) {

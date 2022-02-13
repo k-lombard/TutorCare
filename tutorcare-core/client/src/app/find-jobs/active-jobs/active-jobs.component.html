@@ -133,7 +133,7 @@
     </div>
   </div>
 </div> -->
-<h2 class="text-gray-300 text-3xl italic justify-center items-center w-full flex text-center pt-[5%]" *ngIf="!posts">You have no active jobs.</h2>
+<h2 class="text-gray-300 text-3xl italic justify-center items-center w-full flex text-center pt-[5%]" *ngIf="!posts || posts.length === 0">You have no active jobs.</h2>
 <div class="grid desktop:grid-cols-4 gap-4 laptop:grid-cols-2 tablet:grid-cols-1" *ngIf="posts">
 <div id="postcard" *ngFor="let post of posts" class="px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800 relative">
   <div class="flex items-center">
@@ -147,8 +147,8 @@
       </div>
   </div>
   <div class="mt-2 flex flex-col min-h-[10em]">
-      <a *ngIf="userType === 'careseeker'" [routerLink]="['/find-jobs/my-job-postings', post.post_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{post.title}}</a>
-      <a *ngIf="userType === 'caregiver'" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{post.title}}</a>
+      <a *ngIf="userId === post.user_id" [routerLink]="['/find-jobs/my-job-postings', post.post_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{post.title}}</a>
+      <a *ngIf="userId !== post.user_id" class="grow text-2xl font-bold text-gray-700 dark:text-white">{{post.title}}</a>
       <p class="grow mt-2 text-gray-600 dark:text-gray-300">{{post.care_description}}</p>
   </div>
 
@@ -158,12 +158,12 @@
           <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->
           <div class="flex flex-row">
             <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
-              <a *ngIf="userType === 'careseeker'" [routerLink]="['/find-jobs/applications-received', post.application_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline bottom-0 absolute mb-4">Caregiver: {{post.caregiver.first_name}} {{post.caregiver.last_name}}</a>
-              <a *ngIf="userType === 'caregiver'" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline bottom-0 absolute mb-4">Job Poster: {{post.user.first_name}} {{post.user.last_name}}</a>
-              <button *ngIf="userType === 'careseeker'" mat-raised-button (click)="onMessageClick(post.caregiver.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00] right-0 bottom-1 absolute mx-8 mb-4">
+              <a *ngIf="userId === post.user_id" [routerLink]="['/find-jobs/applications-received', post.application_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline bottom-0 absolute mb-4">Caregiver: {{post.caregiver.first_name}} {{post.caregiver.last_name}}</a>
+              <a *ngIf="userId !== post.user_id" [routerLink]="['/profile', post.user_id]" class="grow text-2xl font-bold text-gray-700 dark:text-white dark:hover:text-gray-200 bottom-0 absolute mb-4">Job Poster: {{post.user.first_name}} {{post.user.last_name}}</a>
+              <button *ngIf="userId === post.user_id" mat-raised-button (click)="onMessageClick(post.caregiver.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00] right-0 bottom-1 absolute mx-8 mb-4">
                 <mat-icon>message</mat-icon>
               </button>
-              <button *ngIf="userType === 'caregiver'" mat-raised-button (click)="onMessageClick(post.user.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00] right-0 bottom-1 absolute mx-8 mb-4">
+              <button *ngIf="userId !== post.user_id" mat-raised-button (click)="onMessageClick(post.user.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00] right-0 bottom-1 absolute mx-8 mb-4">
                 <mat-icon>message</mat-icon>
               </button>
             </div>

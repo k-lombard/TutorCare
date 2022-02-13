@@ -20,11 +20,11 @@ func (db Database) GetAllLocations() (*models.GeolocationPositionList, error) {
 
 func (db Database) GetCaregiverLocations() (*models.GeolocationPositionList, error) {
 	list := &models.GeolocationPositionList{}
-	err := db.Conn.Order("location_id desc").Find(&list.GeolocationPositions, "user_category = ? OR user_category = ?", "caregiver", "both").Error
+	err := db.Conn.Order("location_id desc").Find(&list.GeolocationPositions).Error
 	if err != nil {
 		return list, err
 	}
-	for _, geopos := range list.GeolocationPositions {
+	for i, geopos := range list.GeolocationPositions {
 
 		us := models.User{}
 		err2 := db.Conn.First(&us, "user_id = ?", geopos.UserID).Error
@@ -32,7 +32,7 @@ func (db Database) GetCaregiverLocations() (*models.GeolocationPositionList, err
 			return list, err2
 		}
 		if us.UserCategory == "caregiver" || us.UserCategory == "both" {
-			geopos.User = us
+			list.GeolocationPositions[i].User = us
 		}
 	}
 	return list, nil
@@ -52,16 +52,16 @@ func (db Database) AddGeolocationPosition(loc *models.GeolocationPosition) (mode
 		if err2 != nil {
 			return geolocationPositionOut, err2
 		}
-		fmt.Println("New geolocation_position record created with locationID and timestamp: ", geolocationPositionOut.ID, geolocationPositionOut.Timestamp)
+		fmt.Println("New geolocation_position record created with locationID and timestamp: ", geolocationPositionOut.LocationID, geolocationPositionOut.Timestamp)
 		return geolocationPositionOut, nil
 	default:
 		geolocationPositionOut := models.GeolocationPosition{}
 
-		err := db.Conn.Model(&geolocationPositionOut).Updates(models.GeolocationPosition{UserID: loc.UserID, Accuracy: loc.Accuracy, Latitude: loc.Latitude, Longitude: loc.Longitude}).Error
+		err := db.Conn.Model(&geolocationPositionOut).Where("user_id = ?", loc.UserID).Updates(models.GeolocationPosition{Accuracy: loc.Accuracy, Latitude: loc.Latitude, Longitude: loc.Longitude}).Error
 		if err != nil {
 			return geolocationPositionOut, err
 		}
-		fmt.Println("Geolocation_position record updated with locationID and timestamp: ", geolocationPositionOut.ID, geolocationPositionOut.Timestamp)
+		fmt.Println("Geolocation_position record updated with locationID and timestamp: ", geolocationPositionOut.LocationID, geolocationPositionOut.Timestamp)
 		return geolocationPositionOut, nil
 	}
 }
@@ -87,7 +87,7 @@ func (db Database) DeleteGeolocationPosition(userId uuid.UUID) error {
 			return err
 		}
 	}
-	fmt.Println("GeolocationPosition deleted with userID: ", out.ID)
+	fmt.Println("GeolocationPosition deleted with userID: ", out.LocationID)
 	return nil
 }
 

@@ -79,7 +79,7 @@ func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.Us
 	if isMatch == true {
 		hash = []byte(user2.Password)
 	}
-	err := db.Conn.Model(&user).Updates(models.User{UserID: userId, FirstName: userData.FirstName, LastName: userData.LastName, Email: userData.Email, Password: string(hash), UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences, City: userData.City, Zipcode: userData.Zipcode, Address: userData.Address}).Error
+	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{FirstName: userData.FirstName, LastName: userData.LastName, Email: userData.Email, Password: string(hash), UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences, City: userData.City, Zipcode: userData.Zipcode, Address: userData.Address}).Error
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return user, ErrNoMatch
@@ -99,7 +99,7 @@ func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.User) (mo
 		}
 		return user, errTwo
 	}
-	err := db.Conn.Model(&user).Updates(models.User{UserID: userId, Email: userData.Email, UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences, City: userData.City, Zipcode: userData.Zipcode, Address: userData.Address}).Error
+	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{Email: userData.Email, UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences, City: userData.City, Zipcode: userData.Zipcode, Address: userData.Address}).Error
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return user, ErrNoMatch

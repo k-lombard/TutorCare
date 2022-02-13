@@ -5,18 +5,20 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type GeolocationPosition struct {
-	gorm.Model
-	UserID     uuid.UUID `sql:",fk" json:"user_id"`
-	LocationID int       `sql:",pk" json:"location_id" gorm:"primaryKey"`
+	UserID     uuid.UUID `sql:",fk" json:"user_id" gorm:"type:uuid;"`
+	LocationID int       `sql:",pk" json:"location_id" gorm:"primaryKey;"`
 	Accuracy   float64   `json:"accuracy"`
 	Latitude   float64   `json:"latitude"`
 	Longitude  float64   `json:"longitude"`
-	Timestamp  string    `json:"timestamp" gorm:"autoCreateTime"`
+	Timestamp  string    `json:"timestamp" gorm:"default:null"`
 	User       User      `json:"user" gorm:"-"`
+}
+
+func (GeolocationPosition) TableName() string {
+	return "geolocation"
 }
 
 type GeolocationPositionList struct {

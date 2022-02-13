@@ -5,14 +5,12 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type Post struct {
-	gorm.Model
-	UserID          uuid.UUID     `sql:",fk" json:"user_id"`
-	CaregiverID     uuid.UUID     `json:"caregiver_id"`
-	PostID          int           `sql:",pk" json:"post_id" gorm:"primaryKey"`
+	UserID          uuid.UUID     `sql:",fk" json:"user_id" gorm:"type:uuid;"`
+	CaregiverID     uuid.UUID     `json:"caregiver_id" gorm:"type:uuid;"`
+	PostID          int           `sql:",pk" json:"post_id" gorm:"primaryKey;"`
 	Title           string        `json:"title"`
 	Tags            string        `json:"tags"`
 	CareDescription string        `json:"care_description"`
@@ -21,7 +19,7 @@ type Post struct {
 	DateOfJob       string        `json:"date_of_job"`
 	StartTime       string        `json:"start_time"`
 	EndTime         string        `json:"end_time"`
-	DatePosted      string        `json:"date_posted" gorm:"autoCreateTime"`
+	DatePosted      string        `json:"date_posted" gorm:"default:null"`
 	Applications    []Application `json:"applications" gorm:"-"`
 	Caregiver       User          `json:"caregiver" gorm:"-"`
 	ApplicationID   int           `json:"application_id" gorm:"-"`

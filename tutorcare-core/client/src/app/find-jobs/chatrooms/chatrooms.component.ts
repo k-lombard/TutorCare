@@ -7,6 +7,7 @@ import { DefaultGlobalConfig, ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import SimpleBar from 'simplebar';
+import { SimplebarAngularComponent } from 'simplebar-angular';
 import { getCurrUser } from 'src/app/auth/auth.selectors';
 import { Application } from 'src/app/models/application.model';
 import { Chatroom } from 'src/app/models/chatroom.model';
@@ -58,7 +59,7 @@ export class ChatroomsComponent implements OnInit{
     }}
     private routeSub: Subscription;
     constructor(private router: Router, private chatroomService: ChatroomsService, private store: Store<AppState>, private route: ActivatedRoute, private toastr: ToastrService, private fb: FormBuilder, public elementRef: ElementRef) {}
-    @ViewChild('scrollMe', { read: SimpleBar }) public myScrollContainer: SimpleBar;
+    @ViewChild('scrollMe') public myScrollContainer: ElementRef;
     async ngOnInit() {
 
       this.messageForm = new FormGroup({
@@ -98,10 +99,13 @@ export class ChatroomsComponent implements OnInit{
             this.otherUserId = this.user1_id
           }
         })
-        this.chatroomService.getMessagesByChatroomId(this.chatroomId).subscribe(messages => {
-          console.log(messages)
-          this.messages = messages.reverse()
-        })
+        if (!this.messages || this.messages.length === 0) {
+          this.chatroomService.getMessagesByChatroomId(this.chatroomId).subscribe(messages => {
+            console.log(messages)
+            this.messages = messages.reverse()
+          })
+        }
+        // this.scrollBottom()
       }
       if (this.chatroomId) {
         this.chatroomService.getChatroomToken(this.userId).then((res: string) => {
@@ -164,6 +168,10 @@ export class ChatroomsComponent implements OnInit{
       })
     }
 
+    scrollBottom(){
+      this.myScrollContainer['SimpleBar'].getScrollElement().scrollTop = this.myScrollContainer['SimpleBar'].getScrollElement().scrollHeight
+    }
+
     onFindCareClick() {
         this.router.navigate(['/find-care'])
     }
@@ -182,12 +190,10 @@ export class ChatroomsComponent implements OnInit{
         this.otherUser = this.user1
         this.otherUserId = this.user1_id
       }
-      if ((!this.messages || this.messages.length === 0)) {
-        this.chatroomService.getMessagesByChatroomId(this.currChatroom.chatroom_id).subscribe(messages => {
-          console.log(messages)
-          this.messages = messages.reverse()
-        })
-      }
+      this.chatroomService.getMessagesByChatroomId(this.currChatroom.chatroom_id).subscribe(messages => {
+        console.log(messages)
+        this.messages = messages.reverse()
+      })
     }
 
     back() {

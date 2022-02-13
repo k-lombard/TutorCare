@@ -15,8 +15,8 @@ func (db Database) GetAllPosts() (*models.PostList, error) {
 	if err != nil {
 		return list, err
 	}
-	for _, post := range list.Posts {
-		err := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy')", "TO_CHAR(start_time :: TIME, 'hh12:mi AM')", "TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&post.DateOfJob, &post.StartTime, &post.EndTime).Error
+	for i, post := range list.Posts {
+		err := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job", "TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time", "TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&list.Posts[i]).Error
 		if err != nil {
 			return list, err
 		}
@@ -26,12 +26,12 @@ func (db Database) GetAllPosts() (*models.PostList, error) {
 
 func (db Database) GetActivePosts() (*models.PostList, error) {
 	list := &models.PostList{}
-	err := db.Conn.Where("completed = false AND caregiver_id = ?", "00000000-0000-0000-0000-000000000000").Order("post_id desc").Find(&list.Posts).Error
+	err := db.Conn.Model(&models.Post{}).Where("completed = ? AND (caregiver_id = ? OR caregiver_id IS NULL)", false, uuid.MustParse("00000000-0000-0000-0000-000000000000")).Order("post_id desc").Find(&list.Posts).Error
 	if err != nil {
 		return list, err
 	}
-	for _, post := range list.Posts {
-		err := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy')", "TO_CHAR(start_time :: TIME, 'hh12:mi AM')", "TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&post.DateOfJob, &post.StartTime, &post.EndTime).Error
+	for i, post := range list.Posts {
+		err := db.Conn.Raw("SELECT TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time FROM posts WHERE post_id = ?", post.PostID).Scan(&list.Posts[i]).Error
 		if err != nil {
 			return list, err
 		}
@@ -39,54 +39,71 @@ func (db Database) GetActivePosts() (*models.PostList, error) {
 	return list, nil
 }
 
-func (db Database) GetActivePostsWithCaregiver(userId uuid.UUID) (*models.PostList, error) {
+func (db Database) GetActivePostsView(userId uuid.UUID) (*models.PostList, error) {
 	list := &models.PostList{}
-	err := db.Conn.Where("completed = false AND caregiver_id != ? AND user_id = ?", "00000000-0000-0000-0000-000000000000", userId).Order("post_id desc").Find(&list.Posts).Error
+	err := db.Conn.Where("completed = false AND caregiver_id != ? AND caregiver_id IS NOT NULL AND (user_id = ? OR caregiver_id = ?)", "00000000-0000-0000-0000-000000000000", userId, userId).Order("post_id desc").Find(&list.Posts).Error
 	if err != nil {
 		return list, err
 	}
-	for _, post := range list.Posts {
+	for i, post := range list.Posts {
+		errDate := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job", "TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time", "TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&list.Posts[i]).Error
+		if errDate != nil {
+			return list, errDate
+		}
 		careUser := models.User{}
 		errNew := db.Conn.First(&careUser, "user_id = ?", post.CaregiverID).Error
 		if errNew != nil {
 			return list, errNew
 		}
-		errFinal := db.Conn.Where("user_id = ? AND post_id = ?", post.CaregiverID, post.PostID).Select("application_id").First(&post.ApplicationID).Error
+
+		poster := models.User{}
+		errPost := db.Conn.First(&poster, "user_id = ?", post.UserID).Error
+		if errPost != nil {
+			return list, errPost
+		}
+		list.Posts[i].User = poster
+		app := models.Application{}
+		errFinal := db.Conn.Where("user_id = ? AND post_id = ?", post.CaregiverID, post.PostID).Select("application_id").First(&app).Error
 		if errFinal != nil {
 			return list, errFinal
 		}
-		post.Caregiver = careUser
+		list.Posts[i].ApplicationID = app.ApplicationID
+		list.Posts[i].Caregiver = careUser
 	}
 	return list, nil
 }
 
-func (db Database) GetActivePostsForCaregiverView(caregiverId uuid.UUID) (*models.PostList, error) {
-	list := &models.PostList{}
-	err := db.Conn.Where("completed = false AND caregiver_id != ? AND caregiver_id = ?", "00000000-0000-0000-0000-000000000000", caregiverId).Order("post_id desc").Find(&list.Posts).Error
-	if err != nil {
-		return list, err
-	}
-	for _, post := range list.Posts {
-		careUser := models.User{}
-		errNew := db.Conn.First(&careUser, "user_id = ?", post.UserID).Error
-		if errNew != nil {
-			return list, errNew
-		}
-		post.User = careUser
-	}
-	return list, nil
-}
+// func (db Database) GetActivePostsForCaregiverView(caregiverId uuid.UUID) (*models.PostList, error) {
+// 	list := &models.PostList{}
+// 	err := db.Conn.Where("completed = false AND caregiver_id != ? AND caregiver_id = ?", "00000000-0000-0000-0000-000000000000", caregiverId).Order("post_id desc").Find(&list.Posts).Error
+// 	if err != nil {
+// 		return list, err
+// 	}
+// 	for i, post := range list.Posts {
+// 		errDate := db.Conn.Raw("SELECT TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time FROM posts WHERE post_id = ?", post.PostID).Scan(&list.Posts[i]).Error
+// 		if errDate != nil {
+// 			return list, errDate
+// 		}
+// 		careUser := models.User{}
+// 		errNew := db.Conn.First(&careUser, "user_id = ?", post.UserID).Error
+// 		if errNew != nil {
+// 			return list, errNew
+// 		}
+// 		list.Posts[i].User = careUser
+// 	}
+// 	return list, nil
+// }
 
 func (db Database) GetPostsAppliedTo(caregiverId uuid.UUID) (*models.PostList, error) {
 	list := &models.PostList{}
 	appList := &models.ApplicationList{}
-	err := db.Conn.Order("application_id desc").Find(&appList.Applications).Error
+	err := db.Conn.Where("user_id = ?", caregiverId).Order("application_id desc").Find(&appList.Applications).Error
 	if err != nil {
 		return list, err
 	}
 	for _, application := range appList.Applications {
 		post := models.Post{}
-		err2 := db.Conn.Where("post_id = ? AND completed = false AND caregiver_id = ?", application.PostID, "00000000-0000-0000-0000-000000000000").Select("*", "TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy')", "TO_CHAR(start_time :: TIME, 'hh12:mi AM')", "TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&post, &post.DateOfJob, &post.StartTime, &post.EndTime).Error
+		err2 := db.Conn.Where("post_id = ? AND completed = false", application.PostID).Select("*").First(&post).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job", "TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time", "TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&post).Error
 		if err2 != nil {
 			return list, err2
 		}
@@ -108,7 +125,7 @@ func (db Database) AddPost(post *models.Post) (models.Post, error) {
 	if err != nil {
 		return postOut, err
 	}
-	err2 := db.Conn.Where("post_id = ?", post.PostID).Select("*", "TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy')", "TO_CHAR(start_time :: TIME, 'hh12:mi AM')", "TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&postOut, &postOut.DateOfJob, &postOut.StartTime, &postOut.EndTime).Error
+	err2 := db.Conn.Where("post_id = ?", post.PostID).Select("*").First(&postOut).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job", "TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time", "TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&postOut).Error
 	if err2 != nil {
 		return postOut, err2
 	}
@@ -118,51 +135,61 @@ func (db Database) AddPost(post *models.Post) (models.Post, error) {
 
 func (db Database) GetPostById(postId int) (models.Post, error) {
 	postOut := models.Post{}
-	switch err := db.Conn.Where("post_id = ? AND caregiver_id != ?", postId, "00000000-0000-0000-0000-000000000000").Select("*", "TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy')", "TO_CHAR(start_time :: TIME, 'hh12:mi AM')", "TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&postOut, &postOut.DateOfJob, &postOut.StartTime, &postOut.EndTime).Error; err {
+	switch err := db.Conn.Where("post_id = ?", postId).Select("*").First(&postOut).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job", "TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time", "TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&postOut).Error; err {
 	case sql.ErrNoRows:
 		return postOut, ErrNoMatch
 	default:
-		newUser := models.User{}
-		err4 := db.Conn.First(&newUser, "user_id = ?", postOut.CaregiverID).Error
-		if err4 != nil {
-			return postOut, err4
+		if postOut.CaregiverID.String() != "00000000-0000-0000-0000-000000000000" {
+			newUser := models.User{}
+			err4 := db.Conn.First(&newUser, "user_id = ?", postOut.CaregiverID).Error
+			if err4 != nil {
+				return postOut, err4
+			}
+			postOut.Caregiver = newUser
 		}
-		postOut.Caregiver = newUser
+		poster := models.User{}
+		err5 := db.Conn.First(&poster, "user_id = ?", postOut.UserID).Error
+		if err5 != nil {
+			return postOut, err5
+		}
+		postOut.User = poster
 		return postOut, nil
 	}
 }
 
 func (db Database) GetPostsByUserId(userId uuid.UUID) (*models.PostList, error) {
 	list := &models.PostList{}
-	err := db.Conn.Where("user_id = ? AND caregiver_id != ?", userId, "00000000-0000-0000-0000-000000000000").Order("post_id desc").Find(&list.Posts).Error
+	err := db.Conn.Where("user_id = ?", userId).Order("post_id desc").Find(&list.Posts).Error
 	if err != nil {
 		return list, err
 	}
-	for _, post := range list.Posts {
-		err := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy')", "TO_CHAR(start_time :: TIME, 'hh12:mi AM')", "TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&post.DateOfJob, &post.StartTime, &post.EndTime).Error
-		if err != nil {
-			return list, err
+	for i, post := range list.Posts {
+		errDate := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job", "TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time", "TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&list.Posts[i]).Error
+		if errDate != nil {
+			return list, errDate
 		}
 		list2 := &models.ApplicationList{}
 		err2 := db.Conn.Where("post_id = ?", post.PostID).Order("application_id desc").Find(&list2.Applications).Error
 		if err2 != nil {
 			return list, err2
 		}
-		for _, application := range list2.Applications {
+		for k, application := range list2.Applications {
 			newUser := models.User{}
 			err4 := db.Conn.First(&newUser, "user_id = ?", application.UserID).Error
 			if err4 != nil {
 				return list, err4
 			}
-			application.User = newUser
+			list2.Applications[k].User = newUser
 		}
-		newUser2 := models.User{}
-		err3 := db.Conn.First(&newUser2, "user_id = ?", post.CaregiverID).Error
-		if err3 != nil {
-			return list, err3
+		if post.CaregiverID.String() != "00000000-0000-0000-0000-000000000000" {
+			newUser2 := models.User{}
+			err3 := db.Conn.First(&newUser2, "user_id = ?", post.CaregiverID).Error
+			if err3 != nil {
+				return list, err3
+			}
+			list.Posts[i].Caregiver = newUser2
 		}
-		post.Caregiver = newUser2
-		post.Applications = list2.Applications
+		list.Posts[i].Applications = list2.Applications
 	}
 	return list, nil
 }
@@ -192,7 +219,7 @@ func (db Database) UpdatePost(postId int, postData models.Post) (models.Post, er
 		}
 		return post, errTwo
 	}
-	err := db.Conn.Model(&post).Updates(models.Post{PostID: postId, Title: postData.Title, Tags: postData.Tags, CareDescription: postData.CareDescription, StartTime: postData.StartTime, EndTime: postData.EndTime}).Error
+	err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(models.Post{Title: postData.Title, Tags: postData.Tags, CareDescription: postData.CareDescription, StartTime: postData.StartTime, EndTime: postData.EndTime}).Error
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return post, ErrNoMatch
@@ -202,7 +229,7 @@ func (db Database) UpdatePost(postId int, postData models.Post) (models.Post, er
 	return post, nil
 }
 
-func (db Database) AddApplicationToPost(postId int, postData models.Post) (models.Post, error) {
+func (db Database) AddApplicationToPost(postId int, postData models.Post, appUserId uuid.UUID) (models.Post, error) {
 	post := models.Post{}
 	post2 := models.Post{}
 	errTwo := db.Conn.First(&post2, "post_id = ?", postId).Error
@@ -212,8 +239,8 @@ func (db Database) AddApplicationToPost(postId int, postData models.Post) (model
 		}
 		return post, errTwo
 	}
-	if postData.CaregiverID != post2.UserID {
-		err := db.Conn.Model(&post).Updates(models.Post{PostID: postId, CaregiverID: postData.CaregiverID}).Error
+	if appUserId != post2.UserID {
+		err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(models.Post{CaregiverID: postData.CaregiverID}).Error
 		if err != nil {
 			if err == sql.ErrNoRows {
 				return post, ErrNoMatch

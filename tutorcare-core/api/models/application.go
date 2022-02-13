@@ -5,17 +5,15 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type Application struct {
-	gorm.Model
-	UserID        uuid.UUID `sql:",fk" json:"user_id" gorm:"type:uuid;primaryKey;"`
-	ApplicationID int       `sql:",pk" json:"application_id"`
+	UserID        uuid.UUID `sql:",fk" json:"user_id" gorm:"type:uuid;"`
+	ApplicationID int       `sql:",pk" json:"application_id" gorm:"primaryKey;"`
 	PostID        int       `sql:",fk" json:"post_id"`
 	Message       string    `json:"message"`
 	Accepted      bool      `json:"accepted"`
-	DateCreated   string    `json:"date_created"  gorm:"autoCreateTime"`
+	DateCreated   string    `json:"date_created" gorm:"default:null"`
 	User          User      `json:"user" gorm:"-"`
 }
 

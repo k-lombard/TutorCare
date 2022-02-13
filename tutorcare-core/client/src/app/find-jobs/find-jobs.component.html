@@ -113,7 +113,7 @@
 <nav class="bg-white w-full shadow dark:bg-gray-800">
   <div class="container flex items-center justify-left p-6 mx-4 text-gray-600 capitalize dark:text-gray-300">
 
-    <button *ngIf="userType === 'careseeker' || userType === 'both'" (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
+    <button (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
       <span id="createspan">CREATE JOB POST</span>
     </button>
     <div id="dropdown" class="flex items-center justify-center mx-4">
