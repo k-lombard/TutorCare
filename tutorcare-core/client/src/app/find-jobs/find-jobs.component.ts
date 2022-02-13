@@ -152,6 +152,10 @@ export class FindJobsComponent implements OnInit {
       this.div1=!this.div1;
     }
 
+    editPost(post: Post) {
+      this.router.navigate(['/find-jobs/my-job-postings/' + post.post_id])
+    }
+
     ngOnInit() {
       this.store
       .pipe(
@@ -275,7 +279,7 @@ export class CreateJobDialog implements OnInit{
   constructor(
     public dialogRef: MatDialogRef<CreateJobDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder, private store: Store<AppState>, private findJobs: FindJobsService) {
+    private fb: FormBuilder, private store: Store<AppState>, private findJobs: FindJobsService, private router: Router) {
 
   }
 
@@ -355,6 +359,7 @@ export class CreateJobDialog implements OnInit{
 
     });
     this.dialogRef.close(this.form.value);
+    window.location.reload()
   }
 
   close() {

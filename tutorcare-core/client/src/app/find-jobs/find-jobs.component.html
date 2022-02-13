@@ -173,6 +173,7 @@
 
   <div id="row-bottom" class="flex items-center justify-between w-full mt-4">
     <button *ngIf="userId !== post.user_id" id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>
+    <button id="edit" class= "opacity-80" *ngIf="userId == post.user_id" (click)="editPost(post)" mat-raised-button color="accent"><span>View</span></button>
 
       <div class="h-full items-center">
           <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->
