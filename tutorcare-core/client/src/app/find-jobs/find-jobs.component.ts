@@ -152,6 +152,10 @@ export class FindJobsComponent implements OnInit {
       this.div1=!this.div1;
     }
 
+    editPost(post: Post) {
+      this.router.navigate(['/find-jobs/my-job-postings/' + post.post_id])
+    }
+
     ngOnInit() {
       this.store
       .pipe(
@@ -359,6 +363,7 @@ export class CreateJobDialog implements OnInit{
 
     });
     this.dialogRef.close(this.form.value);
+    window.location.reload()
   }
 
   close() {

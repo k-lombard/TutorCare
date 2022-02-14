@@ -40,13 +40,14 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 import { ApplyJobDialog } from '../find-jobs/apply-job/apply-job.component';
 import { ApplicationsReceivedComponent } from '../find-jobs/applications-received/applications-received.component';
 import { ActiveJobsComponent } from '../find-jobs/active-jobs/active-jobs.component';
-import { MyJobPostingsComponent } from '../find-jobs/my-job-postings/my-job-postings.component';
+import { EditJobDialog, MyJobPostingsComponent } from '../find-jobs/my-job-postings/my-job-postings.component';
 import { ChatroomsComponent } from '../find-jobs/chatrooms/chatrooms.component';
 import { VerifyComponent } from '../signup/verify/verify.component';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ProfileComponent } from '../profile/profile.component';
 import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component';
+import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
 
 
 @NgModule({
@@ -87,6 +88,7 @@ import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component
     declarations: [
         LoginComponent,
         NavbarComponent,
+        SidebarComponent,
         SignupComponent,
         HomeComponent,
         AccountComponent,
@@ -101,7 +103,8 @@ import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component
         ChatroomsComponent,
         VerifyComponent,
         ProfileComponent,
-        AppliedToComponent
+        AppliedToComponent,
+        EditJobDialog
     ],
     exports: [LoginComponent, NavbarComponent],
     entryComponents: [CreateJobDialog]

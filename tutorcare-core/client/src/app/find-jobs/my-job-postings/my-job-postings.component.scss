@@ -44,12 +44,16 @@ h3 {
 
 
 [id="stock"] {
-  border-radius: 50% !important;
+  /*border-radius: 50% !important;
   border: solid 1px #000 !important;
   width: 100px;
   height: 100px;
-  display: inline !important;
+  display: inline !important;*/
+  border-radius: 50% !important;
+  border: solid 1px #000 !important;
+  cursor: pointer;
 }
+
 [id="theapp"] {
   cursor: pointer;
   text-overflow: ellipsis !important;
@@ -91,12 +95,12 @@ bar-rating {
 }
 
 [id="rightcol"] {
-  width: calc(40% - 72px);
+  width: calc(100% - 72px);
 }
 
-[id="rightcol2"] {
+/*[id="rightcol2"] {
   width: calc(60% - 72px);
-}
+}*/
 
 .navbar {
   width: 100% !important;
@@ -138,6 +142,10 @@ bar-rating {
 
 [id="timeofjob"] {
   display: inline !important;
+}
+
+[id="bottomdiv"] {
+  overflow-x: hidden !important;
 }
 
 
