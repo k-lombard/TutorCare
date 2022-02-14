@@ -267,8 +267,9 @@ export class CreateJobDialog implements OnInit{
   ]
 
   _createJobObservable: Observable<Post> | undefined
-  minDate = new Date()
-  maxDate = new Date().setMonth(new Date().getMonth() + 3)
+  minDate1: Date = (new Date())
+  minDate2: Date = (new Date())
+  maxDate: Date = new Date()
   filter_options: FilterOption[] = [
     {value: 'tutoring-0', viewValue: 'Type: Tutoring'},
     {value: 'babysitting-1', viewValue: 'Type: Babysitting'},
@@ -279,8 +280,11 @@ export class CreateJobDialog implements OnInit{
   constructor(
     public dialogRef: MatDialogRef<CreateJobDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder, private store: Store<AppState>, private findJobs: FindJobsService, private router: Router) {
-
+    private fb: FormBuilder, private store: Store<AppState>, private findJobs: FindJobsService) {
+      this.minDate2.setDate((new Date()).getDate() + 1)
+      this.minDate1.setDate((new Date()).getDate() + 1)
+      this.minDate2.setHours((new Date()).getHours() + 1)
+      this.maxDate.setMonth((new Date()).getMonth() + 3)
   }
 
   onStartTimeChange() {

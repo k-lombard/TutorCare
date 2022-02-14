@@ -2,7 +2,6 @@ package handler
 
 import (
 	"fmt"
-	"hash/fnv"
 	"main/models"
 	"net/http"
 	"os"
@@ -175,15 +174,17 @@ func loginPage(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, "User has not verified their gatech email yet.")
 		return
 	}
-	h := fnv.New64a()
-	h.Write([]byte(userOut.UserID.String()))
-	summedUserID := h.Sum64()
-	ts, err := NewToken(summedUserID)
+	// h := fnv.New64a()
+	// h.Write([]byte(userOut.UserID.String()))
+	// summedUserID := h.Sum64()
+	// ts, err := NewToken(summedUserID)
+	ts, err := NewToken(userOut.UserID.String(), 20)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	saveErr := AuthFunc(summedUserID, ts)
+	// saveErr := AuthFunc(summedUserID, ts)
+	saveErr := AuthFunc(userOut.UserID.String(), ts)
 	if saveErr != nil {
 		c.JSON(http.StatusUnprocessableEntity, saveErr.Error())
 	}
@@ -197,9 +198,9 @@ func loginPage(c *gin.Context) {
 	c.JSON(http.StatusOK, userOut)
 }
 
-func NewToken(userid uint64) (*models.TokenDetails, error) {
+func NewToken(userid string, minutes uint64) (*models.TokenDetails, error) {
 	td := &models.TokenDetails{}
-	td.AtExpires = time.Now().Add(time.Minute * 20).Unix()
+	td.AtExpires = time.Now().Add(time.Minute * time.Duration(minutes)).Unix()
 	newUuid, err3 := uuid.NewV4()
 	if err3 != nil {
 		fmt.Println("Error creating v4 uuid: ", err3)
@@ -222,7 +223,6 @@ func NewToken(userid uint64) (*models.TokenDetails, error) {
 	accessTokenClaims["exp"] = td.AtExpires
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessTokenClaims)
 	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
-	fmt.Println(os.Getenv("ACCESS_SECRET"))
 	if err != nil {
 		return td, err
 	}
@@ -232,7 +232,6 @@ func NewToken(userid uint64) (*models.TokenDetails, error) {
 	refreshTokenClaims["exp"] = td.RtExpires
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshTokenClaims)
 	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))
-	fmt.Println(os.Getenv("REFRESH_SECRET"))
 	if err != nil {
 		return nil, err
 	}
@@ -240,18 +239,29 @@ func NewToken(userid uint64) (*models.TokenDetails, error) {
 	return td, nil
 }
 
-func AuthFunc(userid uint64, td *models.TokenDetails) error {
+func AuthFunc(userid string, td *models.TokenDetails) error {
 	at := time.Unix(td.AtExpires, 0)
 	rt := time.Unix(td.RtExpires, 0)
 	now := time.Now()
 
-	errAccess := Client.Set(Client.Context(), td.AccessUuid, strconv.Itoa(int(userid)), at.Sub(now)).Err()
+	errAccess := Client.Set(Client.Context(), td.AccessUuid, userid, at.Sub(now)).Err()
 	if errAccess != nil {
 		return errAccess
 	}
-	errRefresh := Client.Set(Client.Context(), td.RefreshUuid, strconv.Itoa(int(userid)), rt.Sub(now)).Err()
+	errRefresh := Client.Set(Client.Context(), td.RefreshUuid, userid, rt.Sub(now)).Err()
 	if errRefresh != nil {
 		return errRefresh
+	}
+	return nil
+}
+
+func AuthFuncWebsocket(userid string, td *models.TokenDetails) error {
+	at := time.Unix(td.AtExpires, 0)
+	now := time.Now()
+
+	errAccess := Client.Set(Client.Context(), td.AccessToken, userid, at.Sub(now)).Err()
+	if errAccess != nil {
+		return errAccess
 	}
 	return nil
 }

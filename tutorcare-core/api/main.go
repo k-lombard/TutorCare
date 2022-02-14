@@ -26,7 +26,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Could not set up database: %v", err)
 	}
-	defer database.Conn.Close()
 
 	httpHandler := handler.RouteHandler(database, m)
 	listener := httpHandler.Run(":8080")

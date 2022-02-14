@@ -2,8 +2,10 @@ package handler
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"main/database"
+	"main/models"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -87,13 +89,45 @@ func RouteHandler(db database.Database, m *melody.Melody) *gin.Engine {
 	messages := api.Group("/messages", TokenAuthMiddleware())
 	r.messages(messages)
 	api.GET("/:chatroomid/ws", func(c *gin.Context) {
+		// websocketToken := models.WebsocketToken{}
+		// if err := render.Bind(c.Request, &websocketToken); err != nil {
+		// 	c.JSON(http.StatusBadRequest, "Error: Bad request")
+		// 	return
+		// }
+		// useridOut, err := Client.Get(ctx, websocketToken.Token).Result()
+		// if err != nil {
+		// 	c.JSON(http.StatusForbidden, "Error: Forbidden; please re-login.")
+		// }
+		// if useridOut == websocketToken.UserID.String() {
 		m.HandleRequest(c.Writer, c.Request)
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		m.BroadcastFilter(msg, func(q *melody.Session) bool {
-			return q.Request.URL.Path == s.Request.URL.Path
-		})
+		val, found := s.Get("sent")
+		fmt.Println(found)
+		if val != nil && found == true {
+			m.BroadcastFilter(msg, func(q *melody.Session) bool {
+				return q.Request.URL.Path == s.Request.URL.Path
+			})
+		} else {
+			var tokenObj models.WebsocketToken
+			if err2 := json.Unmarshal(msg, &tokenObj); err2 != nil {
+				s.CloseWithMsg(melody.FormatCloseMessage(403, "Error: please re-login."))
+			}
+			fmt.Println(tokenObj.UserID, tokenObj.Token)
+			useridOut, err4 := Client.Get(ctx, tokenObj.Token).Result()
+			if err4 != nil {
+				s.CloseWithMsg(melody.FormatCloseMessage(403, "Error: please re-login."))
+			}
+			fmt.Println(useridOut)
+			if useridOut == tokenObj.UserID {
+				fmt.Println("success")
+				s.Set("sent", true)
+			} else {
+				fmt.Println("equality error")
+				s.CloseWithMsg(melody.FormatCloseMessage(403, "Error: please re-login."))
+			}
+		}
 	})
 	return r.router
 }

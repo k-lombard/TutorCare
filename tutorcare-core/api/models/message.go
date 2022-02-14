@@ -8,13 +8,13 @@ import (
 )
 
 type Message struct {
-	SenderID   uuid.UUID `sql:",fk" json:"sender_id"`
-	MessageID  int       `sql:",pk" json:"message_id"`
-	ChatroomID int       `sql:",fk" json:"chatroom_id"`
-	Message    string    `json:"message"`
-	IsDeleted  bool      `json:"is_deleted"`
-	Timestamp  string    `json:"timestamp"`
-	Sender     User      `json:"sender"`
+	SenderID   uuid.UUID `sql:",fk" json:"sender_id" gorm:"type:uuid;column:sender;default:null;"`
+	MessageID  int       `sql:",pk" json:"message_id" gorm:"primaryKey;default:null;"`
+	ChatroomID int       `sql:",fk" json:"chatroom_id" gorm:"default:null"`
+	Message    string    `json:"message" gorm:"default:null"`
+	IsDeleted  bool      `json:"is_deleted" gorm:"default:null"`
+	Timestamp  string    `json:"timestamp" gorm:"default:null"`
+	Sender     User      `json:"sender" gorm:"-"`
 }
 
 type MessageList struct {

@@ -42,7 +42,7 @@ export class AppliedToComponent implements OnInit {
 
     ngOnInit() {
       this.routeSub = this.route.params.subscribe(params => {
-        this.postId = params['id']
+        this.postId = parseInt(params['id'])
         console.log(this.postId)
       });
       this.store
@@ -55,6 +55,13 @@ export class AppliedToComponent implements OnInit {
       })
       this.appliedToService.getPostsAppliedTo(this.userId).subscribe(data => {
         this.posts = data
+        if (this.posts) {
+          for (let i = 0; i < this.posts?.length; i++) {
+            if (this.posts[i].post_id === this.postId) {
+              this.appliedToService.setSelectedIdx(i)
+            }
+          }
+        }
         var postsCopy: Post[] = []
         if (this.posts) {
           for (var post of this.posts) {

@@ -31,8 +31,8 @@ func addApplication(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
-	appOut, err := dbInstance.AddApplication(app)
-	if err != nil {
+	appOut, err2 := dbInstance.AddApplication(app)
+	if err2 != nil {
 		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
@@ -168,9 +168,10 @@ func acceptApplication(c *gin.Context) {
 		return
 	}
 	postData := models.Post{}
-	postData.PostID = app.PostID
+	postData.PostID = appData.PostID
 	postData.CaregiverID = app.UserID
-	post, err2 := dbInstance.AddApplicationToPost(app.PostID, postData)
+	postData.CaregiverID = appData.UserID
+	post, err2 := dbInstance.AddApplicationToPost(appData.PostID, postData, appData.UserID)
 	if err2 != nil {
 		if err2 == database.ErrNoMatch {
 			c.JSON(http.StatusNotFound, "Error: Resource not found")

@@ -39,7 +39,7 @@ export class ApplicationsReceivedComponent implements OnInit {
 
     ngOnInit() {
       this.routeSub = this.route.params.subscribe(params => {
-        this.appId = params['id']
+        this.appId = parseInt(params['id'])
         console.log(this.appId)
       });
       this.store
@@ -50,7 +50,7 @@ export class ApplicationsReceivedComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      if (this.appId) {
+      if (this.appId && (!this.posts || this.posts.length === 0) ) {
         this.appsRec.getApplicationById(this.appId).subscribe(application => {
           console.log(application)
           this.currApp = application
@@ -58,6 +58,13 @@ export class ApplicationsReceivedComponent implements OnInit {
       }
       this.appsRec.getPostsByUserId(this.userId).subscribe(data => {
         this.posts = data
+        for (let i = 0; i < this.posts.length; i++) {
+          for (let k = 0; k < this.posts[i].applications.length; k++) {
+            if (this.posts[i].applications[k].application_id === this.appId) {
+              this.appsRec.setSelectedIdx(k, this.posts[i].post_id)
+            }
+          }
+        }
         var postsCopy: Post[] = []
         if (this.posts) {
           for (var post of this.posts) {

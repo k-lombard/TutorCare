@@ -59,7 +59,7 @@
                                   <div class="pl-3 w-full">
                                       <a id="firstlast" [routerLink]="['/profile/', loc.user.user_id]" class="font-medium leading-5 text-gray-800 focus:outline-none text-xl dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline" tabindex="0">{{loc.user.first_name}} {{loc.user.last_name}}</a>
                                       <div class="prefs flex flex-row mt-2" *ngIf="loc.user?.preferences">
-                                        <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded cursor-pointer hover:bg-gray-500">{{pref}}</a>
+                                        <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded hover:bg-gray-500">{{pref}}</a>
                                       </div>
                                       <p class="leading-normal pt-2 text-gray-500 focus:outline-none text-sm" tabindex="0">{{ loc.user.bio }}</p>
                                   </div>
@@ -85,7 +85,7 @@
                                 <div class="pl-3 w-full">
                                     <p tabindex="0"  id="firstlast" class="leading-5 text-gray-800 focus:outline-none text-xl font-medium">{{loc.user.first_name}} {{loc.user.last_name}}</p>
                                     <div class="prefs flex flex-row mt-2" *ngIf="loc.user?.preferences">
-                                      <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded cursor-pointer hover:bg-gray-500">{{pref}}</a>
+                                      <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded hover:bg-gray-500">{{pref}}</a>
                                     </div>
                                     <p tabindex="0" class="pt-2 text-gray-500 focus:outline-none text-sm leading-normal">{{ loc.user.bio }}</p>
                                 </div>
@@ -113,7 +113,7 @@
                               <div class="pl-3 w-full">
                                   <p id="firstlast" class="leading-5 text-gray-800 focus:outline-none text-xl font-medium" tabindex="0">{{loc.user.first_name}} {{loc.user.last_name}}</p>
                                   <div class="prefs flex flex-row mt-2" *ngIf="loc.user?.preferences">
-                                    <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded cursor-pointer hover:bg-gray-500">{{pref}}</a>
+                                    <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded hover:bg-gray-500">{{pref}}</a>
                                   </div>
                                   <p class="text-gray-500 focus:outline-none text-sm leading-normal pt-2" tabindex="0">{{ loc.user.bio }}</p>
                               </div>

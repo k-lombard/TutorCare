@@ -8,14 +8,14 @@ import (
 )
 
 type Chatroom struct {
-	User1ID     uuid.UUID `sql:",fk" json:"user1_id"`
-	User2ID     uuid.UUID `sql:",fk" json:"user2_id"`
-	ChatroomID  int       `sql:",pk" json:"chatroom_id"`
-	IsDeleted   bool      `json:"is_deleted"`
-	DateCreated string    `json:"date_created"`
-	User1       User      `json:"user1"`
-	User2       User      `json:"user2"`
-	Messages    []Message `json:"messages"`
+	User1ID     uuid.UUID `sql:",fk" json:"user1_id" gorm:"type:uuid;column:user1;default:null;"`
+	User2ID     uuid.UUID `sql:",fk" json:"user2_id" gorm:"type:uuid;column:user2;default:null;"`
+	ChatroomID  int       `sql:",pk" json:"chatroom_id" gorm:"primaryKey;"`
+	IsDeleted   bool      `json:"is_deleted" gorm:"default:null"`
+	DateCreated string    `json:"date_created" gorm:"default:null"`
+	User1       User      `json:"user1" gorm:"-"`
+	User2       User      `json:"user2" gorm:"-"`
+	Messages    []Message `json:"messages" gorm:"-"`
 }
 
 type ChatroomList struct {

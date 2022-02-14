@@ -64,7 +64,7 @@ export class MyJobPostingsComponent implements OnInit {
 
     ngOnInit() {
       this.routeSub = this.route.params.subscribe(params => {
-        this.postId = params['id']
+        this.postId = parseInt(params['id'])
         console.log(this.postId)
       });
       this.store
@@ -75,7 +75,7 @@ export class MyJobPostingsComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      if (this.postId) {
+      if (this.postId && (!this.posts || this.posts.length === 0)) {
         this.myJobs.getPostById(this.postId).subscribe(post => {
           console.log(post)
           this.currPost = post
@@ -83,6 +83,13 @@ export class MyJobPostingsComponent implements OnInit {
       }
       this.myJobs.getPostsByUserId(this.userId).subscribe(data => {
         this.posts = data
+        if (this.posts) {
+          for (let i = 0; i < this.posts?.length; i++) {
+            if (this.posts[i].post_id === this.postId) {
+              this.myJobs.setSelectedIdx(i)
+            }
+          }
+        }
         var postsCopy: Post[] = []
         if (this.posts) {
           for (var post of this.posts) {
@@ -224,8 +231,9 @@ export class EditJobDialog implements OnInit{
   ]
 
   _editJobObservable: Observable<Post> | undefined
-  minDate = new Date()
-  maxDate = new Date().setMonth(new Date().getMonth() + 3)
+  minDate1 = new Date()
+  minDate2 = new Date()
+  maxDate = new Date()
   filter_options: FilterOption[] = [
     {value: 'tutoring-0', viewValue: 'Type: Tutoring'},
     {value: 'baby-sitting-1', viewValue: 'Type: Babysitting'},
@@ -238,6 +246,9 @@ export class EditJobDialog implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data,
     private fb: FormBuilder, private store: Store<AppState>, private myJobs: MyJobPostingsService) {
       this.post = this.data.post
+      this.minDate1.setHours((new Date()).getHours() + 1)
+      this.minDate2.setHours((new Date()).getHours() + 2)
+      this.maxDate.setMonth((new Date()).getMonth() + 3)
     }
 
   ngOnInit() {

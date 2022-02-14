@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, Input} from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../models/user.model';
@@ -12,6 +12,7 @@ import { getCurrUser, isLoggedIn } from '../../auth/auth.selectors';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
+  @Input() currPage: string;
   user: User | undefined;
   name = "Account"
   isLoggedIn: boolean = false
