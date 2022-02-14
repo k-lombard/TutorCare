@@ -231,8 +231,9 @@ export class EditJobDialog implements OnInit{
   ]
 
   _editJobObservable: Observable<Post> | undefined
-  minDate = new Date()
-  maxDate = new Date().setMonth(new Date().getMonth() + 3)
+  minDate1 = new Date()
+  minDate2 = new Date()
+  maxDate = new Date()
   filter_options: FilterOption[] = [
     {value: 'tutoring-0', viewValue: 'Type: Tutoring'},
     {value: 'baby-sitting-1', viewValue: 'Type: Babysitting'},
@@ -245,6 +246,9 @@ export class EditJobDialog implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data,
     private fb: FormBuilder, private store: Store<AppState>, private myJobs: MyJobPostingsService) {
       this.post = this.data.post
+      this.minDate1.setHours((new Date()).getHours() + 1)
+      this.minDate2.setHours((new Date()).getHours() + 2)
+      this.maxDate.setMonth((new Date()).getMonth() + 3)
     }
 
   ngOnInit() {

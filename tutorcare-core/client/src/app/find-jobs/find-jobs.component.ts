@@ -283,7 +283,7 @@ export class CreateJobDialog implements OnInit{
     private fb: FormBuilder, private store: Store<AppState>, private findJobs: FindJobsService) {
       this.minDate2.setDate((new Date()).getDate() + 1)
       this.minDate1.setDate((new Date()).getDate() + 1)
-      this.minDate2.setHours((new Date()).getHours() + 0.5)
+      this.minDate2.setHours((new Date()).getHours() + 1)
       this.maxDate.setMonth((new Date()).getMonth() + 3)
   }
 
