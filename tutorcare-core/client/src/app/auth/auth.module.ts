@@ -47,6 +47,7 @@ import { SimplebarAngularModule } from 'simplebar-angular';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ProfileComponent } from '../profile/profile.component';
 import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component';
+import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
 
 
 @NgModule({
@@ -87,6 +88,7 @@ import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component
     declarations: [
         LoginComponent,
         NavbarComponent,
+        SidebarComponent,
         SignupComponent,
         HomeComponent,
         AccountComponent,

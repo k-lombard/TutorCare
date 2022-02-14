@@ -1,0 +1,89 @@
+@use '@angular/material' as mat;
+@import "../../../custom-theme.scss";
+
+h1 {
+    color: mat.get-color-from-palette($tutorcare-core-accent, A100);
+    font-family: "Dosis" !important;
+    font-size: 36px !important;
+}
+
+.mat-h1 {
+    color: mat.get-color-from-palette($tutorcare-core-accent, A100);
+    font-family: "Dosis" !important;
+}
+
+.nightmode {
+  background: rgb(0,92,89);
+  background: linear-gradient(270deg, rgba(0,92,89,1) 0%, rgba(65,1,83,1) 100%);
+  border: 1 solid white !important;
+  border-color: white !important;
+  float: right !important;
+  right: 0;
+  position: absolute;
+}
+
+.mat-button {
+    margin: 30px;
+    font-size: 16px !important;
+    margin-bottom: 25px !important;
+}
+
+.example-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-color: mat.get-color-from-palette($tutorcare-core-accent);
+}
+
+.example-sidenav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  background-color: mat.get-color-from-palette($tutorcare-core-primary);
+}
+
+a {
+  color: black !important;
+}
+
+@media (min-width: 1361px) {
+  .mat-sidenav-container {
+    display: none;
+  }
+  [id="hamburger"] {
+    display: none;
+  }
+  [id="nightmode2"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+@media (max-width: 1360px) {
+  [id="nightmode2"] {
+    display: flex !important;
+    visibility: visible !important;
+  }
+  [id="menu-links"] {
+    display: none;
+  }
+  [id="hamburger"] {
+    float: right;
+    justify-self: center;
+    justify-content: center;
+    position: end;
+  }
+  .example-sidenav-content {
+    right: 0;
+    position: flex;
+  }
+}
+
+@media (max-width: 360px) {
+  [id="nightmode2"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+

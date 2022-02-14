@@ -23,6 +23,7 @@ export class ApplicationsReceivedComponent implements OnInit {
     public acceptActive = this.acceptSubject.asObservable();
     selectedValue: string | undefined
     userCategory: string = ""
+    menuVisible: boolean
     user!: User
     userId!: string
     posts!: Post[]
