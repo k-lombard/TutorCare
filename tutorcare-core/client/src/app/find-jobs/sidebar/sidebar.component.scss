@@ -44,7 +44,7 @@ h1 {
 }
 
 a {
-  color: black !important;
+  color: mat.get-color-from-palette($tutorcare-core-primary) !important;
 }
 
 @media (min-width: 1361px) {
