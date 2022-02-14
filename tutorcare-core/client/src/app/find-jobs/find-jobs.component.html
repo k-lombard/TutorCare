@@ -27,11 +27,11 @@
       </div>
     </mat-list-item>
   </mat-list> -->
-<div class="flex flex-row w-[100%]">
-  <div class="flex flex-col h-full w-64 h-screen px-4 py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
-    <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Find Jobs</h2>
+  <div class="flex flex-row w-[100%]">
+    <div class="flex flex-col h-full w-64 h-screen px-4 py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
+      <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Find Jobs</h2>
 
-    <div class="relative mt-6 mx-2">
+      <div class="relative mt-6 mx-2">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
             <svg (click)="searchPosts()" class="w-5 h-5 text-gray-400 hover:cursor-pointer hover:text-gray-800" viewBox="0 0 24 24" fill="none">
                 <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -39,37 +39,38 @@
         </span>
         <mat-icon mat-button *ngIf="filteredSearch" (click)="resetSearchFilter()" class="absolute inset-y-0 right-0 flex items-center mr-3 pt-4 justify-center text-black hover:cursor-pointer hover:text-gray-400">cancel</mat-icon>
         <input [(ngModel)]="search" (keyup.enter)="searchPosts()" type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
-    </div>
-
-    <sidebar></sidebar>
-</div>
-<div id="rightcol" class="flex flex-col">
-<nav class="bg-white w-full shadow dark:bg-gray-800">
-  <div class="container flex items-center justify-left p-6 mx-4 text-gray-600 capitalize dark:text-gray-300">
-
-    <button *ngIf="userType === 'careseeker' || userType === 'both'" (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
-      <span id="createspan">CREATE JOB POST</span>
-    </button>
-    <div id="dropdown" class="flex items-center justify-center mx-4">
-      <div class="relative inline-block">
-          <!-- Dropdown toggle button -->
-          <button (click)="div1Function()" class="relative z-10 block p-2 text-gray-700 bg-white border border-gray rounded-md dark:text-white focus:border-blue-500 focus:ring-opacity-40 dark:focus:ring-opacity-40 focus:ring-blue-300 dark:focus:ring-blue-400 focus:ring dark:bg-gray-800 focus:outline-none">
-              <svg id="arrow" class="w-5 h-5 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-              <span id="filter" class="font-medium mx-2">Filter By</span>
-          </button>
-
-          <!-- Dropdown menu -->
-          <div matInput *ngIf="div1" class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
-              <mat-option (click)="filter(option.value)" *ngFor="let option of filter_options" [value]="option.value" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> {{option.viewValue}} </mat-option>
-          </div>
       </div>
-      <button id="filterbutton" *ngIf="filtered" (click)="resetFilters()" mat-raised-button class="mx-8"><mat-icon>cancel</mat-icon> RESET FILTERS</button>
-  </div>
 
+      <sidebar></sidebar>
   </div>
-</nav>
+  
+  <div id="rightcol" class="flex flex-col">
+    <nav class="bg-white w-full shadow dark:bg-gray-800">
+    <div class="container flex items-center justify-left p-6 mx-4 text-gray-600 capitalize dark:text-gray-300">
+
+      <button *ngIf="userType === 'careseeker' || userType === 'both'" (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
+        <span id="createspan">CREATE JOB POST</span>
+      </button>
+      <div id="dropdown" class="flex items-center justify-center mx-4">
+        <div class="relative inline-block">
+            <!-- Dropdown toggle button -->
+            <button (click)="div1Function()" class="relative z-10 block p-2 text-gray-700 bg-white border border-gray rounded-md dark:text-white focus:border-blue-500 focus:ring-opacity-40 dark:focus:ring-opacity-40 focus:ring-blue-300 dark:focus:ring-blue-400 focus:ring dark:bg-gray-800 focus:outline-none">
+                <svg id="arrow" class="w-5 h-5 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                <span id="filter" class="font-medium mx-2">Filter By</span>
+            </button>
+
+            <!-- Dropdown menu -->
+            <div matInput *ngIf="div1" class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
+                <mat-option (click)="filter(option.value)" *ngFor="let option of filter_options" [value]="option.value" class="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> {{option.viewValue}} </mat-option>
+            </div>
+        </div>
+        <button id="filterbutton" *ngIf="filtered" (click)="resetFilters()" mat-raised-button class="mx-8"><mat-icon>cancel</mat-icon> RESET FILTERS</button>
+      </div>
+
+    </div>
+  </nav>
 <!-- <div id="listitem" *ngFor="let post of posts" class="flex justify-center items-center w-1/6 h-1/2 rounded-md shadow-lg mr-[2rem] my-8 px-4 bg-cover card bg-base-200" style="background:  #D6DBD4">
   <div class="card glass lg:card-side text-neutral-content">
     <div class=" pt-8">

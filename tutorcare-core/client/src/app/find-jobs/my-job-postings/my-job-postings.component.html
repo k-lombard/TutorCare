@@ -16,69 +16,105 @@
       <sidebar></sidebar>
     </div>
 
-    <div id="rightcol" [class.showmenu]="menuVisible" [class.hiddencol]="currPost" class="postcol flex flex-col border-r">
-      <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
-      <h2 class="text-gray-300 text-3xl italic justify-center items-center w-full flex text-center pt-[5%]" *ngIf="!posts">You haven't created any job posts.</h2>
-      <div class="grid grid-cols-1 gap-1" *ngIf="posts">
-          <ul *ngFor="let post of posts; let i = index" [class.selected]="getSelected() == i || currPost == post" (click)="setSelected(i)" (click)="setPost(post)" [routerLink]="['/find-jobs/my-job-postings', post.post_id]" id="jobcard" class="postcard menu px-8 py-4 my-4 mx-4 bg-white border-gray border hover:bg-gray-200 rounded-lg shadow-md dark:bg-gray-800">
-            <li class="menu-title">
-              <div class="flex flex-row items-stretch justify-between relative">
-                    <h2 class="text-2xl">{{post.title}}</h2>
-                    <div class="flex flex-col right-0 absolute" [style.display]="'block'">
-                      <h2 id="dateofjob" class="text-lg justify-self-end justify-end justify-items-end block">{{post.date_of_job}}</h2>
-                    </div>
-              </div>
-              <div class="flex flex-row relative">
-                <div>
-                  <h2 class="mt-4 text-lg font-light">Description:</h2>
-                  <p>{{post.care_description}}</p>
-                  <button (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
-                  <span id="createspan">EDIT JOB POST</span>
-                </button>
-                </div>
-                <p id="timeofjob" class="font-light justify-self-end justify-end justify-items-end inline right-0 absolute">Start: {{post.start_time}} | End: {{post.end_time}}</p>
-              </div>
-            </li>
-          </ul>
-      </div>
-    </div>
-    <div *ngIf="currPost" [class.visible]="currPost" id="rightcol2" class="flex flex-col bg-[#D6DBD4] shadow-lg shadow-[#D6DBD4] relative">
-      <div class="container px-6 py-8 mx-auto">
-        <div class="items-center lg:flex">
-            <div class="lg:w-1/2">
-              <div class="flex flex-row justify-between my-10">
-                <button (click)="back()" id="back" class="justify-center items-center backbutton text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
-                <div id="accepted" *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="statusbutton w-full text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs mx-8 px-4"><p class="justify-center items-center">ACCEPTED</p></div>
-                <div id="accepted" *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" class="statusbutton w-full text-white items-center justify-center rounded bg-[#2F96B4] shadow-lg shadow-[#54585A] text-xs mx-8 px-4"><p class="justify-center items-center">NO CAREGIVER ASSIGNED</p></div>
-              </div>
-                <div *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="flex flex-row justify-between">
-                  <div>
-                    <h2 class="pt-4 text-lg font-bold text-gray-800 dark:text-gray-100">Assigned Caregiver:</h2>
-                    <h2 class="pt-2 text-3xl font-bold text-gray-800 dark:text-gray-100 hover:underline hover:cursor-pointer hover:text-gray-600" [routerLink]="['/profile/', currPost.caregiver.user_id]">{{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}</h2>
-                  </div>
-                  <img id="stock" class="object-cover mx-12 rounded-full sm:block hover:opacity-50 hover:cursor-pointer" [routerLink]="['/profile/', currPost.caregiver.user_id]" src="../../assets/images/profile_picture.jpeg" alt="avatar">
-                </div>
-                <p class="text-gray-800 font-bold dark:text-gray-100 pt-8">Post ID: {{currPost.post_id}}</p>
-                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Title:</h3>
-                <textarea [maxLength]="50"  [(ngModel)]="currPost.title" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md shadow-md shadow-[#FFFFFF] bg-white rounded px-2"> {{currPost.title}}</textarea>
-                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Description:</h3>
-                <textarea [maxLength]="1023" [(ngModel)]="currPost.care_description" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.care_description}}</textarea>
-                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Tags:</h3>
-                <textarea [maxLength]="255" [(ngModel)]="currPost.tags" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.tags}}</textarea>
-                <h3 ng-pattern="/^[A-Za-z0-9]{3}\ [0-9]{1,2}\ [0-9]{4}$/"class="mt-4 text-lg text-gray-800 dark:text-gray-100">Date of Job:</h3>
-                <textarea [(ngModel)]="currPost.date_of_job" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.date_of_job}}</textarea>
-                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Start Time:</h3>
-                <textarea [(ngModel)]="currPost.start_time" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.start_time}}</textarea>
-                <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">End Time:</h3>
-                <textarea [(ngModel)]="currPost.end_time" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.end_time}}</textarea>
+    <div id="rightcol" class="flex flex-col">
+      <div class="grid desktop:grid-cols-4 gap-4 laptop:grid-cols-2 tablet:grid-cols-1">
+        <div id="postcard" *ngFor="let post of posts" class="px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
+          <div class="flex items-center justify-between">
+            <div [style.display]="'block'">
+              <span class="text-sm font-light text-gray-600 dark:text-gray-400">{{post.date_of_job}}</span>
+              <span [style.display]="'block'" class="text-sm font-light text-gray-600 dark:text-gray-400">Start: {{post.start_time}} | End: {{post.end_time}}</span>
             </div>
+              <a id="type" class="px-3 py-1 text-sm font-bold text-white transition-colors duration-200 transform bg-gray-600 rounded cursor-default">{{post.care_type}}</a>
+          </div>
+          <div class="mt-2 flex flex-col min-h-[10em]">
+              <a class="grow text-2xl font-bold text-gray-700 dark:text-white">{{post.title}}</a>
+              <p class="grow mt-2 text-gray-600 dark:text-gray-300">{{post.care_description}}</p>
+          </div>
+        
+          <div id="row-bottom" class="flex items-center justify-between w-full mt-4">
+            <!--<button *ngIf="userId !== post.user_id" id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>-->
+            <button id="apply" (click)="openDialog(post)" mat-raised-button color="accent"><span>EDIT</span></button>
+            <button id="apply" (click)="onDeleteClick(post.post_id)" mat-raised-button color="warn"><span>REMOVE</span></button>
+        
+              <div class="h-full items-center">
+                  <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->
+                  <div class="flex flex-row">
+                    <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
+                      <div *ngIf="post.tagList.length > 0" class="taglist flex flex-row">
+                        <div *ngFor="let tag of post.tagList" class="taglist mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-4 text-xs leading-3">{{ tag }}</div>
+                      </div>
+                      <img id="stock" class="object-cover w-10 h-10 mx-2 rounded-full sm:block hover:opacity-50" src="../../assets/images/profile_picture.jpeg" alt="avatar" [routerLink]="['/profile/', post.user_id]">
+                    </div>
+                </div>
+              </div>
+          </div>
         </div>
       </div>
-      <div class="flex flex-row justify-between">
-        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" id="delete" (click)="onDeleteClick(currPost.post_id)" class="w-1/4 mx-4 shadow shadow-[#BD362F] font-white my-2" mat-raised-button>DELETE</button>
-        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && editable" id="edit" (click)="onEditClick()" class="w-1/4 mx-4 shadow shadow-[#eaaa00] my-2" mat-raised-button color="accent">EDIT</button>
-        <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && !editable" id="save" (click)="onSaveClick()" class="w-1/4 mx-4 shadow shadow-[#eaaa00] my-2" mat-raised-button>SAVE</button>
-      </div>
+
+      <!--<div id="rightcol" [class.showmenu]="menuVisible" [class.hiddencol]="currPost" class="postcol flex flex-col border-r">
+        <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
+        <h2 class="text-gray-300 text-3xl italic justify-center items-center w-full flex text-center pt-[5%]" *ngIf="!posts">You haven't created any job posts.</h2>
+        <div class="grid grid-cols-1 gap-1" *ngIf="posts">
+            <ul *ngFor="let post of posts; let i = index" [class.selected]="getSelected() == i || currPost == post" (click)="setSelected(i)" (click)="setPost(post)" [routerLink]="['/find-jobs/my-job-postings', post.post_id]" id="jobcard" class="postcard menu px-8 py-4 my-4 mx-4 bg-white border-gray border hover:bg-gray-200 rounded-lg shadow-md dark:bg-gray-800">
+              <li class="menu-title">
+                <div class="flex flex-row items-stretch justify-between relative">
+                      <h2 class="text-2xl">{{post.title}}</h2>
+                      <div class="flex flex-col right-0 absolute" [style.display]="'block'">
+                        <h2 id="dateofjob" class="text-lg justify-self-end justify-end justify-items-end block">{{post.date_of_job}}</h2>
+                      </div>
+                </div>
+                <div class="flex flex-row relative">
+                  <div>
+                    <h2 class="mt-4 text-lg font-light">Description:</h2>
+                    <p>{{post.care_description}}</p>
+                    <button (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
+                    <span id="createspan">EDIT JOB POST</span>
+                  </button>
+                  </div>
+                  <p id="timeofjob" class="font-light justify-self-end justify-end justify-items-end inline right-0 absolute">Start: {{post.start_time}} | End: {{post.end_time}}</p>
+                </div>
+              </li>
+            </ul>
+        </div>
+      </div>-->
+      <!--<div *ngIf="currPost" [class.visible]="currPost" id="rightcol2" class="flex flex-col bg-[#D6DBD4] shadow-lg shadow-[#D6DBD4] relative">
+        <div class="container px-6 py-8 mx-auto">
+          <div class="items-center lg:flex">
+              <div class="lg:w-1/2">
+                <div class="flex flex-row justify-between my-10">
+                  <button (click)="back()" id="back" class="justify-center items-center backbutton text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
+                  <div id="accepted" *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="statusbutton w-full text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs mx-8 px-4"><p class="justify-center items-center">ACCEPTED</p></div>
+                  <div id="accepted" *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" class="statusbutton w-full text-white items-center justify-center rounded bg-[#2F96B4] shadow-lg shadow-[#54585A] text-xs mx-8 px-4"><p class="justify-center items-center">NO CAREGIVER ASSIGNED</p></div>
+                </div>
+                  <div *ngIf="currPost.caregiver_id != '00000000-0000-0000-0000-000000000000'" class="flex flex-row justify-between">
+                    <div>
+                      <h2 class="pt-4 text-lg font-bold text-gray-800 dark:text-gray-100">Assigned Caregiver:</h2>
+                      <h2 class="pt-2 text-3xl font-bold text-gray-800 dark:text-gray-100 hover:underline hover:cursor-pointer hover:text-gray-600" [routerLink]="['/profile/', currPost.caregiver.user_id]">{{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}</h2>
+                    </div>
+                    <img id="stock" class="object-cover mx-12 rounded-full sm:block hover:opacity-50 hover:cursor-pointer" [routerLink]="['/profile/', currPost.caregiver.user_id]" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+                  </div>
+                  <p class="text-gray-800 font-bold dark:text-gray-100 pt-8">Post ID: {{currPost.post_id}}</p>
+                  <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Title:</h3>
+                  <textarea [maxLength]="50"  [(ngModel)]="currPost.title" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md shadow-md shadow-[#FFFFFF] bg-white rounded px-2"> {{currPost.title}}</textarea>
+                  <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Description:</h3>
+                  <textarea [maxLength]="1023" [(ngModel)]="currPost.care_description" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.care_description}}</textarea>
+                  <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Tags:</h3>
+                  <textarea [maxLength]="255" [(ngModel)]="currPost.tags" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-1 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.tags}}</textarea>
+                  <h3 ng-pattern="/^[A-Za-z0-9]{3}\ [0-9]{1,2}\ [0-9]{4}$/"class="mt-4 text-lg text-gray-800 dark:text-gray-100">Date of Job:</h3>
+                  <textarea [(ngModel)]="currPost.date_of_job" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.date_of_job}}</textarea>
+                  <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Start Time:</h3>
+                  <textarea [(ngModel)]="currPost.start_time" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.start_time}}</textarea>
+                  <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">End Time:</h3>
+                  <textarea [(ngModel)]="currPost.end_time" [readonly]="editable" ng-readonly="editable" class="w-full pclass mt-4 text-black dark:text-gray-400 lg:max-w-md bg-white rounded shadow-md shadow-[#FFFFFF] px-2"> {{currPost.end_time}}</textarea>
+              </div>
+          </div>
+        </div>
+        <div class="flex flex-row justify-between">
+          <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000'" id="delete" (click)="onDeleteClick(currPost.post_id)" class="w-1/4 mx-4 shadow shadow-[#BD362F] font-white my-2" mat-raised-button>DELETE</button>
+          <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && editable" id="edit" (click)="onEditClick()" class="w-1/4 mx-4 shadow shadow-[#eaaa00] my-2" mat-raised-button color="accent">EDIT</button>
+          <button *ngIf="currPost.caregiver_id == '00000000-0000-0000-0000-000000000000' && !editable" id="save" (click)="onSaveClick()" class="w-1/4 mx-4 shadow shadow-[#eaaa00] my-2" mat-raised-button>SAVE</button>
+        </div>
+      </div>-->
     </div>
   </div>
 </div>

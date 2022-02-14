@@ -1,6 +1,6 @@
-<div>
-  <h2 mat-dialog-title>Edit Job Posting</h2>
-  <mat-dialog-content [formGroup]="form">
+ <mat-dialog-content [formGroup]="form">
+  <h2>Edit Job Posting</h2>
+ 
     <mat-card>
       <!-- <mat-form-field appearance="outline">
           <mat-label>Type of Care</mat-label>
@@ -63,7 +63,7 @@
         <mat-datepicker #matDatepicker></mat-datepicker>
       </mat-form-field> -->
 
-      <mat-card>
+      <mat-card class = "dateTime">
         <mat-form-field>
           <mat-label>Start Time</mat-label>
           <input matInput [ngxMatDatetimePicker]="picker1" placeholder="Choose a date" formControlName="start_time"
@@ -72,21 +72,22 @@
           <ngx-mat-datetime-picker #picker1>
           </ngx-mat-datetime-picker>
        </mat-form-field>
-      </mat-card>
-      <mat-card>
-       <mat-form-field>
-        <mat-label>End Time</mat-label>
-        <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="end_time"
-           [min]="minDate" [max]="maxDate">
-        <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #picker2>
-        </ngx-mat-datetime-picker>
+       </mat-card>
+
+    <mat-card class = "dateTime right">
+      <mat-form-field>
+      <mat-label>End Time</mat-label>
+      <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="end_time"
+          [min]="minDate" [max]="maxDate">
+      <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #picker2>
+      </ngx-mat-datetime-picker>
      </mat-form-field>
     </mat-card>
 
-  </mat-dialog-content>
+  
   <div class="flex flex-row justify-between w-full">
     <button class="mat-raised-button mat-primary create-button"(click)="close()"> <span>CLOSE</span></button>
-    <button id="create-button" class="shadow-md shadow-[#eaaa00] mat-raised-button mat-accent create-button"(click)="save()"><span>CREATE</span></button>
+    <button id="create-button" class="shadow-md shadow-[#eaaa00] mat-raised-button mat-accent create-button"(click)="save()"><span>SAVE CHANGES</span></button>
   </div>
-</div>
+</mat-dialog-content>

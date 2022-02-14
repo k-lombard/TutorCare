@@ -43,17 +43,18 @@ export class MyJobPostingsComponent implements OnInit {
 
     constructor(private router: Router, public dialog: MatDialog, private route: ActivatedRoute, private store: Store<AppState>, private toastr: ToastrService, private myJobs: MyJobPostingsService) {}
 
-    openDialog() {
+    openDialog(post: Post) {
         const dialogConfig = new MatDialogConfig();
-
+        console.log(post)
         dialogConfig.disableClose = false;
         // dialogConfig.autoFocus = true;
         dialogConfig.data = {
-          id: 1,
+          id: post.post_id,
           title: 'Edit Job Posting',
+          post: post
         };
         dialogConfig.height = "90%"
-        dialogConfig.width = "90%"
+        dialogConfig.width = "80%"
         const dialogRef = this.dialog.open(EditJobDialog, dialogConfig);
 
         dialogRef.afterClosed().subscribe(
@@ -227,24 +228,17 @@ export class EditJobDialog implements OnInit{
   maxDate = new Date().setMonth(new Date().getMonth() + 3)
   filter_options: FilterOption[] = [
     {value: 'tutoring-0', viewValue: 'Type: Tutoring'},
-    {value: 'babysitting-1', viewValue: 'Type: Babysitting'},
+    {value: 'baby-sitting-1', viewValue: 'Type: Babysitting'},
     {value: 'other-2', viewValue: 'Type: Other'}
 ];
 
 
   constructor(
     public dialogRef: MatDialogRef<EditJobDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data,
     private fb: FormBuilder, private store: Store<AppState>, private myJobs: MyJobPostingsService) {
-
-  }
-
-  onStartTimeChange() {
-    this.start_time = this.startTimeFC.value
-  }
-  onEndTimeChange() {
-    this.end_time = this.endTimeFC.value
-  }
+      this.post = this.data.post
+    }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -264,7 +258,27 @@ export class EditJobDialog implements OnInit{
             this.user = data
             this.userId = this.user.user_id || ""
     })
+    if (this.post.care_type == "tutoring") {
+      this.form.get('type_care').setValue("tutoring-0")
+    } else if (this.post.care_type == "babysitting") {
+      this.form.get('type_care').setValue("baby-sitting-1")
+    } else if (this.post.care_type == "other") {
+      this.form.get('type_care').setValue("other-2")
+    }
+    this.form.get('job_title').setValue(this.post.title)
+    this.form.get('job_desc').setValue(this.post.care_description)
+    this.selectedTags = this.post.tagList
+    this.form.get('job_tags').setValue(this.post.tagList)
+    this.form.get('start_time').setValue(this.post.start_time)
+    this.form.get('end_time').setValue(this.post.end_time)
+  }
 
+  onStartTimeChange() {
+    this.start_time = this.startTimeFC.value
+  }
+
+  onEndTimeChange() {
+    this.end_time = this.endTimeFC.value
   }
 
   save() {
@@ -277,7 +291,7 @@ export class EditJobDialog implements OnInit{
     } else if (this.form.value.type_care == "other-2") {
       this.type_care = "other"
     }
-    this.month = this.form.value.start_time.getMonth() + 1
+    this.month = this.form.get('start_time').value.getMonth() + 1
     this.day = this.form.value.start_time.getDate()
     console.log(this.day)
     if (this.month < 10) {
@@ -301,11 +315,12 @@ export class EditJobDialog implements OnInit{
     this.start_time = this.form.value.start_time.getHours() + ':' + this.form.value.start_time.getMinutes()
     this.end_time = this.form.value.end_time.getHours() + ':' + this.form.value.end_time.getMinutes()
     this.title = this.form.value.job_title
-    this.tags = this.tagString
+    this.tags = this.tagString/*
     console.log(this.start_time)
     console.log(this.form.value.start_time.getMonth())
-    console.log(this.form.value.start_time.getDay())
-    this._editJobObservable = this.myJobs.editJobPost(this.userId, this.post.application_id, this.title, this.tags, this.job_desc, this.date_of_job, this.start_time, this.end_time, this.type_care)
+    console.log(this.form.value.start_time.getDay())*/
+    console.log(this.userId, this.post.post_id, this.title, this.tags, this.job_desc, this.date_of_job, this.start_time, this.end_time, this.type_care)
+    this._editJobObservable = this.myJobs.editJobPost(this.userId, this.post.post_id, this.title, this.tags, this.job_desc, this.date_of_job, this.start_time, this.end_time, this.type_care)
 
     this._editJobObservable.subscribe((data2: Post) => {
         this.post = data2
