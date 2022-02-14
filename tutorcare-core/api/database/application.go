@@ -59,7 +59,7 @@ func (db Database) GetApplicationById(appId int) (models.Application, error) {
 
 func (db Database) GetApplicationsByPostId(postId int) (*models.ApplicationList, error) {
 	list := &models.ApplicationList{}
-	err := db.Conn.Order("application_id desc").Find(&list.Applications, "post_id = ?", postId).Error
+	err := db.Conn.Where("post_id = ?", postId).Order("application_id desc").Find(&list.Applications).Error
 	if err != nil {
 		return list, err
 	}
@@ -68,7 +68,7 @@ func (db Database) GetApplicationsByPostId(postId int) (*models.ApplicationList,
 
 func (db Database) GetApplicationsByUserId(userId uuid.UUID) (*models.ApplicationList, error) {
 	list := &models.ApplicationList{}
-	err := db.Conn.Order("application_id desc").Find(&list.Applications, "user_id = ?", userId).Error
+	err := db.Conn.Where("user_id = ?", userId).Order("application_id desc").Find(&list.Applications).Error
 	if err != nil {
 		return list, err
 	}

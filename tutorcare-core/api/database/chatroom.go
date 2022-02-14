@@ -98,7 +98,7 @@ func (db Database) GetChatroomByTwoUsers(userid1 uuid.UUID, userid2 uuid.UUID) (
 
 func (db Database) GetChatroomsByUserId(userId uuid.UUID) (*models.ChatroomList, error) {
 	list := &models.ChatroomList{}
-	err := db.Conn.Order("chatroom_id desc").Find(&list.Chatrooms, "user1 = ? OR user2 = ?", userId, userId).Error
+	err := db.Conn.Where("user1 = ? OR user2 = ?", userId, userId).Order("chatroom_id desc").Find(&list.Chatrooms).Error
 	if err != nil {
 		return list, err
 	}
