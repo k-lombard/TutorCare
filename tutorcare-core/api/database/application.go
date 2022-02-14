@@ -1,10 +1,12 @@
 package database
 
 import (
-	"database/sql"
+	"errors"
 	"fmt"
 
 	"main/models"
+
+	"gorm.io/gorm"
 
 	"github.com/google/uuid"
 )
@@ -38,10 +40,13 @@ func (db Database) AddApplication(app *models.Application) (models.Application, 
 
 func (db Database) GetApplicationById(appId int) (models.Application, error) {
 	appOut := models.Application{}
-	switch err := db.Conn.First(&appOut, "application_id = ?", appId).Error; err {
-	case sql.ErrNoRows:
-		return appOut, ErrNoMatch
-	default:
+	err := db.Conn.First(&appOut, "application_id = ?", appId).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return appOut, ErrNoMatch
+		}
+		return appOut, err
+	} else {
 		userOut := models.User{}
 		err3 := db.Conn.First(&userOut, "user_id = ?", appOut.UserID).Error
 		if err3 != nil {
@@ -73,12 +78,10 @@ func (db Database) GetApplicationsByUserId(userId uuid.UUID) (*models.Applicatio
 func (db Database) DeleteApplication(applicationId int) error {
 	err := db.Conn.Delete(&models.Application{}, applicationId).Error
 	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrNoMatch
-		default:
-			return err
 		}
+		return err
 	}
 	fmt.Println("Application deleted with ApplicationID: ", applicationId)
 	return nil
@@ -89,21 +92,21 @@ func (db Database) UpdateApplication(applicationId int, appData models.Applicati
 	app2 := models.Application{}
 	errTwo := db.Conn.First(&app2, "application_id = ?", applicationId).Error
 	if errTwo != nil {
-		if errTwo == sql.ErrNoRows {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
 			return app, ErrNoMatch
 		}
 		return app, errTwo
 	}
 	err := db.Conn.Model(&app).Where("application_id = ?", applicationId).Updates(models.Application{Message: appData.Message, Accepted: appData.Accepted}).Error
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return app, ErrNoMatch
 		}
 		return app, err
 	}
 	errOut := db.Conn.First(&app, "application_id = ?", applicationId).Error
 	if errOut != nil {
-		if errOut == sql.ErrNoRows {
+		if errors.Is(errOut, gorm.ErrRecordNotFound) {
 			return app, ErrNoMatch
 		}
 		return app, errOut

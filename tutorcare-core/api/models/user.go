@@ -8,22 +8,22 @@ import (
 )
 
 type User struct {
-	UserID       uuid.UUID `sql:",pk" json:"user_id" gorm:"type:uuid;primaryKey;"`
-	FirstName    string    `json:"first_name"`
-	LastName     string    `json:"last_name"`
-	Email        string    `json:"email"`
-	Password     string    `json:"password"`
-	DateJoined   string    `json:"date_joined" gorm:"-"`
-	Status       bool      `json:"status"`
-	UserCategory string    `json:"user_category"`
-	Experience   string    `json:"experience"`
-	Bio          string    `json:"bio"`
-	Preferences  string    `json:"preferences"`
-	Country      string    `json:"country"`
-	State        string    `json:"state"`
-	City         string    `json:"city"`
-	Zipcode      string    `json:"zipcode"`
-	Address      string    `json:"address"`
+	UserID       uuid.UUID `sql:",pk" json:"user_id" gorm:"type:uuid;primaryKey;default:null;"`
+	FirstName    string    `json:"first_name" gorm:"default:null"`
+	LastName     string    `json:"last_name" gorm:"default:null"`
+	Email        string    `json:"email" gorm:"default:null"`
+	Password     string    `json:"password" gorm:"default:null"`
+	DateJoined   string    `json:"date_joined" gorm:"default:null"`
+	Status       bool      `json:"status" gorm:"default:null"`
+	UserCategory string    `json:"user_category" gorm:"default:null"`
+	Experience   string    `json:"experience" gorm:"default:null"`
+	Bio          string    `json:"bio" gorm:"default:null"`
+	Preferences  string    `json:"preferences" gorm:"default:null"`
+	Country      string    `json:"country" gorm:"default:null"`
+	State        string    `json:"state" gorm:"default:null"`
+	City         string    `json:"city" gorm:"default:null"`
+	Zipcode      string    `json:"zipcode" gorm:"default:null"`
+	Address      string    `json:"address" gorm:"default:null"`
 	AccessToken  string    `json:"access_token" gorm:"-"`
 	RefreshToken string    `json:"refresh_token" gorm:"-"`
 }

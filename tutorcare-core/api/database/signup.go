@@ -1,18 +1,23 @@
 package database
 
 import (
-	"database/sql"
+	"errors"
 	"fmt"
 	"main/models"
+
+	"gorm.io/gorm"
 )
 
 func (db Database) Signup(user *models.User) bool {
 	userOut := models.User{}
-	switch err := db.Conn.Select("email").First(&userOut.Email, "email = ?", &user.Email).Error; err {
-	case sql.ErrNoRows:
-		fmt.Println("Email doesn't already exist; proceed with registration.")
-		return true
-	default:
+	err := db.Conn.Select("email").First(&userOut, "email = ?", user.Email).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			fmt.Println("Email doesn't already exist; proceed with registration.")
+			return true
+		}
+		return false
+	} else {
 		fmt.Println("Email already exists")
 		return false
 	}

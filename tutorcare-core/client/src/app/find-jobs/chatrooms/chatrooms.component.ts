@@ -76,13 +76,19 @@ export class ChatroomsComponent implements OnInit{
           console.log(this.chatToken)
       })
       this.routeSub = this.route.params.subscribe(params => {
-        this.chatroomId = params['id']
+        this.chatroomId = parseInt(params['id'])
         console.log(this.chatroomId)
       });
 
       this.chatroomService.getChatroomsByUserId(this.userId).subscribe(data => {
         this.chatrooms = data
-
+        if (this.chatrooms) {
+          for (let i = 0; i < this.chatrooms?.length; i++) {
+            if (this.chatrooms[i].chatroom_id === this.chatroomId) {
+              this.chatroomService.setSelectedIdx(i)
+            }
+          }
+        }
       })
       if (this.chatroomId) {
         this.chatroomService.getChatroomById(this.chatroomId).subscribe(chatroom => {
@@ -102,7 +108,7 @@ export class ChatroomsComponent implements OnInit{
         if (!this.messages || this.messages.length === 0) {
           this.chatroomService.getMessagesByChatroomId(this.chatroomId).subscribe(messages => {
             console.log(messages)
-            this.messages = messages.reverse()
+            this.messages = messages
           })
         }
         // this.scrollBottom()
@@ -154,18 +160,20 @@ export class ChatroomsComponent implements OnInit{
       const sender = this.user
       const id = this.userId
       const msg = this.messageForm.get('message').value
-      var msgStr: string  = JSON.stringify({
-        message: msg,
-        sender_id: id,
-        chatroom_id: this.chatroomId,
-        sender: { first_name: sender.first_name, last_name: sender.last_name },
-        timestamp: "Just now"
-      })
-      this.ws.send(msgStr)
-      this.chatroomService.sendMessage(this.messageForm.get('message').value, this.userId, this.currChatroom.chatroom_id).subscribe(message => {
-        console.log(message)
-        this.messageForm.reset()
-      })
+      if (msg.length > 0) {
+        var msgStr: string  = JSON.stringify({
+          message: msg,
+          sender_id: id,
+          chatroom_id: this.chatroomId,
+          sender: { first_name: sender.first_name, last_name: sender.last_name },
+          timestamp: "Just now"
+        })
+        this.ws.send(msgStr)
+        this.chatroomService.sendMessage(this.messageForm.get('message').value, this.userId, this.currChatroom.chatroom_id).subscribe(message => {
+          console.log(message)
+          this.messageForm.reset()
+        })
+      }
     }
 
     scrollBottom(){
@@ -192,7 +200,7 @@ export class ChatroomsComponent implements OnInit{
       }
       this.chatroomService.getMessagesByChatroomId(this.currChatroom.chatroom_id).subscribe(messages => {
         console.log(messages)
-        this.messages = messages.reverse()
+        this.messages = messages
       })
     }
 

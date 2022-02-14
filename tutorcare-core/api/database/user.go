@@ -1,10 +1,12 @@
 package database
 
 import (
-	"database/sql"
+	"errors"
 	"fmt"
 
 	"main/models"
+
+	"gorm.io/gorm"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -28,7 +30,7 @@ func (db Database) AddUser(user *models.User) (models.User, error) {
 	if err := db.Conn.Create(&user).Error; err != nil {
 		return userOut, err
 	}
-	if err2 := db.Conn.First(&userOut, "email = ?", user.Email).Error; err2 != nil {
+	if err2 := db.Conn.Where("email = ?", user.Email).First(&userOut).Error; err2 != nil {
 		return userOut, err2
 	}
 
@@ -38,22 +40,24 @@ func (db Database) AddUser(user *models.User) (models.User, error) {
 
 func (db Database) GetUserById(userId uuid.UUID) (models.User, error) {
 	user := models.User{}
-	switch err := db.Conn.First(&user, "user_id = ?", userId).Error; err {
-	case sql.ErrNoRows:
-		return user, ErrNoMatch
-	default:
-		return user, err
+	err := db.Conn.First(&user, "user_id = ?", userId).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return user, ErrNoMatch
+		} else {
+			return user, err
+		}
 	}
+	return user, nil
 }
 
 func (db Database) DeleteUser(userId uuid.UUID) error {
 	user := &models.User{}
 	err := db.Conn.Delete(&user, "user_id = ?", userId).Error
 	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrNoMatch
-		default:
+		} else {
 			return err
 		}
 	}
@@ -70,7 +74,7 @@ func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.Us
 	user2 := models.User{}
 	errTwo := db.Conn.First(&user2, "user_id = ?", userId).Error
 	if errTwo != nil {
-		if errTwo == sql.ErrNoRows {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
 		}
 		return user, errTwo
@@ -81,14 +85,14 @@ func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.Us
 	}
 	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{FirstName: userData.FirstName, LastName: userData.LastName, Email: userData.Email, Password: string(hash), UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences, City: userData.City, Zipcode: userData.Zipcode, Address: userData.Address}).Error
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
 		}
 		return user, err
 	}
 	errFinal := db.Conn.First(&user, "user_id = ?", userId).Error
 	if errFinal != nil {
-		if errFinal == sql.ErrNoRows {
+		if errors.Is(errFinal, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
 		}
 		return user, errFinal
@@ -101,21 +105,21 @@ func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.User) (mo
 	user2 := models.User{}
 	errTwo := db.Conn.First(&user2, "user_id = ?", userId).Error
 	if errTwo != nil {
-		if errTwo == sql.ErrNoRows {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
 		}
 		return user, errTwo
 	}
 	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{Email: userData.Email, UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences}).Error
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
 		}
 		return user, err
 	}
 	errFinal := db.Conn.First(&user, "user_id = ?", userId).Error
 	if errFinal != nil {
-		if errFinal == sql.ErrNoRows {
+		if errors.Is(errFinal, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
 		}
 		return user, errFinal

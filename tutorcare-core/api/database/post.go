@@ -1,10 +1,12 @@
 package database
 
 import (
-	"database/sql"
+	"errors"
 	"fmt"
 
 	"main/models"
+
+	"gorm.io/gorm"
 
 	"github.com/google/uuid"
 )
@@ -135,10 +137,13 @@ func (db Database) AddPost(post *models.Post) (models.Post, error) {
 
 func (db Database) GetPostById(postId int) (models.Post, error) {
 	postOut := models.Post{}
-	switch err := db.Conn.Where("post_id = ?", postId).Select("*").First(&postOut).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job", "TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time", "TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&postOut).Error; err {
-	case sql.ErrNoRows:
-		return postOut, ErrNoMatch
-	default:
+	err := db.Conn.Where("post_id = ?", postId).Select("*").First(&postOut).Select("TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job", "TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time", "TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&postOut).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return postOut, ErrNoMatch
+		}
+		return postOut, err
+	} else {
 		if postOut.CaregiverID.String() != "00000000-0000-0000-0000-000000000000" {
 			newUser := models.User{}
 			err4 := db.Conn.First(&newUser, "user_id = ?", postOut.CaregiverID).Error
@@ -195,14 +200,29 @@ func (db Database) GetPostsByUserId(userId uuid.UUID) (*models.PostList, error) 
 }
 
 func (db Database) DeletePost(postId int) error {
+	errApp := db.Conn.Where("post_id = ?", postId).Delete(models.Application{}).Error
+	if errApp != nil {
+		if errors.Is(errApp, gorm.ErrRecordNotFound) {
+			err := db.Conn.Delete(&models.Post{}, postId).Error
+			if err != nil {
+				if errors.Is(err, gorm.ErrRecordNotFound) {
+					return ErrNoMatch
+				} else {
+					return err
+				}
+			}
+			fmt.Println("Post deleted with PostID: ", postId)
+			return nil
+		} else {
+			return errApp
+		}
+	}
 	err := db.Conn.Delete(&models.Post{}, postId).Error
 	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrNoMatch
-		default:
-			return err
 		}
+		return err
 	}
 	fmt.Println("Post deleted with PostID: ", postId)
 	return nil
@@ -214,14 +234,14 @@ func (db Database) UpdatePost(postId int, postData models.Post) (models.Post, er
 	post2 := models.Post{}
 	errTwo := db.Conn.First(&post2, "post_id = ?", postId).Error
 	if errTwo != nil {
-		if errTwo == sql.ErrNoRows {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
 			return post, ErrNoMatch
 		}
 		return post, errTwo
 	}
-	err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(models.Post{Title: postData.Title, Tags: postData.Tags, CareDescription: postData.CareDescription, StartTime: postData.StartTime, EndTime: postData.EndTime}).Error
+	err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(models.Post{Title: postData.Title, Tags: postData.Tags, CareDescription: postData.CareDescription, DateOfJob: postData.DateOfJob, StartTime: postData.StartTime, EndTime: postData.EndTime}).Error
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return post, ErrNoMatch
 		}
 		return post, err
@@ -234,7 +254,7 @@ func (db Database) AddApplicationToPost(postId int, postData models.Post, appUse
 	post2 := models.Post{}
 	errTwo := db.Conn.First(&post2, "post_id = ?", postId).Error
 	if errTwo != nil {
-		if errTwo == sql.ErrNoRows {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
 			return post, ErrNoMatch
 		}
 		return post, errTwo
@@ -242,7 +262,7 @@ func (db Database) AddApplicationToPost(postId int, postData models.Post, appUse
 	if appUserId != post2.UserID {
 		err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(models.Post{CaregiverID: postData.CaregiverID}).Error
 		if err != nil {
-			if err == sql.ErrNoRows {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return post, ErrNoMatch
 			}
 			return post, err

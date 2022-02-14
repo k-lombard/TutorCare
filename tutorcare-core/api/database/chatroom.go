@@ -1,10 +1,12 @@
 package database
 
 import (
-	"database/sql"
+	"errors"
 	"fmt"
 
 	"main/models"
+
+	"gorm.io/gorm"
 
 	"github.com/google/uuid"
 )
@@ -21,29 +23,35 @@ func (db Database) GetAllChatrooms() (*models.ChatroomList, error) {
 func (db Database) AddChatroom(chatroom *models.Chatroom) (models.Chatroom, error) {
 	checkExists := models.Chatroom{}
 	chatroomOut := models.Chatroom{}
-	switch errLatest := db.Conn.Where("(user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?)", chatroom.User1ID, chatroom.User2ID, chatroom.User2ID, chatroom.User1ID).First(&checkExists).Error; errLatest {
-	case sql.ErrNoRows:
-		err := db.Conn.Create(&chatroom).Error
-		if err != nil {
-			return chatroomOut, err
+	errLatest := db.Conn.Where("(user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?)", chatroom.User1ID, chatroom.User2ID, chatroom.User2ID, chatroom.User1ID).First(&checkExists).Error
+	if errLatest != nil {
+		if errors.Is(errLatest, gorm.ErrRecordNotFound) {
+			err := db.Conn.Create(&chatroom).Error
+			if err != nil {
+				return chatroomOut, err
+			}
+			err2 := db.Conn.First(&chatroomOut, "user1 = ? AND user2 = ?", chatroom.User1ID, chatroom.User2ID).Error
+			if err2 != nil {
+				return chatroomOut, err2
+			}
+			fmt.Println("New chatroom record created with chatroomID and timestamp: ", chatroomOut.ChatroomID, chatroomOut.DateCreated)
+			return chatroomOut, nil
 		}
-		err2 := db.Conn.First(&chatroomOut, "user1 = ? AND user2 = ?", chatroom.User1ID, chatroom.User2ID).Error
-		if err2 != nil {
-			return chatroomOut, err2
-		}
-		fmt.Println("New chatroom record created with chatroomID and timestamp: ", chatroomOut.ChatroomID, chatroomOut.DateCreated)
-		return chatroomOut, nil
-	default:
+		return chatroomOut, errLatest
+	} else {
 		return chatroomOut, ErrDuplicate
 	}
 }
 
 func (db Database) GetChatroomById(chatroomId int) (models.Chatroom, error) {
 	chatroomOut := models.Chatroom{}
-	switch err := db.Conn.First(&chatroomOut, "chatroom_id = ?", chatroomId).Error; err {
-	case sql.ErrNoRows:
-		return chatroomOut, ErrNoMatch
-	default:
+	err := db.Conn.First(&chatroomOut, "chatroom_id = ?", chatroomId).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return chatroomOut, ErrNoMatch
+		}
+		return chatroomOut, err
+	} else {
 		userOut := models.User{}
 		err3 := db.Conn.First(&userOut, "user_id = ?", chatroomOut.User1ID).Error
 		if err3 != nil {
@@ -62,10 +70,16 @@ func (db Database) GetChatroomById(chatroomId int) (models.Chatroom, error) {
 
 func (db Database) GetChatroomByTwoUsers(userid1 uuid.UUID, userid2 uuid.UUID) (models.Chatroom, error) {
 	chatroomOut := models.Chatroom{}
-	switch err := db.Conn.Where("user1 = ? AND user2 = ? OR user1 = ? AND user2 = ?", userid1, userid2, userid2, userid1).First(&chatroomOut).Error; err {
-	case sql.ErrNoRows:
-		return chatroomOut, ErrNoMatch
-	default:
+	err := db.Conn.Where("user1 = ? AND user2 = ? OR user1 = ? AND user2 = ?", userid1, userid2, userid2, userid1).First(&chatroomOut).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return chatroomOut, ErrNoMatch
+		}
+		return chatroomOut, err
+	} else {
+		if err != nil {
+			return chatroomOut, err
+		}
 		userOut := models.User{}
 		err3 := db.Conn.First(&userOut, "user_id = ?", chatroomOut.User1ID).Error
 		if err3 != nil {
@@ -108,10 +122,9 @@ func (db Database) GetChatroomsByUserId(userId uuid.UUID) (*models.ChatroomList,
 func (db Database) DeleteChatroom(chatroomId int) error {
 	err := db.Conn.Delete(&models.Chatroom{}, chatroomId).Error
 	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrNoMatch
-		default:
+		} else {
 			return err
 		}
 	}

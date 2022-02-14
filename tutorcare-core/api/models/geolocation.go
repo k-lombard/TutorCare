@@ -8,11 +8,11 @@ import (
 )
 
 type GeolocationPosition struct {
-	UserID     uuid.UUID `sql:",fk" json:"user_id" gorm:"type:uuid;"`
-	LocationID int       `sql:",pk" json:"location_id" gorm:"primaryKey;"`
-	Accuracy   float64   `json:"accuracy"`
-	Latitude   float64   `json:"latitude"`
-	Longitude  float64   `json:"longitude"`
+	UserID     uuid.UUID `sql:",fk" json:"user_id" gorm:"type:uuid;default:null;"`
+	LocationID int       `sql:",pk" json:"location_id" gorm:"primaryKey;default:null;"`
+	Accuracy   float64   `json:"accuracy" gorm:"default:null"`
+	Latitude   float64   `json:"latitude" gorm:"default:null"`
+	Longitude  float64   `json:"longitude" gorm:"default:null"`
 	Timestamp  string    `json:"timestamp" gorm:"default:null"`
 	User       User      `json:"user" gorm:"-"`
 }

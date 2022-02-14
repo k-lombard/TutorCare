@@ -1,10 +1,12 @@
 package database
 
 import (
-	"database/sql"
+	"errors"
 	"fmt"
 
 	"main/models"
+
+	"gorm.io/gorm"
 
 	"github.com/google/uuid"
 )
@@ -40,21 +42,24 @@ func (db Database) GetCaregiverLocations() (*models.GeolocationPositionList, err
 
 func (db Database) AddGeolocationPosition(loc *models.GeolocationPosition) (models.GeolocationPosition, error) {
 	geolocationPositionTemp := models.GeolocationPosition{}
-	switch err := db.Conn.First(&geolocationPositionTemp, "user_id = ?", loc.UserID).Error; err {
-	case sql.ErrNoRows:
+	err := db.Conn.First(&geolocationPositionTemp, "user_id = ?", loc.UserID).Error
+	if err != nil {
 		geolocationPositionOut := models.GeolocationPosition{}
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 
-		errNew := db.Conn.Create(&loc).Error
-		if errNew != nil {
-			return geolocationPositionOut, errNew
+			errNew := db.Conn.Create(&loc).Error
+			if errNew != nil {
+				return geolocationPositionOut, errNew
+			}
+			err2 := db.Conn.First(&geolocationPositionOut, "user_id = ?", loc.UserID).Error
+			if err2 != nil {
+				return geolocationPositionOut, err2
+			}
+			fmt.Println("New geolocation_position record created with locationID and timestamp: ", geolocationPositionOut.LocationID, geolocationPositionOut.Timestamp)
+			return geolocationPositionOut, nil
 		}
-		err2 := db.Conn.First(&geolocationPositionOut, "user_id = ?", loc.UserID).Error
-		if err2 != nil {
-			return geolocationPositionOut, err2
-		}
-		fmt.Println("New geolocation_position record created with locationID and timestamp: ", geolocationPositionOut.LocationID, geolocationPositionOut.Timestamp)
-		return geolocationPositionOut, nil
-	default:
+		return geolocationPositionOut, err
+	} else {
 		geolocationPositionOut := models.GeolocationPosition{}
 
 		err := db.Conn.Model(&geolocationPositionOut).Where("user_id = ?", loc.UserID).Updates(models.GeolocationPosition{Accuracy: loc.Accuracy, Latitude: loc.Latitude, Longitude: loc.Longitude}).Error
@@ -68,11 +73,14 @@ func (db Database) AddGeolocationPosition(loc *models.GeolocationPosition) (mode
 
 func (db Database) GetGeolocationPositionByUserId(userId uuid.UUID) (models.GeolocationPosition, error) {
 	loc := models.GeolocationPosition{}
-	switch err := db.Conn.First(&loc, "user_id = ?", userId).Error; err {
-	case sql.ErrNoRows:
-		return loc, ErrNoMatch
-	default:
+	err := db.Conn.First(&loc, "user_id = ?", userId).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return loc, ErrNoMatch
+		}
 		return loc, err
+	} else {
+		return loc, nil
 	}
 }
 
@@ -80,12 +88,10 @@ func (db Database) DeleteGeolocationPosition(userId uuid.UUID) error {
 	out := models.GeolocationPosition{}
 	err := db.Conn.Where("user_id = ?", userId).Delete(&out).Error
 	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrNoMatch
-		default:
-			return err
 		}
+		return err
 	}
 	fmt.Println("GeolocationPosition deleted with userID: ", out.LocationID)
 	return nil
@@ -96,21 +102,21 @@ func (db Database) UpdateGeolocationPosition(userId uuid.UUID, locData models.Ge
 	loc2 := models.GeolocationPosition{}
 	errTwo := db.Conn.First(&loc2, "user_id = ?", userId).Error
 	if errTwo != nil {
-		if errTwo == sql.ErrNoRows {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
 			return loc, ErrNoMatch
 		}
 		return loc, errTwo
 	}
 	err := db.Conn.Model(&loc).Where("user_id = ?", userId).Updates(models.GeolocationPosition{Accuracy: locData.Accuracy, Latitude: locData.Latitude, Longitude: locData.Longitude}).Error
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return loc, ErrNoMatch
 		}
 		return loc, err
 	}
 	errOut := db.Conn.First(&loc, "user_id = ?", userId).Error
 	if errOut != nil {
-		if errOut == sql.ErrNoRows {
+		if errors.Is(errOut, gorm.ErrRecordNotFound) {
 			return loc, ErrNoMatch
 		}
 		return loc, errOut

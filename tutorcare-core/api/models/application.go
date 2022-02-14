@@ -8,11 +8,11 @@ import (
 )
 
 type Application struct {
-	UserID        uuid.UUID `sql:",fk" json:"user_id" gorm:"type:uuid;"`
-	ApplicationID int       `sql:",pk" json:"application_id" gorm:"primaryKey;"`
-	PostID        int       `sql:",fk" json:"post_id"`
-	Message       string    `json:"message"`
-	Accepted      bool      `json:"accepted"`
+	UserID        uuid.UUID `sql:",fk" json:"user_id" gorm:"type:uuid;default:null;"`
+	ApplicationID int       `sql:",pk" json:"application_id" gorm:"primaryKey;default:null;"`
+	PostID        int       `sql:",fk" json:"post_id" gorm:"default:null"`
+	Message       string    `json:"message" gorm:"default:null"`
+	Accepted      bool      `json:"accepted" gorm:"default:null"`
 	DateCreated   string    `json:"date_created" gorm:"default:null"`
 	User          User      `json:"user" gorm:"-"`
 }

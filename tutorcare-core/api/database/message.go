@@ -1,10 +1,12 @@
 package database
 
 import (
-	"database/sql"
+	"errors"
 	"fmt"
 
 	"main/models"
+
+	"gorm.io/gorm"
 
 	"github.com/google/uuid"
 )
@@ -16,7 +18,7 @@ func (db Database) GetAllMessages() (*models.MessageList, error) {
 		return list, err
 	}
 	for i, message := range list.Messages {
-		errThree := db.Conn.Where("message_id = ?", message.MessageID).Select("TO_CHAR(timestamp, 'FMDay, FMDD  HH12:MI') as timestamp").First(&list.Messages[i]).Error
+		errThree := db.Conn.Where("message_id = ?", message.MessageID).Select("TO_CHAR(timestamp at time zone 'US/Eastern', 'FMDay, FMDD  HH12:MI AM') as timestamp").First(&list.Messages[i]).Error
 		if errThree != nil {
 			return list, errThree
 		}
@@ -31,7 +33,7 @@ func (db Database) AddMessage(message *models.Message) (models.Message, error) {
 	if err != nil {
 		return messageOut, err
 	}
-	err2 := db.Conn.Where("message_id = ?", message.MessageID).Select("*", "TO_CHAR(timestamp, 'FMDay, FMDD  HH12:MI') as timestamp").First(&messageOut, &messageOut).Error
+	err2 := db.Conn.Where("message_id = ?", message.MessageID).Select("*", "TO_CHAR(timestamp at time zone 'US/Eastern', 'FMDay, FMDD  HH12:MI AM') as timestamp").First(&messageOut, &messageOut).Error
 	if err2 != nil {
 		return messageOut, err2
 	}
@@ -41,10 +43,13 @@ func (db Database) AddMessage(message *models.Message) (models.Message, error) {
 
 func (db Database) GetMessageById(messageId int) (models.Message, error) {
 	messageOut := models.Message{}
-	switch err2 := db.Conn.Select("*", "TO_CHAR(timestamp, 'FMDay, FMDD  HH12:MI') as timestamp").First(&messageOut, &messageOut).Error; err2 {
-	case sql.ErrNoRows:
-		return messageOut, ErrNoMatch
-	default:
+	err2 := db.Conn.Select("*", "TO_CHAR(timestamp at time zone 'US/Eastern', 'FMDay, FMDD  HH12:MI AM') as timestamp").First(&messageOut, &messageOut).Error
+	if err2 != nil {
+		if errors.Is(err2, gorm.ErrRecordNotFound) {
+			return messageOut, ErrNoMatch
+		}
+		return messageOut, err2
+	} else {
 		userOut := models.User{}
 		err3 := db.Conn.First(&userOut, "user_id = ?", messageOut.SenderID).Error
 		if err3 != nil {
@@ -62,7 +67,7 @@ func (db Database) GetMessagesByUserId(userId uuid.UUID) (*models.MessageList, e
 		return list, err
 	}
 	for i, message := range list.Messages {
-		errThree := db.Conn.Where("message_id = ?", list.Messages[i].MessageID).Select("TO_CHAR(timestamp, 'FMDay, FMDD  HH12:MI') as timestamp").First(&list.Messages[i].MessageID).Error
+		errThree := db.Conn.Where("message_id = ?", list.Messages[i].MessageID).Select("TO_CHAR(timestamp at time zone 'US/Eastern', 'FMDay, FMDD  HH12:MI AM') as timestamp").First(&list.Messages[i].MessageID).Error
 		if errThree != nil {
 			return list, errThree
 		}
@@ -78,12 +83,12 @@ func (db Database) GetMessagesByUserId(userId uuid.UUID) (*models.MessageList, e
 
 func (db Database) GetMessagesByChatroomId(chatroomId int) (*models.MessageList, error) {
 	list := &models.MessageList{}
-	err := db.Conn.Where("chatroom_id = ?", chatroomId).Order("message_id desc").Find(&list.Messages).Error
+	err := db.Conn.Where("chatroom_id = ?", chatroomId).Order("message_id asc").Find(&list.Messages).Error
 	if err != nil {
 		return list, err
 	}
 	for i, message := range list.Messages {
-		errThree := db.Conn.Where("message_id = ?", list.Messages[i].MessageID).Select("TO_CHAR(timestamp, 'FMDay, FMDD  HH12:MI') as timestamp").First(&list.Messages[i]).Error
+		errThree := db.Conn.Where("message_id = ?", message.MessageID).Select("TO_CHAR(timestamp at time zone 'US/Eastern', 'FMDay, FMDD  HH12:MI AM') as timestamp").First(&list.Messages[i]).Error
 		if errThree != nil {
 			return list, errThree
 		}
@@ -100,10 +105,9 @@ func (db Database) GetMessagesByChatroomId(chatroomId int) (*models.MessageList,
 func (db Database) DeleteMessage(messageId int) error {
 	err := db.Conn.Delete(&models.Message{}, messageId).Error
 	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrNoMatch
-		default:
+		} else {
 			return err
 		}
 	}
@@ -114,23 +118,23 @@ func (db Database) DeleteMessage(messageId int) error {
 func (db Database) UpdateMessage(messageId int, messageData models.Message) (models.Message, error) {
 	msg := models.Message{}
 	messageOut := models.Message{}
-	errTwo := db.Conn.Where("message_id = ?", messageId).Select("*", "TO_CHAR(timestamp, 'FMDay, FMDD  HH12:MI') as timestamp").First(&messageOut, &messageOut).Error
+	errTwo := db.Conn.Where("message_id = ?", messageId).Select("*", "TO_CHAR(timestamp at time zone 'US/Eastern', 'FMDay, FMDD  HH12:MI AM') as timestamp").First(&messageOut, &messageOut).Error
 	if errTwo != nil {
-		if errTwo == sql.ErrNoRows {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
 			return msg, ErrNoMatch
 		}
 		return msg, errTwo
 	}
 	err := db.Conn.Model(&msg).Where("message_id = ?", messageId).Updates(models.Message{Message: messageData.Message, IsDeleted: messageData.IsDeleted}).Error
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return msg, ErrNoMatch
 		}
 		return msg, err
 	}
 	errOut := db.Conn.First(&msg, "message_id = ?", messageId).Error
 	if errOut != nil {
-		if errOut == sql.ErrNoRows {
+		if errors.Is(errOut, gorm.ErrRecordNotFound) {
 			return msg, ErrNoMatch
 		}
 		return msg, errOut
