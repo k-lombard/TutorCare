@@ -28,7 +28,7 @@
     </mat-list-item>
   </mat-list> -->
   <div class="flex flex-row w-[100%]">
-    <div class="flex flex-col h-full w-64 h-screen px-4 py-8 bg-white dark:bg-gray-800 dark:border-gray-600">
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white dark:bg-gray-800 dark:border-gray-600">
       <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Find Jobs</h2>
 
       <div class="relative mt-6 mx-2">
@@ -44,7 +44,11 @@
       <sidebar currPage="find-jobs"></sidebar>
   </div>
 
-  <div id="rightcol" class="flex flex-col">
+  <div id="rightcol" class="flex flex-col" [class.showmenu]="menuVisible" [class.hiddencol]="mainCol">
+    <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none">
+      <mat-icon class="arrowback">arrow_back</mat-icon>
+      <span class = "pl-2 pt-.5 font-bold">Menu</span>
+    </button>
     <nav class="bg-white w-full dark:bg-gray-800">
     <div class="container flex items-center justify-left pt-6 text-gray-600 capitalize dark:text-gray-300">
 
@@ -110,9 +114,10 @@
   </div>
 
   <div id="row-bottom" class="flex items-center justify-between w-full mt-4">
+    <span></span>
     <button *ngIf="userId !== post.user_id" id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>
     <!--<button *ngIf="userId == post.user_id" id="apply" (click)="editPost(post)" mat-raised-button color="accent"><span>EDIT</span></button>-->
-    <div>
+    <div class="float-right">
       <div class="h-full items-center">
           <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->
           <div class="flex flex-row">

@@ -70,7 +70,13 @@ bar-rating {
 }
 
 [id="rightcol"] {
-  width: calc(100% - 72px) !important;
+  width: 100% !important;
+}
+
+[id="back"] {
+  background-color: #eaaa00;
+  @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
+  display: none;
 }
 
 .navbar {
@@ -108,4 +114,65 @@ bar-rating {
 }
 [id="bottomdiv"] {
   overflow-x: hidden !important;
+}
+
+[id="jobcard"] {
+  cursor: pointer;
+}
+
+@media (max-width: 1420px) {
+
+  .backbutton2 {
+    display: none;
+  }
+
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none;
+  }
+}
+
+@media (max-width: 750px) {
+  .backbutton {
+    display: flex;
+    padding-left: 10px;
+  }
+
+  .backbutton2 {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
+
+  .menu {
+    width: 100% !important;
+    min-width: 100% !important;
+    display: flex !important;
+    .sidenav {
+      width: 100% !important;
+      min-width: 100% !important;
+      display: flex !important;
+    }
+  }
+
+  .showmenu {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+  .sidenav {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none;
+  }
 }

@@ -33,6 +33,7 @@ export class MyJobPostingsComponent implements OnInit {
     posts!: Post[]
     currPost!: Post
     menuVisible: boolean
+    mainCol: boolean
     locs!: GeolocationPositionWithUser[]
     mySubscription!: any
     postId!: number
@@ -147,7 +148,7 @@ export class MyJobPostingsComponent implements OnInit {
     }
 
     backToMenu() {
-      this.currPost = undefined
+      this.mainCol = false
       this.menuVisible = true
     }
 
