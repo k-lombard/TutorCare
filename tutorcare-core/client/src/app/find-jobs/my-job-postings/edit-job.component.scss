@@ -3,6 +3,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
 .mat-dialog {
   background-color: #D6DBD4;
 }
@@ -17,6 +18,7 @@ mat-card {
 .mat-form-field {
   width: 100%;
 }
+
 h2 {
   margin: 10px;
   margin-left: 15px;
@@ -117,14 +119,5 @@ button {
 
 .mat-raised-button {
   @apply shadow-md shadow-[#eaaa00];
-}
-
-.dateTime {
-  width: 45%;
-  display: inline-block;
-}
-
-.right {
-  float: right;
 }
 

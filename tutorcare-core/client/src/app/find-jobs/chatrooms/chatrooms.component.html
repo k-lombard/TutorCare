@@ -1,7 +1,7 @@
 <div>
   <navbar></navbar>
   <div class="flex flex-row w-[100%]">
-    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white dark:bg-gray-800 dark:border-gray-600">
       <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Messages</h2>
 
       <div class="relative mt-6 mx-2">
@@ -16,7 +16,10 @@
       <sidebar currPage="messages"></sidebar>
     </div>
     <div id="rightcol" [class.showmenu]="menuVisible" [class.hiddencol]="currChatroom" class="flex flex-col border-r">
-      <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
+      <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none">
+        <mat-icon class="arrowback">arrow_back</mat-icon>
+        <span class = "pl-2 pt-.5 font-bold">Menu</span>
+      </button>
       <h2 class="text-gray-300 text-3xl italic justify-center items-center w-full flex text-center pt-[5%]" *ngIf="!chatrooms">You haven't messaged any users.</h2>
       <div class="grid grid-cols-1 gap-1 chatroomcol" *ngIf="chatrooms">
           <!-- <ul *ngFor="let chatroom of chatrooms; let i = index" [class.selected]="getSelected() == i || currChatroom == chatroom" (click)="setSelected(i)" (click)="setChatroom(chatroom)" [routerLink]="['/find-jobs/messages', chatroom.chatroom_id]" id="jobcard" class="menu px-8 py-4 my-4 mx-4 bg-white border-gray border hover:bg-gray-200 rounded-lg shadow-md dark:bg-gray-800">

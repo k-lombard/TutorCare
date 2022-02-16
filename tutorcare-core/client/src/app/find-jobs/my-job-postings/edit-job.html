@@ -62,8 +62,7 @@
         <mat-datepicker-toggle matSuffix [for]="matDatepicker"></mat-datepicker-toggle>
         <mat-datepicker #matDatepicker></mat-datepicker>
       </mat-form-field> -->
-
-      <mat-card class = "dateTime">
+      <mat-card>
         <mat-form-field>
           <mat-label>Start Time</mat-label>
           <input matInput [ngxMatDatetimePicker]="picker1" placeholder="Choose a date" formControlName="start_time"
@@ -74,17 +73,16 @@
        </mat-form-field>
        </mat-card>
 
-    <mat-card class = "dateTime right">
-      <mat-form-field>
-      <mat-label>End Time</mat-label>
-      <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="end_time"
-          [min]="minDate2" [max]="maxDate">
-      <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #picker2>
-      </ngx-mat-datetime-picker>
-     </mat-form-field>
-    </mat-card>
-
+      <mat-card>
+        <mat-form-field>
+          <mat-label>End Time</mat-label>
+          <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="end_time"
+              [min]="minDate2" [max]="maxDate">
+          <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker #picker2>
+          </ngx-mat-datetime-picker>
+        </mat-form-field>
+      </mat-card>
 
   <div class="flex flex-row justify-between w-full">
     <button class="mat-raised-button mat-primary create-button"(click)="close()"> <span>CLOSE</span></button>

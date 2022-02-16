@@ -33,6 +33,7 @@ export class MyJobPostingsComponent implements OnInit {
     posts!: Post[]
     currPost!: Post
     menuVisible: boolean
+    mainCol: boolean
     locs!: GeolocationPositionWithUser[]
     mySubscription!: any
     postId!: number
@@ -114,14 +115,15 @@ export class MyJobPostingsComponent implements OnInit {
       this.currPost = post
     }
 
-    onDeleteClick(post_id: number) {
-      this.myJobs.deletePost(post_id).subscribe(id => {
+    onDeleteClick(post: Post) {
+      if(window.confirm("Are you sure you want to delete the job post: " + post.title + "?")) 
+      this.myJobs.deletePost(post.post_id).subscribe(id => {
         console.log("deleted post with id: " + id)
         this.currPost = undefined
         this.toastr.success("Post successfully deleted with id: "+ id, "Success", {closeButton: true, timeOut: 5000, progressBar: true});
         var postsCopy: Post[] = []
         for (let pos of this.posts) {
-          if (pos.post_id != post_id) {
+          if (pos.post_id != post.post_id) {
             postsCopy.push(pos)
           }
         }
@@ -147,7 +149,7 @@ export class MyJobPostingsComponent implements OnInit {
     }
 
     backToMenu() {
-      this.currPost = undefined
+      this.mainCol = false
       this.menuVisible = true
     }
 
@@ -269,6 +271,7 @@ export class EditJobDialog implements OnInit{
             this.user = data
             this.userId = this.user.user_id || ""
     })
+
     if (this.post.care_type == "tutoring") {
       this.form.get('type_care').setValue("tutoring-0")
     } else if (this.post.care_type == "babysitting") {

@@ -46,6 +46,8 @@ export class FindJobsComponent implements OnInit {
         {value: 'other-2', viewValue: 'Type: Other'}
     ];
     displayedPosts: Post[] = []
+    menuVisible: boolean
+    mainCol: boolean
     constructor(private router: Router, private findJobs: FindJobsService, public dialog: MatDialog, private route: ActivatedRoute, private store: Store<AppState>, private toastr: ToastrService) {}
 
     openDialog() {
@@ -193,14 +195,18 @@ export class FindJobsComponent implements OnInit {
             this.displayedPosts = postsCopy
 
         })
-
     }
+
     onFindCareClick() {
         this.router.navigate(['/find-care'])
     }
 
-
+    backToMenu() {
+      this.mainCol = false
+      this.menuVisible = true
+    }
 }
+
 interface Tag {
   display: string,
   value: string
