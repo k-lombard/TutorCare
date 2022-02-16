@@ -323,6 +323,8 @@ export class CreateJobDialog implements OnInit{
 
   save() {
     console.log(this.form.value)
+    var start_time = new Date(this.form.value.start_time)
+    var end_time = new Date(this.form.value.end_time)
     this.job_desc = this.form.value.job_desc
     if (this.form.value.type_care == "tutoring-0") {
       this.type_care = "tutoring"
@@ -331,8 +333,8 @@ export class CreateJobDialog implements OnInit{
     } else if (this.form.value.type_care == "other-2") {
       this.type_care = "other"
     }
-    this.month = this.form.value.start_time.getMonth() + 1
-    this.day = this.form.value.start_time.getDate()
+    this.month = start_time.getMonth() + 1
+    this.day = start_time.getDate()
     console.log(this.day)
     if (this.month < 10) {
       this.monthStr = '0' + this.month
@@ -351,14 +353,14 @@ export class CreateJobDialog implements OnInit{
         this.tagString = this.tagString + " " + val.toLowerCase()
       }
     }
-    this.date_of_job = this.form.value.start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
-    this.start_time = this.form.value.start_time.getHours() + ':' + this.form.value.start_time.getMinutes()
-    this.end_time = this.form.value.end_time.getHours() + ':' + this.form.value.end_time.getMinutes()
+    this.date_of_job = start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
+    this.start_time = start_time.getHours() + ':' + start_time.getMinutes()
+    this.end_time = end_time.getHours() + ':' + end_time.getMinutes()
     this.title = this.form.value.job_title
     this.tags = this.tagString
     console.log(this.start_time)
-    console.log(this.form.value.start_time.getMonth())
-    console.log(this.form.value.start_time.getDay())
+    console.log(start_time.getMonth())
+    console.log(start_time.getDay())
     this._createJobObservable = this.findJobs.createPost(this.userId, this.title, this.job_desc, this.tags, this.type_care, this.date_of_job, this.start_time, this.end_time)
 
     this._createJobObservable.subscribe((data2: Post) => {

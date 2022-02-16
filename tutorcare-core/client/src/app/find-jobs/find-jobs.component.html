@@ -28,7 +28,7 @@
     </mat-list-item>
   </mat-list> -->
   <div class="flex flex-row w-[100%]">
-    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white dark:bg-gray-800 dark:border-gray-600">
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-4 shadow shadow-2xl bg-white dark:bg-gray-800 dark:border-gray-600 z-100">
       <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Find Jobs</h2>
 
       <div class="relative mt-6 mx-2">
@@ -41,7 +41,7 @@
         <input [(ngModel)]="search" (keyup.enter)="searchPosts()" type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
       </div>
 
-      <sidebar currPage="find-jobs"></sidebar>
+      <sidebar currPage="find-jobs" class="flex h-full mb-0 pb-0"></sidebar>
   </div>
 
   <div id="rightcol" class="flex flex-col" [class.showmenu]="menuVisible" [class.hiddencol]="mainCol">
@@ -52,7 +52,7 @@
     <nav class="bg-white w-full dark:bg-gray-800">
     <div class="container flex items-center justify-left pt-6 text-gray-600 capitalize dark:text-gray-300">
 
-      <button *ngIf="userType === 'careseeker' || userType === 'both'" (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
+      <button (click)="openDialog()" id="createclick" color="accent" mat-raised-button href="#" class="mx-4 sm:mx-6">
         <span id="createspan">CREATE JOB POST</span>
       </button>
       <div id="dropdown" class="flex items-center justify-center mx-4">
@@ -113,10 +113,8 @@
       <p class="grow mt-2 text-gray-600 dark:text-gray-300">{{post.care_description}}</p>
   </div>
 
-  <div id="row-bottom" class="flex items-center justify-between w-full mt-4">
-    <span></span>
-    <button *ngIf="userId !== post.user_id" id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>
-    <!--<button *ngIf="userId == post.user_id" id="apply" (click)="editPost(post)" mat-raised-button color="accent"><span>EDIT</span></button>-->
+  <div id="row-bottom" class="flex flex-row items-center justify-between w-full mt-4">
+    <button class="float-left justify-start items-start" *ngIf="userId !== post.user_id" id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>
     <div class="float-right">
       <div class="h-full items-center">
           <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->

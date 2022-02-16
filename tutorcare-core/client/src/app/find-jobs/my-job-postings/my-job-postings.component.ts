@@ -116,7 +116,7 @@ export class MyJobPostingsComponent implements OnInit {
     }
 
     onDeleteClick(post: Post) {
-      if(window.confirm("Are you sure you want to delete the job post: " + post.title + "?")) 
+      if(window.confirm("Are you sure you want to delete the job post: " + post.title + "?"))
       this.myJobs.deletePost(post.post_id).subscribe(id => {
         console.log("deleted post with id: " + id)
         this.currPost = undefined
@@ -296,6 +296,8 @@ export class EditJobDialog implements OnInit{
   }
 
   save() {
+    var start_time = new Date(this.form.get('start_time').value)
+    var end_time = new Date(this.form.get('end_time').value)
     console.log(this.form.value)
     this.job_desc = this.form.value.job_desc
     if (this.form.value.type_care == "tutoring-0") {
@@ -305,8 +307,8 @@ export class EditJobDialog implements OnInit{
     } else if (this.form.value.type_care == "other-2") {
       this.type_care = "other"
     }
-    this.month = this.form.get('start_time').value.getMonth() + 1
-    this.day = this.form.value.start_time.getDate()
+    this.month = start_time.getMonth() + 1
+    this.day = start_time.getDate()
     console.log(this.day)
     if (this.month < 10) {
       this.monthStr = '0' + this.month
@@ -325,9 +327,9 @@ export class EditJobDialog implements OnInit{
         this.tagString = this.tagString + " " + val.toLowerCase()
       }
     }
-    this.date_of_job = this.form.value.start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
-    this.start_time = this.form.value.start_time.getHours() + ':' + this.form.value.start_time.getMinutes()
-    this.end_time = this.form.value.end_time.getHours() + ':' + this.form.value.end_time.getMinutes()
+    this.date_of_job = start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
+    this.start_time = start_time.getHours() + ':' + start_time.getMinutes()
+    this.end_time = end_time.getHours() + ':' + end_time.getMinutes()
     this.title = this.form.value.job_title
     this.tags = this.tagString/*
     console.log(this.start_time)

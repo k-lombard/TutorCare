@@ -1,7 +1,7 @@
 <div>
   <navbar></navbar>
   <div class="flex flex-row w-[100%]">
-    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white dark:bg-gray-800 dark:border-gray-600">
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white dark:bg-gray-800 dark:border-gray-600 shadow shadow-2xl">
       <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">My Jobs</h2>
 
       <div class="relative mt-6 mx-2">
@@ -21,6 +21,7 @@
         <mat-icon class="arrowback">arrow_back</mat-icon>
         <span class = "pl-2 pt-.5 font-bold">Menu</span>
       </button>
+      <h2 class="text-gray-300 text-3xl italic justify-center items-center w-full flex text-center pt-[5%]" *ngIf="!posts || posts.length === 0">You haven't created any job posts.</h2>
       <div class="grid desktop:grid-cols-4 gap-4 laptop:grid-cols-2 tablet:grid-cols-1">
         <div id="postcard" *ngFor="let post of posts" class="px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
           <div class="flex items-center justify-between">
@@ -31,7 +32,7 @@
               <!--<a id="type" class="px-3 py-1 text-sm font-bold text-white transition-colors duration-200 transform bg-gray-600 rounded cursor-default">{{post.care_type}}</a>-->
               <div>
                 <mat-icon (click)="openDialog(post)" class="transition-colors duration-200 transform rounded cursor-pointer">edit</mat-icon>
-                
+
                 <mat-icon (click)="onDeleteClick(post)" class="transition-colors duration-200 transform rounded cursor-pointer ml-5">delete</mat-icon>
               </div>
             </div>

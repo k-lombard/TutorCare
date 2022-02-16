@@ -68,7 +68,7 @@
           <input matInput [ngxMatDatetimePicker]="picker1" placeholder="Choose a date" formControlName="start_time"
              [min]="minDate1" [max]="maxDate">
           <mat-datepicker-toggle matSuffix [for]="$any(picker1)"></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker #picker1>
+          <ngx-mat-datetime-picker [defaultTime]="[12,0,0]" [showSeconds]="false" [stepMinute]="15" [enableMeridian]="true" #picker1>
           </ngx-mat-datetime-picker>
        </mat-form-field>
        </mat-card>
@@ -79,7 +79,7 @@
           <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="end_time"
               [min]="minDate2" [max]="maxDate">
           <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker #picker2>
+          <ngx-mat-datetime-picker [defaultTime]="[12,0,0]" [showSeconds]="false" [stepMinute]="15" [enableMeridian]="true" #picker2>
           </ngx-mat-datetime-picker>
         </mat-form-field>
       </mat-card>

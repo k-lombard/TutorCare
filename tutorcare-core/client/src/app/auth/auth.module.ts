@@ -33,7 +33,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { CreateJobDialog, FindJobsComponent } from '../find-jobs/find-jobs.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
@@ -48,7 +48,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ProfileComponent } from '../profile/profile.component';
 import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component';
 import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
-
 
 @NgModule({
     imports: [
@@ -106,7 +105,7 @@ import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
         AppliedToComponent,
         EditJobDialog
     ],
-    exports: [LoginComponent, NavbarComponent],
+    exports: [LoginComponent, NavbarComponent, ],
     entryComponents: [CreateJobDialog]
 })
 export class AuthModule {
