@@ -1,7 +1,7 @@
 <div>
   <navbar></navbar>
   <div class="flex flex-row w-[100%]">
-    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white dark:bg-gray-800 dark:border-gray-600 shadow shadow-2xl">
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-4 shadow shadow-2xl bg-white dark:bg-gray-800 dark:border-gray-600 ">
       <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">My Jobs</h2>
 
       <div class="relative mt-6 mx-2">
@@ -13,7 +13,7 @@
 
         <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
       </div>
-      <sidebar currPage="my-job-postings"></sidebar>
+      <sidebar currPage="my-job-postings" class="flex h-full mb-0 pb-0"></sidebar>
     </div>
 
     <div id="rightcol" class="flex flex-col" [class.showmenu]="menuVisible" [class.hiddencol]="mainCol">
