@@ -18,8 +18,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder":"@angular-builders/custom-webpack:browser",
           "options": {
+            "customWebpackConfig": {
+              "path": "./custom-webpack.config.js"
+            },
             "preserveSymlinks": true,
             "baseHref": "/",
             "outputPath": "dist/tutorcare-core",
@@ -40,6 +43,9 @@
           },
           "configurations": {
             "production": {
+              "buildOptimizer": true,
+              "optimization": true,
+              "aot": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -61,8 +67,9 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
-              "optimization": false,
+              "buildOptimizer": true,
+              "optimization": true,
+              "aot": true,
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,

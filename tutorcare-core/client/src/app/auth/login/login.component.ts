@@ -1,15 +1,12 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { tap, map } from 'rxjs/operators';
-import { noop } from 'rxjs';
 import { Login } from '../auth.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/reducers';
-import Swal from 'sweetalert2'
 import { User } from 'src/app/models/user.model';
 import { _getOptionScrollPosition } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';
