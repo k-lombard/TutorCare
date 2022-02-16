@@ -50,9 +50,8 @@
             <div class="custom-a">
                 <mat-icon>message</mat-icon>
             </div> -->
-                <div *ngIf="locs" tabindex="0" class="items-center justify-center mx-[5%] focus:outline-none py-8 w-[90%] h-full h-[20rem]" aria-label="group of caregivers">
-                  <div class="desktop:flex items-center justify-center w-full h-full">
-                      <div *ngFor="let loc of locs.slice(start_index, start_index+3)" id="outerdiv" tabindex="0" aria-label="caregiver" class="mb-7 p-6 shadow-lg shadow-[#D6DBD4] rounded h-[18rem] bg-[#D6DBD4] my-4 focus:outline-none desktop:w-2/12 desktop:mr-7 desktop:mb-0">
+                <div class="grid desktop:grid-cols-4 gap-4 laptop:grid-cols-2 tablet:grid-cols-1">
+                      <div *ngFor="let loc of locs" id="outerdiv" tabindex="0" aria-label="caregiver" class="px-8 py-4 my-4 mx-4 shadow-lg shadow-[#D6DBD4] rounded h-[18rem] bg-[#D6DBD4] my-4 focus:outline-none desktop:w-2/12 desktop:mr-7 desktop:mb-0">
                           <div class="flex items-center border-b border-gray-200 pb-6">
                             <img id="stock" src="../../assets/images/profile_picture.jpeg" [routerLink]="['/profile/', loc.user.user_id]" class="shadow-sm shadow-black w-12 h-12 rounded-full hover:opacity-50 hover:cursor-pointer" />
                               <div class="flex items-start justify-between w-full">
@@ -78,61 +77,6 @@
                               </div>
                           </div>
                       </div>
-                      <div *ngFor="let loc of locs.slice(start_index+3, start_index+4)" id="outerdiv" aria-label="caregiver" tabindex="0" class="shadow-lg shadow-[#D6DBD4] rounded h-[18rem] my-4 focus:outline-none desktop:w-2/12 desktop:mr-7 desktop:mb-0 mb-7 bg-[#D6DBD4] p-6">
-                        <div class="flex items-center border-b border-gray-200 pb-6" >
-                          <img id="stock" src="../../assets/images/profile_picture.jpeg" class="w-12 h-12 rounded-full shadow-md shadow-black" />
-                            <div class="flex items-start justify-between w-full">
-                                <div class="pl-3 w-full">
-                                    <p tabindex="0"  id="firstlast" class="leading-5 text-gray-800 focus:outline-none text-xl font-medium">{{loc.user.first_name}} {{loc.user.last_name}}</p>
-                                    <div class="prefs flex flex-row mt-2" *ngIf="loc.user?.preferences">
-                                      <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded hover:bg-gray-500">{{pref}}</a>
-                                    </div>
-                                    <p tabindex="0" class="pt-2 text-gray-500 focus:outline-none text-sm leading-normal">{{ loc.user.bio }}</p>
-                                </div>
-                                <button mat-raised-button (click)="onMessageClick(loc.user.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00]">
-                                  <mat-icon>message</mat-icon>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="px-2">
-                            <p class="focus:outline-none text-sm leading-5 py-4 text-gray-600" tabindex="0">{{ loc.user.experience }}</p>
-                            <div class="flex flex-row">
-                              <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
-                                <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 text-xs leading-3"><mat-icon>check_circle</mat-icon></div>
-                                <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 ml-3 text-xs leading-3"><mat-icon>local_fire_department</mat-icon></div>
-                              </div>
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-                <div class="desktop:flex items-center justify-center w-full h-full">
-                  <div *ngFor="let loc of locs.slice(start_index+4, start_index+8)" id="outerdiv" aria-label="caregiver" tabindex="0" class="p-6 shadow-lg shadow-[#D6DBD4] rounded h-[18rem] bg-[#D6DBD4] my-4 focus:outline-none desktop:w-2/12 desktop:mr-7 desktop:mb-0 mb-7">
-                      <div class="flex items-center border-b border-gray-200 pb-6">
-                        <img id="stock" src="../../assets/images/profile_picture.jpeg" class="w-12 h-12 rounded-full shadow-md shadow-black" />
-                          <div class="flex items-start justify-between w-full">
-                              <div class="pl-3 w-full">
-                                  <p id="firstlast" class="leading-5 text-gray-800 focus:outline-none text-xl font-medium" tabindex="0">{{loc.user.first_name}} {{loc.user.last_name}}</p>
-                                  <div class="prefs flex flex-row mt-2" *ngIf="loc.user?.preferences">
-                                    <a id="type" *ngFor="let pref of loc.user.preferences.split(' ')" class="flex justify-end items-end mb-[2%] float-right py-1 px-3 text-sm font-bold text-white transition-colors duration-200 transform bg-[#eaaa00] rounded hover:bg-gray-500">{{pref}}</a>
-                                  </div>
-                                  <p class="text-gray-500 focus:outline-none text-sm leading-normal pt-2" tabindex="0">{{ loc.user.bio }}</p>
-                              </div>
-                              <button mat-raised-button (click)="onMessageClick(loc.user.user_id)" id="messagebutton" color="accent" aria-label="message" class="shadow-lg shadow-[#eaaa00]">
-                                <mat-icon>message</mat-icon>
-                              </button>
-                          </div>
-                      </div>
-                      <div class="px-2">
-                        <p class="py-4 text-gray-600 focus:outline-none text-sm leading-5" tabindex="0">{{ loc.user.experience }}</p>
-                        <div class="flex flex-row">
-                          <div class="flex focus:outline-none" id="bottomdiv" tabindex="0">
-                            <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 text-xs leading-3"><mat-icon>check_circle</mat-icon></div>
-                            <div class="text-[#eaaa00] rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-4 ml-3 text-xs leading-3"><mat-icon>local_fire_department</mat-icon></div>
-                          </div>
-                      </div>
-                    </div>
-                  </div>
-            </div>
           </div>
       <!-- </mat-list> -->
 </div>

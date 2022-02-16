@@ -18,16 +18,20 @@
             <mat-error class="error-message" *ngIf="loginForm.get('password').hasError(validation.type) && (loginForm.get('password').dirty || loginForm.get('password').touched)">{{validation.message}}</mat-error>
           </mat-error>
         </mat-form-field>
-
-        <button color="accent" mat-raised-button type="submit" id="login-button" [disabled]="!loginForm.valid">
-          <mat-icon aria-hidden="false" aria-label="Example home icon">login</mat-icon>
-          Login
-        </button>
-
-        <button color="accent" mat-raised-button id ="signin-button" (click) = "onSignupSubmit()">
-          Sign Up
-        </button>
-
+        <div class="flex flex-row justify-between">
+          <div class="flex flex-col">
+            <button color="accent" mat-raised-button id ="signin-button" (click) = "onSignupSubmit()">
+              Sign Up
+            </button>
+            <a href="/verify" class="verifylink py-2 hover:cursor-pointer hover:text-gray-200 font-xs">Verify Email</a>
+          </div>
+          <div class="flex flex-col">
+            <button color="accent" mat-raised-button type="submit" id="login-button" [disabled]="!loginForm.valid">
+              <mat-icon aria-hidden="false" aria-label="Example home icon">login</mat-icon>
+              Login
+            </button>
+          </div>
+      </div>
 
       </mat-card>
     </form>
