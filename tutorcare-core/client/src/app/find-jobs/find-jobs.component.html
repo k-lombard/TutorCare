@@ -28,7 +28,7 @@
     </mat-list-item>
   </mat-list> -->
   <div class="flex flex-row w-[100%]">
-    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-4 shadow shadow-2xl bg-white dark:bg-gray-800 dark:border-gray-600 z-100">
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-8 shadow shadow-2xl bg-white dark:bg-gray-800 dark:border-gray-600 z-100">
       <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Find Jobs</h2>
 
       <div class="relative mt-6 mx-2">
@@ -113,22 +113,16 @@
       <p class="grow mt-2 text-gray-600 dark:text-gray-300">{{post.care_description}}</p>
   </div>
 
-  <div id="row-bottom" class="flex flex-row items-center justify-between w-full mt-4">
-    <button class="float-left justify-start items-start" *ngIf="userId !== post.user_id" id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>
-    <div class="float-right">
-      <div class="h-full items-center">
+  <div id="row-bottom" class="flex flex-row w-full mt-4 flow-root">
+    <button class="float-left justify-start items-start justify-self-start" *ngIf="userId !== post.user_id" id="apply" (click)="openApplyDialog(post)" mat-raised-button color="accent"><span>APPLY</span></button>
           <!-- <a class="font-bold text-gray-700 cursor-pointer dark:text-gray-200">Khatab wedaa</a> -->
-          <div class="flex flex-row">
-            <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">
-              <!--<div *ngIf="post.tagList.length > 0" class="taglist flex flex-row">
-                <div *ngFor="let tag of post.tagList" class="taglist mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-4 text-xs leading-3">{{ tag }}</div>
-              </div>-->
-              <div id="type" class="taglist mx-1 font-bold text-white items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-4 text-s leading-3">{{post.care_type}}</div>
-             <img id="stock" class="object-cover w-10 h-10 mx-2 rounded-full sm:block hover:opacity-50" src="../../assets/images/profile_picture.jpeg" alt="avatar" [routerLink]="['/profile/', post.user_id]">
-            </div>
-        </div>
-      </div>
-    </div>
+    <div class="flex flex-row float-right justify-self-end self-end justify-end flex-grow">
+        <!--<div *ngIf="post.tagList.length > 0" class="taglist flex flex-row">
+          <div *ngFor="let tag of post.tagList" class="taglist mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-4 text-xs leading-3">{{ tag }}</div>
+        </div>-->
+        <div id="type" class="taglist mx-1 flex justify-end font-bold text-white items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-4 text-s leading-3">{{post.care_type}}</div>
+        <img id="stock" class="object-cover flex justify-end w-10 h-10 mx-2 rounded-full sm:block hover:opacity-50" src="../../assets/images/profile_picture.jpeg" alt="avatar" [routerLink]="['/profile/', post.user_id]">
+  </div>
   </div>
 </div>
 </div>

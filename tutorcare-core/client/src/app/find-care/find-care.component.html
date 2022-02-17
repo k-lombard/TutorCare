@@ -51,7 +51,7 @@
                 <mat-icon>message</mat-icon>
             </div> -->
                 <div class="grid desktop:grid-cols-4 gap-4 laptop:grid-cols-2 tablet:grid-cols-1">
-                      <div *ngFor="let loc of locs" id="outerdiv" tabindex="0" aria-label="caregiver" class="px-8 py-4 my-4 mx-4 shadow-lg shadow-[#D6DBD4] rounded h-[18rem] bg-[#D6DBD4] my-4 focus:outline-none desktop:w-2/12 desktop:mr-7 desktop:mb-0">
+                      <div *ngFor="let loc of locs" id="outerdiv" tabindex="0" aria-label="caregiver" class="px-8 py-4 my-4 mx-4 shadow-lg shadow-[#D6DBD4] rounded h-[18rem] bg-[#D6DBD4] my-4 focus:outline-none">
                           <div class="flex items-center border-b border-gray-200 pb-6">
                             <img id="stock" src="../../assets/images/profile_picture.jpeg" [routerLink]="['/profile/', loc.user.user_id]" class="shadow-sm shadow-black w-12 h-12 rounded-full hover:opacity-50 hover:cursor-pointer" />
                               <div class="flex items-start justify-between w-full">
@@ -67,7 +67,7 @@
                                   </button>
                               </div>
                           </div>
-                          <div class="px-2">
+                          <div class="px-2 py-4">
                               <p class="focus:outline-none text-sm leading-5 py-4 text-gray-600" tabindex="0">{{ loc.user.experience }}</p>
                               <div class="flex flex-row">
                                 <div class="focus:outline-none flex" id="bottomdiv" tabindex="0">

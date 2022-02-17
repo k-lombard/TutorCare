@@ -1,7 +1,7 @@
 <div>
   <navbar></navbar>
   <div class="flex flex-row w-[100%]">
-    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-4 shadow shadow-2xl bg-white dark:bg-gray-800 dark:border-gray-600 ">
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-8 shadow shadow-2xl bg-white dark:bg-gray-800 dark:border-gray-600 ">
       <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">My Jobs</h2>
 
       <div class="relative mt-6 mx-2">
@@ -31,9 +31,9 @@
             </div>
               <!--<a id="type" class="px-3 py-1 text-sm font-bold text-white transition-colors duration-200 transform bg-gray-600 rounded cursor-default">{{post.care_type}}</a>-->
               <div>
-                <mat-icon (click)="openDialog(post)" class="transition-colors duration-200 transform rounded cursor-pointer">edit</mat-icon>
+                <mat-icon (click)="openDialog(post)" class="transition-colors duration-200 transform rounded cursor-pointer hover:bg-gray-200">edit</mat-icon>
 
-                <mat-icon (click)="onDeleteClick(post)" class="transition-colors duration-200 transform rounded cursor-pointer ml-5">delete</mat-icon>
+                <mat-icon (click)="onDeleteClick(post)" class="transition-colors duration-200 transform rounded cursor-pointer ml-5 hover:bg-gray-200">delete</mat-icon>
               </div>
             </div>
           <div class="mt-2 flex flex-col min-h-[10em]">

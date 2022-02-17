@@ -20,7 +20,6 @@ mat-card {
 }
 
 h2 {
-  margin: 10px;
   margin-left: 15px;
   font-family: "Dosis" !important;
   font-size: calc(26px + 1vw) !important;
@@ -113,7 +112,13 @@ h2 {
 
 button {
   padding: 10px;
-  margin: 25px;
+  margin: 5%;
+}
+
+@media (max-width: 400px) {
+  button {
+    margin: 0px;
+  }
 }
 
 

@@ -33,6 +33,7 @@
                 {{application.message}}
           </a>
         </li>
+        <a *ngIf="post.applications.length === 0" class="text-gray-300 text-xl italic w-full flex">You haven't received any applications for this job post.</a>
       </ul>
     </div>
     </div>
@@ -42,8 +43,8 @@
             <div class="lg:w-1/2">
               <div id="accepted" *ngIf="currApp.accepted" class="w-1/6 my-4 text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs right-0 absolute mx-8"><p class="justify-center items-center">ACCEPTED</p></div>
                 <div class="flex flex-row">
-                  <h2 class="pt-4 text-3xl font-bold text-gray-800 dark:text-gray-100">{{currApp.user.first_name}} {{currApp.user.last_name}}</h2>
-                  <img id="stock" class="object-cover mx-12 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+                  <h2 [routerLink]="['/profile/', currApp.user_id]" class="pt-4 text-3xl font-bold text-gray-800 dark:text-gray-100 hover:cursor-pointer hover:text-gray-600">{{currApp.user.first_name}} {{currApp.user.last_name}}</h2>
+                  <img [routerLink]="['/profile/', currApp.user_id]" id="stock" class="object-cover mx-12 rounded-full sm:block hover:opacity-50 hover:cursor-pointer" src="../../assets/images/profile_picture.jpeg" alt="avatar">
                 </div>
                 <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">Application ID: {{currApp.application_id}}</h2>
                 <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Message:</h3>
