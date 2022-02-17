@@ -100,8 +100,8 @@
 <div id="postcard" *ngFor="let post of displayedPosts" class="px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
   <div class="flex items-center justify-between">
     <div [style.display]="'block'">
-      <span class="text-sm font-light text-gray-600 dark:text-gray-400">{{post.date_of_job}}</span>
-      <span [style.display]="'block'" class="text-sm font-light text-gray-600 dark:text-gray-400">Start: {{post.start_time}} | End: {{post.end_time}}</span>
+      <span class="text-sm font-light text-gray-600 dark:text-gray-400">Start: {{post.start_date}} at {{post.start_time}}</span>
+      <span [style.display]="'block'" class="text-sm font-light text-gray-600 dark:text-gray-400">End: {{post.end_date}} at {{post.end_time}}</span>
     </div>
     <div>
       <!--<a id="type" class="px-3 py-1 text-sm font-bold text-white transition-colors duration-200 transform bg-gray-600 rounded cursor-default">{{post.care_type}}</a>-->

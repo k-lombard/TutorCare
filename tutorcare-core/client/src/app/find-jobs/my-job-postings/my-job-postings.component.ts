@@ -155,7 +155,7 @@ export class MyJobPostingsComponent implements OnInit {
 
     onSaveClick() {
       this.editable = true
-      this.myJobs.editJobPost(this.currPost.user_id, this.currPost.post_id, this.currPost.title, this.currPost.tags, this.currPost.care_description, this.currPost.date_of_job, this.currPost.start_time, this.currPost.end_time, this.currPost.care_type).subscribe(updatedPost => {
+      this.myJobs.editJobPost(this.currPost.user_id, this.currPost.post_id, this.currPost.title, this.currPost.tags, this.currPost.care_description, this.currPost.start_date, this.currPost.start_time, this.currPost.end_date, this.currPost.end_time, this.currPost.care_type).subscribe(updatedPost => {
         console.log(updatedPost)
       })
     }
@@ -186,7 +186,8 @@ export class EditJobDialog implements OnInit{
   date2!: string
   type_care!: string
   job_desc!: string
-  date_of_job!: string
+  end_date!: string
+  start_date!: string
   picker!: string
   endTimeFC = new FormControl()
   startTimeFC = new FormControl()
@@ -307,19 +308,40 @@ export class EditJobDialog implements OnInit{
     } else if (this.form.value.type_care == "other-2") {
       this.type_care = "other"
     }
-    this.month = start_time.getMonth() + 1
-    this.day = start_time.getDate()
+    var month = start_time.getMonth() + 1
+    var day = start_time.getDate()
     console.log(this.day)
-    if (this.month < 10) {
-      this.monthStr = '0' + this.month
+    var monthStr
+    if (month < 10) {
+      monthStr = '0' + month
     } else {
-      this.monthStr = this.month.toString()
+      monthStr = month.toString()
     }
-    if (this.day < 10) {
-      this.dayStr = '0' + this.day
+    var dayStr
+    if (day < 10) {
+      dayStr = '0' + this.day
     } else {
-      this.dayStr = this.day.toString()
+      dayStr = day.toString()
     }
+    this.start_date = start_time.getFullYear() + '-' + monthStr + '-' + dayStr
+
+    var month2 = end_time.getMonth() + 1
+    var day2 = end_time.getDate()
+    console.log(this.day)
+    var monthStr2
+    if (month2 < 10) {
+      monthStr2 = '0' + month2
+    } else {
+      monthStr2 = month2.toString()
+    }
+    var dayStr2
+    if (day2 < 10) {
+      dayStr2 = '0' + day2
+    } else {
+      dayStr2 = day2.toString()
+    }
+    this.end_date = end_time.getFullYear() + '-' + monthStr2 + '-' + dayStr2
+    
     for (let val of this.selectedTags) {
       if (this.tagString === "") {
         this.tagString = val.toLowerCase()
@@ -327,16 +349,15 @@ export class EditJobDialog implements OnInit{
         this.tagString = this.tagString + " " + val.toLowerCase()
       }
     }
-    this.date_of_job = start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
+    this.tags = this.tagString
+
     this.start_time = start_time.getHours() + ':' + start_time.getMinutes()
     this.end_time = end_time.getHours() + ':' + end_time.getMinutes()
     this.title = this.form.value.job_title
-    this.tags = this.tagString/*
-    console.log(this.start_time)
-    console.log(this.form.value.start_time.getMonth())
-    console.log(this.form.value.start_time.getDay())*/
-    console.log(this.userId, this.post.post_id, this.title, this.tags, this.job_desc, this.date_of_job, this.start_time, this.end_time, this.type_care)
-    this._editJobObservable = this.myJobs.editJobPost(this.userId, this.post.post_id, this.title, this.tags, this.job_desc, this.date_of_job, this.start_time, this.end_time, this.type_care)
+    
+    console.log(this.userId, this.post.post_id, this.title, this.tags, this.job_desc, this.start_date, this.start_time, this.end_date, this.end_time, this.type_care)
+
+    this._editJobObservable = this.myJobs.editJobPost(this.userId, this.post.post_id, this.title, this.tags, this.job_desc, this.start_date, this.start_time, this.end_date, this.end_time, this.type_care)
 
     this._editJobObservable.subscribe((data2: Post) => {
         this.post = data2

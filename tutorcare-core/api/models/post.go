@@ -16,8 +16,9 @@ type Post struct {
 	CareDescription string        `json:"care_description" gorm:"default:null"`
 	CareType        string        `json:"care_type" gorm:"default:null"`
 	Completed       bool          `json:"completed" gorm:"default:null"`
-	DateOfJob       string        `json:"date_of_job" gorm:"default:null"`
+	StartDate       string        `json:"start_date" gorm:"default:null"`
 	StartTime       string        `json:"start_time" gorm:"default:null"`
+	EndDate         string        `json:"end_date" gorm:"default:null"`
 	EndTime         string        `json:"end_time" gorm:"default:null"`
 	DatePosted      string        `json:"date_posted" gorm:"default:null"`
 	Applications    []Application `json:"applications" gorm:"-"`
@@ -31,7 +32,7 @@ type PostList struct {
 }
 
 func (i *Post) Bind(r *http.Request) error {
-	if i.CareType == "" || i.DateOfJob == "" || i.StartTime == "" || i.Title == "" || i.CareDescription == "" || i.EndTime == "" || (i.UserID).String() == "" {
+	if i.CareType == "" || i.StartDate == "" || i.StartTime == "" || i.Title == "" || i.CareDescription == "" || i.EndDate == "" || i.EndTime == "" || (i.UserID).String() == "" {
 		return fmt.Errorf("Care_type, date_of_job, start_time, care_description, end_time, and user_id are required fields.")
 	}
 	return nil

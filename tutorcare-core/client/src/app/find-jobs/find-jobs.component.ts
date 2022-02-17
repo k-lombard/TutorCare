@@ -226,7 +226,8 @@ export class CreateJobDialog implements OnInit{
   date2!: string
   type_care!: string
   job_desc!: string
-  date_of_job!: string
+  end_date!: string
+  start_date!: string
   picker!: string
   endTimeFC = new FormControl()
   startTimeFC = new FormControl()
@@ -353,7 +354,23 @@ export class CreateJobDialog implements OnInit{
         this.tagString = this.tagString + " " + val.toLowerCase()
       }
     }
-    this.date_of_job = start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
+    this.start_date = start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
+
+    this.month = end_time.getMonth() + 1
+    this.day = end_time.getDate()
+    console.log(this.day)
+    if (this.month < 10) {
+      this.monthStr = '0' + this.month
+    } else {
+      this.monthStr = this.month.toString()
+    }
+    if (this.day < 10) {
+      this.dayStr = '0' + this.day
+    } else {
+      this.dayStr = this.day.toString()
+    }
+    this.end_date = end_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
+    
     this.start_time = start_time.getHours() + ':' + start_time.getMinutes()
     this.end_time = end_time.getHours() + ':' + end_time.getMinutes()
     this.title = this.form.value.job_title
@@ -361,7 +378,7 @@ export class CreateJobDialog implements OnInit{
     console.log(this.start_time)
     console.log(start_time.getMonth())
     console.log(start_time.getDay())
-    this._createJobObservable = this.findJobs.createPost(this.userId, this.title, this.job_desc, this.tags, this.type_care, this.date_of_job, this.start_time, this.end_time)
+    this._createJobObservable = this.findJobs.createPost(this.userId, this.title, this.job_desc, this.tags, this.type_care, this.start_date, this.start_time, this.end_date, this.end_time)
 
     this._createJobObservable.subscribe((data2: Post) => {
         this.post = data2
