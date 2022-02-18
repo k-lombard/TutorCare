@@ -280,8 +280,10 @@ export class FindCareComponent implements OnInit {
             select(getCurrUser)
         ).subscribe(data =>  {
             this.user = data
-            this.userId = this.user.user_id || ""
-            this.userType = this.user.user_category
+            if (this.user !== undefined) {
+                this.userId = this.user.user_id || ""
+                this.userType = this.user.user_category
+            }
       })
 
     }

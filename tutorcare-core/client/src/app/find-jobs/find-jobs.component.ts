@@ -170,10 +170,12 @@ export class FindJobsComponent implements OnInit {
         .pipe(
             select(getCurrUser)
         ).subscribe(data =>  {
-            this.user = data
+          this.user = data
+          if (this.user !== undefined) {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
-      })
+          }
+        })
         this.findJobs.getPosts().subscribe(data => {
             this.posts = data
             var postsCopy: Post[] = []
