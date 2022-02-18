@@ -12,6 +12,8 @@ h1 {
     font-family: "Dosis" !important;
 }
 
+
+
 .nightmode {
   background: rgb(0,92,89);
   background: linear-gradient(270deg, rgba(0,92,89,1) 0%, rgba(65,1,83,1) 100%);
@@ -46,6 +48,15 @@ h1 {
 a {
   color: white !important;
 }
+
+.banner {
+  background-color: mat.get-color-from-palette($tutorcare-core-warn);
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  overflow-wrap: break-all;
+}
+
 
 @media (min-width: 1361px) {
   .mat-sidenav-container {

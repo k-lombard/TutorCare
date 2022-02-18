@@ -15,6 +15,7 @@ export class NavbarComponent implements OnInit {
   user: User | undefined;
   name = "Account"
   isLoggedIn: boolean = false
+  showVerifyBanner: boolean = false
   public isMenuOpen: boolean = false;
   constructor(private router: Router, private store: Store<AppState>) {}
 
@@ -33,6 +34,11 @@ export class NavbarComponent implements OnInit {
     ).subscribe(loggedIn => {
       this.isLoggedIn = loggedIn
     })
+    if (this.user !== undefined) {
+      if (this.router.url !== '/verify' && !this.user.status) {
+        this.showVerifyBanner = true
+      }
+    }
   }
 
   public onSidenavClick(): void {

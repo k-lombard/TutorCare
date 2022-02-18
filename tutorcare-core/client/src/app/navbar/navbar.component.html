@@ -1,5 +1,11 @@
-<mat-toolbar color="primary" class="focus:outline-none py-2 w-[100%] h-[5rem]">
-    <mat-toolbar-row class="desktop:flex items-center justify-left h-full">
+
+<mat-toolbar color="primary" class="flex focus:outline-none w-[100%]">
+
+    <mat-toolbar-row *ngIf="showVerifyBanner" class = "flex banner max-h-9" color="warn">
+        <a class = "flex mx-auto" href="/verify">You have not verified your email. Please click here to verify your email</a>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row class="desktop:flex items-center justify-left h-full py-2">
       <h1 color="accent" class="mat-typography">TutorCare</h1>
       <span class="menu-spacer"></span>
       <div id="menu-links">

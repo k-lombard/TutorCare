@@ -30,9 +30,8 @@
               <span [style.display]="'block'" class="text-sm font-light text-gray-600 dark:text-gray-400">End: {{post.end_date}} at {{post.end_time}}</span>
             </div>
               <!--<a id="type" class="px-3 py-1 text-sm font-bold text-white transition-colors duration-200 transform bg-gray-600 rounded cursor-default">{{post.care_type}}</a>-->
-              <div>
+              <div class = "flex">
                 <mat-icon (click)="openDialog(post)" class="transition-colors duration-200 transform rounded cursor-pointer hover:bg-gray-200">edit</mat-icon>
-
                 <mat-icon (click)="onDeleteClick(post)" class="transition-colors duration-200 transform rounded cursor-pointer ml-5 hover:bg-gray-200">delete</mat-icon>
               </div>
             </div>
