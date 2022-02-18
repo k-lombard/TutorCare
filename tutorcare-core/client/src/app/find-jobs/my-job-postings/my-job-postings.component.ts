@@ -41,7 +41,6 @@ export class MyJobPostingsComponent implements OnInit {
     userType!: string
     editable: boolean = true
     private routeSub: Subscription;
-    //constructor(private router: Router, private myJobs: MyJobPostingsService, private store: Store<AppState>, private route: ActivatedRoute, private toastr: ToastrService) {}
 
     constructor(private router: Router, public dialog: MatDialog, private route: ActivatedRoute, private store: Store<AppState>, private toastr: ToastrService, private myJobs: MyJobPostingsService) {}
 
@@ -67,7 +66,6 @@ export class MyJobPostingsComponent implements OnInit {
     ngOnInit() {
       this.routeSub = this.route.params.subscribe(params => {
         this.postId = parseInt(params['id'])
-        console.log(this.postId)
       });
       this.store
         .pipe(
@@ -79,7 +77,6 @@ export class MyJobPostingsComponent implements OnInit {
       })
       if (this.postId && (!this.posts || this.posts.length === 0)) {
         this.myJobs.getPostById(this.postId).subscribe(post => {
-          console.log(post)
           this.currPost = post
         })
       }
@@ -99,7 +96,7 @@ export class MyJobPostingsComponent implements OnInit {
             postsCopy.push(post)
           }
           this.posts = postsCopy
-          console.log(this.posts)
+          //console.log(this.posts)
        }
       })
     }
@@ -119,7 +116,6 @@ export class MyJobPostingsComponent implements OnInit {
     onDeleteClick(post: Post) {
       if(window.confirm("Are you sure you want to delete the job post: " + post.title + "?"))
       this.myJobs.deletePost(post.post_id).subscribe(id => {
-        console.log("deleted post with id: " + id)
         this.currPost = undefined
         this.toastr.success("Post successfully deleted with id: "+ id, "Success", {closeButton: true, timeOut: 5000, progressBar: true});
         var postsCopy: Post[] = []
@@ -134,7 +130,6 @@ export class MyJobPostingsComponent implements OnInit {
 
     onEditClick() {
       this.editable = false
-      console.log(this.editable)
     }
 
     setSelected(i: number) {
@@ -347,7 +342,6 @@ export class EditJobDialog implements OnInit{
     }
     var month = start_time.getMonth() + 1
     var day = start_time.getDate()
-    console.log(this.day)
     var monthStr
     if (month < 10) {
       monthStr = '0' + month
@@ -364,7 +358,6 @@ export class EditJobDialog implements OnInit{
 
     var month2 = end_time.getMonth() + 1
     var day2 = end_time.getDate()
-    console.log(this.day)
     var monthStr2
     if (month2 < 10) {
       monthStr2 = '0' + month2
@@ -392,7 +385,7 @@ export class EditJobDialog implements OnInit{
     this.end_time = end_time.getHours() + ':' + end_time.getMinutes()
     this.title = this.form.value.job_title
     
-    console.log(this.userId, this.post.post_id, this.title, this.tags, this.job_desc, this.start_date, this.start_time, this.end_date, this.end_time, this.type_care)
+    //console.log(this.userId, this.post.post_id, this.title, this.tags, this.job_desc, this.start_date, this.start_time, this.end_date, this.end_time, this.type_care)
 
     this._editJobObservable = this.myJobs.editJobPost(this.userId, this.post.post_id, this.title, this.tags, this.job_desc, this.start_date, this.start_time, this.end_date, this.end_time, this.type_care)
 

@@ -179,7 +179,6 @@ export class FindJobsComponent implements OnInit {
         this.findJobs.getPosts().subscribe(data => {
             this.posts = data
             var postsCopy: Post[] = []
-            console.log(this.posts)
             if (this.posts) {
               for (var post of this.posts) {
                 var tempTags = post.tags.split(" ")
@@ -189,7 +188,6 @@ export class FindJobsComponent implements OnInit {
                   tag = tag.replace("_", " ")
                   tempTags2.push(tag)
                 }
-                console.log(tempTags2)
                 post.tagList = tempTags2
                 postsCopy.push(post)
               }
@@ -364,7 +362,6 @@ validation_messages = {
   }
 
   save() {
-    console.log(this.form.value)
     var start_time = new Date(this.form.value.start_time)
     var end_time = new Date(this.form.value.end_time)
     this.job_desc = this.form.value.job_desc
@@ -377,7 +374,6 @@ validation_messages = {
     }
     this.month = start_time.getMonth() + 1
     this.day = start_time.getDate()
-    console.log(this.day)
     if (this.month < 10) {
       this.monthStr = '0' + this.month
     } else {
@@ -399,7 +395,6 @@ validation_messages = {
 
     this.month = end_time.getMonth() + 1
     this.day = end_time.getDate()
-    console.log(this.day)
     if (this.month < 10) {
       this.monthStr = '0' + this.month
     } else {
@@ -416,9 +411,6 @@ validation_messages = {
     this.end_time = end_time.getHours() + ':' + end_time.getMinutes()
     this.title = this.form.value.job_title
     this.tags = this.tagString
-    console.log(this.start_time)
-    console.log(start_time.getMonth())
-    console.log(start_time.getDay())
     this._createJobObservable = this.findJobs.createPost(this.userId, this.title, this.job_desc, this.tags, this.type_care, this.start_date, this.start_time, this.end_date, this.end_time)
 
     this._createJobObservable.subscribe((data2: Post) => {

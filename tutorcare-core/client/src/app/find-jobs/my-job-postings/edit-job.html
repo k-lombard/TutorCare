@@ -1,5 +1,5 @@
 <div>
-  <h2 mat-dialog-title class="py-12">Create Job Posting</h2>
+  <h2 mat-dialog-title class="py-5">Edit Job Posting</h2>
   <mat-dialog-content [formGroup]="form">
     <mat-card>
       <!-- <mat-form-field appearance="outline">
@@ -102,6 +102,6 @@
   </mat-dialog-content>
   <div class="flex flex-row justify-between w-full">
     <button mat-raised-button class=" mat-primary create-button"(click)="close()"> <span>CLOSE</span></button>
-    <button mat-raised-button id="create-button" class="shadow-md shadow-[#eaaa00]  mat-accent create-button"(click)="save()" [disabled]="!form.valid"><span>CREATE</span></button>
+    <button mat-raised-button id="create-button" class="shadow-md shadow-[#eaaa00]  mat-accent create-button"(click)="save()" [disabled]="!form.valid"><span>SAVE CHANGES</span></button>
   </div>
 </div>

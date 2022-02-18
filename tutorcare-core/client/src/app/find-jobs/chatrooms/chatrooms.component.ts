@@ -72,12 +72,12 @@ export class ChatroomsComponent implements OnInit{
           this.user = data
           this.userId = this.user.user_id || ""
           this.userType = this.user.user_category
-          console.log(this.userId)
-          console.log(this.chatToken)
+          //console.log(this.userId)
+          //console.log(this.chatToken)
       })
       this.routeSub = this.route.params.subscribe(params => {
         this.chatroomId = parseInt(params['id'])
-        console.log(this.chatroomId)
+        //console.log(this.chatroomId)
       });
 
       this.chatroomService.getChatroomsByUserId(this.userId).subscribe(data => {
