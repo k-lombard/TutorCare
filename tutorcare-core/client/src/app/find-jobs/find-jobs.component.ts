@@ -4,7 +4,7 @@ import { GeolocationPositionWithUser } from '../models/geolocationposition.model
 import { Post } from '../models/post.model';
 import { FindJobsService } from './find-jobs.service';
 import {MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../reducers';
@@ -16,6 +16,7 @@ import { ApplyJobDialog } from './apply-job/apply-job.component';
 import { ToastrService } from 'ngx-toastr';
 import { taggedTemplate } from '@angular/compiler/src/output/output_ast';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DateValidator } from './date.validator';
 
 
 interface FilterOption {
@@ -221,7 +222,8 @@ interface Tag {
 })
 export class CreateJobDialog implements OnInit{
   post!: Post
-  form!: FormGroup;
+  form!: FormGroup
+  dateGroup!: FormGroup
   date!: string
   date2!: string
   type_care!: string
@@ -283,6 +285,28 @@ export class CreateJobDialog implements OnInit{
     {value: 'other-2', viewValue: 'Type: Other'}
 ];
 
+validation_messages = {
+  'care_type': [
+    { type: 'required', message: 'Type is required' }
+  ],
+  'job_title': [
+    { type: 'required', message: 'Title is required' },
+    { type: 'maxlength', message: 'Title cannot be more than 50 characters long' }
+  ],
+  'job_desc': [
+    { type: 'required', message: 'Job decription is required' },
+    { type: 'maxlength', message: 'Description cannot be more than 1023 characters long' }
+  ],
+  'start_time': [
+    { type: 'required', message: 'Starting date and time are required' },
+  ],
+  'end_time': [
+    { type: 'required', message: 'Ending date and time are required' },
+    { type: 'dateLessThan', message: 'Ending time must be after starting time'} //BUG: does not show
+  ]
+  
+}
+
 
   constructor(
     public dialogRef: MatDialogRef<CreateJobDialog>,
@@ -302,15 +326,30 @@ export class CreateJobDialog implements OnInit{
   }
 
   ngOnInit() {
+    this.dateGroup = new FormGroup({
+      start_time: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      end_time: new FormControl('', Validators.compose([
+        Validators.required
+      ]))
+    }, (formGroup: FormGroup) => {
+        return DateValidator.dateLessThan(formGroup);
+    })
+
     this.form = this.fb.group({
-      type_care: new FormControl(),
-      job_title: new FormControl(),
-      job_desc: new FormControl(),
-      job_tags: new FormControl(),
-      picker: new FormControl(new Date()),
-      start_time: new FormControl(),
-      end_time: new FormControl(),
-      posts: new FormControl()
+      type_care: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      job_title: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.maxLength(50)
+      ])),
+      job_desc: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.maxLength(1023)
+      ])),
+      dateGroup: this.dateGroup
     });
     this.store
         .pipe(

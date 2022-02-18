@@ -1,5 +1,5 @@
 import {Component, OnInit, ChangeDetectionStrategy, Inject} from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { GeolocationPositionWithUser } from '../../models/geolocationposition.mo
 import { FindJobsService } from '../find-jobs.service';
 import { MyJobPostingsService } from './my-job-postings.service';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { DateValidator } from '../date.validator';
 
 @Component({
   selector: 'my-job-postings-component',
@@ -181,7 +182,8 @@ interface Tag {
 })
 export class EditJobDialog implements OnInit{
   post!: Post
-  form!: FormGroup;
+  form!: FormGroup
+  dateGroup!: FormGroup
   date!: string
   date2!: string
   type_care!: string
@@ -233,6 +235,28 @@ export class EditJobDialog implements OnInit{
     {display: 'Ages 15-17', value: 'Ages_15-17'},
   ]
 
+  validation_messages = {
+    'care_type': [
+      { type: 'required', message: 'Type is required' }
+    ],
+    'job_title': [
+      { type: 'required', message: 'Title is required' },
+      { type: 'maxlength', message: 'Title cannot be more than 50 characters long' }
+    ],
+    'job_desc': [
+      { type: 'required', message: 'Job decription is required' },
+      { type: 'maxlength', message: 'Description cannot be more than 1023 characters long' }
+    ],
+    'start_time': [
+      { type: 'required', message: 'Starting date and time are required' },
+    ],
+    'end_time': [
+      { type: 'required', message: 'Ending date and time are required' },
+      { type: 'dateLessThan', message: 'Ending time must be after starting time'} //BUG: does not show
+    ]
+    
+  }
+
   _editJobObservable: Observable<Post> | undefined
   minDate1 = new Date()
   minDate2 = new Date()
@@ -255,15 +279,30 @@ export class EditJobDialog implements OnInit{
     }
 
   ngOnInit() {
+    this.dateGroup = new FormGroup({
+      start_time: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      end_time: new FormControl('', Validators.compose([
+        Validators.required
+      ]))
+    }, (formGroup: FormGroup) => {
+        return DateValidator.dateLessThan(formGroup);
+    })
+
     this.form = this.fb.group({
-      type_care: new FormControl(),
-      job_title: new FormControl(),
-      job_desc: new FormControl(),
-      job_tags: new FormControl(),
-      picker: new FormControl(new Date()),
-      start_time: new FormControl(),
-      end_time: new FormControl(),
-      posts: new FormControl()
+      type_care: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      job_title: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.maxLength(50)
+      ])),
+      job_desc: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.maxLength(1023)
+      ])),
+      dateGroup: this.dateGroup
     });
     this.store
         .pipe(
@@ -272,7 +311,6 @@ export class EditJobDialog implements OnInit{
             this.user = data
             this.userId = this.user.user_id || ""
     })
-
     if (this.post.care_type == "tutoring") {
       this.form.get('type_care').setValue("tutoring-0")
     } else if (this.post.care_type == "babysitting") {
@@ -283,9 +321,8 @@ export class EditJobDialog implements OnInit{
     this.form.get('job_title').setValue(this.post.title)
     this.form.get('job_desc').setValue(this.post.care_description)
     this.selectedTags = this.post.tagList
-    this.form.get('job_tags').setValue(this.post.tagList)
-    this.form.get('start_time').setValue(this.post.start_time)
-    this.form.get('end_time').setValue(this.post.end_time)
+    //this.form.get('start_time').setValue(this.post.start_time)
+    //this.form.get('end_time').setValue(this.post.end_time)
   }
 
   onStartTimeChange() {

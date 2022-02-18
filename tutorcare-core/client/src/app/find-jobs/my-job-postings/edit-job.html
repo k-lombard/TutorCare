@@ -1,6 +1,6 @@
- <mat-dialog-content [formGroup]="form">
-  <h2 class="py-12">Edit Job Posting</h2>
-
+<div>
+  <h2 mat-dialog-title class="py-12">Create Job Posting</h2>
+  <mat-dialog-content [formGroup]="form">
     <mat-card>
       <!-- <mat-form-field appearance="outline">
           <mat-label>Type of Care</mat-label>
@@ -13,30 +13,37 @@
                 {{option.viewValue}}
             </mat-option>
         </mat-select>
+        <mat-error *ngFor="let validation of validation_messages.care_type">
+          <mat-error class="error-message" *ngIf="form.get('type_care').hasError(validation.type) && (form.get('type_care').dirty || form.get('type_care').touched)">{{validation.message}}</mat-error>
+        </mat-error>
       </mat-form-field>
     </mat-card>
     <mat-card>
       <mat-form-field appearance="outline">
           <mat-label>Job Title</mat-label>
           <!-- <input formControlName="job_desc" matInput /> -->
-          <textarea id="title-field" matInput
+          <input id="title-field" matInput
                     name="first"
                     formControlName="job_title"
-                    cdkTextareaAutosize
-                    class="textarea-inline-control" >
-          </textarea>
+                    class = "title">
+          <mat-error *ngFor="let validation of validation_messages.job_title">
+            <mat-error class="error-message" *ngIf="form.get('job_title').hasError(validation.type) && (form.get('job_title').dirty || form.get('job_title').touched)">{{validation.message}}</mat-error>
+          </mat-error>
       </mat-form-field>
     </mat-card>
     <mat-card>
       <mat-form-field appearance="outline">
-          <mat-label>Job Description</mat-label>
-          <!-- <input formControlName="job_desc" matInput /> -->
-          <textarea id="desc-field" matInput
-                    name="first"
-                    formControlName="job_desc"
-                    cdkTextareaAutosize
-                    class="textarea-inline-control" >
-          </textarea>
+        <mat-label>Job Description</mat-label>
+        <!-- <input formControlName="job_desc" matInput /> -->
+        <textarea id="desc-field" matInput
+                  name="first"
+                  formControlName="job_desc"
+                  cdkTextareaAutosize
+                  class="textarea-inline-control" >
+        </textarea>
+        <mat-error *ngFor="let validation of validation_messages.job_desc">
+          <mat-error class="error-message" *ngIf="form.get('job_desc').hasError(validation.type) && (form.get('job_desc').dirty || form.get('job_desc').touched)">{{validation.message}}</mat-error>
+        </mat-error>
       </mat-form-field>
     </mat-card>
 
@@ -62,30 +69,39 @@
         <mat-datepicker-toggle matSuffix [for]="matDatepicker"></mat-datepicker-toggle>
         <mat-datepicker #matDatepicker></mat-datepicker>
       </mat-form-field> -->
-      <mat-card>
-        <mat-form-field>
-          <mat-label>Start Time</mat-label>
-          <input matInput [ngxMatDatetimePicker]="picker1" placeholder="Choose a date" formControlName="start_time"
-             [min]="minDate1" [max]="maxDate">
-          <mat-datepicker-toggle matSuffix [for]="$any(picker1)"></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker [defaultTime]="[12,0,0]" [showSeconds]="false" [stepMinute]="15" [enableMeridian]="true" #picker1>
-          </ngx-mat-datetime-picker>
-       </mat-form-field>
-       </mat-card>
 
-      <mat-card>
-        <mat-form-field>
-          <mat-label>End Time</mat-label>
-          <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="end_time"
+      <div formGroupName = "dateGroup">
+        <mat-card>
+          <mat-form-field>
+            <mat-label>Start Time</mat-label>
+            <input matInput [ngxMatDatetimePicker]="picker1" placeholder="Choose a date" formControlName="start_time"
+              [min]="minDate1" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="$any(picker1)"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker [defaultTime]="[12,0,0]" [showSeconds]="false" [stepMinute]="15" [enableMeridian]="true" #picker1>
+            </ngx-mat-datetime-picker >
+            <mat-error *ngFor="let validation of validation_messages.start_time">
+              <mat-error class="error-message" *ngIf="form.get('dateGroup').get('start_time').hasError(validation.type) && (form.get('dateGroup').get('start_time').dirty || form.get('dateGroup').get('start_time').touched)">{{validation.message}}</mat-error>
+            </mat-error>
+        </mat-form-field>
+        </mat-card>
+        <mat-card>
+          <mat-form-field>
+            <mat-label>End Time</mat-label>
+            <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Choose a date" formControlName="end_time"
               [min]="minDate2" [max]="maxDate">
-          <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker [defaultTime]="[12,0,0]" [showSeconds]="false" [stepMinute]="15" [enableMeridian]="true" #picker2>
-          </ngx-mat-datetime-picker>
+            <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker [defaultTime]="[12,0,0]" [showSeconds]="false" [stepMinute]="15" [enableMeridian]="true" #picker2>
+            </ngx-mat-datetime-picker>
+            <mat-error *ngFor="let validation of validation_messages.end_time">
+              <mat-error class="error-message" *ngIf="form.get('dateGroup').get('end_time').hasError(validation.type) && (form.get('dateGroup').get('end_time').dirty || form.get('dateGroup').get('end_time').touched)">{{validation.message}}</mat-error>
+            </mat-error>
         </mat-form-field>
       </mat-card>
+    </div>
 
+  </mat-dialog-content>
   <div class="flex flex-row justify-between w-full">
-    <button class="mat-raised-button mat-primary create-button"(click)="close()"><span>CLOSE</span></button>
-    <button id="create-button" class="shadow-md shadow-[#eaaa00] mat-raised-button mat-accent create-button"(click)="save()"><span>SAVE CHANGES</span></button>
+    <button mat-raised-button class=" mat-primary create-button"(click)="close()"> <span>CLOSE</span></button>
+    <button mat-raised-button id="create-button" class="shadow-md shadow-[#eaaa00]  mat-accent create-button"(click)="save()" [disabled]="!form.valid"><span>CREATE</span></button>
   </div>
-</mat-dialog-content>
+</div>
