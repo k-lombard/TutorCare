@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy, Inject} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, Inject, Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GeolocationPositionWithUser } from '../models/geolocationposition.model';
 import { Post } from '../models/post.model';
@@ -60,13 +60,20 @@ export class FindJobsComponent implements OnInit {
         dialogConfig.data = {
           id: 1,
           title: 'Create Job Posting',
+          posts: this.posts as Post[]
         };
         dialogConfig.height = "90%"
         dialogConfig.width = "90%"
         const dialogRef = this.dialog.open(CreateJobDialog, dialogConfig);
 
         dialogRef.afterClosed().subscribe(
-          data => console.log("Dialog output:", data)
+          data =>  {
+            console.log("Dialog output:", data)
+            if (data.posts) {
+              this.posts = data?.posts
+              this.displayedPosts = data?.posts
+            }
+          }
         );
       } else {
         this.toastr.error("You must be logged in to do this.", "Error", {closeButton: true, timeOut: 5000, progressBar: true})
@@ -221,6 +228,7 @@ interface Tag {
   ]
 })
 export class CreateJobDialog implements OnInit{
+  @Output() newPosts = new EventEmitter<Post[]>();
   post!: Post
   form!: FormGroup
   dateGroup!: FormGroup
@@ -304,7 +312,7 @@ validation_messages = {
     { type: 'required', message: 'Ending date and time are required' },
     { type: 'dateLessThan', message: 'Ending time must be after starting time'} //BUG: does not show
   ]
-  
+
 }
 
 
@@ -333,8 +341,6 @@ validation_messages = {
       end_time: new FormControl('', Validators.compose([
         Validators.required
       ]))
-    }, (formGroup: FormGroup) => {
-        return DateValidator.dateLessThan(formGroup);
     })
 
     this.form = this.fb.group({
@@ -349,6 +355,7 @@ validation_messages = {
         Validators.required,
         Validators.maxLength(1023)
       ])),
+      posts: new FormControl([]),
       dateGroup: this.dateGroup
     });
     this.store
@@ -362,8 +369,8 @@ validation_messages = {
   }
 
   save() {
-    var start_time = new Date(this.form.value.start_time)
-    var end_time = new Date(this.form.value.end_time)
+    var start_time = new Date(this.form.value.dateGroup.start_time)
+    var end_time = new Date(this.form.value.dateGroup.end_time)
     this.job_desc = this.form.value.job_desc
     if (this.form.value.type_care == "tutoring-0") {
       this.type_care = "tutoring"
@@ -406,7 +413,7 @@ validation_messages = {
       this.dayStr = this.day.toString()
     }
     this.end_date = end_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
-    
+
     this.start_time = start_time.getHours() + ':' + start_time.getMinutes()
     this.end_time = end_time.getHours() + ':' + end_time.getMinutes()
     this.title = this.form.value.job_title
@@ -416,12 +423,12 @@ validation_messages = {
     this._createJobObservable.subscribe((data2: Post) => {
         this.post = data2
         if (this.data.posts && this.data.posts instanceof Array) {
-          this.form.value.posts = this.data.posts.concat(this.post)
+          var temp: any[] = this.data.posts.unshift(this.post)
+          this.form.value.posts = this.data.posts
         }
 
     });
     this.dialogRef.close(this.form.value);
-    window.location.reload()
   }
 
   close() {

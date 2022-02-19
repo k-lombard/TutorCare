@@ -54,7 +54,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     dateInput: 'l, LTS'
   },
   display: {
-    dateInput: 'YYYY-MM-DD HH:mm A',
+    dateInput: 'YYYY-MM-DD hh:mm A',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -92,12 +92,13 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, { provide: RouterStateSerializer, useClass: CustomSerializer },{
-    provide: NgxMatDateAdapter,
-    useClass: NgxMatMomentAdapter,
-    deps: [MAT_DATE_LOCALE, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-  },
-  { provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, { provide: RouterStateSerializer, useClass: CustomSerializer },
+    {
+      provide: NgxMatDateAdapter,
+      useClass: NgxMatMomentAdapter,
+      deps: [MAT_DATE_LOCALE, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }
 ],
   bootstrap: [AppComponent]
 })
