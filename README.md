@@ -19,26 +19,28 @@
 # Release Notes
 ## Version 0.2.0
 ### New Features
-- Adds live chat messaging system for user to communicate to each other.
+- Adds live chat messaging system for users to communicate to each other.
 - Adds search and filter functionality to narrow the jobs shown on the find-jobs page.
 - Adds applying to a job post functionality where a caregiver can apply to a job post.
 - Adds editing and deleting job post functionality to allow change to be made to a job post.
-- Adds functionality for a careseeker to view a list of applicants to their job post, see their profiles, and add them to a chatroom for messages.
+- Adds functionality for a careseeker to view a list of applicants, see their profiles, and add them to a chatroom for messages.
 - Adds hiring functionality for careseekers to hire someone from the list of applicant.
 - Adds working find-care functionality for caregseekers to find nearby caregivers.
-- Adds logout capability for a user.
+- Adds capability for a user to logout.
 
 ### Bug Fixes
-- Fixed bug where messages link did not show in mobile side navigation
-- Fixed explicit SQL queries with GORM refactoring to prevent SQL injection
-- Put validation to prevent invalid information on the following forms: sign up, login, create job, and edit job
+- Fixed bug where messages link did not show in mobile side navigation.
+- Fixed explicit SQL queries with GORM refactoring to prevent SQL injection.
+- Put validation to prevent invalid information on the following forms: sign up, login, create job, and edit job.
+- Added authentication to backend of websockets to prevent hijacking.
 
 ### Known Issues
-- Webpack bundle needs to be optimized
-- Search feature is not elastic so it will be too slow with a larger number of posts
-- Find-Care, Active Jobs, Applications Revcieved, Applications Sent pages are not mobile responsive
-- Some forms do not autofill information, requiring user to input the same info in multiple places
-- Mobile sidebar is not closable on very small screen sizes. Filter button clips in front of the nav on find-jobs page.
+- Webpack bundle needs to be optimized.
+- Search feature is not elastic so it will become slow with higher number of posts.
+- Find-Care, Active Jobs, Applications Revcieved, Applications Sent pages are not mobile responsive.
+- Some forms do not autofill information, requiring user to input the same info in multiple places.
+- Mobile sidebar is not closable on very small screen sizes. 
+- Filter button clips in front of the sidebar on find-jobs page.
 
 ## Version 0.1.0
 ### New Features
