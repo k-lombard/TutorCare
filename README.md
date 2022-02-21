@@ -38,6 +38,7 @@
 - Search feature is not elastic so it will be too slow with a larger number of posts
 - Find-Care, Active Jobs, Applications Revcieved, Applications Sent pages are not mobile responsive
 - Some forms do not autofill information, requiring user to input the same info in multiple places
+- Mobile sidebar is not closable on very small screen sizes. Filter button clips in front of the nav on find-jobs page.
 
 ## Version 0.1.0
 ### New Features
