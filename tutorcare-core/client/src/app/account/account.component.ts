@@ -15,6 +15,7 @@ import { Logout } from '../auth/auth.actions';
     styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit {
+    url = this.router.url
     user!: User;
     first_name: string | undefined
     last_name: string |undefined
@@ -22,6 +23,9 @@ export class AccountComponent implements OnInit {
     user_type: string | undefined
     exp!: string
     bio!: string
+    careseeker: boolean = false
+    caregiver: boolean = false
+    both: boolean = false
     constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private authService: AuthService, private toastr: ToastrService) {}
 
     ngOnInit() {
@@ -35,7 +39,16 @@ export class AccountComponent implements OnInit {
             this.user_type = this.user.user_category? this.user.user_category.charAt(0).toUpperCase() + this.user.user_category.substring(1) : ""
             this.exp = this.user.experience || ""
             this.bio = this.user.bio || ""
+            
         })
+        if (this.user_type == "Caregiver") {
+          this.caregiver = true
+        }
+        else if (this.user_type == "Careseeker") {
+          this.careseeker = true
+        } else {
+          this.both = true
+        }
     }
 
     onEditProfileClick() {

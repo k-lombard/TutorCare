@@ -10,6 +10,8 @@ import { tap } from 'rxjs/operators';
 import { Logout } from '../auth/auth.actions';
 import { Subscription } from 'rxjs';
 import { ProfileService } from './profile.service';
+import { ChatroomsService } from '../find-jobs/chatrooms/chatrooms.service';
+import { Chatroom } from '../models/chatroom.model';
 
 @Component({
     selector: 'profile-component',
@@ -17,6 +19,7 @@ import { ProfileService } from './profile.service';
     styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+    url = this.router.url 
     user!: User;
     first_name: string | undefined
     last_name: string |undefined
@@ -26,18 +29,30 @@ export class ProfileComponent implements OnInit {
     bio!: string
     userId!: string
     userOut!: User
+    careseeker: boolean = false
+    caregiver: boolean = false
+    both: boolean = false
     private routeSub: Subscription;
-    constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private authService: AuthService, private toastr: ToastrService, private profileService: ProfileService) {}
+    constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private authService: AuthService, private toastr: ToastrService, private profileService: ProfileService, private chatroomService: ChatroomsService) {}
 
     ngOnInit() {
       this.routeSub = this.route.params.subscribe(params => {
         this.userId = params['id']
-        console.log(this.userId)
-      });
+        //console.log(this.userId)
+      })
       this.profileService.getUserByUserId(this.userId).subscribe((userOut: User) => {
         this.userOut = userOut
+        //console.log(this.userOut)
+        if (this.userOut.user_category == "caregiver") {
+          this.caregiver = true
+        }
+        else if (this.userOut.user_category == "careseeker") {
+          this.careseeker = true
+        } else {
+          this.both = true
+        }
       })
-        this.store
+      this.store
         .pipe(
             select(getCurrUser)
         ).subscribe(data =>  {
@@ -47,7 +62,10 @@ export class ProfileComponent implements OnInit {
             this.user_type = this.user.user_category? this.user.user_category.charAt(0).toUpperCase() + this.user.user_category.substring(1) : ""
             this.exp = this.user.experience || ""
             this.bio = this.user.bio || ""
+            
         })
+        
+        
 
     }
 
@@ -69,6 +87,12 @@ export class ProfileComponent implements OnInit {
       });
     }
 
+    onMessageClick(userid1: string) {
+      this.chatroomService.getChatroomByTwoUsers(userid1, this.userId).subscribe((chatroom: Chatroom) => {
+        this.router.navigate([`/find-jobs/messages/${chatroom.chatroom_id}`])
+        this.chatroomService.setSelected(chatroom.chatroom_id)
+      })
+    }
 
 
 

@@ -134,7 +134,9 @@ export class EditProfileComponent implements OnInit {
             this.user.access_token = this.access_token
             this.store.dispatch(new Login({user: data}));
         });
-        this.router.navigate(['/account'])
+        this.router.navigate(['/account']).then(() => {
+          window.location.reload();
+        });
     }
 
 }
