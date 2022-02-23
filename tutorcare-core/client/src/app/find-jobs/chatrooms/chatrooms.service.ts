@@ -80,6 +80,10 @@ export class ChatroomsService {
 
 getChatroomByTwoUsers(user1_id: string, user2_id: string) {
   let url = `/api/chatrooms/users/${user1_id}/${user2_id}`;
+  if (user1_id == user2_id) {
+    this.toastr.error("Error: Cannot create a chatroom between a single user")
+    return undefined
+  }
   return new Observable((observer: any) => {
      this.http.get(url)
          .pipe(map((res: any) => res),
