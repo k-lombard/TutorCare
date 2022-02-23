@@ -62,7 +62,7 @@ export class SignupComponent implements OnInit {
     'password': [
       { type: 'required', message: 'Password is required' },
       { type: 'minlength', message: 'Password must be at least 8 characters long' },
-      { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, and one number' }
+      { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, one number, and a special character: [!,@,#,$,%,^,&,*]' }
     ],
     'emailCode': [
       { type: 'required', message: 'Password is required' },
