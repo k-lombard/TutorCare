@@ -23,6 +23,7 @@ type Post struct {
 	DatePosted         string        `json:"date_posted" gorm:"default:null"`
 	PosterCompleted    bool          `json:"poster_completed" gorm:"default:null"`
 	CaregiverCompleted bool          `json:"caregiver_completed" gorm:"default:null"`
+	HourlyRate         float64       `json:"hourly_rate" gorm:"default:null"`
 	Applications       []Application `json:"applications" gorm:"-"`
 	Caregiver          User          `json:"caregiver" gorm:"-"`
 	ApplicationID      int           `json:"application_id" gorm:"-"`
