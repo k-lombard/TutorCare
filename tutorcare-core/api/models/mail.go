@@ -38,11 +38,6 @@ func SendEmailVerificationCode(to []string) int {
 }
 
 func sendEmail(email mail) {
-	//Default Email Sender
-	if email.Sender == "" {
-		email.Sender = "tutorcaregatech@gmail.com"
-		email.Pass = "tutorcareemailpassword"
-	}
 
 	smtpHost := "smtp.gmail.com"
 	smtpPort := "587"
