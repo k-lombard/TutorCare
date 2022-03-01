@@ -8,23 +8,26 @@ import (
 )
 
 type Post struct {
-	UserID          uuid.UUID     `sql:",fk" json:"user_id" gorm:"type:uuid;default:null;"`
-	CaregiverID     uuid.UUID     `json:"caregiver_id" gorm:"type:uuid;default:null;"`
-	PostID          int           `sql:",pk" json:"post_id" gorm:"primaryKey;default:null;"`
-	Title           string        `json:"title" gorm:"default:null"`
-	Tags            string        `json:"tags" gorm:"default:null"`
-	CareDescription string        `json:"care_description" gorm:"default:null"`
-	CareType        string        `json:"care_type" gorm:"default:null"`
-	Completed       bool          `json:"completed" gorm:"default:null"`
-	StartDate       string        `json:"start_date" gorm:"default:null"`
-	StartTime       string        `json:"start_time" gorm:"default:null"`
-	EndDate         string        `json:"end_date" gorm:"default:null"`
-	EndTime         string        `json:"end_time" gorm:"default:null"`
-	DatePosted      string        `json:"date_posted" gorm:"default:null"`
-	Applications    []Application `json:"applications" gorm:"-"`
-	Caregiver       User          `json:"caregiver" gorm:"-"`
-	ApplicationID   int           `json:"application_id" gorm:"-"`
-	User            User          `json:"user" gorm:"-"`
+	UserID             uuid.UUID     `sql:",fk" json:"user_id" gorm:"type:uuid;default:null;"`
+	CaregiverID        uuid.UUID     `json:"caregiver_id" gorm:"type:uuid;default:null;"`
+	PostID             int           `sql:",pk" json:"post_id" gorm:"primaryKey;default:null;"`
+	Title              string        `json:"title" gorm:"default:null"`
+	Tags               string        `json:"tags" gorm:"default:null"`
+	CareDescription    string        `json:"care_description" gorm:"default:null"`
+	CareType           string        `json:"care_type" gorm:"default:null"`
+	Completed          bool          `json:"completed" gorm:"default:null"`
+	StartDate          string        `json:"start_date" gorm:"default:null"`
+	StartTime          string        `json:"start_time" gorm:"default:null"`
+	EndDate            string        `json:"end_date" gorm:"default:null"`
+	EndTime            string        `json:"end_time" gorm:"default:null"`
+	DatePosted         string        `json:"date_posted" gorm:"default:null"`
+	PosterCompleted    bool          `json:"poster_completed" gorm:"default:null"`
+	CaregiverCompleted bool          `json:"caregiver_completed" gorm:"default:null"`
+	HourlyRate         float64       `json:"hourly_rate" gorm:"default:null"`
+	Applications       []Application `json:"applications" gorm:"-"`
+	Caregiver          User          `json:"caregiver" gorm:"-"`
+	ApplicationID      int           `json:"application_id" gorm:"-"`
+	User               User          `json:"user" gorm:"-"`
 }
 
 type PostList struct {
