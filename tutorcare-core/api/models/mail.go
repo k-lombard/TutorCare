@@ -22,7 +22,7 @@ func SendEmailVerificationCode(to []string) int {
 	code := generateVerificationCode()
 
 	subject := "TutorCare Email Verification Code"
-	body := "<p>Your validation code is <b>" + strconv.Itoa(code) + "</b></p>"
+	body := "<p>Your validation code is <b>" + strconv.Itoa(code) + "</b></p><br><a href='http://localhost:4200/verify'>Verify Email Here</a>"
 	pass := os.Getenv("EMAIL_PASS")
 
 	request := mail{
