@@ -15,6 +15,8 @@ export interface Profile {
     service_types ?:string
     age_groups    ?:string
     covid19       ?:boolean
+    cpr           ?:boolean
+    first_aid     ?:boolean
     smoker        ?:boolean
     jobs_completed?:number
     rate_range    ?:string

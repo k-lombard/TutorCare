@@ -22,6 +22,8 @@ type Profile struct {
 	ServiceTypes  string    `json:"service_types" gorm:"default:null"`
 	AgeGroups     string    `json:"age_groups" gorm:"default:null"`
 	Covid19       bool      `json:"covid19" gorm:"default:null"`
+	Cpr           bool      `json:"cpr" gorm:"default:null"`
+	FirstAid      bool      `json:"first_aid" gorm:"default:null"`
 	Smoker        bool      `json:"smoker" gorm:"default:null"`
 	JobsCompleted int       `json:"jobs_completed" gorm:"default:null"`
 	RateRange     string    `json:"rate_range" gorm:"default:null"`

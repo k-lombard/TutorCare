@@ -73,6 +73,8 @@ func (db Database) GetUserById(userId uuid.UUID) (models.User, error) {
 func (db Database) GetUserProfileById(userId uuid.UUID) (models.Profile, error) {
 	userProfile := models.Profile{}
 	err := db.Conn.First(&userProfile, "user_id = ?", userId).Error
+	fmt.Printf("Database: GetUserProfileById")
+	fmt.Printf(userProfile.UserID.String() + string(userProfile.ProfileID))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return userProfile, ErrNoMatch
@@ -183,6 +185,8 @@ func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.Profile) 
 			ServiceTypes:  userData.ServiceTypes,
 			AgeGroups:     userData.AgeGroups,
 			Covid19:       userData.Covid19,
+			Cpr:           userData.Cpr,
+			FirstAid:      userData.FirstAid,
 			Smoker:        userData.Smoker,
 			JobsCompleted: userData.JobsCompleted,
 			RateRange:     userData.RateRange,
