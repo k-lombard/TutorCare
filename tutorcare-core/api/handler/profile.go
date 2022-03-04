@@ -45,7 +45,7 @@ func updateUserProfile(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
-	user, err := dbInstance.UpdateUserProfile(userID, userData)
+	userProfile, err := dbInstance.UpdateUserProfile(userID, userData)
 	if err != nil {
 		if err == database.ErrNoMatch {
 			c.JSON(http.StatusNotFound, "Error: Resource not found")
@@ -54,7 +54,7 @@ func updateUserProfile(c *gin.Context) {
 		}
 		return
 	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, userProfile)
 }
 
 func getUserProfileById(c *gin.Context) {

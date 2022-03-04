@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"main/models"
 
@@ -144,7 +145,13 @@ func (db Database) UpdateUserData(userId uuid.UUID, userData models.User) (model
 		}
 		return user, errTwo
 	}
-	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{Email: userData.Email, UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences}).Error
+	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{
+		Email:        userData.Email,
+		UserCategory: userData.UserCategory,
+		Experience:   userData.Experience,
+		Bio:          userData.Bio,
+		Preferences:  userData.Preferences,
+	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
@@ -162,50 +169,50 @@ func (db Database) UpdateUserData(userId uuid.UUID, userData models.User) (model
 }
 
 func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.Profile) (models.Profile, error) {
-	user := models.Profile{}
+	userProfile := models.Profile{}
 	user2 := models.Profile{}
 	errTwo := db.Conn.First(&user2, "user_id = ?", userId).Error
 	if errTwo != nil {
 		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
-			return user, ErrNoMatch
+			return userProfile, ErrNoMatch
 		}
-		return user, errTwo
+		return userProfile, errTwo
 	}
-	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(
-		models.Profile{
-			ProfilePic:    userData.ProfilePic,
-			Bio:           userData.Bio,
-			BadgeList:     userData.BadgeList,
-			Age:           userData.Age,
-			Gender:        userData.Gender,
-			Language:      userData.Language,
-			Experience:    userData.Experience,
-			Education:     userData.Education,
-			Skills:        userData.Skills,
-			ServiceTypes:  userData.ServiceTypes,
-			AgeGroups:     userData.AgeGroups,
-			Covid19:       userData.Covid19,
-			Cpr:           userData.Cpr,
-			FirstAid:      userData.FirstAid,
-			Smoker:        userData.Smoker,
-			JobsCompleted: userData.JobsCompleted,
-			RateRange:     userData.RateRange,
-			Rating:        userData.Rating,
-		}).Error
+	fmt.Printf("UpdateUserProfile function. Updated covid value = " + strconv.FormatBool((userData.Covid19)))
+	err := db.Conn.Model(&userProfile).Where("user_id = ?", userId).Updates(models.Profile{
+		ProfilePic:    userData.ProfilePic,
+		Bio:           userData.Bio,
+		BadgeList:     userData.BadgeList,
+		Age:           userData.Age,
+		Gender:        userData.Gender,
+		Language:      userData.Language,
+		Experience:    userData.Experience,
+		Education:     userData.Education,
+		Skills:        userData.Skills,
+		ServiceTypes:  userData.ServiceTypes,
+		AgeGroups:     userData.AgeGroups,
+		Covid19:       userData.Covid19,
+		Cpr:           userData.Cpr,
+		FirstAid:      userData.FirstAid,
+		Smoker:        userData.Smoker,
+		JobsCompleted: userData.JobsCompleted,
+		RateRange:     userData.RateRange,
+		Rating:        userData.Rating,
+	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return user, ErrNoMatch
+			return userProfile, ErrNoMatch
 		}
-		return user, err
+		return userProfile, err
 	}
-	errFinal := db.Conn.First(&user, "user_id = ?", userId).Error
+	errFinal := db.Conn.First(&userProfile, "user_id = ?", userId).Error
 	if errFinal != nil {
 		if errors.Is(errFinal, gorm.ErrRecordNotFound) {
-			return user, ErrNoMatch
+			return userProfile, ErrNoMatch
 		}
-		return user, errFinal
+		return userProfile, errFinal
 	}
-	return user, nil
+	return userProfile, nil
 }
 
 func comparePasswords(hashedPwd string, plainPwd []byte) bool {
