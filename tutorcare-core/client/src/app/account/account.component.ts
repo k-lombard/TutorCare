@@ -8,6 +8,9 @@ import { AuthService } from '../auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { tap } from 'rxjs/operators';
 import { Logout } from '../auth/auth.actions';
+import { Profile } from '../models/profile.model';
+import { ProfileComponent } from '../profile/profile.component';
+import { AccountService } from './account.service';
 
 @Component({
     selector: 'account-component',
@@ -17,16 +20,13 @@ import { Logout } from '../auth/auth.actions';
 export class AccountComponent implements OnInit {
     url = this.router.url
     user!: User;
+    profile!: Profile;
     first_name: string | undefined
     last_name: string |undefined
-    rate: number = 4.5
     user_type: string | undefined
     exp!: string
     bio!: string
-    careseeker: boolean = false
-    caregiver: boolean = false
-    both: boolean = false
-    constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private authService: AuthService, private toastr: ToastrService) {}
+    constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private authService: AuthService, private toastr: ToastrService, private accountService: AccountService) {}
 
     ngOnInit() {
         this.store
@@ -37,18 +37,12 @@ export class AccountComponent implements OnInit {
             this.first_name = (this.user ? this.user.first_name : "")
             this.last_name = (this.user ? this.user.last_name : "")
             this.user_type = this.user.user_category? this.user.user_category.charAt(0).toUpperCase() + this.user.user_category.substring(1) : ""
-            this.exp = this.user.experience || ""
-            this.bio = this.user.bio || ""
-            
         })
-        if (this.user_type == "Caregiver") {
-          this.caregiver = true
-        }
-        else if (this.user_type == "Careseeker") {
-          this.careseeker = true
-        } else {
-          this.both = true
-        }
+        this.accountService.getProfile(this.user.user_id).subscribe( data => {
+            this.profile = data
+            console.log("here")
+            console.log(this.profile.badge_list)
+        })
     }
 
     onEditProfileClick() {
@@ -68,8 +62,9 @@ export class AccountComponent implements OnInit {
         this.toastr.success("Successfully logged out.", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
       });
     }
-
-
-
-
 }
+
+
+
+
+
