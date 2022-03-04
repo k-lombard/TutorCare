@@ -20,6 +20,11 @@ h2 {
     font-size: 30px;
 }
 
+.tool-tip {
+  background-color: mat.get-color-from-palette($tutorcare-core-primary);
+  color: white;
+} 
+
 .edit-profile{
     width: 100% !important;
     min-width: unset!important;

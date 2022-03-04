@@ -12,6 +12,12 @@ import { Profile } from '../models/profile.model';
 import { ProfileComponent } from '../profile/profile.component';
 import { AccountService } from './account.service';
 
+interface Badges {
+  value: string
+  description: string
+  matIconString: string
+}
+
 @Component({
     selector: 'account-component',
     templateUrl: './account.component.html',
@@ -26,6 +32,11 @@ export class AccountComponent implements OnInit {
     user_type: string | undefined
     exp!: string
     bio!: string
+    all_badges: Badges[] = [
+      {value: 'verified', description: 'Verified University Email', matIconString:'verified_user'},
+      {value: '20jobs', description: '20 Completed Jobs', matIconString:'whatshot'}
+    ];
+    user_badges: Badges[] = []
     constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private authService: AuthService, private toastr: ToastrService, private accountService: AccountService) {}
 
     ngOnInit() {
@@ -40,9 +51,25 @@ export class AccountComponent implements OnInit {
         })
         this.accountService.getProfile(this.user.user_id).subscribe( data => {
             this.profile = data
-            console.log("here")
-            console.log(this.profile.badge_list)
+            /*if (this.user.status) {
+              this.profile.badge_list += "verified" + ","
+            }
+            this.profile.jobs_completed = 20
+            if (this.profile.jobs_completed >= 20) {
+              this.profile.badge_list += "20jobs" + ","
+            }*/
+            // Just for testing badge. Badge strings need to be added when they occur. Ex: when verified email, "verified" + "," gets appended then not here
+            this.setBadges(this.profile.badge_list)
         })
+    }
+
+    setBadges(badge_list: string) {
+      badge_list.split(',').forEach(parsedString => {
+        var badge = this.all_badges.find(item => item.value == parsedString)
+        if (badge) {
+          this.user_badges.push(badge)
+        }
+      });
     }
 
     onEditProfileClick() {
