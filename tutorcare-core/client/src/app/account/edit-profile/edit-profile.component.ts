@@ -11,13 +11,11 @@ import { tap } from 'rxjs/operators';
 import { Login, Logout } from 'src/app/auth/auth.actions';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { Profile } from 'src/app/models/profile.model';
+import { Options, LabelType } from "@angular-slider/ngx-slider";
 
-interface Option {
-    value: string;
-    viewValue: string;
-}
 
-interface Preference {
+interface Item {
   display: string,
   value: string
 }
@@ -29,13 +27,16 @@ interface Preference {
 })
 export class EditProfileComponent implements OnInit {
     public form: FormGroup = new FormGroup({})
-    selectedValue!: string
-    userCategory: string | undefined
+    user!: User;
+    profile!: Profile
     _editProfileObservable: Observable<User> | undefined
+    /*selectedValue!: string
+    userCategory: string | undefined
+    
     options: Option[] = [
-        {value: 'caregiver-0', viewValue: 'Providing Care'},
-        {value: 'careseeker-1', viewValue: 'Seeking Care'},
-        {value: 'both-2', viewValue: 'Both'},
+        {value: 'caregiver', viewValue: 'Providing Care'},
+        {value: 'careseeker', viewValue: 'Seeking Care'},
+        {value: 'both', viewValue: 'Both'},
     ];
     email: string | undefined
     output: string | undefined
@@ -44,7 +45,6 @@ export class EditProfileComponent implements OnInit {
     emailFC = new FormControl();
     experienceFC = new FormControl();
     bioFC = new FormControl();
-    user!: User;
     first_name: string | undefined
     last_name: string |undefined
     rate: number = 4.5
@@ -58,7 +58,33 @@ export class EditProfileComponent implements OnInit {
     refresh_token!: string
     selectedPreferences: string[] = []
     preferenceString: string = ""
-    items: Preference[] = [{display: 'Tutoring', value: 'Tutoring'}, {display: 'Baby-sitting', value: 'Baby-sitting'}, {display: 'Dog-sitting', value: 'Dog-sitting'}, {display: 'House-sitting', value: 'House-sitting'}]
+    items: Preference[] = [{display: 'Tutoring', value: 'Tutoring'}, {display: 'Baby-sitting', value: 'Baby-sitting'}, {display: 'Dog-sitting', value: 'Dog-sitting'}, {display: 'House-sitting', value: 'House-sitting'}]*/
+    skills: Item[] = [
+      {display: 'Skill1', value: 'Skill1'},
+      {display: 'Skill2', value: 'Skill2'},
+      {display: 'Skill3', value: 'Skill3'},
+      {display: 'Skill4', value: 'Skill4'}
+    ]
+
+  minValue: number = 20;
+  maxValue: number = 30;
+  options: Options = {
+    floor: 10,
+    ceil: 100,
+    minRange: 10,
+    maxRange: 30,
+    pushRange: true,
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          return "<b>$" + value + "</b>";
+        case LabelType.High:
+          return "<b>$" + value + "</b>";
+        default:
+          return "$" + value;
+      }
+    }
+  };
     constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private editProfileService: EditProfileService) {}
 
     ngOnInit() {
@@ -67,7 +93,7 @@ export class EditProfileComponent implements OnInit {
             select(getCurrUser)
         ).subscribe(data =>  {
             this.user = data
-            this.emailVal = this.user.email || ""
+            /*this.emailVal = this.user.email || ""
             this.catVal = this.user.user_category || ""
             this.expVal = this.user.experience || ""
             this.bioVal = this.user.bio || ""
@@ -87,11 +113,15 @@ export class EditProfileComponent implements OnInit {
                 prefCopy.push(tempStr)
               }
               this.selectedPreferences = prefCopy
-            }
+            }*/
         })
+        this.editProfileService.getProfile(this.user.user_id).subscribe( data => {
+          this.profile = data
+          console.log(this.profile)
+      })
     }
 
-    onEmailChange() {
+    /*onEmailChange() {
         this.email = this.emailFC.value
     }
 
@@ -101,14 +131,14 @@ export class EditProfileComponent implements OnInit {
 
     onBioChange() {
         this.bio = this.emailFC.value
-    }
+    }*/
 
     onCancelSubmit() {
         this.router.navigate(['account'])
     }
 
     onSave() {
-        if (this.selectedValue == 'caregiver-0') {
+        /*if (this.selectedValue == 'caregiver-1') {
           this.userCategory = "caregiver"
         } else if (this.selectedValue == 'careseeker-1') {
           this.userCategory = "careseeker"
@@ -121,22 +151,26 @@ export class EditProfileComponent implements OnInit {
           } else {
             this.preferenceString = this.preferenceString + " " + val.toLowerCase()
           }
-        }
-        this.editProfileFunc(this.user.user_id, this.emailVal, this.expVal, this.userCategory, this.bioVal, this.user.password, this.preferenceString)
+        }*/
+        console.log("saved")
+        console.log(this.profile)
+        this.editProfileFunc(this.user.user_id, this.profile)
     }
 
-    editProfileFunc(user_id: string | undefined, email: string | undefined, experience: string | undefined, user_category: string | undefined, bio: string | undefined, password: string | undefined, preferences: string | undefined) {
-        this._editProfileObservable = this.editProfileService.editProfile(user_id, email, experience, user_category, bio, password, preferences);
-
-        this._editProfileObservable.subscribe((data: User) => {
-            this.user = data;
-            this.user.refresh_token = this.refresh_token
-            this.user.access_token = this.access_token
-            this.store.dispatch(new Login({user: data}));
+    editProfileFunc(user_id: string | undefined, newProfile: Profile) {
+        this._editProfileObservable = this.editProfileService.editProfile(user_id, newProfile);
+        console.log("here")
+        this._editProfileObservable.subscribe((data: Profile) => {
+            console.log(data)
+            //this.profile = data
+            //this.user = data;
+            //this.user.refresh_token = this.refresh_token
+            //this.user.access_token = this.access_token
+            //this.store.dispatch(new Login({user: data}));
         });
-        this.router.navigate(['/account']).then(() => {
+        /*this.router.navigate(['/account']).then(() => {
           window.location.reload();
-        });
+        });*/
     }
 
 }

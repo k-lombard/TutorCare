@@ -1,52 +1,82 @@
-<div>
+<div *ngIf="profile">
     <navbar></navbar>
     <form class="example-form">
-        <mat-card>
+        
+        <mat-card class="flex flex-row">
             <mat-card-title>Profile Information</mat-card-title>
-            <mat-form-field appearance="outline">
-                <mat-label>Email</mat-label>
+            <!-- <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label> -->
                 <!-- <input [value]="'emailVal'" [formControl]="emailFC" matInput (change)="onEmailChange()"> -->
-                <textarea id="email-field" matInput
+                <!-- <textarea id="email-field" matInput
                     name="first"
-                    [(ngModel)]="emailVal"
+                    [(ngModel)]="user.email"
                     cdkTextareaAutosize
                     class="textarea-inline-control" >
                 </textarea>
-            </mat-form-field>
+            </mat-form-field> -->
 
-            <mat-form-field appearance="fill">
+            <!-- <mat-form-field appearance="fill">
                 <mat-label>User Category</mat-label>
                 <mat-select name="second" [(ngModel)]="selectedValue" name="option">
                   <mat-option *ngFor="let option of options" [value]="option.value">
                     {{option.viewValue}}
                   </mat-option>
                 </mat-select>
-              </mat-form-field>
+            </mat-form-field> -->
+            <mat-form-field appearance="outline">
+                <mat-label>What do you want others to know about you?</mat-label>
+                <textarea matInput
+                    name="bio"
+                    [(ngModel)]="profile.bio"
+                    class="textarea-inline-control"
+                    cdkTextareaAutosize>
+                </textarea>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+                <mat-label>What are your qualifications?</mat-label>
+                <!-- <input [value]="'expVal'" value="expVal" [formControl]="experienceFC" matInput (change)="onExperienceChange()"> -->
+                <textarea matInput
+                    name="qualifications"
+                    [(ngModel)]="profile.education"
+                    class="textarea-inline-control"
+                    cdkTextareaAutosize>
+                </textarea>
+            </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Experience</mat-label>
                 <!-- <input [value]="'expVal'" value="expVal" [formControl]="experienceFC" matInput (change)="onExperienceChange()"> -->
                 <textarea matInput
-                    name="third"
-                    [(ngModel)]="expVal"
+                    name="experience"
+                    [(ngModel)]="profile.experience"
                     class="textarea-inline-control"
                     cdkTextareaAutosize>
                 </textarea>
+                
             </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Bio</mat-label>
-                <!-- <input [value]="'bioVal'" [formControl]="bioFC" matInput (change)="onBioChange()"> -->
-                <textarea matInput
-                    name="fourth"
-                    [(ngModel)]="bioVal"
-                    class="textarea-inline-control"
-                    cdkTextareaAutosize>
-                </textarea>
-            </mat-form-field>
-            <h2 class="text-sm font-bold py-0 mt-4 pt-8">Care Preferences:</h2>
+
+
+            <ng-select class="custom mt-2" matInput [multiple]="true" [(ngModel)]="profile.skills" [ngModelOptions]="{standalone: true}" placeholder="Select skills you want to show">
+                <ng-option *ngFor="let task of skills" [value]="task.value" >{{task.display}}</ng-option>
+            </ng-select>
+
+            <div class="custom-slider mt-2">
+                <mat-label class="inline-block">What is your ideal price range?</mat-label>
+                <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
+            </div>
+            
+            <!-- <h2 class="text-sm font-bold py-0 mt-4 pt-8">Care Preferences:</h2>
             <ng-select class="custom" matInput [multiple]="true" [(ngModel)]="selectedPreferences" [ngModelOptions]="{standalone: true}">
               <ng-option *ngFor="let pref of items" [value]="pref.value" >{{pref.display}}</ng-option>
-            </ng-select>
+            </ng-select> -->
+
+            <ul class="twocolumn mt-2">
+                <li><mat-checkbox name="covid" [checked]="profile.covid19" (change)="profile.covid19 = !profile.covid19">Have you had at least 2 COVID-19 Vaccines</mat-checkbox></li>
+                <li><mat-checkbox name="smoker" [checked]="profile.smoker" (change)="profile.smoker = !profile.smoker">Do you smoke regularly?</mat-checkbox></li>
+                <li><mat-checkbox name="cpr" [checked]="profile.cpr" (change)="profile.cpr = !profile.cpr">Do you have CPR training?</mat-checkbox></li>
+                <li><mat-checkbox name="first_aid" [checked]="profile.first_aid" (change)="profile.first_aid = !profile.first_aid">Do you have First Aid training?</mat-checkbox></li>
+            </ul>
 
 
             <mat-card-actions>

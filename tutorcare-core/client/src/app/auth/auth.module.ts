@@ -3,6 +3,9 @@ import {CommonModule} from '@angular/common';
 import {LoginComponent} from './login/login.component';
 import {MatCardModule} from "@angular/material/card";
 import { MatInputModule } from "@angular/material/input";
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import {RouterModule} from "@angular/router";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
@@ -57,6 +60,9 @@ import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
         ReactiveFormsModule,
         MatInputModule,
         MatCardModule,
+        NgxSliderModule,
+        MatSlideToggleModule,
+        MatCheckboxModule,
         HttpClientModule,
         MatButtonModule,
         ReactiveFormsModule,
