@@ -9,6 +9,12 @@
   display: inline-block !important;
 }
 
+[id="back"] {
+  background-color: #eaaa00;
+  @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
+  display: none;
+}
+
 [id="date"] {
   display: inline-block !important;
   float: none;
@@ -125,6 +131,15 @@ bar-rating {
   [id="dateofjob"] {
     display: none !important;
   }
+  .backbutton2 {
+    display: none;
+  }
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none;
+  }
 }
 
 .pclass {
@@ -136,6 +151,42 @@ bar-rating {
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
     overflow-x: hidden !important;
+  }
+  [id="rightcol"] {
+    width: 100% !important;
+  }
+  .backbutton2 {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
+  .menu {
+    width: 100% !important;
+    min-width: 100% !important;
+    display: flex !important;
+    .sidenav {
+      width: 100% !important;
+      min-width: 100% !important;
+      display: flex !important;
+    }
+  }
+
+  .showmenu {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+  .sidenav {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none;
   }
 }
 

@@ -50,7 +50,7 @@
 
 [id="send"] {
   background-color: #eaaa00;
-  @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
+  @apply transition-colors duration-100 shadow-md shadow-[#eaaa00] transition-colors transform hover:shadow-gray-600 hover:bg-gray-600 focus:bg-gray-600 focus:outline-none;
 }
 
 [id="back"] {

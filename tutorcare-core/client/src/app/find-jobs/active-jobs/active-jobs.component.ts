@@ -32,6 +32,8 @@ export class ActiveJobsComponent implements OnInit {
     locs!: GeolocationPositionWithUser[]
     userType!: string
     mySubscription!: any
+    menuVisible: boolean
+    mainCol: boolean
     constructor(private router: Router, private activeJobs: ActiveJobsService, private store: Store<AppState>, private chatroomService: ChatroomsService) {}
 
 
@@ -42,31 +44,21 @@ export class ActiveJobsComponent implements OnInit {
         ).subscribe(data =>  {
             this.user = data
             this.userId = this.user.user_id || ""
+            console.log(this.userId)
             this.userType = this.user.user_category
       })
       var postsCopy: Post[] = []
-      if (this.userType == "careseeker" || this.userType == "both") {
-        this.activeJobs.getActiveJobsByUserId(this.userId).subscribe(data => {
-          this.posts = data
-          if (this.posts) {
-            for (var post of this.posts) {
-              post.tagList = post.tags.split(" ")
-              postsCopy.push(post)
-            }
-            console.log(this.posts)
+      this.activeJobs.getActiveJobsByUserId(this.userId).subscribe(data => {
+        this.posts = data
+        console.log(data)
+        if (this.posts) {
+          for (var post of this.posts) {
+            post.tagList = post.tags.split(" ")
+            postsCopy.push(post)
           }
-        })
-      } else if (this.userType == "caregiver" || this.userType == "both") {
-        this.activeJobs.getActiveJobsByCaregiverId(this.userId).subscribe(data => {
-          this.posts = data
-          if (this.posts) {
-            for (var post of this.posts) {
-              post.tagList = post.tags.split(" ")
-              postsCopy.push(post)
-            }
-          }
-        })
-      }
+          console.log(this.posts)
+        }
+      })
       this.posts = postsCopy
     }
 
@@ -75,5 +67,9 @@ export class ActiveJobsComponent implements OnInit {
         this.router.navigate([`/find-jobs/messages/${chatroom.chatroom_id}`])
         this.chatroomService.setSelected(chatroom.chatroom_id)
       })
+    }
+    backToMenu() {
+      this.mainCol = false
+      this.menuVisible = true
     }
 }

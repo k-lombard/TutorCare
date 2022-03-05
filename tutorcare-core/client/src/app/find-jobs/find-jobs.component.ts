@@ -1,10 +1,10 @@
-import {Component, OnInit, ChangeDetectionStrategy, Inject} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, Inject, Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GeolocationPositionWithUser } from '../models/geolocationposition.model';
 import { Post } from '../models/post.model';
 import { FindJobsService } from './find-jobs.service';
 import {MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../reducers';
@@ -16,6 +16,7 @@ import { ApplyJobDialog } from './apply-job/apply-job.component';
 import { ToastrService } from 'ngx-toastr';
 import { taggedTemplate } from '@angular/compiler/src/output/output_ast';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DateValidator } from './date.validator';
 
 
 interface FilterOption {
@@ -46,6 +47,8 @@ export class FindJobsComponent implements OnInit {
         {value: 'other-2', viewValue: 'Type: Other'}
     ];
     displayedPosts: Post[] = []
+    menuVisible: boolean
+    mainCol: boolean
     constructor(private router: Router, private findJobs: FindJobsService, public dialog: MatDialog, private route: ActivatedRoute, private store: Store<AppState>, private toastr: ToastrService) {}
 
     openDialog() {
@@ -57,13 +60,20 @@ export class FindJobsComponent implements OnInit {
         dialogConfig.data = {
           id: 1,
           title: 'Create Job Posting',
+          posts: this.posts as Post[]
         };
         dialogConfig.height = "90%"
         dialogConfig.width = "90%"
         const dialogRef = this.dialog.open(CreateJobDialog, dialogConfig);
 
         dialogRef.afterClosed().subscribe(
-          data => console.log("Dialog output:", data)
+          data =>  {
+            console.log("Dialog output:", data)
+            if (data.posts) {
+              this.posts = data?.posts
+              this.displayedPosts = data?.posts
+            }
+          }
         );
       } else {
         this.toastr.error("You must be logged in to do this.", "Error", {closeButton: true, timeOut: 5000, progressBar: true})
@@ -152,6 +162,10 @@ export class FindJobsComponent implements OnInit {
       this.div1=!this.div1;
     }
 
+    editPost(post: Post) {
+      this.router.navigate(['/find-jobs/my-job-postings/' + post.post_id])
+    }
+
     ngOnInit() {
       this.store
       .pipe(
@@ -163,14 +177,15 @@ export class FindJobsComponent implements OnInit {
         .pipe(
             select(getCurrUser)
         ).subscribe(data =>  {
-            this.user = data
+          this.user = data
+          if (this.user !== undefined) {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
-      })
+          }
+        })
         this.findJobs.getPosts().subscribe(data => {
             this.posts = data
             var postsCopy: Post[] = []
-            console.log(this.posts)
             if (this.posts) {
               for (var post of this.posts) {
                 var tempTags = post.tags.split(" ")
@@ -180,7 +195,6 @@ export class FindJobsComponent implements OnInit {
                   tag = tag.replace("_", " ")
                   tempTags2.push(tag)
                 }
-                console.log(tempTags2)
                 post.tagList = tempTags2
                 postsCopy.push(post)
               }
@@ -189,14 +203,18 @@ export class FindJobsComponent implements OnInit {
             this.displayedPosts = postsCopy
 
         })
-
     }
+
     onFindCareClick() {
         this.router.navigate(['/find-care'])
     }
 
-
+    backToMenu() {
+      this.mainCol = false
+      this.menuVisible = true
+    }
 }
+
 interface Tag {
   display: string,
   value: string
@@ -210,13 +228,16 @@ interface Tag {
   ]
 })
 export class CreateJobDialog implements OnInit{
+  @Output() newPosts = new EventEmitter<Post[]>();
   post!: Post
-  form!: FormGroup;
+  form!: FormGroup
+  dateGroup!: FormGroup
   date!: string
   date2!: string
   type_care!: string
   job_desc!: string
-  date_of_job!: string
+  end_date!: string
+  start_date!: string
   picker!: string
   endTimeFC = new FormControl()
   startTimeFC = new FormControl()
@@ -263,20 +284,46 @@ export class CreateJobDialog implements OnInit{
   ]
 
   _createJobObservable: Observable<Post> | undefined
-  minDate = new Date()
-  maxDate = new Date().setMonth(new Date().getMonth() + 3)
+  minDate1: Date = (new Date())
+  minDate2: Date = (new Date())
+  maxDate: Date = new Date()
   filter_options: FilterOption[] = [
     {value: 'tutoring-0', viewValue: 'Type: Tutoring'},
     {value: 'babysitting-1', viewValue: 'Type: Babysitting'},
     {value: 'other-2', viewValue: 'Type: Other'}
 ];
 
+validation_messages = {
+  'care_type': [
+    { type: 'required', message: 'Type is required' }
+  ],
+  'job_title': [
+    { type: 'required', message: 'Title is required' },
+    { type: 'maxlength', message: 'Title cannot be more than 50 characters long' }
+  ],
+  'job_desc': [
+    { type: 'required', message: 'Job decription is required' },
+    { type: 'maxlength', message: 'Description cannot be more than 1023 characters long' }
+  ],
+  'start_time': [
+    { type: 'required', message: 'Starting date and time are required' },
+  ],
+  'end_time': [
+    { type: 'required', message: 'Ending date and time are required' },
+    { type: 'dateLessThan', message: 'Ending time must be after starting time'} //BUG: does not show
+  ]
+
+}
+
 
   constructor(
     public dialogRef: MatDialogRef<CreateJobDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder, private store: Store<AppState>, private findJobs: FindJobsService) {
-
+      this.minDate2.setDate((new Date()).getDate() + 1)
+      this.minDate1.setDate((new Date()).getDate() + 1)
+      this.minDate2.setHours((new Date()).getHours() + 1)
+      this.maxDate.setMonth((new Date()).getMonth() + 3)
   }
 
   onStartTimeChange() {
@@ -287,15 +334,29 @@ export class CreateJobDialog implements OnInit{
   }
 
   ngOnInit() {
+    this.dateGroup = new FormGroup({
+      start_time: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      end_time: new FormControl('', Validators.compose([
+        Validators.required
+      ]))
+    })
+
     this.form = this.fb.group({
-      type_care: new FormControl(),
-      job_title: new FormControl(),
-      job_desc: new FormControl(),
-      job_tags: new FormControl(),
-      picker: new FormControl(new Date()),
-      start_time: new FormControl(),
-      end_time: new FormControl(),
-      posts: new FormControl()
+      type_care: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      job_title: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.maxLength(50)
+      ])),
+      job_desc: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.maxLength(1023)
+      ])),
+      posts: new FormControl([]),
+      dateGroup: this.dateGroup
     });
     this.store
         .pipe(
@@ -308,7 +369,8 @@ export class CreateJobDialog implements OnInit{
   }
 
   save() {
-    console.log(this.form.value)
+    var start_time = new Date(this.form.value.dateGroup.start_time)
+    var end_time = new Date(this.form.value.dateGroup.end_time)
     this.job_desc = this.form.value.job_desc
     if (this.form.value.type_care == "tutoring-0") {
       this.type_care = "tutoring"
@@ -317,9 +379,8 @@ export class CreateJobDialog implements OnInit{
     } else if (this.form.value.type_care == "other-2") {
       this.type_care = "other"
     }
-    this.month = this.form.value.start_time.getMonth() + 1
-    this.day = this.form.value.start_time.getDate()
-    console.log(this.day)
+    this.month = start_time.getMonth() + 1
+    this.day = start_time.getDate()
     if (this.month < 10) {
       this.monthStr = '0' + this.month
     } else {
@@ -337,20 +398,33 @@ export class CreateJobDialog implements OnInit{
         this.tagString = this.tagString + " " + val.toLowerCase()
       }
     }
-    this.date_of_job = this.form.value.start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
-    this.start_time = this.form.value.start_time.getHours() + ':' + this.form.value.start_time.getMinutes()
-    this.end_time = this.form.value.end_time.getHours() + ':' + this.form.value.end_time.getMinutes()
+    this.start_date = start_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
+
+    this.month = end_time.getMonth() + 1
+    this.day = end_time.getDate()
+    if (this.month < 10) {
+      this.monthStr = '0' + this.month
+    } else {
+      this.monthStr = this.month.toString()
+    }
+    if (this.day < 10) {
+      this.dayStr = '0' + this.day
+    } else {
+      this.dayStr = this.day.toString()
+    }
+    this.end_date = end_time.getFullYear() + '-' + this.monthStr + '-' + this.dayStr
+
+    this.start_time = start_time.getHours() + ':' + start_time.getMinutes()
+    this.end_time = end_time.getHours() + ':' + end_time.getMinutes()
     this.title = this.form.value.job_title
     this.tags = this.tagString
-    console.log(this.start_time)
-    console.log(this.form.value.start_time.getMonth())
-    console.log(this.form.value.start_time.getDay())
-    this._createJobObservable = this.findJobs.createPost(this.userId, this.title, this.job_desc, this.tags, this.type_care, this.date_of_job, this.start_time, this.end_time)
+    this._createJobObservable = this.findJobs.createPost(this.userId, this.title, this.job_desc, this.tags, this.type_care, this.start_date, this.start_time, this.end_date, this.end_time)
 
     this._createJobObservable.subscribe((data2: Post) => {
         this.post = data2
         if (this.data.posts && this.data.posts instanceof Array) {
-          this.form.value.posts = this.data.posts.concat(this.post)
+          var temp: any[] = this.data.posts.unshift(this.post)
+          this.form.value.posts = this.data.posts
         }
 
     });

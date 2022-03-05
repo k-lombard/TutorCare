@@ -69,7 +69,7 @@ deletePost(post_id: number): Observable<string> {
   });
 }
 
-editJobPost(user_id: string, post_id: number, title: string, tags: string, care_description: string, date_of_job: string, start_time: string, end_time: string, care_type: string): Observable<Post> {
+editJobPost(user_id: string, post_id: number, title: string, tags: string, care_description: string, start_date: string, start_time: string, end_date:string, end_time: string, care_type: string): Observable<Post> {
   let url = `/api/posts/${post_id}`;
     return new Observable((observer: any) => {
       this.http.put<any>(url, JSON.stringify({
@@ -77,8 +77,9 @@ editJobPost(user_id: string, post_id: number, title: string, tags: string, care_
         "title": title,
         "tags": tags,
         "care_description": care_description,
-        "date_of_job": date_of_job,
+        "start_date": start_date,
         "start_time": start_time,
+        "end_date": end_date,
         "end_time": end_time,
         "care_type": care_type
     }), {headers: this.headers})

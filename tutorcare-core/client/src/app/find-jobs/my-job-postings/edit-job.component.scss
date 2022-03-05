@@ -1,0 +1,128 @@
+@use '@angular/material' as mat;
+@import "../../../custom-theme.scss";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.mat-dialog {
+  background-color: #D6DBD4;
+}
+mat-card {
+  padding: 10px;
+  margin: 15px;
+}
+.mat-dialog-content {
+  padding: 10px;
+  max-height: unset;
+}
+.mat-form-field {
+  width: 100%;
+}
+
+h2 {
+  margin-left: 15px;
+  font-family: "Dosis" !important;
+  font-size: calc(26px + 1vw) !important;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+.ng-select.custom {
+  border:0px;
+  min-height: 0px;
+  border-radius: 0;
+  border-color: #eaaa00 !important;
+}
+.ng-select.custom ::ng-deep .ng-select-container  {
+  min-height: 0px;
+  border-radius: 0;
+  border-color: #eaaa00 !important;
+  padding-top: 5px !important;
+}
+.ng-option {
+  background-color: #eaaa00 !important;
+}
+.ng-value ::ng-deep{
+  background-color: #eaaa00 !important;
+}
+
+.ng-select.ng-select-multiple ::ng-deep .ng-select-container .ng-value-container .ng-value {
+  background-color: #eaaa00 !important;
+  border-color: #eaaa00 !important;
+}
+
+.ng-dropdown-panel.ng-select-bottom {
+  border-color: #eaaa00 !important;
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+  color: #eaaa00 !important;
+}
+
+::ng-deep .ng-select.ng-select-focused .ng-select-container:after {
+  border-color: #eaaa00 !important;
+}
+
+.ng-dropdown-panel ::ng-deep .ng-dropdown-panel-items{
+  border-color: #eaaa00 !important;
+}
+
+::ng-deep .ng-dropdown-panel {
+  border-color: #eaaa00 !important;
+}
+
+.ng-value-label {
+  background-color: #eaaa00 !important;
+}
+
+.ng-value-icon {
+  background-color: #eaaa00 !important;
+}
+
+.textarea-inline-control {
+  flex: 1;
+  border-color: transparent;
+  padding: 2 0 10px;
+  padding-bottom: 3%;
+  line-height: 1.2;
+  min-height: 10px;
+  resize: none;
+  box-shadow: transparent 0px 0px 0px 1px;
+  overflow: auto;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  border-radius: 3px;
+  appearance: none;
+  display: flex;
+  &:hover:not(:focus) {
+      background-color: rgb(235, 236, 240);
+      overflow-x: hidden;
+      display: flex;
+      flex: 1;
+  }
+
+  &:focus {
+      background-color: rgb(255,255,255);
+      border: 1px solid #4c9aff;
+      box-shadow: 0 0 0 1px #4c9aff;
+      outline: none;
+  }
+}
+
+button {
+  padding: 10px;
+  margin: 5%;
+}
+
+@media (max-width: 400px) {
+  button {
+    margin: 0px;
+  }
+}
+
+
+.mat-raised-button {
+  @apply shadow-md shadow-[#eaaa00];
+}
+

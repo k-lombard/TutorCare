@@ -1,8 +1,8 @@
 <div>
   <navbar></navbar>
   <div class="flex flex-row w-[100%]">
-    <div class="flex flex-col h-full w-64 h-screen px-4 py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
-      <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Find Jobs</h2>
+    <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 py-8 bg-white dark:bg-gray-800 dark:border-gray-600 shadow shadow-2xl">
+      <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Applications Received</h2>
 
       <div class="relative mt-6 mx-2">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -12,85 +12,50 @@
         </span>
 
         <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
+      </div>
+      <sidebar currPage="applications-received" class="h-full mb-0 pb-0"></sidebar>
     </div>
-
-      <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs">
-        <mat-icon>topic</mat-icon>
-
-          <span class="mx-4 font-medium">Current Job Postings</span>
-      </a>
-
-      <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/messages">
-        <mat-icon>message</mat-icon>
-
-          <span class="mx-4 font-medium">Messages</span>
-      </a>
-
-      <div class="flex flex-col justify-between flex-1">
-          <nav>
-
-          <div>
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/my-job-postings">
-                <mat-icon>folder_copy</mat-icon>
-
-                  <span class="mx-4 font-medium">My Job Postings</span>
-              </a>
-
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-700 bg-gray-200 rounded-md dark:bg-gray-700 dark:text-gray-200" href="/find-jobs/applications-received">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-
-                  <span class="mx-4 font-medium">Applications Received</span>
-              </a>
-
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/active-jobs">
-                <mat-icon>library_add_check</mat-icon>
-
-                  <span class="mx-4 font-medium">Active Jobs</span>
-              </a>
-            </div>
-            <div>
-
-              <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700" href="/find-jobs/applied-to">
-                <mat-icon>assignment_turned_in</mat-icon>
-
-                  <span class="mx-4 font-medium">Applied To</span>
-              </a>
-            </div>
-          </nav>
-        </div>
-    </div>
-    <div id="rightcol" class="flex flex-col border-r">
-      <h2 class="text-gray-300 text-3xl italic justify-center items-center w-full flex text-center pt-[5%]" *ngIf="!posts">You haven't created any job posts.</h2>
+    <div id="rightcol" [class.showmenu]="menuVisible" [class.hiddencol]="currApp" class="appcol flex flex-col border-r">
+      <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
+      <h2 class="text-gray-300 text-3xl italic justify-center items-center w-full flex text-center pt-[5%]" *ngIf="!posts || posts.length === 0">You haven't created any job posts.</h2>
       <div class="grid grid-cols-1 gap-1" *ngIf="posts">
-      <ul *ngFor="let post of posts" class="menu px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
+      <ul *ngFor="let post of posts" class="appcard px-8 py-4 my-4 mx-4 bg-white border-gray border rounded-lg shadow-md dark:bg-gray-800">
+        <div class="flex flex-col flex-grow">
         <li class="menu-title">
           <div class="flex flex-row items-stretch relative">
                 <h2>{{post.title}}</h2>
-                <h2 id="dateofjob" class="text-lg justify-self-end justify-end justify-items-end right-0 absolute">{{post.date_of_job}}</h2>
+                <h2 id="dateofjob" class="text-lg justify-self-end justify-end justify-items-end right-0 absolute">{{post.start_date}}</h2>
           </div>
         </li>
-        <li id="theapp" (click)="setApp(application)" [class.selected]="currApp === application || getSelected(post.post_id) === i" (click)="setSelected(i, post.post_id)" [routerLink]="['/find-jobs/applications-received', application.application_id]" *ngFor="let application of post.applications; let i = index" class="border rounded border-gray py-2 my-2 hover:bg-gray-200">
-          <a class="px-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 mr-2 stroke-current">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-            </svg>
-                {{application.message}}
-          </a>
-        </li>
+        <div class="flex flex-col flex-grow appcolumn">
+          <li id="theapp" (click)="setApp(application)" [class.selected]="currApp === application || getSelected(post.post_id) === i" (click)="setSelected(i, post.post_id)" [routerLink]="['/find-jobs/applications-received', application.application_id]" *ngFor="let application of post.applications; let i = index" class="border subapp rounded border-gray py-2 my-2 hover:bg-gray-200">
+            <a class="px-2">
+              <div class="flex flex-row justify-between">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 mr-2 stroke-current">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                  </svg>
+                  <a class="messagecontent">{{application.user.first_name}} {{application.user.last_name}}</a>
+                  <a class="appdate px-2">{{modifyDate(application.date_created)}}</a>
+              </div>
+            </a>
+          </li>
+        </div>
+      </div>
+        <a *ngIf="post.applications.length === 0" class="text-gray-300 text-xl italic w-full flex">You haven't received any applications for this job post.</a>
       </ul>
     </div>
     </div>
-    <div *ngIf="currApp" id="rightcol2" class="flex flex-col shadow-lg shadow-[#D6DBD4] bg-[#D6DBD4] relative">
+    <div *ngIf="currApp" [class.visible]="currApp" id="rightcol2" class="flex flex-col shadow-lg shadow-[#D6DBD4] bg-[#D6DBD4] relative">
       <div class="container px-6 py-8 mx-auto">
         <div class="items-center lg:flex">
             <div class="lg:w-1/2">
+              <div class="flex flex-row justify-between my-10 w-full">
+                <button (click)="back()" id="back" class="justify-center items-center w-1/4 py-4 backbutton text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"><mat-icon class="arrowback">arrow_back</mat-icon></button>
+              </div>
               <div id="accepted" *ngIf="currApp.accepted" class="w-1/6 my-4 text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs right-0 absolute mx-8"><p class="justify-center items-center">ACCEPTED</p></div>
                 <div class="flex flex-row">
-                  <h2 class="pt-4 text-3xl font-bold text-gray-800 dark:text-gray-100">{{currApp.user.first_name}} {{currApp.user.last_name}}</h2>
-                  <img id="stock" class="object-cover mx-12 rounded-full sm:block" src="../../assets/images/profile_picture.jpeg" alt="avatar">
+                  <h2 [routerLink]="['/profile/', currApp.user_id]" class="pt-4 text-3xl font-bold text-gray-800 dark:text-gray-100 hover:cursor-pointer hover:text-gray-600">{{currApp.user.first_name}} {{currApp.user.last_name}}</h2>
+                  <img [routerLink]="['/profile/', currApp.user_id]" id="stock" class="object-cover mx-12 rounded-full sm:block hover:opacity-50 hover:cursor-pointer" src="../../assets/images/profile_picture.jpeg" alt="avatar">
                 </div>
                 <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">Application ID: {{currApp.application_id}}</h2>
                 <h3 class="mt-4 text-lg text-gray-800 dark:text-gray-100">Message:</h3>

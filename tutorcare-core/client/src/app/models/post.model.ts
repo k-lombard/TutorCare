@@ -13,7 +13,9 @@ export interface Post {
   care_type?: string
   completed?: boolean
   date_of_job?: string
+  start_date?: string
   start_time?: string
+  end_date?: string
   end_time?: string
   date_posted?: string
   applications?: Application[]

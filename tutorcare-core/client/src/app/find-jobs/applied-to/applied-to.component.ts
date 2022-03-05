@@ -33,7 +33,7 @@ export class AppliedToComponent implements OnInit {
     postId!: number
     userType!: string
     editable: boolean = true
-    shown: boolean = false
+    shownMap: Map<number, boolean> = new Map<number, boolean>()
     private routeSub: Subscription;
     constructor(private router: Router, private appliedToService: AppliedToService, private store: Store<AppState>, private route: ActivatedRoute, private toastr: ToastrService, private _elementRef : ElementRef) {}
     @ViewChild('dropDown') dropdown: ElementRef;
@@ -42,7 +42,7 @@ export class AppliedToComponent implements OnInit {
 
     ngOnInit() {
       this.routeSub = this.route.params.subscribe(params => {
-        this.postId = params['id']
+        this.postId = parseInt(params['id'])
         console.log(this.postId)
       });
       this.store
@@ -53,28 +53,35 @@ export class AppliedToComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
+      this.appliedToService.getPostsAppliedTo(this.userId).subscribe(data => {
+        this.posts = data
+        if (this.posts) {
+          for (let i = 0; i < this.posts?.length; i++) {
+            if (this.posts[i].post_id === this.postId) {
+              this.appliedToService.setSelectedIdx(i)
+            }
+          }
+        }
+        var postsCopy: Post[] = []
+        if (this.posts) {
+          for (var post of this.posts) {
+            post.tagList = post.tags.split(" ")
+            postsCopy.push(post)
+          }
+          this.posts = postsCopy
+          console.log(this.posts)
+        }
+      })
       if (this.postId) {
         this.appliedToService.getPostById(this.postId).subscribe(post => {
           console.log(post)
           this.currPost = post
         })
-        this.appliedToService.getPostsAppliedTo(this.userId).subscribe(data => {
-          this.posts = data
-          var postsCopy: Post[] = []
-          if (this.posts) {
-            for (var post of this.posts) {
-              post.tagList = post.tags.split(" ")
-              postsCopy.push(post)
-            }
-            this.posts = postsCopy
-            console.log(this.posts)
-          }
-        })
       }
     }
 
-    toggleDropdown(event) {
-      this.shown = !this.shown
+    toggleDropdown(event, i) {
+      this.shownMap.set(i, !this.shownMap.get(i))
       event.stopPropagation()
     }
 
@@ -88,6 +95,7 @@ export class AppliedToComponent implements OnInit {
 
     setPost(post: Post) {
       this.currPost = post
+      this.postId = post.post_id
     }
 
     onDeleteClick(post_id: number) {

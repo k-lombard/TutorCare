@@ -14,6 +14,7 @@ import { Message } from 'src/app/models/message.model';
 import { ThisReceiver } from '@angular/compiler';
 import { ApplicationsReceivedService } from '../applications-received/applications-received.service';
 import { Router } from '@angular/router';
+import { ObserversModule } from '@angular/cdk/observers';
 
 
 @Injectable()
@@ -79,6 +80,10 @@ export class ChatroomsService {
 
 getChatroomByTwoUsers(user1_id: string, user2_id: string) {
   let url = `/api/chatrooms/users/${user1_id}/${user2_id}`;
+  if (user1_id == user2_id) {
+    this.toastr.error("Error: Cannot create a chatroom between a single user")
+    return undefined
+  }
   return new Observable((observer: any) => {
      this.http.get(url)
          .pipe(map((res: any) => res),
@@ -118,6 +123,11 @@ createChatroom(user1_id: string, user2_id: string): Observable<Chatroom> {
             observer.complete();
          });
   });
+}
+
+async getChatroomToken(user_id: string): Promise<string> {
+  let url = `api/chatrooms/websocket/${user_id}`
+  return await this.http.get<string>(url, {headers: this.headers}).toPromise()
 }
 
 setSelected(chatRoomId: number) {

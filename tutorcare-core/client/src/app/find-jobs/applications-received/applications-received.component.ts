@@ -23,6 +23,7 @@ export class ApplicationsReceivedComponent implements OnInit {
     public acceptActive = this.acceptSubject.asObservable();
     selectedValue: string | undefined
     userCategory: string = ""
+    menuVisible: boolean
     user!: User
     userId!: string
     posts!: Post[]
@@ -38,7 +39,7 @@ export class ApplicationsReceivedComponent implements OnInit {
 
     ngOnInit() {
       this.routeSub = this.route.params.subscribe(params => {
-        this.appId = params['id']
+        this.appId = parseInt(params['id'])
         console.log(this.appId)
       });
       this.store
@@ -49,7 +50,7 @@ export class ApplicationsReceivedComponent implements OnInit {
             this.userId = this.user.user_id || ""
             this.userType = this.user.user_category
       })
-      if (this.appId) {
+      if (this.appId && (!this.posts || this.posts.length === 0) ) {
         this.appsRec.getApplicationById(this.appId).subscribe(application => {
           console.log(application)
           this.currApp = application
@@ -57,6 +58,13 @@ export class ApplicationsReceivedComponent implements OnInit {
       }
       this.appsRec.getPostsByUserId(this.userId).subscribe(data => {
         this.posts = data
+        for (let i = 0; i < this.posts.length; i++) {
+          for (let k = 0; k < this.posts[i].applications.length; k++) {
+            if (this.posts[i].applications[k].application_id === this.appId) {
+              this.appsRec.setSelectedIdx(k, this.posts[i].post_id)
+            }
+          }
+        }
         var postsCopy: Post[] = []
         if (this.posts) {
           for (var post of this.posts) {
@@ -77,8 +85,17 @@ export class ApplicationsReceivedComponent implements OnInit {
       return this.appsRec.getSelected(post_id)
     }
 
+    back() {
+      this.currApp= undefined
+    }
+
     ngOnDestroy() {
       this.routeSub.unsubscribe();
+    }
+
+    backToMenu() {
+      this.currApp = undefined
+      this.menuVisible = true
     }
 
     onFindCareClick() {
@@ -87,6 +104,10 @@ export class ApplicationsReceivedComponent implements OnInit {
 
     setApp(app: Application) {
       this.currApp = app
+    }
+
+    modifyDate(date: string) {
+      return new Date(date).toLocaleString('en-US', { timeZone: 'EST', hour: '2-digit', minute:'2-digit'})
     }
 
     onAcceptApplication(application_id: number, post_id: number, user_id: string, message: string) {

@@ -3,6 +3,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
 .mat-dialog {
   background-color: #D6DBD4;
 }
@@ -12,12 +13,14 @@ mat-card {
 }
 .mat-dialog-content {
   padding: 10px;
+  max-height: unset;
 }
 .mat-form-field {
   width: 100%;
 }
+
 h2 {
-  margin: 40px 10%;
+  margin-left: 15px;
   font-family: "Dosis" !important;
   font-size: calc(26px + 1vw) !important;
 }
@@ -80,10 +83,10 @@ h2 {
 .textarea-inline-control {
   flex: 1;
   border-color: transparent;
-  padding: 2 0 100px;
+  padding: 2 0 10px;
   padding-bottom: 3%;
-  line-height: 1.28;
-  min-height: 100px;
+  line-height: 1.2;
+  min-height: 10px;
   resize: none;
   box-shadow: transparent 0px 0px 0px 1px;
   overflow: auto;
@@ -109,11 +112,17 @@ h2 {
 
 button {
   padding: 10px;
+  margin: 5%;
+}
+
+@media (max-width: 400px) {
+  button {
+    margin: 0px;
+  }
 }
 
 
 .mat-raised-button {
   @apply shadow-md shadow-[#eaaa00];
 }
-
 

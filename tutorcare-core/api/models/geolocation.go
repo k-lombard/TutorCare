@@ -8,30 +8,21 @@ import (
 )
 
 type GeolocationPosition struct {
-	UserID     uuid.UUID `sql:",fk" json:"user_id"`
-	LocationID int       `sql:",pk" json:"location_id"`
-	Accuracy   float64   `json:"accuracy"`
-	Latitude   float64   `json:"latitude"`
-	Longitude  float64   `json:"longitude"`
-	Timestamp  string    `json:"timestamp"`
+	UserID     uuid.UUID `sql:",fk" json:"user_id" gorm:"type:uuid;default:null;"`
+	LocationID int       `sql:",pk" json:"location_id" gorm:"primaryKey;default:null;"`
+	Accuracy   float64   `json:"accuracy" gorm:"default:null"`
+	Latitude   float64   `json:"latitude" gorm:"default:null"`
+	Longitude  float64   `json:"longitude" gorm:"default:null"`
+	Timestamp  string    `json:"timestamp" gorm:"default:null"`
+	User       User      `json:"user" gorm:"-"`
 }
 
-type GeolocationPositionWithUser struct {
-	UserID     uuid.UUID `sql:",fk" json:"user_id"`
-	LocationID int       `sql:",pk" json:"location_id"`
-	Accuracy   float64   `json:"accuracy"`
-	Latitude   float64   `json:"latitude"`
-	Longitude  float64   `json:"longitude"`
-	Timestamp  string    `json:"timestamp"`
-	User       User      `json:"user"`
+func (GeolocationPosition) TableName() string {
+	return "geolocation"
 }
 
 type GeolocationPositionList struct {
 	GeolocationPositions []GeolocationPosition `json:"geolocation_positions"`
-}
-
-type GeolocationPositionWithUserList struct {
-	GeolocationPositions []GeolocationPositionWithUser `json:"geolocation_positions"`
 }
 
 func (i *GeolocationPosition) Bind(r *http.Request) error {

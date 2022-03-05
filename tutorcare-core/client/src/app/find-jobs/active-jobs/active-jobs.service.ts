@@ -36,20 +36,6 @@ export class ActiveJobsService {
     });
  }
 
- getActiveJobsByCaregiverId(caregiver_id: string): Observable<Post[]> {
-  let url = `/api/posts/active-jobs/caregiver/${caregiver_id}`;
-  return new Observable((observer: any) => {
-     this.http.get(url)
-         .pipe(map((res: any) => res.posts))
-         .subscribe((data: Post[]) => {
-            this._posts = data
-
-            observer.next(this._posts);
-            observer.complete();
-         });
-  });
-}
-
   getApplicationsByPostId(post_id: number): Observable<Application[]> {
     let url = `/api/applications/post/${post_id}`;
     return new Observable((observer: any) => {

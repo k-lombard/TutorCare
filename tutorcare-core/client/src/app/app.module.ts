@@ -9,19 +9,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 
 import { UsersService } from './users.service';
-import { Http, ConnectionBackend, HttpModule } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { LoginComponent } from './auth/login/login.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { SignupComponent } from './signup/signup.component';
 import { SignupService } from './signup/signup.service';
-import { HomeComponent } from './home/home.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { StoreModule } from '@ngrx/store';
 import { AuthModule } from './auth/auth.module';
@@ -36,7 +32,6 @@ import { FindCareService } from './find-care/find-care.service';
 import { BarRatingModule } from 'ngx-bar-rating';
 import { EditProfileService } from './account/edit-profile/edit-profile.service';
 import { ToastrModule } from 'ngx-toastr';
-import { AuthInterceptor } from './auth/auth.interceptor';
 import { FindJobsService } from './find-jobs/find-jobs.service';
 import { ApplyJobService } from './find-jobs/apply-job/apply-job.service';
 import { AboutComponent } from './about/about.component';
@@ -49,7 +44,22 @@ import { SimplebarAngularModule } from 'simplebar-angular';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ProfileService } from './profile/profile.service';
 import { AppliedToService } from './find-jobs/applied-to/applied-to.service';
+import { NgxMatDateAdapter, NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
+import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
+
+const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
+  parse: {
+    dateInput: 'l, LTS'
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD hh:mm A',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  }
+};
 @NgModule({
   declarations: [
     AppComponent,
@@ -82,7 +92,14 @@ import { AppliedToService } from './find-jobs/applied-to/applied-to.service';
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, { provide: RouterStateSerializer, useClass: CustomSerializer },],
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, { provide: RouterStateSerializer, useClass: CustomSerializer },
+    {
+      provide: NgxMatDateAdapter,
+      useClass: NgxMatMomentAdapter,
+      deps: [MAT_DATE_LOCALE, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

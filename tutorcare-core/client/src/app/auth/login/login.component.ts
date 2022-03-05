@@ -9,7 +9,6 @@ import { noop } from 'rxjs';
 import { Login } from '../auth.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/reducers';
-import Swal from 'sweetalert2'
 import { User } from 'src/app/models/user.model';
 import { _getOptionScrollPosition } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';

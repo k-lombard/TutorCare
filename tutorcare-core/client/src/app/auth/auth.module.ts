@@ -33,21 +33,21 @@ import { ToastrModule } from 'ngx-toastr';
 import { CreateJobDialog, FindJobsComponent } from '../find-jobs/find-jobs.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { ApplyJobDialog } from '../find-jobs/apply-job/apply-job.component';
 import { ApplicationsReceivedComponent } from '../find-jobs/applications-received/applications-received.component';
 import { ActiveJobsComponent } from '../find-jobs/active-jobs/active-jobs.component';
-import { MyJobPostingsComponent } from '../find-jobs/my-job-postings/my-job-postings.component';
+import { EditJobDialog, MyJobPostingsComponent } from '../find-jobs/my-job-postings/my-job-postings.component';
 import { ChatroomsComponent } from '../find-jobs/chatrooms/chatrooms.component';
 import { VerifyComponent } from '../signup/verify/verify.component';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ProfileComponent } from '../profile/profile.component';
 import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component';
-
+import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
 
 @NgModule({
     imports: [
@@ -87,6 +87,7 @@ import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component
     declarations: [
         LoginComponent,
         NavbarComponent,
+        SidebarComponent,
         SignupComponent,
         HomeComponent,
         AccountComponent,
@@ -101,9 +102,10 @@ import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component
         ChatroomsComponent,
         VerifyComponent,
         ProfileComponent,
-        AppliedToComponent
+        AppliedToComponent,
+        EditJobDialog
     ],
-    exports: [LoginComponent, NavbarComponent],
+    exports: [LoginComponent, NavbarComponent, ],
     entryComponents: [CreateJobDialog]
 })
 export class AuthModule {
