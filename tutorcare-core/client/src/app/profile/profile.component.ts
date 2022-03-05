@@ -41,6 +41,7 @@ export class ProfileComponent implements OnInit {
 
     ngOnInit() {
       this.routeSub = this.route.params.subscribe(params => {
+        console.log(params['id'])
         this.profileService.getUserByUserId(params['id']).subscribe((data: User) => {
           this.user = data
         })
@@ -70,10 +71,10 @@ export class ProfileComponent implements OnInit {
     }
 
     onEditProfileClick() {
-      this.router.navigate(['profile/edit-profile'])//, {relativeTo: this.route.parent})
+      this.router.navigate([`/profile/${this.currentUser.user_id}/edit-profile`])//, {relativeTo: this.route})
     }
 
-    logoutFunc() {
+    onLogoutClick() {
       this.authService.logout()
       .pipe(
         tap(user => {
@@ -85,5 +86,9 @@ export class ProfileComponent implements OnInit {
         this.router.navigate(['/home'])
         this.toastr.success("Successfully logged out.", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
       });
+    }
+
+    onSettingsClick() {
+      console.log("Settings Button Clicked")
     }
 }

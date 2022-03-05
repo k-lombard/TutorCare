@@ -21,12 +21,11 @@ h2 {
 }
 
 .edit-profile{
-    width: 100% !important;
+    //width: 100% !important;
     min-width: unset!important;
     color: white;
     background-color: mat.get-color-from-palette($tutorcare-core-primary);
     border-radius: 30px !important;
-    padding: 10px;
 }
 
 // [id="biodiv"] {

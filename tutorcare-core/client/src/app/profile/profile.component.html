@@ -2,6 +2,24 @@
   <navbar></navbar>
     <div class="profile grid grid-cols-1">
       <div class="intro-card mx-auto tablet:items-center py-4">
+        <div *ngIf="user.user_id == currentUser.user_id" class="buttons m-4">
+          <div class="flex justify-between">
+            <button  (click)="onEditProfileClick()" color="Primary" class="edit-profile py-2 px-4" mat-raised-button>
+              <span class="align-middle">Edit Profile</span>
+              <mat-icon class="align-middle ml-3">edit_icon</mat-icon>
+            </button>
+
+            <button (click)="onSettingsClick()" color="Primary" class="edit-profile py-2 px-4 align-middle" mat-raised-button>
+              <span class="align-middle">Settings</span>
+              <mat-icon class="align-middle ml-3">settings</mat-icon>
+            </button>
+
+            <button (click)="onLogoutClick()" color="Primary" class="edit-profile py-2 px-4 align-middle" mat-raised-button>
+              <span class="align-middle">Logout</span>
+              <mat-icon class="align-middle ml-3">logout</mat-icon>
+            </button>
+          </div>
+        </div>
         <div class = "summaryBlock tablet:flex">
           <div class="photo-block mt-2 ">
             <img class="mx-auto" id="profile-img" src="../../assets/images/profile_picture.jpeg"/>
@@ -52,14 +70,6 @@
                   <mat-icon *ngIf="!profile.first_aid" class="align-middle float-right pl-2">remove_circle_outline</mat-icon>
                 </li>
               </ul>
-            </div>
-          </div>
-
-          <div class="buttons">
-            <div class="m-4">
-              <button *ngIf="user.user_id == currentUser.user_id" (click)="onEditProfileClick()" color="Primary" class="edit-profile" mat-raised-button>Edit Profile <mat-icon>edit_icon</mat-icon></button>
-
-              <button *ngIf="user.user_id == currentUser.user_id" (click)="logoutFunc()" color="Primary" class="edit-profile mt-5" mat-raised-button>Logout <mat-icon>logout</mat-icon></button>
             </div>
           </div>
         </div>
