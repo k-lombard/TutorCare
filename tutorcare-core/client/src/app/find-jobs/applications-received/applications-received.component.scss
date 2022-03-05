@@ -19,6 +19,40 @@
     @apply shadow-md shadow-[#eaaa00];
 }
 
+.timestamp {
+  display: inline !important;
+  display: flex !important;
+  justify-self: flex-end !important;
+  justify-content: flex-end !important;
+  float: right !important;
+}
+
+.messagecontent {
+  flex-shrink: 1 !important;
+  max-width: 20% !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-all;
+}
+
+.appcontent {
+  max-width: 20% !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-all;
+  flex: 1 !important;
+}
+
+.namedate {
+  flex: 1 !important;
+}
+
+.appname {
+  text-align: right;
+}
+
+.appdate {
+  text-align: right;
+}
+
 .mat-raised-button {
   @apply shadow-lg shadow-[#eaaa00];
 }
@@ -120,8 +154,47 @@ bar-rating {
   align-self: flex-end !important;
 }
 
+[id="back"] {
+  background-color: #eaaa00;
+  @apply shadow-md shadow-[#eaaa00] hover:shadow-gray-600 transition-colors duration-200 transform;
+  display: none;
+}
+
 @media (max-width: 1400px) {
+  .backbutton {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
   [id="dateofjob"] {
+    display: none !important;
+  }
+  .backbutton2 {
+    display: none;
+  }
+  .visible {
+    width: calc(100% - 16rem) !important;
+    display: flex !important;
+    min-width: calc(100% - 16rem) !important;
+    max-width: calc(100% - 16rem) !important;
+    margin: 0px;
+    padding: 0px;
+    height: 100% !important;
+  }
+  [id="rightcol"] {
+    width: calc(100% - 16rem);
+  }
+  [id="rightcol2"] {
+    max-width: 0px;
+    width: 0px;
+    height: 0px;
+    display: none;
+  }
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
     display: none !important;
   }
 }
@@ -131,11 +204,93 @@ bar-rating {
 }
 
 @media (max-width: 810px) {
+  .subapp {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+  .sidenav {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+  .backbutton {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
   .pclass {
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
     overflow-x: hidden !important;
   }
+  .visible {
+    width: calc(100%) !important;
+    display: flex !important;
+    min-width: calc(100%) !important;
+    max-width: calc(100%) !important;
+    margin: 0px;
+    padding: 0px;
+    height: calc(100% - 1rem) !important;
+  }
+  [id="rightcol2"] {
+    max-width: 0px;
+    width: 0px;
+    height: 0px;
+    display: none;
+  }
+  [id="rightcol"] {
+    width: 100%;
+  }
+  .appcol {
+    width: 100% !important;
+    display: flex;
+  }
+
+  .appcolumn {
+    width: 100% !important;
+  }
+
+  .appcard {
+    width: calc(100% - 20px) !important;
+    margin: 10px !important;
+    min-width: calc(100% - 20px) !important;
+    display: flex;
+  }
+  .menu {
+    width: 100% !important;
+    min-width: 100% !important;
+    display: flex !important;
+    .sidenav {
+      width: 100% !important;
+      min-width: 100% !important;
+      display: flex !important;
+    }
+  }
+  .backbutton2 {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+  }
+  
+  .showmenu {
+    width: 0px;
+    min-width: 0px;
+    display: none;
+  }
+  .hiddencol {
+    max-width: 0px !important;
+    width: 0px !important;
+    height: 0px !important;
+    display: none !important;
+  }
+  [id="accept"] {
+    padding: 10px !important;
+    @apply shadow-md shadow-[#eaaa00];
+    margin-bottom: 20px !important;
+  }
+  
 }
 
 [id="accept"] {
