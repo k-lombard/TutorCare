@@ -57,7 +57,10 @@
             </mat-form-field>
 
 
-            <ng-select class="custom mt-2" matInput [multiple]="true" [(ngModel)]="user_skills" [ngModelOptions]="{standalone: true}" placeholder="Select skills you want to show">
+            <!-- <ng-select class="custom mt-2" matInput [multiple]="true" [(ngModel)]="user_skills" [ngModelOptions]="{standalone: true}" placeholder="Select skills you want to show">
+                <ng-option *ngFor="let skill of all_skills" [value]="skill.value" >{{skill.display}}</ng-option>
+            </ng-select> -->
+            <ng-select placeholder="Select skills you want to show" class="custom mt-2" matInput [multiple]="true" [(ngModel)]="user_skills" [ngModelOptions]="{standalone: true}">
                 <ng-option *ngFor="let skill of all_skills" [value]="skill.value" >{{skill.display}}</ng-option>
             </ng-select>
 

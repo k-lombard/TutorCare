@@ -1,4 +1,4 @@
-<div *ngIf="profile">
+<div *ngIf="user && profile">
   <navbar></navbar>
     <div class="profile grid grid-cols-1">
       <div class="intro-card mx-auto tablet:items-center py-4">
@@ -170,7 +170,9 @@
             <mat-card class="bio">
               <h2>My Qualifications</h2>
               <p>{{profile.education}}</p>
-              <p>{{profile.skills}}</p>
+              <div *ngIf="user_skills.length > 0" class="taglist flex flex-row">
+                <div *ngFor="let skill of user_skills" class="taglist mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-4 text-xs leading-3">{{ skill.display }}</div>
+              </div>
             </mat-card>
           </div>
 

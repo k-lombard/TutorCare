@@ -27,6 +27,7 @@ interface Skill {
 })
 export class EditProfileComponent implements OnInit {
     public form: FormGroup = new FormGroup({})
+    loaded = false
     user!: User;
     profile!: Profile
     _editProfileObservable: Observable<User> | undefined
@@ -87,27 +88,27 @@ export class EditProfileComponent implements OnInit {
         {display: 'Ages 11-14', value: 'Ages_11-14'},
         {display: 'Ages 15-17', value: 'Ages_15-17'},
     ]
-    user_skills: Skill[] = []
+    user_skills: string[] = []
 
-  minValue: number = 20;
-  maxValue: number = 30;
-  sliderOptions: Options = {
-    floor: 10,
-    ceil: 100,
-    minRange: 10,
-    maxRange: 30,
-    pushRange: true,
-    translate: (value: number, label: LabelType): string => {
-      switch (label) {
-        case LabelType.Low:
-          return "<b>$" + value + "</b>";
-        case LabelType.High:
-          return "<b>$" + value + "</b>";
-        default:
-          return "$" + value;
+    minValue: number = 20;
+    maxValue: number = 30;
+    sliderOptions: Options = {
+      floor: 10,
+      ceil: 100,
+      minRange: 10,
+      maxRange: 30,
+      pushRange: true,
+      translate: (value: number, label: LabelType): string => {
+        switch (label) {
+          case LabelType.Low:
+            return "<b>$" + value + "</b>";
+          case LabelType.High:
+            return "<b>$" + value + "</b>";
+          default:
+            return "$" + value;
+        }
       }
-    }
-  };
+    };
     constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private editProfileService: EditProfileService) {}
 
     ngOnInit() {
@@ -141,27 +142,36 @@ export class EditProfileComponent implements OnInit {
         this.editProfileService.getProfile(this.user.user_id).subscribe( data => {
           this.profile = data
           this.user_skills = this.skillsToArray(this.profile.skills)
-          console.log(this.profile)
+          this.parseRateRange(this.profile.rate_range)
+          console.log(this.user_skills)
       })
+      this.loaded = true
+      this.user_skills.values()
     }
 
     skillsToArray(skill_list: string) {
-      var skill_array: Skill[] = []
+      var skill_array: string[] = []
       skill_list.split(',').forEach(parsedString => {
         var skill = this.all_skills.find(item => item.value == parsedString)
         if (skill) {
-          skill_array.push(skill)
+          skill_array.push(skill.value)
         }
       });
       return skill_array
     }
 
-    skillsToString(skill_list: Skill[]) {
+    skillsToString(skill_list: string[]) {
       var skill_string = ""
-      skill_list.forEach((item: Skill) => {
+      skill_list.forEach((item) => {
         skill_string += item + ","
       })
       return skill_string
+    }
+
+    parseRateRange(rate: string) {
+      var str = rate.split(",")
+      this.minValue = parseInt(str[0])
+      this.maxValue = parseInt(str[1])
     }
 
     /*onEmailChange() {
@@ -197,8 +207,7 @@ export class EditProfileComponent implements OnInit {
         }*/
         console.log("saved")
         console.log(this.profile)
-        console.log(this.user_skills)
-        this.profile.rate_range = "$" + this.minValue.toString() + " - $" + this.maxValue.toString();
+        this.profile.rate_range = this.minValue.toString() + "," + this.maxValue.toString();
         this.profile.skills = this.skillsToString(this.user_skills) || ""
         this.editProfileFunc(this.user.user_id, this.profile)
     }
