@@ -13,23 +13,35 @@ import { Chatroom } from 'src/app/models/chatroom.model';
 import { Message } from 'src/app/models/message.model';
 import { ThisReceiver } from '@angular/compiler';
 import { User } from '../models/user.model';
+import { Profile } from '../models/profile.model';
 
 
 @Injectable()
 export class ProfileService {
   results:Object[];
-  _chatrooms: Chatroom[] | undefined;
   _output: any[] | undefined;
-  _chatroom: Chatroom | undefined
-  _messages: Message[] | undefined
-  selectedIdx!: number
   _post_id: string | undefined
+  _profile: Profile | undefined;
   headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });
   constructor(private http: HttpClient, private toastr: ToastrService) {
     this.results = []
   }
+
+  getProfileByUserId(user_id: string): Observable<Profile> {
+    let url = `/api/profile/p/${user_id}`;
+    return new Observable((observer: any) => {
+       this.http.get(url)
+           .pipe(map((res: any) => res))
+           .subscribe((data: Profile) => {
+              this._profile = data
+              console.log(data)
+              observer.next(this._profile);
+              observer.complete();
+           });
+    });
+ }
 
   getUserByUserId(user_id: string): Observable<User> {
     let url = `/api/users/${user_id}`;

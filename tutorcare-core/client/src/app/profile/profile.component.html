@@ -1,380 +1,183 @@
-
- <div *ngIf="userOut">
-<!--  <navbar></navbar>
-  <div id="outercard" class="w-[90%] px-8 py-4 mx-auto mt-16 bg-white rounded-lg shadow-lg">
-    <div class="flex justify-end -mt-16 md:justify-end">
-        <img class="object-cover w-50 h-50 border-2 border-blue-500 rounded-full" alt="profile avatar" src="../../assets/images/profile_picture.jpeg">
-    </div>
-
-    <h2 class="mt-2 text-2xl font-semibold text-gray-800 md:mt-0 md:text-3xl">{{userOut.user_category}}</h2>
-
-    <h3 class="mt-2 text-xl font-semibold text-gray-800 md:mt-0 md:text-3xl">Bio: </h3><p class="mt-2 text-gray-600">{{userOut.bio}}</p>
-    <h3 class="mt-2 text-xl font-semibold text-gray-800 md:mt-0 md:text-3xl">Experience: </h3><p class="mt-2 text-gray-600">{{userOut.experience}}</p>
-    <div class="flex justify-end">
-        <a class="pb-12 object-right text-4xl font-medium text-blue-500">{{userOut.first_name}} {{userOut.last_name}}</a>
-        <bar-rating class="object-right-bottom px-8" [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating>
-    </div>
-  </div>
-</div> -->
-
-<!-- 
-<navbar></navbar>
-    <!-- <mat-card>
-        <mat-grid-list cols="5" rowHeight="2:1" ratio="1:1">
-            <mat-grid-tile [rowspan]="2"><img id="stock" src="../../assets/images/profile_picture.jpeg"/></mat-grid-tile>
-            <mat-grid-tile><h1>{{ first_name }}</h1></mat-grid-tile>
-            <mat-grid-tile><h1>{{ last_name }}</h1></mat-grid-tile>
-            <mat-grid-tile><bar-rating [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating></mat-grid-tile>
-            <mat-grid-tile></mat-grid-tile>
-            <mat-grid-tile><h2>Type: {{ user_type }}</h2></mat-grid-tile>
-            <mat-grid-tile><h2> Badges: <mat-icon>check_circle</mat-icon></h2></mat-grid-tile>
-            <mat-grid-tile><button (click)="onEditProfileClick()" color="Primary" class="edit-profile" mat-raised-button>Edit Profile <mat-icon>edit_icon</mat-icon></button></mat-grid-tile>
-        </mat-grid-list>
-    </mat-card>
-    <mat-grid-list cols="5" rowHeight="1:1" ratio="1:1">
-      <mat-grid-tile id="empty"></mat-grid-tile>
-      <mat-grid-tile>
-        <div id="biodiv">
-          <h2 [style.text-align]="'left'">Experience: </h2> <h3>{{ exp }}</h3>
-          <h2 [style.text-align]="'left'">Bio:</h2> <h3>{{ bio }}</h3>
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list> -->
-    <!--<div id="outercard" class="w-[90%] px-8 py-4 mx-auto mt-16 bg-white rounded-lg shadow-lg">
-      <div class="flex justify-end -mt-16 md:justify-end">
-          <img class="object-cover w-50 h-50 border-2 border-blue-500 rounded-full" alt="profile avatar" src="../../assets/images/profile_picture.jpeg">
-      </div>
-
-      <h2 class="mt-2 text-2xl font-semibold text-gray-800 md:mt-0 md:text-3xl">{{user_type}}</h2>
-
-      <h3 class="mt-2 text-xl font-semibold text-gray-800 md:mt-0 md:text-3xl">Bio: </h3><p class="mt-2 text-gray-600">{{bio}}</p>
-      <h3 class="mt-2 text-xl font-semibold text-gray-800 md:mt-0 md:text-3xl">Experience: </h3><p class="mt-2 text-gray-600">{{exp}}</p>
-      <button (click)="onEditProfileClick()" color="Primary" class="edit-profile" mat-raised-button>Edit Profile <mat-icon>edit_icon</mat-icon></button>
-      <button (click)="logoutFunc()" color="Primary" class="edit-profile" mat-raised-button>Logout <mat-icon>logout</mat-icon></button>
-      <div class="flex justify-end">
-          <a href="#" class="pb-12 object-right text-4xl font-medium text-blue-500">{{first_name}} {{last_name}}</a>
-          <bar-rating class="object-right-bottom px-8" [readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating>
-      </div>
-    </div>
--->
-
-<navbar></navbar>
-  <div class="profile grid grid-cols-1">
-    <div class="intro-card mx-auto tablet:items-center py-4">
-      <div class = "summaryBlock tablet:flex">
-        <div class="photo-block mt-2 ">
-          <img class="mx-auto" id="profile-img" src="../../assets/images/profile_picture.jpeg"/>
-        </div>
-
-        <div class="profile-details mt-2 tablet:ml-5">
-          <div class="name-row">
-            <h2 class="inline-block">{{userOut.first_name}} {{userOut.last_name}}</h2>
-            <span class="ml-5">badge_list</span>
-          </div>
-          <div class="rating-row">
-            <bar-rating class="inline-block"[readOnly]=true [(rate)]="rate" [theme]="'stars'" [max]="5"></bar-rating>
-            <span>number_of_reviews</span>
+<div *ngIf="profile">
+  <navbar></navbar>
+    <div class="profile grid grid-cols-1">
+      <div class="intro-card mx-auto tablet:items-center py-4">
+        <div class = "summaryBlock tablet:flex">
+          <div class="photo-block mt-2 ">
+            <img class="mx-auto" id="profile-img" src="../../assets/images/profile_picture.jpeg"/>
           </div>
 
-          <div class="stats-row">
-            <span>Type: {{ userOut.user_category }}</span>
-            <span>  |  </span>
-            <span>number_of_jobs_completed</span>
-            <span>  |  </span>
-            <span>hourly_rate</span>
+          <div class="profile-details m-4 tablet:ml-5">
+            <div class="name-row">
+              <h2 class="inline-block">{{user.first_name}} {{user.last_name}}</h2>
+              <div *ngIf="profile.badge_list" class="inline-block ml-4">
+                <span *ngFor="let badge of user_badges">
+                  <mat-icon [innerHTML] = "badge.matIconString"  #tooltip="matTooltip" matTooltipPosition="above" [matTooltip]="badge.description" matTooltipClass="tool-tip"></mat-icon>
+                </span>
+              </div>
+              <bar-rating class="ml-4" [readOnly]=true [(rate)]="profile.rating" [theme]="'stars'" [max]="5"></bar-rating>
+            </div>
+
+            <div class="stats-row">
+              <span>{{ user.user_category }}</span>
+              <span>  |  </span>
+              <span>Jobs Completed: {{profile.jobs_completed}}</span>
+              <span>  |  </span>
+              <span>Rate: {{profile.rate_range}}</span>
+            </div>
+
+
+            <div class="attributes">
+              <ul class="twocolumn mt-4">
+                <li class="flex items-center justify-between">
+                  <span class="align-middle">COVID-19 Vaccination</span>
+                  <mat-icon *ngIf="profile.covid19" class="align-middle float-right pl-2">check_circle_outline</mat-icon>
+                  <mat-icon *ngIf="!profile.covid19" class="align-middle float-right pl-2">remove_circle_outline</mat-icon>
+                  <!-- <mat-icon class="align-middle">check_circle</mat-icon> -->
+                </li>
+                <li class="flex items-center justify-between">
+                  <span class="align-middle">CPR Training</span>
+                  <mat-icon *ngIf="profile.cpr" class="align-middle float-right pl-2">check_circle_outline</mat-icon>
+                  <mat-icon *ngIf="!profile.cpr" class="align-middle float-right pl-2">remove_circle_outline</mat-icon>
+                </li>
+                <li class="flex items-center justify-between">
+                  <span class="align-middle">Non-Smoker</span>
+                  <mat-icon *ngIf="profile.smoker" class="align-middle float-right pl-2">check_circle_outline</mat-icon>
+                  <mat-icon *ngIf="!profile.smoker" class="align-middle float-right pl-2">remove_circle_outline</mat-icon>
+                  <!-- <mat-icon class="align-middle">check_circle</mat-icon> -->
+                </li>
+                <li class="flex items-center justify-between">
+                  <span class="align-middle">First Aid Training</span>
+                  <mat-icon *ngIf="profile.first_aid" class="align-middle float-right pl-2">check_circle_outline</mat-icon>
+                  <mat-icon *ngIf="!profile.first_aid" class="align-middle float-right pl-2">remove_circle_outline</mat-icon>
+                </li>
+              </ul>
+            </div>
           </div>
 
+          <div class="buttons">
+            <div class="m-4">
+              <button *ngIf="user.user_id == currentUser.user_id" (click)="onEditProfileClick()" color="Primary" class="edit-profile" mat-raised-button>Edit Profile <mat-icon>edit_icon</mat-icon></button>
 
-          <div class="attributes">
-            <ul class="twocolumn my-4">
-              <li>
-                <span class="align-middle">COVID-19 Vaccination</span>
-                <mat-icon class="align-middle">check_circle_outline</mat-icon>
-                <!-- <mat-icon class="align-middle">check_circle</mat-icon> -->
-              </li>
-              <li>
-                <span class="align-middle">CPR Training</span>
-                <mat-icon class="align-middle">check_circle_outline</mat-icon>
-              </li>
-              <li>
-                <span class="align-middle">Non-Smoker</span>
-                <mat-icon class="align-middle">check_circle_outline</mat-icon>
-                <!-- <mat-icon class="align-middle">check_circle</mat-icon> -->
-              </li>
-              <li>
-                <span class="align-middle">First Aid Training</span>
-                <mat-icon class="align-middle">check_circle_outline</mat-icon>
-              </li>
-            </ul>
+              <button *ngIf="user.user_id == currentUser.user_id" (click)="logoutFunc()" color="Primary" class="edit-profile mt-5" mat-raised-button>Logout <mat-icon>logout</mat-icon></button>
+            </div>
           </div>
         </div>
 
-        <div class="buttons">
-          <div class="ml-5">
-            <!-- <button (click)="onEditProfileClick()" color="Primary" class="edit-profile" mat-raised-button>Edit Profile <mat-icon>edit_icon</mat-icon></button>
-
-            <button (click)="logoutFunc()" color="Primary" class="edit-profile mt-5" mat-raised-button>Logout <mat-icon>logout</mat-icon></button> -->
-            <!-- <button color="Primary" class="edit-profile mt-5" mat-raised-button>Message <mat-icon>message</mat-icon></button> -->
-            <button *ngIf="user.user_id != userOut.user_id" id="messagebutton" (click)="onMessageClick(userOut.user_id)" mat-raised-button color="accent" aria-label="message" class="color-[#eaaa00] shadow-lg shadow-[#eaaa00] edit-profile">
-              <span>Message</span>
-              <mat-icon>message</mat-icon>
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      <div *ngIf="careseeker" class="cs-tabnav py-4">
-        <div class="tablet:flex border-b border-gray-200 dark:border-gray-700">
-          <a href="{{url}}#profile" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:px-4 -px-1 dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
-            <mat-icon>assignment</mat-icon>
-              
-            <span class="mx-1 text-sm sm:text-base">
-              Profile
-            </span>
-          </a>
-
-          <a href="{{url}}#recurring" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>calendar_today</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-              Recurring Needs
-            </span>
-          </a>
-
-          <a href="{{url}}#family" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>school</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-                My Family
-            </span>
-          </a>
-
-          <a href="{{url}}#reviews" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>comment</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-                Reviews and Recommendation
-            </span>
-          </a>
-        </div>
-      </div>
-
-      <div *ngIf="careseeker" class="cs-profile-sections">
-        <div id="profile" class="py-4">
-          <mat-card class="bio">
-            <h2>About My Family</h2>
-            <p>{{userOut.bio}}</p>
-          </mat-card>
-        </div>
-
-        <div id="recurring" class="py-4">
-          <mat-card class="bio">
-            <h2>My Recurring Needs</h2>
-            <p>[show user's Recurring Needs]</p>
-          </mat-card>
-        </div>
-
-        <div id="family" class="py-4">
-          <mat-card class="bio">
-            <h2>My Family</h2>
-            <p>[show user's Family Members]</p>
-          </mat-card>
-        </div>
-      </div>
-
-      <div *ngIf="caregiver" class="cg-tabnav py-4">
-        <div class="tablet:flex border-b border-gray-200 dark:border-gray-700">
-          <a href="{{url}}#profile" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:px-4 -px-1 dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
-            <mat-icon>assignment</mat-icon>
-              
-            <span class="mx-1 text-sm sm:text-base">
-              Profile
-            </span>
-          </a>
-
-          <a href="{{url}}#availability" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>calendar_today</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-              Availability
-            </span>
-          </a>
-
-          <a href="{{url}}#qualifications" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>school</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-                Qualifications
-            </span>
-          </a>
-
-          <a href="{{url}}#services" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>child_care</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-                Services
-            </span>
-          </a>
-
-          <a href="{{url}}#reviews" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>comment</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-                Reviews and Recommendation
-            </span>
-          </a>
-        </div>
-      </div>
-      
-      <div *ngIf="caregiver" class="cg-profile-sections">
-        <div id="profile" class="py-4">
-          <mat-card class="bio">
-            <h2>About Me</h2>
-            <p>{{userOut.bio}}</p>
-          </mat-card>
-        </div>
-
-        <div id="availability" class="py-4">
-          <mat-card class="bio">
-            <h2>My Availability</h2>
-            <p>[show user's availability]</p>
-          </mat-card>
-        </div>
-
-        <div id="qualifications" class="py-4">
-          <mat-card class="bio">
-            <h2>My Qualifications</h2>
-            <p>[show user's qualifications]</p>
-          </mat-card>
-        </div>
-
-        <div id="services" class="py-4">
-          <mat-card class="bio">
-            <h2>My Services</h2>
-            <p>[show user's services]</p>
-          </mat-card>
-        </div>
-
-        <div id="reviews" class="py-4">
-          <mat-card class="bio">
-            <h2>My Recommendations</h2>
-            <p>[show user's Reviews and Recommendations]</p>
-          </mat-card>
-        </div>
-      </div>
-
-      
-      <div *ngIf="both" class="both-tabnav py-4">
-        <div class="tablet:flex border-b border-gray-200 dark:border-gray-700">
-          <a href="{{url}}#profile" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:px-4 -px-1 dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
-            <mat-icon>assignment</mat-icon>
-              
-            <span class="mx-1 text-sm sm:text-base">
-              Profile
-            </span>
-          </a>
-          
-          <a href="{{url}}#family" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>school</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-                My Family
-            </span>
-          </a>
-          
-          <a href="{{url}}#recurring" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>calendar_today</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-              Recurring Needs
-            </span>
-          </a>
-          
-          <a href="{{url}}#availability" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>calendar_today</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-              Availability
-            </span>
-          </a>
-          
-          
-          <a href="{{url}}#qualifications" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>school</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-                Qualifications
-            </span>
-          </a>
-
-          <a href="{{url}}#services" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>child_care</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-                Services
-            </span>
-          </a>
-          
-          <a href="{{url}}#reviews" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-            <mat-icon>comment</mat-icon>
-
-            <span class="mx-1 text-sm sm:text-base">
-                Reviews and Recommendation
-            </span>
-          </a>
-        </div>
-      </div>
-
-      <div *ngIf="both" class="cs-profile-sections">
-        <div id="profile" class="py-4">
-          <mat-card class="bio">
-            <h2>About My Family</h2>
-            <p>{{userOut.bio}}</p>
-          </mat-card>
-        </div>
-
-        <div id="family" class="py-4">
-          <mat-card class="bio">
-            <h2>My Family</h2>
-            <p>[show user's Family Members]</p>
-          </mat-card>
-        </div>
         
-        <div id="recurring" class="py-4">
-          <mat-card class="bio">
-            <h2>My Recurring Needs</h2>
-            <p>[show user's Recurring Needs]</p>
-          </mat-card>
+        <div class="both-tabnav py-4">
+          <div class="tablet:flex border-b border-gray-200 dark:border-gray-700">
+            <a href="{{url}}#profile" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:px-4 -px-1 dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
+              <mat-icon>assignment</mat-icon>
+                
+              <span class="mx-1 text-sm sm:text-base">
+                Profile
+              </span>
+            </a>
+            
+            <a href="{{url}}#family" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+              <mat-icon>school</mat-icon>
+
+              <span class="mx-1 text-sm sm:text-base">
+                  My Family
+              </span>
+            </a>
+            
+            <!-- <a href="{{url}}#recurring" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+              <mat-icon>calendar_today</mat-icon>
+
+              <span class="mx-1 text-sm sm:text-base">
+                Recurring Needs
+              </span>
+            </a>
+            
+            <a href="{{url}}#availability" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+              <mat-icon>calendar_today</mat-icon>
+
+              <span class="mx-1 text-sm sm:text-base">
+                Availability
+              </span>
+            </a> -->
+            
+            
+            <a href="{{url}}#qualifications" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+              <mat-icon>school</mat-icon>
+
+              <span class="mx-1 text-sm sm:text-base">
+                  Qualifications
+              </span>
+            </a>
+
+            <a href="{{url}}#services" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+              <mat-icon>child_care</mat-icon>
+
+              <span class="mx-1 text-sm sm:text-base">
+                  Services
+              </span>
+            </a>
+            
+            <a href="{{url}}#reviews" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+              <mat-icon>comment</mat-icon>
+
+              <span class="mx-1 text-sm sm:text-base">
+                  Reviews and Recommendation
+              </span>
+            </a>
+          </div>
         </div>
 
-        <div id="availability" class="py-4">
-          <mat-card class="bio">
-            <h2>My Availability</h2>
-            <p>[show user's availability]</p>
-          </mat-card>
-        </div>
+        <div class="cs-profile-sections">
+          <div id="profile" class="py-4">
+            <mat-card class="bio">
+              <h2>My Information</h2>
+              <p>Age: {{profile.age}} || Gender: {{profile.gender}} || Languages: {{profile.language}}</p>
+              <p>{{profile.bio}}</p>
+            </mat-card>
+          </div>
 
-        <div id="qualifications" class="py-4">
-          <mat-card class="bio">
-            <h2>My Qualifications</h2>
-            <p>[show user's qualifications]</p>
-          </mat-card>
-        </div>
+          <div id="family" class="py-4">
+            <mat-card class="bio">
+              <h2>My Family</h2>
+              <p>[show user's Family Members]</p>
+            </mat-card>
+          </div>
+          
+          <!-- <div id="recurring" class="py-4">
+            <mat-card class="bio">
+              <h2>My Recurring Needs</h2>
+              <p>[show user's Recurring Needs]</p>
+            </mat-card>
+          </div>
 
-        <div id="services" class="py-4">
-          <mat-card class="bio">
-            <h2>My Services</h2>
-            <p>[show user's services]</p>
-          </mat-card>
-        </div>
+          <div id="availability" class="py-4">
+            <mat-card class="bio">
+              <h2>My Availability</h2>
+              <p>[show user's availability]</p>
+            </mat-card>
+          </div> -->
 
-        <div id="reviews" class="py-4">
-          <mat-card class="bio">
-            <h2>My Recommendations</h2>
-            <p>[show user's Reviews and Recommendations]</p>
-          </mat-card>
+          <div id="qualifications" class="py-4">
+            <mat-card class="bio">
+              <h2>My Qualifications</h2>
+              <p>{{profile.education}}</p>
+              <p>{{profile.skills}}</p>
+            </mat-card>
+          </div>
+
+          <div id="services" class="py-4">
+            <mat-card class="bio">
+              <h2>My Services</h2>
+              <p>{{profile.service_types}}</p>
+            </mat-card>
+          </div>
+
+          <div id="reviews" class="py-4">
+            <mat-card class="bio">
+              <h2>My Recommendations</h2>
+              <p>[show user's Reviews and Recommendations]</p>
+            </mat-card>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>

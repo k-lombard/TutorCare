@@ -34,7 +34,7 @@ import { CustomSerializer } from './shared/utils';
 import { RouterModule } from '@angular/router';
 import { FindCareService } from './find-care/find-care.service';
 import { BarRatingModule } from 'ngx-bar-rating';
-import { EditProfileService } from './account/edit-profile/edit-profile.service';
+import { EditProfileService } from './profile/edit-profile/edit-profile.service';
 import { ToastrModule } from 'ngx-toastr';
 import { FindJobsService } from './find-jobs/find-jobs.service';
 import { ApplyJobService } from './find-jobs/apply-job/apply-job.service';
@@ -51,7 +51,6 @@ import { AppliedToService } from './find-jobs/applied-to/applied-to.service';
 import { NgxMatDateAdapter, NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { AccountService } from './account/account.service';
 
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
@@ -101,7 +100,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, AccountService, { provide: RouterStateSerializer, useClass: CustomSerializer },
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, { provide: RouterStateSerializer, useClass: CustomSerializer },
     {
       provide: NgxMatDateAdapter,
       useClass: NgxMatMomentAdapter,

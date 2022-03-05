@@ -8,10 +8,15 @@ import { AuthService } from '../auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { tap } from 'rxjs/operators';
 import { Logout } from '../auth/auth.actions';
-import { Subscription } from 'rxjs';
+import { Profile } from '../models/profile.model';
 import { ProfileService } from './profile.service';
-import { ChatroomsService } from '../find-jobs/chatrooms/chatrooms.service';
-import { Chatroom } from '../models/chatroom.model';
+import { Subscription } from 'rxjs';
+
+interface Badges {
+  value: string
+  description: string
+  matIconString: string
+}
 
 @Component({
     selector: 'profile-component',
@@ -19,58 +24,53 @@ import { Chatroom } from '../models/chatroom.model';
     styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-    url = this.router.url 
+    url = this.router.url
     user!: User;
-    first_name: string | undefined
+    currentUser!: User;
+    profile!: Profile;
+    /*first_name: string | undefined
     last_name: string |undefined
-    rate: number = 4.5
-    user_type: string | undefined
-    exp!: string
-    bio!: string
-    userId!: string
-    userOut!: User
-    careseeker: boolean = false
-    caregiver: boolean = false
-    both: boolean = false
-    private routeSub: Subscription;
-    constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private authService: AuthService, private toastr: ToastrService, private profileService: ProfileService, private chatroomService: ChatroomsService) {}
+    user_type: string | undefined*/
+    all_badges: Badges[] = [
+      {value: 'verified', description: 'Verified University Email', matIconString:'verified_user'},
+      {value: '20jobs', description: '20 Completed Jobs', matIconString:'whatshot'}
+    ];
+    user_badges: Badges[] = []
+    private routeSub: Subscription
+    constructor(private store: Store<AppState>, private router: Router, private route: ActivatedRoute, private authService: AuthService, private toastr: ToastrService, private profileService: ProfileService) {}
 
     ngOnInit() {
       this.routeSub = this.route.params.subscribe(params => {
-        this.userId = params['id']
-        //console.log(this.userId)
-      })
-      this.profileService.getUserByUserId(this.userId).subscribe((userOut: User) => {
-        this.userOut = userOut
-        //console.log(this.userOut)
-        if (this.userOut.user_category == "caregiver") {
-          this.caregiver = true
-        }
-        else if (this.userOut.user_category == "careseeker") {
-          this.careseeker = true
-        } else {
-          this.both = true
-        }
+        this.profileService.getUserByUserId(params['id']).subscribe((data: User) => {
+          this.user = data
+        })
+        this.profileService.getProfileByUserId(params['id']).subscribe((data: Profile) => {
+          this.profile = data
+          this.setBadges(this.profile.badge_list)
+        })
       })
       this.store
-        .pipe(
-            select(getCurrUser)
-        ).subscribe(data =>  {
-            this.user = data
-            this.first_name = (this.user ? this.user.first_name : "")
-            this.last_name = (this.user ? this.user.last_name : "")
-            this.user_type = this.user.user_category? this.user.user_category.charAt(0).toUpperCase() + this.user.user_category.substring(1) : ""
-            this.exp = this.user.experience || ""
-            this.bio = this.user.bio || ""
-            
-        })
-        
-        
+      .pipe(
+          select(getCurrUser)
+      ).subscribe(data =>  {
+          this.currentUser = data
+          /*this.first_name = (this.user ? this.user.first_name : "")
+          this.last_name = (this.user ? this.user.last_name : "")
+          this.user_type = this.user.user_category? this.user.user_category.charAt(0).toUpperCase() + this.user.user_category.substring(1) : ""*/
+      })
+    }
 
+    setBadges(badge_list: string) {
+      badge_list.split(',').forEach(parsedString => {
+        var badge = this.all_badges.find(item => item.value == parsedString)
+        if (badge) {
+          this.user_badges.push(badge)
+        }
+      });
     }
 
     onEditProfileClick() {
-        this.router.navigate(['edit-profile'], {relativeTo: this.route})
+      this.router.navigate(['profile/edit-profile'])//, {relativeTo: this.route.parent})
     }
 
     logoutFunc() {
@@ -86,14 +86,4 @@ export class ProfileComponent implements OnInit {
         this.toastr.success("Successfully logged out.", "Success", {closeButton: true, timeOut: 5000, progressBar: true});
       });
     }
-
-    onMessageClick(userid1: string) {
-      this.chatroomService.getChatroomByTwoUsers(userid1, this.userId).subscribe((chatroom: Chatroom) => {
-        this.router.navigate([`/find-jobs/messages/${chatroom.chatroom_id}`])
-        this.chatroomService.setSelected(chatroom.chatroom_id)
-      })
-    }
-
-
-
 }
