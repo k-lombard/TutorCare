@@ -57,13 +57,13 @@
             </mat-form-field>
 
 
-            <ng-select class="custom mt-2" matInput [multiple]="true" [(ngModel)]="profile.skills" [ngModelOptions]="{standalone: true}" placeholder="Select skills you want to show">
-                <ng-option *ngFor="let task of skills" [value]="task.value" >{{task.display}}</ng-option>
+            <ng-select class="custom mt-2" matInput [multiple]="true" [(ngModel)]="user_skills" [ngModelOptions]="{standalone: true}" placeholder="Select skills you want to show">
+                <ng-option *ngFor="let skill of all_skills" [value]="skill.value" >{{skill.display}}</ng-option>
             </ng-select>
 
             <div class="custom-slider mt-2">
                 <mat-label class="inline-block">What is your ideal price range?</mat-label>
-                <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
+                <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="sliderOptions"></ngx-slider>
             </div>
             
             <!-- <h2 class="text-sm font-bold py-0 mt-4 pt-8">Care Preferences:</h2>

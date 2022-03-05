@@ -15,7 +15,7 @@ import { Profile } from 'src/app/models/profile.model';
 import { Options, LabelType } from "@angular-slider/ngx-slider";
 
 
-interface Item {
+interface Skill {
   display: string,
   value: string
 }
@@ -59,16 +59,39 @@ export class EditProfileComponent implements OnInit {
     selectedPreferences: string[] = []
     preferenceString: string = ""
     items: Preference[] = [{display: 'Tutoring', value: 'Tutoring'}, {display: 'Baby-sitting', value: 'Baby-sitting'}, {display: 'Dog-sitting', value: 'Dog-sitting'}, {display: 'House-sitting', value: 'House-sitting'}]*/
-    skills: Item[] = [
-      {display: 'Skill1', value: 'Skill1'},
-      {display: 'Skill2', value: 'Skill2'},
-      {display: 'Skill3', value: 'Skill3'},
-      {display: 'Skill4', value: 'Skill4'}
+    all_skills: Skill[] = [
+        {display: 'Tutoring', value: 'Tutoring'},
+        {display: 'Baby-sitting', value: 'Baby-sitting'},
+        {display: 'Dog-sitting', value: 'Dog-sitting'},
+        {display: 'House-sitting', value: 'House-sitting'},
+        {display: 'Math', value: 'Math'},
+        {display: 'Chemistry', value: 'Chemistry'},
+        {display: 'Biology', value: 'Biology'},
+        {display: 'Calculus', value: 'Calculus'},
+        {display: 'Physics', value: 'Physics'},
+        {display: 'Algebra', value: 'Algebra'},
+        {display: 'Geometry', value: 'Geometry'},
+        {display: 'Computer Science', value: 'Computer_Science'},
+        {display: 'Mechanical Engineering', value: 'Mechanical_Engineering'},
+        {display: 'Neuroscience', value: 'Neuroscience'},
+        {display: 'Chemical Engineering', value: 'Chemical_Engineering'},
+        {display: 'Industrial Engineering', value: 'Industrial_Engineering'},
+        {display: 'Aeronautical Engineering', value: 'Aeuronautical_Engineering'},
+        {display: 'Industrial Engineering', value: 'Industrial_Engineering'},
+        {display: 'Business', value: 'Business'},
+        {display: 'Linear Algebra', value: 'Linear_Algebra'},
+        {display: 'Multivariable Calculus', value: 'Multivariable_Calculus'},
+        {display: 'Ages 0-2', value: 'Ages_0-2'},
+        {display: 'Ages 3-6', value: 'Ages_3-6'},
+        {display: 'Ages 7-10', value: 'Ages_7-10'},
+        {display: 'Ages 11-14', value: 'Ages_11-14'},
+        {display: 'Ages 15-17', value: 'Ages_15-17'},
     ]
+    user_skills: Skill[] = []
 
   minValue: number = 20;
   maxValue: number = 30;
-  options: Options = {
+  sliderOptions: Options = {
     floor: 10,
     ceil: 100,
     minRange: 10,
@@ -117,8 +140,28 @@ export class EditProfileComponent implements OnInit {
         })
         this.editProfileService.getProfile(this.user.user_id).subscribe( data => {
           this.profile = data
+          this.user_skills = this.skillsToArray(this.profile.skills)
           console.log(this.profile)
       })
+    }
+
+    skillsToArray(skill_list: string) {
+      var skill_array: Skill[] = []
+      skill_list.split(',').forEach(parsedString => {
+        var skill = this.all_skills.find(item => item.value == parsedString)
+        if (skill) {
+          skill_array.push(skill)
+        }
+      });
+      return skill_array
+    }
+
+    skillsToString(skill_list: Skill[]) {
+      var skill_string = ""
+      skill_list.forEach((item: Skill) => {
+        skill_string += item + ","
+      })
+      return skill_string
     }
 
     /*onEmailChange() {
@@ -154,12 +197,14 @@ export class EditProfileComponent implements OnInit {
         }*/
         console.log("saved")
         console.log(this.profile)
+        console.log(this.user_skills)
+        this.profile.rate_range = "$" + this.minValue.toString() + " - $" + this.maxValue.toString();
+        this.profile.skills = this.skillsToString(this.user_skills) || ""
         this.editProfileFunc(this.user.user_id, this.profile)
     }
 
     editProfileFunc(user_id: string | undefined, newProfile: Profile) {
         this._editProfileObservable = this.editProfileService.editProfile(user_id, newProfile);
-        console.log("here")
         this._editProfileObservable.subscribe((data: Profile) => {
             console.log(data)
             //this.profile = data
