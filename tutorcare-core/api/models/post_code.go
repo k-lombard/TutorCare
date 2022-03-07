@@ -18,8 +18,8 @@ type PostCodeList struct {
 }
 
 func (i *PostCode) Bind(r *http.Request) error {
-	if i.PostID == 0 || i.CodeID == 0 || i.Code == 0 {
-		return fmt.Errorf("PostID, CodeID, and Code are required fields.")
+	if i.PostID == 0 {
+		return fmt.Errorf("PostID is a required field.")
 	}
 	return nil
 }
