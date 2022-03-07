@@ -18,7 +18,7 @@ func (db Database) GetAllPosts() (*models.PostList, error) {
 		return list, err
 	}
 	for i, post := range list.Posts {
-		err := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&list.Posts[i]).Error
+		err := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&list.Posts[i]).Error
 		if err != nil {
 			return list, err
 		}
@@ -48,7 +48,7 @@ func (db Database) GetActivePostsView(userId uuid.UUID) (*models.PostList, error
 		return list, err
 	}
 	for i, post := range list.Posts {
-		errDate := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&list.Posts[i]).Error
+		errDate := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&list.Posts[i]).Error
 		if errDate != nil {
 			return list, errDate
 		}
@@ -105,7 +105,7 @@ func (db Database) GetPostsAppliedTo(caregiverId uuid.UUID) (*models.PostList, e
 	}
 	for _, application := range appList.Applications {
 		post := models.Post{}
-		err2 := db.Conn.Where("post_id = ? AND completed = false", application.PostID).Select("*").First(&post).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&post).Error
+		err2 := db.Conn.Where("post_id = ? AND completed = false", application.PostID).Select("*").First(&post).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&post).Error
 		if err2 != nil {
 			return list, err2
 		}
@@ -127,7 +127,7 @@ func (db Database) AddPost(post *models.Post) (models.Post, error) {
 	if err != nil {
 		return postOut, err
 	}
-	err2 := db.Conn.Where("post_id = ?", post.PostID).Select("*").First(&postOut).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&postOut).Error
+	err2 := db.Conn.Where("post_id = ?", post.PostID).Select("*").First(&postOut).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&postOut).Error
 	if err2 != nil {
 		return postOut, err2
 	}
@@ -137,7 +137,7 @@ func (db Database) AddPost(post *models.Post) (models.Post, error) {
 
 func (db Database) GetPostById(postId int) (models.Post, error) {
 	postOut := models.Post{}
-	err := db.Conn.Where("post_id = ?", postId).Select("*").First(&postOut).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&postOut).Error
+	err := db.Conn.Where("post_id = ?", postId).Select("*").First(&postOut).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&postOut).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return postOut, ErrNoMatch
@@ -169,7 +169,7 @@ func (db Database) GetPostsByUserId(userId uuid.UUID) (*models.PostList, error) 
 		return list, err
 	}
 	for i, post := range list.Posts {
-		errDate := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&list.Posts[i]).Error
+		errDate := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&list.Posts[i]).Error
 		if errDate != nil {
 			return list, errDate
 		}

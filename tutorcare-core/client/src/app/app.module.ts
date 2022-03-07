@@ -47,6 +47,8 @@ import { AppliedToService } from './find-jobs/applied-to/applied-to.service';
 import { NgxMatDateAdapter, NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import 'hammerjs';
 
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
@@ -86,6 +88,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     MatListModule,
     MatIconModule,
     MatGridListModule,
+    MatTooltipModule,
     AuthModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],

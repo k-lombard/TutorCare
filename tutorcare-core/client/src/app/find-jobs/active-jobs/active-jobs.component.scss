@@ -121,6 +121,10 @@ bar-rating {
   padding: 5px;
 }
 
+[matTooltip] {
+  z-index: 999 !important;
+}
+
 
 [id="row-bottom"] {
   justify-self: baseline !important;
@@ -145,6 +149,7 @@ bar-rating {
 .pclass {
   text-overflow: ellipsis !important;
 }
+
 
 @media (max-width: 810px) {
   .pclass {

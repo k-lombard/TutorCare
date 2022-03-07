@@ -33,7 +33,7 @@ func (db Database) AddPostCode(postcode *models.PostCode) (models.PostCode, erro
 	if err2 != nil {
 		return postcodeOut, err2
 	}
-	fmt.Println("New post record created with postID and timestamp: ", postcodeOut.PostID, postcodeOut.Timestamp)
+	fmt.Println("New post_code record created with postID and timestamp: ", postcodeOut.PostID, postcodeOut.Timestamp)
 	return postcodeOut, nil
 }
 
