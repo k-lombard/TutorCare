@@ -75,27 +75,6 @@ func (db Database) GetActivePostsView(userId uuid.UUID) (*models.PostList, error
 	return list, nil
 }
 
-// func (db Database) GetActivePostsForCaregiverView(caregiverId uuid.UUID) (*models.PostList, error) {
-// 	list := &models.PostList{}
-// 	err := db.Conn.Where("completed = false AND caregiver_id != ? AND caregiver_id = ?", "00000000-0000-0000-0000-000000000000", caregiverId).Order("post_id desc").Find(&list.Posts).Error
-// 	if err != nil {
-// 		return list, err
-// 	}
-// 	for i, post := range list.Posts {
-// 		errDate := db.Conn.Raw("SELECT TO_CHAR(date_of_job :: DATE, 'Mon dd, yyyy') as date_of_job, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time FROM posts WHERE post_id = ?", post.PostID).Scan(&list.Posts[i]).Error
-// 		if errDate != nil {
-// 			return list, errDate
-// 		}
-// 		careUser := models.User{}
-// 		errNew := db.Conn.First(&careUser, "user_id = ?", post.UserID).Error
-// 		if errNew != nil {
-// 			return list, errNew
-// 		}
-// 		list.Posts[i].User = careUser
-// 	}
-// 	return list, nil
-// }
-
 func (db Database) GetPostsAppliedTo(caregiverId uuid.UUID) (*models.PostList, error) {
 	list := &models.PostList{}
 	appList := &models.ApplicationList{}
