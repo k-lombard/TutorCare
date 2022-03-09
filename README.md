@@ -17,6 +17,26 @@
 
 
 # Release Notes
+## Version 0.3.0
+### New Features
+- Redesign of the user profile page
+- Adds a user profile database table to store profile information
+- Updates the edit-profile page to work the the new profile models and new information
+- Adds Mobile Responsiveness to the Find-Care, Active Jobs, Applications Revcieved, and Applications Sent pages
+
+### Bug Fixes
+- Fixed Grid Layout of the Find Care Page
+- Fixed redundancy of the account and profile pages by merging their functionalities
+- Fixed a issue with the date info of a recieved application
+
+### Known Issues
+- Webpack bundle needs to be optimized.
+- Search feature is not elastic so it will become slow with higher number of posts.
+- Some forms do not autofill information, requiring user to input the same info in multiple places.
+- Mobile sidebar is not closable on very small screen sizes. 
+- Filter button clips in front of the sidebar on find-jobs page.
+- Issue with date and time validation on the create and update job post.
+
 ## Version 0.2.0
 ### New Features
 - Adds live chat messaging system for users to communicate to each other.
