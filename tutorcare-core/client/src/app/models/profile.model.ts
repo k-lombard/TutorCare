@@ -1,5 +1,3 @@
-import { Review } from "./review.model";
-
 export interface Profile {
     user_id       ?:string
     profile_id    ?:number

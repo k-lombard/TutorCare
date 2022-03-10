@@ -212,7 +212,22 @@ export class EditProfileComponent implements OnInit {
         this.editProfileFunc(this.user.user_id, this.profile)
     }
 
+    checkCovid() {
+      console.log(this.profile)
+      this.profile.covid19 = !this.profile.covid19
+    }
+    checkSmoker() {
+      this.profile.smoker = !this.profile.smoker
+    }
+    checkCpr() {
+      this.profile.cpr = !this.profile.cpr
+    }
+    checkFirstAid() {
+      this.profile.first_aid = !this.profile.first_aid
+    }
+
     editProfileFunc(user_id: string | undefined, newProfile: Profile) {
+      console.log(newProfile)
         this._editProfileObservable = this.editProfileService.editProfile(user_id, newProfile);
         this._editProfileObservable.subscribe((data: Profile) => {
             console.log(data)

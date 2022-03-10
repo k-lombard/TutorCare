@@ -97,7 +97,10 @@ func (db Database) UpdateApplication(applicationId int, appData models.Applicati
 		}
 		return app, errTwo
 	}
-	err := db.Conn.Model(&app).Where("application_id = ?", applicationId).Updates(models.Application{Message: appData.Message, Accepted: appData.Accepted}).Error
+	err := db.Conn.Model(&app).Where("application_id = ?", applicationId).Updates(map[string]interface{}{
+		"Message":  appData.Message,
+		"Accepted": appData.Accepted,
+	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return app, ErrNoMatch

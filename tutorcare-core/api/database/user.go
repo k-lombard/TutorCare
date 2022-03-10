@@ -3,7 +3,6 @@ package database
 import (
 	"errors"
 	"fmt"
-	"strconv"
 
 	"main/models"
 
@@ -118,7 +117,19 @@ func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.Us
 	if isMatch == true {
 		hash = []byte(user2.Password)
 	}
-	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{FirstName: userData.FirstName, LastName: userData.LastName, Email: userData.Email, Password: string(hash), UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences, City: userData.City, Zipcode: userData.Zipcode, Address: userData.Address}).Error
+	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(map[string]interface{}{
+		"FirstName":    userData.FirstName,
+		"LastName":     userData.LastName,
+		"Email":        userData.Email,
+		"Password":     string(hash),
+		"UserCategory": userData.UserCategory,
+		"Experience":   userData.Experience,
+		"Bio":          userData.Bio,
+		"Preferences":  userData.Preferences,
+		"City":         userData.City,
+		"Zipcode":      userData.Zipcode,
+		"Address":      userData.Address,
+	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
@@ -145,12 +156,12 @@ func (db Database) UpdateUserData(userId uuid.UUID, userData models.User) (model
 		}
 		return user, errTwo
 	}
-	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{
-		Email:        userData.Email,
-		UserCategory: userData.UserCategory,
-		Experience:   userData.Experience,
-		Bio:          userData.Bio,
-		Preferences:  userData.Preferences,
+	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(map[string]interface{}{
+		"Email":        userData.Email,
+		"UserCategory": userData.UserCategory,
+		"Experience":   userData.Experience,
+		"Bio":          userData.Bio,
+		"Preferences":  userData.Preferences,
 	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -178,26 +189,25 @@ func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.Profile) 
 		}
 		return userProfile, errTwo
 	}
-	fmt.Printf("UpdateUserProfile function. Updated covid value = " + strconv.FormatBool((userData.Covid19)))
-	err := db.Conn.Model(&userProfile).Where("user_id = ?", userId).Updates(models.Profile{
-		ProfilePic:    userData.ProfilePic,
-		Bio:           userData.Bio,
-		BadgeList:     userData.BadgeList,
-		Age:           userData.Age,
-		Gender:        userData.Gender,
-		Language:      userData.Language,
-		Experience:    userData.Experience,
-		Education:     userData.Education,
-		Skills:        userData.Skills,
-		ServiceTypes:  userData.ServiceTypes,
-		AgeGroups:     userData.AgeGroups,
-		Covid19:       userData.Covid19,
-		Cpr:           userData.Cpr,
-		FirstAid:      userData.FirstAid,
-		Smoker:        userData.Smoker,
-		JobsCompleted: userData.JobsCompleted,
-		RateRange:     userData.RateRange,
-		Rating:        userData.Rating,
+	err := db.Conn.Model(&user2).Where("user_id = ?", userId).Updates(map[string]interface{}{
+		"ProfilePic":    userData.ProfilePic,
+		"Bio":           userData.Bio,
+		"BadgeList":     userData.BadgeList,
+		"Age":           userData.Age,
+		"Gender":        userData.Gender,
+		"Language":      userData.Language,
+		"Experience":    userData.Experience,
+		"Education":     userData.Education,
+		"Skills":        userData.Skills,
+		"ServiceTypes":  userData.ServiceTypes,
+		"AgeGroups":     userData.AgeGroups,
+		"Covid19":       userData.Covid19,
+		"Cpr":           userData.Cpr,
+		"FirstAid":      userData.FirstAid,
+		"Smoker":        userData.Smoker,
+		"JobsCompleted": userData.JobsCompleted,
+		"RateRange":     userData.RateRange,
+		"Rating":        userData.Rating,
 	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

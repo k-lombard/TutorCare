@@ -75,10 +75,10 @@
             </ng-select> -->
 
             <ul class="twocolumn mt-2">
-                <li><mat-checkbox name="covid" [checked]="profile.covid19" (change)="profile.covid19 = !profile.covid19">Have you had at least 2 COVID-19 Vaccines</mat-checkbox></li>
-                <li><mat-checkbox name="smoker" [checked]="profile.smoker" (change)="profile.smoker = !profile.smoker">Do you smoke regularly?</mat-checkbox></li>
-                <li><mat-checkbox name="cpr" [checked]="profile.cpr" (change)="profile.cpr = !profile.cpr">Do you have CPR training?</mat-checkbox></li>
-                <li><mat-checkbox name="first_aid" [checked]="profile.first_aid" (change)="profile.first_aid = !profile.first_aid">Do you have First Aid training?</mat-checkbox></li>
+                <li><mat-checkbox name="covid" [checked]="profile.covid19" (change)="checkCovid()">Have you had at least 2 COVID-19 Vaccines</mat-checkbox></li>
+                <li><mat-checkbox name="smoker" [checked]="profile.smoker" (change)="checkSmoker()">Do you smoke regularly?</mat-checkbox></li>
+                <li><mat-checkbox name="cpr" [checked]="profile.cpr" (change)="checkCpr()">Do you have CPR training?</mat-checkbox></li>
+                <li><mat-checkbox name="first_aid" [checked]="profile.first_aid" (change)="checkFirstAid()">Do you have First Aid training?</mat-checkbox></li>
             </ul>
 
 
