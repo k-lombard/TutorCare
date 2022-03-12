@@ -170,8 +170,8 @@ export class EditProfileComponent implements OnInit {
 
     parseRateRange(rate: string) {
       var str = rate.split(",")
-      this.minValue = parseInt(str[0])
-      this.maxValue = parseInt(str[1])
+      this.minValue = (Number.isNaN(parseInt(str[0])) ? this.minValue : parseInt(str[0]))
+      this.maxValue = (Number.isNaN(parseInt(str[1])) ? this.maxValue : parseInt(str[1]))
     }
 
     /*onEmailChange() {
@@ -207,7 +207,7 @@ export class EditProfileComponent implements OnInit {
         }*/
         console.log("saved")
         console.log(this.profile)
-        this.profile.rate_range = this.minValue.toString() + "," + this.maxValue.toString();
+        this.profile.rate_range = "$" + this.minValue.toString() + " - $" + this.maxValue.toString();
         this.profile.skills = this.skillsToString(this.user_skills) || ""
         this.editProfileFunc(this.user.user_id, this.profile)
     }
@@ -237,9 +237,9 @@ export class EditProfileComponent implements OnInit {
             //this.user.access_token = this.access_token
             //this.store.dispatch(new Login({user: data}));
         });
-        /*this.router.navigate(['/account']).then(() => {
+        this.router.navigate([`/profile/${this.user.user_id}`]).then(() => {
           window.location.reload();
-        });*/
+        });
     }
 
 }

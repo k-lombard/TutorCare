@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit {
     last_name: string |undefined
     user_type: string | undefined*/
     all_badges: Badges[] = [
-      {value: 'verified', description: 'Verified University Email', matIconString:'verified_user'},
+      {value: 'verified', description: 'Verified GA Tech Email', matIconString:'verified_user'},
       {value: '20jobs', description: '20 Completed Jobs', matIconString:'whatshot'}
     ];
     user_badges: Badges[] = []
@@ -81,6 +81,7 @@ export class ProfileComponent implements OnInit {
         })
         this.profileService.getProfileByUserId(params['id']).subscribe((data: Profile) => {
           this.profile = data
+          //this.profile.badge_list = "verified"
           this.setBadges(this.profile.badge_list)
           this.user_skills = this.skillsToArray(this.profile.skills)
         })

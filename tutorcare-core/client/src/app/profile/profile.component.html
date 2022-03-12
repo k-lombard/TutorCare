@@ -40,8 +40,8 @@
               <span>{{ user.user_category }}</span>
               <span>  |  </span>
               <span>Jobs Completed: {{profile.jobs_completed}}</span>
-              <span>  |  </span>
-              <span>Rate: {{profile.rate_range}}</span>
+              <span *ngIf ="profile.rate_range">  |  </span>
+              <span *ngIf ="profile.rate_range" >Rate: {{profile.rate_range}}</span>
             </div>
 
 
@@ -140,17 +140,17 @@
           <div id="profile" class="py-4">
             <mat-card class="bio">
               <h2>My Information</h2>
-              <p>Age: {{profile.age}} || Gender: {{profile.gender}} || Languages: {{profile.language}}</p>
+              <!-- <p>Age: {{profile.age}} || Gender: {{profile.gender}} || Languages: {{profile.language}}</p> -->
               <p>{{profile.bio}}</p>
             </mat-card>
           </div>
 
-          <div id="family" class="py-4">
+          <!-- <div id="family" class="py-4">
             <mat-card class="bio">
               <h2>My Family</h2>
               <p>[show user's Family Members]</p>
             </mat-card>
-          </div>
+          </div> -->
           
           <!-- <div id="recurring" class="py-4">
             <mat-card class="bio">
@@ -170,16 +170,17 @@
             <mat-card class="bio">
               <h2>My Qualifications</h2>
               <p>{{profile.education}}</p>
-              <div *ngIf="user_skills.length > 0" class="taglist flex flex-row">
-                <div *ngFor="let skill of user_skills" class="taglist mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-4 px-4 text-xs leading-3">{{ skill.display }}</div>
-              </div>
+              
             </mat-card>
           </div>
 
           <div id="services" class="py-4">
             <mat-card class="bio">
               <h2>My Services</h2>
-              <p>{{profile.service_types}}</p>
+              <p>{{profile.experience}}</p>
+              <div *ngIf="user_skills.length > 0" class="taglist flex flex-row">
+                <div *ngFor="let skill of user_skills" class="taglist mx-1 text-[#eaaa00] items-center justify-center rounded-full bg-[#54585A] shadow-lg shadow-[#54585A] py-2 px-2 leading-3">{{ skill.display }}</div>
+              </div>
             </mat-card>
           </div>
 
