@@ -18,6 +18,9 @@ export interface Post {
   end_date?: string
   end_time?: string
   date_posted?: string
+  hourly_rate?: number
+  poster_completed?: boolean
+  caregiver_completed?: boolean
   applications?: Application[]
   caregiver?: User
   application_id?: number

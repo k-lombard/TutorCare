@@ -49,6 +49,7 @@ import { ProfileComponent } from '../profile/profile.component';
 import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component';
 import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { JobComponent } from '../job/job.component';
 
 @NgModule({
     imports: [
@@ -105,7 +106,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         VerifyComponent,
         ProfileComponent,
         AppliedToComponent,
-        EditJobDialog
+        EditJobDialog,
+        JobComponent
     ],
     exports: [LoginComponent, NavbarComponent, ],
     entryComponents: [CreateJobDialog]

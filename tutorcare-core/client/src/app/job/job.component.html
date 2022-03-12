@@ -1,0 +1,99 @@
+<div>
+    <navbar></navbar>
+    <div class="flex flex-row w-[100%]">
+        <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-8 shadow shadow-2xl bg-white">
+        <h2 class="pagetitle text-3xl font-semibold text-gray-800 px-4">My Jobs</h2>
+
+        <div class="relative mt-6 mx-2">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+            </span>
+
+            <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
+        </div>
+        <sidebar currPage="my-job-postings" class="h-full mb-0 pb-0"></sidebar>
+        </div>
+        <div class="flex flex-col w-[100%] h-[100%]">
+            <mat-card *ngIf="currPost?.title" class="jobcard">
+                <div *ngIf="currPost.caregiver_completed && currPost.poster_completed" id="completed" class="w-1/6 text-white items-center justify-center rounded bg-[#51A351] shadow-lg shadow-[#54585A] text-xs float-right justify-self-end mx-2"><p class="justify-center items-center">COMPLETED</p></div>
+                <div class="flex flex-row items-center justify-between">
+                    <h2 class="jobpost pt-2 pb-2">{{currPost.title}}</h2>
+                    <h2 class="jobdesctitle float-right flex">{{currPost.start_date}} {{currPost.start_time}} to {{currPost.end_date}} {{currPost.end_time}}</h2>
+                </div>
+                <h2 class="jobid text-gray-400 pt-2 pb-2">Post ID: {{currPost.post_id}}</h2>
+                <h2 class="jobdesctitle pt-2 pb-2">Job Description: <h2 class="jobdesc">{{currPost.care_description}}</h2></h2>
+            </mat-card>
+            <mat-card class="jobcard" *ngIf="currPost?.title">
+                <h2 class="jobdesctitle pt-2 pb-2" *ngIf="currPost.caregiver_id !== user.user_id">Assigned Caregiver:</h2>
+                <h2 class="jobdesctitle pt-2 pb-2" *ngIf="currPost.caregiver_id === user.user_id">Job Poster:</h2>
+                <div *ngIf="currPost.caregiver_id !== user.user_id && currPost?.caregiver?.first_name">
+                    <div class="flex flex-row items-center">
+                        <div *ngIf="currPost.caregiver_id !== user.user_id && currPost?.caregiver?.first_name">
+                            <img class="stock mx-4" src="../../assets/images/profile_picture.jpeg"/>
+                        </div>
+                      <h2 class="align-self-center">{{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}</h2>
+                    </div>
+                </div>
+                <h2 *ngIf="currPost.caregiver_id !== user.user_id && !currPost?.caregiver?.first_name">No Assigned Caregiver</h2>
+                <div *ngIf="currPost.caregiver_id === user.user_id && currPost?.user?.first_name">
+                    <div class="flex flex-row items-center">
+                        <div *ngIf="currPost.caregiver_id === user.user_id && currPost?.user?.first_name">
+                            <img class="stock mx-4" src="../../assets/images/profile_picture.jpeg"/>
+                        </div>        
+                      <h2 class="align-self-center">{{currPost.user.first_name}} {{currPost.user.last_name}}</h2>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id !== user.user_id && !verified.value">
+                <div class="flex flex-row items-center content-center">
+                    <button class="mx-2 icon"
+                        matTooltip="If you are the job-poster, provide this verification code to the caregiver before they begin their job. Failure to provide this code to the caregiver will prevent them from starting the job."
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>info</mat-icon>
+                    </button>
+                    <h2 *ngIf="active.value && verifyCode.value != 0" class="jobdesctitle pt-2 pb-2 mx-4">Job-start Verification Code: <h2 class="jobpost">{{verifyCode | async}}</h2></h2>
+                </div>
+            </mat-card>
+            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id === user.user_id && !verified.value">
+                <div class="flex flex-row items-center content-center">
+                    <button class="mx-2 icon"
+                        matTooltip="If you are providing care, do not begin your job until you have received the job verification code from the job-poster, and you have successfully entered it. Failure to do so may result in you not being paid for the job."
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>info</mat-icon>
+                    </button>
+                    <h2 *ngIf="active.value" class="jobdesctitle pt-2 pb-2 mx-4">Enter Verification Code To Begin Job:</h2>
+                </div>
+                <div class="flex flex-row items-center justify-between">
+                    <form [formGroup]="codeForm" novalidate>
+                    <mat-form-field class="full-width" appearance="outline">
+                        <input matInput type="code" placeholder="Verification code" formControlName="code" required>
+                        <mat-label>Verification Code</mat-label>
+                    </mat-form-field>
+                    </form>
+                    <button color="accent" mat-raised-button class="p-4" (click)="onCodeSubmit()">
+                        <mat-icon aria-hidden="false" aria-label="Example home icon">task_alt</mat-icon>
+                        Verify
+                    </button>
+                </div>
+            </mat-card>
+            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id === user.user_id && verified.value && (!currPost?.poster_completed || !currPost?.caregiver_completed)">
+                <div class="flex flex-row items-center content-center">
+                    <button color="accent" mat-raised-button  class="p-4" (click)="onCaregiverCompleted()">
+                        <mat-icon aria-hidden="false" aria-label="Example home icon">task_alt</mat-icon>
+                        Mark Job As Completed
+                    </button>
+                </div>
+            </mat-card>
+            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id !== user.user_id && verified.value && (!currPost?.poster_completed || !currPost?.caregiver_completed)">
+                <div class="flex flex-row items-center content-center">
+                    <button color="accent" mat-raised-button class="p-4" (click)="onPosterCompleted()">
+                        <mat-icon aria-hidden="false" aria-label="Example home icon">task_alt</mat-icon>
+                        Mark Job As Completed
+                    </button>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</div>

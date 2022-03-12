@@ -35,7 +35,7 @@ type PostList struct {
 }
 
 func (i *Post) Bind(r *http.Request) error {
-	if i.CareType == "" || i.StartDate == "" || i.StartTime == "" || i.Title == "" || i.CareDescription == "" || i.EndDate == "" || i.EndTime == "" || (i.UserID).String() == "" {
+	if i.CareType == "" || i.Title == "" || i.CareDescription == "" || (i.UserID).String() == "" {
 		return fmt.Errorf("Care_type, date_of_job, start_time, care_description, end_time, and user_id are required fields.")
 	}
 	return nil

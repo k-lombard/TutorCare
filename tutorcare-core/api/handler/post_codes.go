@@ -16,7 +16,7 @@ import (
 func (r routes) post_codes(rg *gin.RouterGroup) {
 	rg.GET("/", getAllPostCodes)
 	rg.GET("/:postid", getPostCodeByPostId)
-	rg.GET("/:userid", getPostCodesByUserId)
+	rg.GET("/user/:userid", getPostCodesByUserId)
 	rg.POST("/", addPostCode)
 	rg.PUT("/:postid", updatePostCode)
 	rg.DELETE("/:postid", deletePostCode)

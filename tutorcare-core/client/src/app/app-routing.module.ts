@@ -17,6 +17,7 @@ import { ChatroomsComponent } from './find-jobs/chatrooms/chatrooms.component';
 import { VerifyComponent } from './signup/verify/verify.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AppliedToComponent } from './find-jobs/applied-to/applied-to.component';
+import { JobComponent } from './job/job.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -32,7 +33,7 @@ const routes: Routes = [
   { path: 'find-jobs/applications-received/:id', component: ApplicationsReceivedComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/active-jobs', component: ActiveJobsComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/my-job-postings', component: MyJobPostingsComponent, canActivate: [AuthGuard]},
-  { path: 'find-jobs/my-job-postings/:id', component: MyJobPostingsComponent, canActivate: [AuthGuard]},
+  { path: 'find-jobs/jobs/:id', component: JobComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/applied-to', component: AppliedToComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/applied-to/:id', component: AppliedToComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/messages', component: ChatroomsComponent, canActivate: [AuthGuard]},
