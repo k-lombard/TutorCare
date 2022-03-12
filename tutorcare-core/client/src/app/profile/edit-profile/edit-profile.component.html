@@ -1,0 +1,97 @@
+<div *ngIf="profile">
+    <navbar></navbar>
+    <form class="example-form">
+        
+        <mat-card class="flex flex-row">
+            <mat-card-title>Profile Information</mat-card-title>
+            <!-- <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label> -->
+                <!-- <input [value]="'emailVal'" [formControl]="emailFC" matInput (change)="onEmailChange()"> -->
+                <!-- <textarea id="email-field" matInput
+                    name="first"
+                    [(ngModel)]="user.email"
+                    cdkTextareaAutosize
+                    class="textarea-inline-control" >
+                </textarea>
+            </mat-form-field> -->
+
+            <!-- <mat-form-field appearance="fill">
+                <mat-label>User Category</mat-label>
+                <mat-select name="second" [(ngModel)]="selectedValue" name="option">
+                  <mat-option *ngFor="let option of options" [value]="option.value">
+                    {{option.viewValue}}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field> -->
+            <mat-form-field appearance="outline">
+                <mat-label>What do you want others to know about you?</mat-label>
+                <textarea matInput
+                    name="bio"
+                    [(ngModel)]="profile.bio"
+                    class="textarea-inline-control"
+                    cdkTextareaAutosize>
+                </textarea>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+                <mat-label>What are your qualifications?</mat-label>
+                <!-- <input [value]="'expVal'" value="expVal" [formControl]="experienceFC" matInput (change)="onExperienceChange()"> -->
+                <textarea matInput
+                    name="qualifications"
+                    [(ngModel)]="profile.education"
+                    class="textarea-inline-control"
+                    cdkTextareaAutosize>
+                </textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Experience</mat-label>
+                <!-- <input [value]="'expVal'" value="expVal" [formControl]="experienceFC" matInput (change)="onExperienceChange()"> -->
+                <textarea matInput
+                    name="experience"
+                    [(ngModel)]="profile.experience"
+                    class="textarea-inline-control"
+                    cdkTextareaAutosize>
+                </textarea>
+                
+            </mat-form-field>
+
+
+            <!-- <ng-select class="custom mt-2" matInput [multiple]="true" [(ngModel)]="user_skills" [ngModelOptions]="{standalone: true}" placeholder="Select skills you want to show">
+                <ng-option *ngFor="let skill of all_skills" [value]="skill.value" >{{skill.display}}</ng-option>
+            </ng-select> -->
+            <ng-select placeholder="Select skills you want to show" class="custom mt-2" matInput [multiple]="true" [(ngModel)]="user_skills" [ngModelOptions]="{standalone: true}">
+                <ng-option *ngFor="let skill of all_skills" [value]="skill.value" >{{skill.display}}</ng-option>
+            </ng-select>
+
+            <div class="custom-slider mt-2">
+                <mat-label class="inline-block">What is your ideal price range?</mat-label>
+                <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="sliderOptions"></ngx-slider>
+            </div>
+            
+            <!-- <h2 class="text-sm font-bold py-0 mt-4 pt-8">Care Preferences:</h2>
+            <ng-select class="custom" matInput [multiple]="true" [(ngModel)]="selectedPreferences" [ngModelOptions]="{standalone: true}">
+              <ng-option *ngFor="let pref of items" [value]="pref.value" >{{pref.display}}</ng-option>
+            </ng-select> -->
+
+            <ul class="twocolumn mt-2">
+                <li><mat-checkbox name="covid" [checked]="profile.covid19" (change)="checkCovid()">Have you had at least 2 COVID-19 Vaccines</mat-checkbox></li>
+                <li><mat-checkbox name="smoker" [checked]="profile.smoker" (change)="checkSmoker()">Do you smoke regularly?</mat-checkbox></li>
+                <li><mat-checkbox name="cpr" [checked]="profile.cpr" (change)="checkCpr()">Do you have CPR training?</mat-checkbox></li>
+                <li><mat-checkbox name="first_aid" [checked]="profile.first_aid" (change)="checkFirstAid()">Do you have First Aid training?</mat-checkbox></li>
+            </ul>
+
+
+            <mat-card-actions>
+                <button mat-button (click)="onCancelSubmit()">
+                    <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">login</mat-icon> -->
+                    <span>CANCEL</span>
+                </button>
+                <button mat-raised-button (click)="onSave()" color="accent" id="save-button">
+                    <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">login</mat-icon> -->
+                    <span>SAVE</span>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </form>
+</div>

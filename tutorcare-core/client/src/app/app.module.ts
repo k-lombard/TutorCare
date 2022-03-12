@@ -7,6 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 import { UsersService } from './users.service';
 import { HttpModule } from '@angular/http';
@@ -17,6 +20,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { SignupService } from './signup/signup.service';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { StoreModule } from '@ngrx/store';
@@ -30,7 +34,7 @@ import { CustomSerializer } from './shared/utils';
 import { RouterModule } from '@angular/router';
 import { FindCareService } from './find-care/find-care.service';
 import { BarRatingModule } from 'ngx-bar-rating';
-import { EditProfileService } from './account/edit-profile/edit-profile.service';
+import { EditProfileService } from './profile/edit-profile/edit-profile.service';
 import { ToastrModule } from 'ngx-toastr';
 import { FindJobsService } from './find-jobs/find-jobs.service';
 import { ApplyJobService } from './find-jobs/apply-job/apply-job.service';
@@ -47,6 +51,9 @@ import { AppliedToService } from './find-jobs/applied-to/applied-to.service';
 import { NgxMatDateAdapter, NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { JobService } from './job/job.service';
+// import 'hammerjs';
 
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
@@ -75,6 +82,10 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     ToastrModule.forRoot(),
     MatInputModule,
     MatCardModule,
+    NgxSliderModule,
+    MatSlideToggleModule,
+    MatCheckboxModule,
+    MatTooltipModule,
     HttpClientModule,
     MatButtonModule,
     BarRatingModule,
@@ -86,13 +97,14 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     MatListModule,
     MatIconModule,
     MatGridListModule,
+    MatTooltipModule,
     AuthModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, { provide: RouterStateSerializer, useClass: CustomSerializer },
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, JobService, { provide: RouterStateSerializer, useClass: CustomSerializer },
     {
       provide: NgxMatDateAdapter,
       useClass: NgxMatMomentAdapter,

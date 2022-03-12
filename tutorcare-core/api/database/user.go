@@ -35,7 +35,26 @@ func (db Database) AddUser(user *models.User) (models.User, error) {
 	}
 
 	fmt.Println("New user record created with ID and dateJoined: ", userOut.UserID, userOut.DateJoined)
+
+	err3 := db.addUserProfile(userOut.UserID)
+	if err3 != nil {
+		return userOut, err3
+	}
+
 	return userOut, nil
+}
+
+func (db Database) addUserProfile(userId uuid.UUID) error {
+	userProfileOut := models.Profile{}
+	userProfileOut.UserID = userId
+	if err := db.Conn.Create(&userProfileOut).Error; err != nil {
+		return err
+	}
+	if err2 := db.Conn.Where("user_id = ?", userId).First(&userProfileOut).Error; err2 != nil {
+		return err2
+	}
+	fmt.Println("New user profile record created with userID and profileID", userProfileOut.UserID, userProfileOut.ProfileID)
+	return nil
 }
 
 func (db Database) GetUserById(userId uuid.UUID) (models.User, error) {
@@ -49,6 +68,21 @@ func (db Database) GetUserById(userId uuid.UUID) (models.User, error) {
 		}
 	}
 	return user, nil
+}
+
+func (db Database) GetUserProfileById(userId uuid.UUID) (models.Profile, error) {
+	userProfile := models.Profile{}
+	err := db.Conn.First(&userProfile, "user_id = ?", userId).Error
+	fmt.Printf("Database: GetUserProfileById")
+	fmt.Printf(userProfile.UserID.String() + string(userProfile.ProfileID))
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return userProfile, ErrNoMatch
+		} else {
+			return userProfile, err
+		}
+	}
+	return userProfile, nil
 }
 
 func (db Database) DeleteUser(userId uuid.UUID) error {
@@ -83,7 +117,19 @@ func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.Us
 	if isMatch == true {
 		hash = []byte(user2.Password)
 	}
-	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{FirstName: userData.FirstName, LastName: userData.LastName, Email: userData.Email, Password: string(hash), UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences, City: userData.City, Zipcode: userData.Zipcode, Address: userData.Address}).Error
+	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(map[string]interface{}{
+		"FirstName":    userData.FirstName,
+		"LastName":     userData.LastName,
+		"Email":        userData.Email,
+		"Password":     string(hash),
+		"UserCategory": userData.UserCategory,
+		"Experience":   userData.Experience,
+		"Bio":          userData.Bio,
+		"Preferences":  userData.Preferences,
+		"City":         userData.City,
+		"Zipcode":      userData.Zipcode,
+		"Address":      userData.Address,
+	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
@@ -100,7 +146,7 @@ func (db Database) UpdateUser(userId uuid.UUID, userData models.User) (models.Us
 	return user, nil
 }
 
-func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.User) (models.User, error) {
+func (db Database) UpdateUserData(userId uuid.UUID, userData models.User) (models.User, error) {
 	user := models.User{}
 	user2 := models.User{}
 	errTwo := db.Conn.First(&user2, "user_id = ?", userId).Error
@@ -110,7 +156,13 @@ func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.User) (mo
 		}
 		return user, errTwo
 	}
-	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(models.User{Email: userData.Email, UserCategory: userData.UserCategory, Experience: userData.Experience, Bio: userData.Bio, Preferences: userData.Preferences}).Error
+	err := db.Conn.Model(&user).Where("user_id = ?", userId).Updates(map[string]interface{}{
+		"Email":        userData.Email,
+		"UserCategory": userData.UserCategory,
+		"Experience":   userData.Experience,
+		"Bio":          userData.Bio,
+		"Preferences":  userData.Preferences,
+	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return user, ErrNoMatch
@@ -125,6 +177,52 @@ func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.User) (mo
 		return user, errFinal
 	}
 	return user, nil
+}
+
+func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.Profile) (models.Profile, error) {
+	userProfile := models.Profile{}
+	user2 := models.Profile{}
+	errTwo := db.Conn.First(&user2, "user_id = ?", userId).Error
+	if errTwo != nil {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
+			return userProfile, ErrNoMatch
+		}
+		return userProfile, errTwo
+	}
+	err := db.Conn.Model(&user2).Where("user_id = ?", userId).Updates(map[string]interface{}{
+		"ProfilePic":    userData.ProfilePic,
+		"Bio":           userData.Bio,
+		"BadgeList":     userData.BadgeList,
+		"Age":           userData.Age,
+		"Gender":        userData.Gender,
+		"Language":      userData.Language,
+		"Experience":    userData.Experience,
+		"Education":     userData.Education,
+		"Skills":        userData.Skills,
+		"ServiceTypes":  userData.ServiceTypes,
+		"AgeGroups":     userData.AgeGroups,
+		"Covid19":       userData.Covid19,
+		"Cpr":           userData.Cpr,
+		"FirstAid":      userData.FirstAid,
+		"Smoker":        userData.Smoker,
+		"JobsCompleted": userData.JobsCompleted,
+		"RateRange":     userData.RateRange,
+		"Rating":        userData.Rating,
+	}).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return userProfile, ErrNoMatch
+		}
+		return userProfile, err
+	}
+	errFinal := db.Conn.First(&userProfile, "user_id = ?", userId).Error
+	if errFinal != nil {
+		if errors.Is(errFinal, gorm.ErrRecordNotFound) {
+			return userProfile, ErrNoMatch
+		}
+		return userProfile, errFinal
+	}
+	return userProfile, nil
 }
 
 func comparePasswords(hashedPwd string, plainPwd []byte) bool {

@@ -38,6 +38,13 @@ func addPost(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
+	postCode := &models.PostCode{}
+	postCode.PostID = post.PostID
+	_, err2 := dbInstance.AddPostCode(postCode)
+	if err2 != nil {
+		c.JSON(http.StatusBadRequest, "Error: Bad Request")
+		return
+	}
 	c.JSON(http.StatusOK, postOut)
 }
 

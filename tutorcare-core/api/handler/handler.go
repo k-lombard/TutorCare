@@ -82,6 +82,8 @@ func RouteHandler(db database.Database, m *melody.Melody) *gin.Engine {
 	r.profile(profile)
 	posts := api.Group("/posts")
 	r.posts(posts)
+	postCodes := api.Group("/post_codes")
+	r.post_codes(postCodes)
 	applications := api.Group("/applications", TokenAuthMiddleware())
 	r.applications(applications)
 	chatrooms := api.Group("/chatrooms", TokenAuthMiddleware())

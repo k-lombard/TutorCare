@@ -3,6 +3,8 @@ package database
 import (
 	"errors"
 	"fmt"
+	"math/rand"
+	"time"
 
 	"main/models"
 
@@ -17,32 +19,27 @@ func (db Database) GetAllPostCodes() (*models.PostCodeList, error) {
 	if err != nil {
 		return list, err
 	}
-	for i, postcode := range list.PostCodes {
-		err := db.Conn.Where("post_id = ?", postcode.PostID).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&list.PostCodes[i]).Error
-		if err != nil {
-			return list, err
-		}
-	}
 	return list, nil
 }
 
 func (db Database) AddPostCode(postcode *models.PostCode) (models.PostCode, error) {
 	postcodeOut := models.PostCode{}
+	postcode.Code = generateVerificationCode()
 	err := db.Conn.Create(&postcode).Error
 	if err != nil {
 		return postcodeOut, err
 	}
-	err2 := db.Conn.Where("post_id = ?", postcode.PostID).Select("*").First(&postcodeOut).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&postcodeOut).Error
+	err2 := db.Conn.Where("post_id = ?", postcode.PostID).Select("*").First(&postcodeOut).Error
 	if err2 != nil {
 		return postcodeOut, err2
 	}
-	fmt.Println("New post record created with postID and timestamp: ", postcodeOut.PostID, postcodeOut.Timestamp)
+	fmt.Println("New post_code record created with postID and timestamp: ", postcodeOut.PostID, postcodeOut.Timestamp)
 	return postcodeOut, nil
 }
 
 func (db Database) GetPostCodeByPostId(postId int) (models.PostCode, error) {
 	postcodeOut := models.PostCode{}
-	err := db.Conn.Where("post_id = ?", postId).Select("*").First(&postcodeOut).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM')").First(&postcodeOut).Error
+	err := db.Conn.Where("post_id = ?", postId).Select("*").First(&postcodeOut).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return postcodeOut, ErrNoMatch
@@ -93,4 +90,9 @@ func (db Database) UpdatePostCode(postId int, postcodeData models.PostCode) (mod
 		return postcode, err
 	}
 	return postcode, nil
+}
+
+func generateVerificationCode() int {
+	rand.Seed(time.Now().UnixNano())
+	return 1000 + rand.Intn(999999-1000)
 }

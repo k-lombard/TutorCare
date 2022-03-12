@@ -62,7 +62,11 @@ func (db Database) AddGeolocationPosition(loc *models.GeolocationPosition) (mode
 	} else {
 		geolocationPositionOut := models.GeolocationPosition{}
 
-		err := db.Conn.Model(&geolocationPositionOut).Where("user_id = ?", loc.UserID).Updates(models.GeolocationPosition{Accuracy: loc.Accuracy, Latitude: loc.Latitude, Longitude: loc.Longitude}).Error
+		err := db.Conn.Model(&geolocationPositionOut).Where("user_id = ?", loc.UserID).Updates(map[string]interface{}{
+			"Accuracy":  loc.Accuracy,
+			"Latitude":  loc.Latitude,
+			"Longitude": loc.Longitude,
+		}).Error
 		if err != nil {
 			return geolocationPositionOut, err
 		}
@@ -107,7 +111,11 @@ func (db Database) UpdateGeolocationPosition(userId uuid.UUID, locData models.Ge
 		}
 		return loc, errTwo
 	}
-	err := db.Conn.Model(&loc).Where("user_id = ?", userId).Updates(models.GeolocationPosition{Accuracy: locData.Accuracy, Latitude: locData.Latitude, Longitude: locData.Longitude}).Error
+	err := db.Conn.Model(&loc).Where("user_id = ?", userId).Updates(map[string]interface{}{
+		"Accuracy":  locData.Accuracy,
+		"Latitude":  locData.Latitude,
+		"Longitude": locData.Longitude,
+	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return loc, ErrNoMatch
