@@ -32,6 +32,8 @@ export class ActiveJobsComponent implements OnInit {
     locs!: GeolocationPositionWithUser[]
     userType!: string
     mySubscription!: any
+    menuVisible: boolean
+    mainCol: boolean
     constructor(private router: Router, private activeJobs: ActiveJobsService, private store: Store<AppState>, private chatroomService: ChatroomsService) {}
 
 
@@ -65,5 +67,9 @@ export class ActiveJobsComponent implements OnInit {
         this.router.navigate([`/find-jobs/messages/${chatroom.chatroom_id}`])
         this.chatroomService.setSelected(chatroom.chatroom_id)
       })
+    }
+    backToMenu() {
+      this.mainCol = false
+      this.menuVisible = true
     }
 }

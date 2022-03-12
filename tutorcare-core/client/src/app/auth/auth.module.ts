@@ -51,12 +51,15 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ProfileComponent } from '../profile/profile.component';
 import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component';
 import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { JobComponent } from '../job/job.component';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         MatSelectModule,
+        MatTooltipModule,
         ReactiveFormsModule,
         MatInputModule,
         MatCardModule,
@@ -109,7 +112,8 @@ import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
         VerifyComponent,
         ProfileComponent,
         AppliedToComponent,
-        EditJobDialog
+        EditJobDialog,
+        JobComponent
     ],
     exports: [LoginComponent, NavbarComponent, ],
     entryComponents: [CreateJobDialog]

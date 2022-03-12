@@ -85,8 +85,17 @@ export class ApplicationsReceivedComponent implements OnInit {
       return this.appsRec.getSelected(post_id)
     }
 
+    back() {
+      this.currApp= undefined
+    }
+
     ngOnDestroy() {
       this.routeSub.unsubscribe();
+    }
+
+    backToMenu() {
+      this.currApp = undefined
+      this.menuVisible = true
     }
 
     onFindCareClick() {
@@ -95,6 +104,10 @@ export class ApplicationsReceivedComponent implements OnInit {
 
     setApp(app: Application) {
       this.currApp = app
+    }
+
+    modifyDate(date: string) {
+      return new Date(date).toLocaleString('en-US', { timeZone: 'EST', hour: '2-digit', minute:'2-digit'})
     }
 
     onAcceptApplication(application_id: number, post_id: number, user_id: string, message: string) {

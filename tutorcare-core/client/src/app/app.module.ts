@@ -51,6 +51,9 @@ import { AppliedToService } from './find-jobs/applied-to/applied-to.service';
 import { NgxMatDateAdapter, NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { JobService } from './job/job.service';
+// import 'hammerjs';
 
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
@@ -94,13 +97,14 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     MatListModule,
     MatIconModule,
     MatGridListModule,
+    MatTooltipModule,
     AuthModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, { provide: RouterStateSerializer, useClass: CustomSerializer },
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, JobService, { provide: RouterStateSerializer, useClass: CustomSerializer },
     {
       provide: NgxMatDateAdapter,
       useClass: NgxMatMomentAdapter,
