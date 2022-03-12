@@ -23,11 +23,12 @@
 - Adds a user profile database table to store profile information
 - Updates the edit-profile page to work the the new profile models and new information
 - Adds Mobile Responsiveness to the Find-Care, Active Jobs, Applications Revcieved, and Applications Sent pages
+- Adds Job Completion Flow and Verification of Job Start
 
 ### Bug Fixes
 - Fixed Grid Layout of the Find Care Page
 - Fixed redundancy of the account and profile pages by merging their functionalities
-- Fixed a issue with the date info of a recieved application
+- Fixed a issue with the date info of a received application
 
 ### Known Issues
 - Webpack bundle needs to be optimized.
