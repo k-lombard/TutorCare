@@ -218,7 +218,17 @@ func (db Database) UpdatePost(postId int, postData models.Post) (models.Post, er
 		}
 		return post, errTwo
 	}
-	err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(models.Post{Title: postData.Title, Tags: postData.Tags, CareDescription: postData.CareDescription, StartDate: postData.StartDate, StartTime: postData.StartTime, EndDate: postData.EndDate, EndTime: postData.EndTime, PosterCompleted: postData.PosterCompleted, CaregiverCompleted: postData.CaregiverCompleted}).Error
+	err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
+		"Title":           postData.Title,
+		"Tags":            postData.Tags,
+		"CareDescription": postData.CareDescription,
+		"StartDate":       postData.StartDate,
+		"StartTime":       postData.StartTime,
+		"EndDate":         postData.EndDate,
+		"EndTime":         postData.EndTime,
+    "PosterCompleted": postData.PosterCompleted,
+    "CaregiverCompleted": postData.CaregiverCompleted,
+	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return post, ErrNoMatch
@@ -239,7 +249,9 @@ func (db Database) AddApplicationToPost(postId int, postData models.Post, appUse
 		return post, errTwo
 	}
 	if appUserId != post2.UserID {
-		err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(models.Post{CaregiverID: postData.CaregiverID}).Error
+		err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
+			"CaregiverID": postData.CaregiverID,
+		}).Error
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return post, ErrNoMatch

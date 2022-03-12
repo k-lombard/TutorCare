@@ -66,7 +66,11 @@ export class NavbarComponent implements OnInit {
   }
 
   onAccountClick() {
-    this.router.navigate(['/account'])
+    if (this.user !== undefined) {
+      this.router.navigate(['/profile/' + this.user.user_id])
+    } else {
+      this.router.navigate(['/login'])
+    }
   }
 
   onLoginClick() {

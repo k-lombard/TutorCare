@@ -125,7 +125,10 @@ func (db Database) UpdateMessage(messageId int, messageData models.Message) (mod
 		}
 		return msg, errTwo
 	}
-	err := db.Conn.Model(&msg).Where("message_id = ?", messageId).Updates(models.Message{Message: messageData.Message, IsDeleted: messageData.IsDeleted}).Error
+	err := db.Conn.Model(&msg).Where("message_id = ?", messageId).Updates(map[string]interface{}{
+		"Message":   messageData.Message,
+		"IsDeleted": messageData.IsDeleted,
+	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return msg, ErrNoMatch
