@@ -6,7 +6,6 @@ import { MatInputModule } from "@angular/material/input";
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
-import {MatTooltipModule} from '@angular/material/tooltip';
 import {RouterModule} from "@angular/router";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
@@ -59,7 +58,6 @@ import { JobComponent } from '../job/job.component';
         CommonModule,
         FormsModule,
         MatSelectModule,
-        MatTooltipModule,
         ReactiveFormsModule,
         MatInputModule,
         MatCardModule,

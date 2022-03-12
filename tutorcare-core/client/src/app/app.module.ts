@@ -20,7 +20,6 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatTooltipModule} from '@angular/material/tooltip';
 import { SignupService } from './signup/signup.service';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { StoreModule } from '@ngrx/store';
@@ -97,7 +96,6 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     MatListModule,
     MatIconModule,
     MatGridListModule,
-    MatTooltipModule,
     AuthModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
