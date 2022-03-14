@@ -75,16 +75,21 @@ export class JobComponent implements OnInit {
             Validators.required
             ])),
         })
-      if(this.currPost?.title) {
-        var now = new Date()
-        // if (now.getDate() === this.start.getDate() && now.getHours() - this.start.getHours() < 1 && now.getHours() - this.start.getHours() > 0) {
-            this.active.next(true);
-            this.jobService.getVerificationCode(this.currPost.post_id).subscribe((out: PostCode) => {
-                this.verifyCode.next(out?.code)
-                this.verified.next(out?.verified)
-            })
-        // }
-    }
+    
+        if (this.userId === this.currPost?.user_id || this.userId === this.currPost?.caregiver_id) {
+            if(this.currPost?.title) {
+                var now = new Date()
+                // if (now.getDate() === this.start.getDate() && now.getHours() - this.start.getHours() < 1 && now.getHours() - this.start.getHours() > 0) {
+                    this.active.next(true);
+                    this.jobService.getVerificationCode(this.currPost.post_id).subscribe((out: PostCode) => {
+                        this.verifyCode.next(out?.code)
+                        this.verified.next(out?.verified)
+                    })
+                // }
+            }
+        } else {
+            this.router.navigate(['/home'])
+        }
     }
 
     ngOnDestroy() {

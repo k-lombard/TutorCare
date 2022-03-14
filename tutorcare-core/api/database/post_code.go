@@ -82,14 +82,18 @@ func (db Database) UpdatePostCode(postId int, postcodeData models.PostCode) (mod
 		}
 		return postcode, errTwo
 	}
-	err := db.Conn.Model(&postcode).Where("post_id = ?", postId).Updates(models.PostCode{Verified: postcodeData.Verified}).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return postcode, ErrNoMatch
+	if postcode2.Code == postcodeData.Code {
+		err := db.Conn.Model(&postcode).Where("post_id = ?", postId).Updates(models.PostCode{Verified: postcodeData.Verified}).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return postcode, ErrNoMatch
+			}
+			return postcode, err
 		}
-		return postcode, err
+		return postcode, nil
+	} else {
+		return postcode, errors.New("Code is incorrect.")
 	}
-	return postcode, nil
 }
 
 func generateVerificationCode() int {
