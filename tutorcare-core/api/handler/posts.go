@@ -21,6 +21,7 @@ func (r routes) posts(rg *gin.RouterGroup) {
 	rg.GET("/applied-to/:caregiverid", getPostsAppliedTo)
 	rg.POST("/", addPost)
 	rg.GET("/user/:userid", getPostsByUserId)
+	rg.GET("/user/completed/:userid", getPostsByUserIdCompleted)
 	rg.GET("/:postid", getPostById)
 	rg.PUT("/:postid", updatePost)
 	rg.DELETE("/:postid", deletePost)
@@ -78,17 +79,6 @@ func getActivePostsView(c *gin.Context) {
 	c.JSON(http.StatusOK, posts)
 }
 
-// func getActivePostsForCaregiverView(c *gin.Context) {
-// 	caregiverID := uuid.MustParse(c.Param("caregiverid"))
-// 	posts, err := dbInstance.GetActivePostsForCaregiverView(caregiverID)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		c.JSON(http.StatusInternalServerError, err)
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, posts)
-// }
-
 func getPostsAppliedTo(c *gin.Context) {
 	caregiverID := uuid.MustParse(c.Param("caregiverid"))
 	posts, err := dbInstance.GetPostsAppliedTo(caregiverID)
@@ -122,6 +112,20 @@ func getPostById(c *gin.Context) {
 func getPostsByUserId(c *gin.Context) {
 	userID := uuid.MustParse(c.Param("userid"))
 	posts, err := dbInstance.GetPostsByUserId(userID)
+	if err != nil {
+		if err == database.ErrNoMatch {
+			c.JSON(http.StatusNotFound, "Error: Resource not found")
+		} else {
+			c.JSON(http.StatusBadRequest, "Error: Bad request")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, posts)
+}
+
+func getPostsByUserIdCompleted(c *gin.Context) {
+	userID := uuid.MustParse(c.Param("userid"))
+	posts, err := dbInstance.GetPostsByUserIdCompleted(userID)
 	if err != nil {
 		if err == database.ErrNoMatch {
 			c.JSON(http.StatusNotFound, "Error: Resource not found")

@@ -17,6 +17,7 @@ import { VerifyComponent } from './signup/verify/verify.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AppliedToComponent } from './find-jobs/applied-to/applied-to.component';
 import { JobComponent } from './job/job.component';
+import { HistoryComponent } from './find-jobs/history/history.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -37,6 +38,7 @@ const routes: Routes = [
   { path: 'find-jobs/applied-to/:id', component: AppliedToComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/messages', component: ChatroomsComponent, canActivate: [AuthGuard]},
   { path: 'find-jobs/messages/:id', component: ChatroomsComponent, canActivate: [AuthGuard]},
+  { path: 'find-jobs/history', component: HistoryComponent, canActivate: [AuthGuard]},
   { path: 'verify', component: VerifyComponent},
   { path: '',   redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },

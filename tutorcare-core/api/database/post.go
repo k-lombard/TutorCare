@@ -178,6 +178,43 @@ func (db Database) GetPostsByUserId(userId uuid.UUID) (*models.PostList, error) 
 	return list, nil
 }
 
+func (db Database) GetPostsByUserIdCompleted(userId uuid.UUID) (*models.PostList, error) {
+	list := &models.PostList{}
+	err := db.Conn.Where("user_id = ? AND completed = true", userId).Order("post_id desc").Find(&list.Posts).Error
+	if err != nil {
+		return list, err
+	}
+	for i, post := range list.Posts {
+		errDate := db.Conn.Where("post_id = ?", post.PostID).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&list.Posts[i]).Error
+		if errDate != nil {
+			return list, errDate
+		}
+		list2 := &models.ApplicationList{}
+		err2 := db.Conn.Where("post_id = ?", post.PostID).Order("application_id desc").Find(&list2.Applications).Error
+		if err2 != nil {
+			return list, err2
+		}
+		for k, application := range list2.Applications {
+			newUser := models.User{}
+			err4 := db.Conn.First(&newUser, "user_id = ?", application.UserID).Error
+			if err4 != nil {
+				return list, err4
+			}
+			list2.Applications[k].User = newUser
+		}
+		if post.CaregiverID.String() != "00000000-0000-0000-0000-000000000000" {
+			newUser2 := models.User{}
+			err3 := db.Conn.First(&newUser2, "user_id = ?", post.CaregiverID).Error
+			if err3 != nil {
+				return list, err3
+			}
+			list.Posts[i].Caregiver = newUser2
+		}
+		list.Posts[i].Applications = list2.Applications
+	}
+	return list, nil
+}
+
 func (db Database) DeletePost(postId int) error {
 	errApp := db.Conn.Where("post_id = ?", postId).Delete(models.Application{}).Error
 	if errApp != nil {
@@ -219,15 +256,15 @@ func (db Database) UpdatePost(postId int, postData models.Post) (models.Post, er
 		return post, errTwo
 	}
 	err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
-		"Title":           postData.Title,
-		"Tags":            postData.Tags,
-		"CareDescription": postData.CareDescription,
-		"StartDate":       postData.StartDate,
-		"StartTime":       postData.StartTime,
-		"EndDate":         postData.EndDate,
-		"EndTime":         postData.EndTime,
-    "PosterCompleted": postData.PosterCompleted,
-    "CaregiverCompleted": postData.CaregiverCompleted,
+		"Title":              postData.Title,
+		"Tags":               postData.Tags,
+		"CareDescription":    postData.CareDescription,
+		"StartDate":          postData.StartDate,
+		"StartTime":          postData.StartTime,
+		"EndDate":            postData.EndDate,
+		"EndTime":            postData.EndTime,
+		"PosterCompleted":    postData.PosterCompleted,
+		"CaregiverCompleted": postData.CaregiverCompleted,
 	}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -235,6 +272,18 @@ func (db Database) UpdatePost(postId int, postData models.Post) (models.Post, er
 		}
 		return post, err
 	}
+	if (post2.CaregiverCompleted && postData.PosterCompleted) || (post2.PosterCompleted && postData.CaregiverCompleted) {
+		errLast := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
+			"Completed": true,
+		}).Error
+		if errLast != nil {
+			if errors.Is(errLast, gorm.ErrRecordNotFound) {
+				return post, ErrNoMatch
+			}
+			return post, errLast
+		}
+	}
+	post.Completed = true
 	return post, nil
 }
 

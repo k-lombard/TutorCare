@@ -1,0 +1,47 @@
+<div>
+    <navbar></navbar>
+    <div class="flex flex-row w-[100%]">
+        <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-8 shadow shadow-2xl bg-white">
+            <h2 class="pagetitle text-3xl font-semibold text-gray-800 px-4">History</h2>
+
+            <div class="relative mt-6 mx-2">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+
+                <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search"/>
+            </div>
+            <sidebar currPage="history" class="h-full mb-0 pb-0"></sidebar>
+        </div>
+        <div class="both-tabnav py-4 flex justify-self-center justify-content-center justify-center content-center border-b-2 border-gray-700">
+            <div class="tablet:flex border-b border-gray-200">
+              <a [routerLink]="['/find-jobs/history/job-history']" class="flex items-center h-10 px-2 py-2 -mb-px text-center bg-transparent border-b-2 sm:px-4 -px-1 whitespace-nowrap focus:outline-none">
+                <mat-icon>assignment</mat-icon>
+                  
+                <span class="mx-1 text-sm sm:text-base">
+                  Job History
+                </span>
+              </a>
+              
+              <a [routerLink]="['/find-jobs/history/payments']" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+                <mat-icon>school</mat-icon>
+    
+                <span class="mx-1 text-sm sm:text-base">
+                   Payments
+                </span>
+              </a>
+              
+              
+              <a [routerLink]="['/find-jobs/history/review-history']" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+                <mat-icon>school</mat-icon>
+    
+                <span class="mx-1 text-sm sm:text-base">
+                    Review History
+                </span>
+              </a>
+            </div>
+        </div>
+    </div>
+</div>
