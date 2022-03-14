@@ -10,7 +10,7 @@ import { Application } from 'src/app/models/application.model';
 import { throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { PostCode } from '../models/postcode.model';
-import { compileDeclareDirectiveFromMetadata } from '@angular/compiler';
+import { compileDeclareDirectiveFromMetadata, compileDeclareInjectableFromMetadata } from '@angular/compiler';
 
 
 @Injectable()
@@ -108,7 +108,7 @@ getPostById(post_id: number): Observable<Post> {
 }
 
 updateJobPostCaregiver(post_id: number, post: Post): Observable<Post> {
-    let url = `/api/posts/${post_id}`;
+    let url = `/api/posts/completed/${post_id}`;
     return new Observable((observer: any) => {
         this.http.put<any>(url, JSON.stringify({
             "caregiver_completed": true,
@@ -128,7 +128,7 @@ updateJobPostCaregiver(post_id: number, post: Post): Observable<Post> {
 }
 
 updateJobPostPoster(post_id: number, post: Post): Observable<Post> {
-    let url = `/api/posts/${post_id}`;
+    let url = `/api/posts/completed/${post_id}`;
     return new Observable((observer: any) => {
         this.http.put<any>(url, JSON.stringify({
             "poster_completed": true,
@@ -152,7 +152,8 @@ updatePostCode(post_id: number, code: number): Observable<PostCode> {
     return new Observable((observer: any) => {
         this.http.put<any>(url, JSON.stringify({
             "verified": true,
-            "post_id": post_id
+            "post_id": post_id,
+            "code": code
         }), {headers: this.headers})
             .pipe(map((res: any) => res))
             .subscribe((data: any) => {

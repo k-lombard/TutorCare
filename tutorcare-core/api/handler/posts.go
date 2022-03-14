@@ -24,6 +24,7 @@ func (r routes) posts(rg *gin.RouterGroup) {
 	rg.GET("/user/completed/:userid", getPostsByUserIdCompleted)
 	rg.GET("/:postid", getPostById)
 	rg.PUT("/:postid", updatePost)
+	rg.PUT("/completed/:postid", updatePostCompleted)
 	rg.DELETE("/:postid", deletePost)
 }
 
@@ -169,6 +170,31 @@ func updatePost(c *gin.Context) {
 		return
 	}
 	post, err := dbInstance.UpdatePost(postID, postData)
+	if err != nil {
+		if err == database.ErrNoMatch {
+			c.JSON(http.StatusNotFound, "Error: Resource not found")
+		} else {
+			c.JSON(http.StatusInternalServerError, "Internal server error")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, post)
+}
+
+func updatePostCompleted(c *gin.Context) {
+	r := c.Request
+	postIDStr := c.Param("postid")
+	postID, errConv := strconv.Atoi(postIDStr)
+	if errConv != nil {
+		c.JSON(http.StatusBadRequest, "Error: Invalid PostID Integer")
+		return
+	}
+	postData := models.Post{}
+	if err := render.Bind(r, &postData); err != nil {
+		c.JSON(http.StatusBadRequest, "Error: Bad request")
+		return
+	}
+	post, err := dbInstance.UpdatePostCompleted(postID, postData)
 	if err != nil {
 		if err == database.ErrNoMatch {
 			c.JSON(http.StatusNotFound, "Error: Resource not found")

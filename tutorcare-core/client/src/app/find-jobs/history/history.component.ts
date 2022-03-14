@@ -78,23 +78,6 @@ export class HistoryComponent implements OnInit {
         })
     }
 
-    onPosterCompleted() {
-        this.historyService.updateJobPostPoster(this.currPost.post_id, this.currPost).subscribe((resp: Post) => {
-            this.currPost.poster_completed = true;
-        })
-    }
-
-    onCaregiverCompleted() {
-        this.historyService.updateJobPostCaregiver(this.currPost.post_id, this.currPost).subscribe((resp: Post) => {
-            this.currPost.caregiver_completed = true;
-        })
-    }
-    
-
-    onFindCareClick() {
-        this.router.navigate(['/find-care'])
-    }
-
     setPost(post: Post) {
       this.currPost = post
     }

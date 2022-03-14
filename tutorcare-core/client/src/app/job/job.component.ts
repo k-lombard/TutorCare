@@ -97,7 +97,7 @@ export class JobComponent implements OnInit {
     }
 
     onCodeSubmit() {
-        var code: number = this.codeForm.get('code').value
+        var code: number = parseInt(this.codeForm.get('code').value)
         this.jobService.updatePostCode(this.currPost.post_id, code).subscribe(resp => {
             this.verified.next(true)
         })

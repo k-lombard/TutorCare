@@ -256,13 +256,38 @@ func (db Database) UpdatePost(postId int, postData models.Post) (models.Post, er
 		return post, errTwo
 	}
 	err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
+		"Title":           postData.Title,
+		"Tags":            postData.Tags,
+		"CareDescription": postData.CareDescription,
+		"StartDate":       postData.StartDate,
+		"StartTime":       postData.StartTime,
+		"EndDate":         postData.EndDate,
+		"EndTime":         postData.EndTime,
+	}).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return post, ErrNoMatch
+		}
+		return post, err
+	}
+	return post, nil
+}
+
+func (db Database) UpdatePostCompleted(postId int, postData models.Post) (models.Post, error) {
+	post := models.Post{}
+
+	post2 := models.Post{}
+	errTwo := db.Conn.First(&post2, "post_id = ?", postId).Error
+	if errTwo != nil {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
+			return post, ErrNoMatch
+		}
+		return post, errTwo
+	}
+	err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
 		"Title":              postData.Title,
 		"Tags":               postData.Tags,
 		"CareDescription":    postData.CareDescription,
-		"StartDate":          postData.StartDate,
-		"StartTime":          postData.StartTime,
-		"EndDate":            postData.EndDate,
-		"EndTime":            postData.EndTime,
 		"PosterCompleted":    postData.PosterCompleted,
 		"CaregiverCompleted": postData.CaregiverCompleted,
 	}).Error
