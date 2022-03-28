@@ -15,12 +15,65 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/k-lombard/TutorCare)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)
 
+
+# Release Notes
+## Version 0.3.0
+### New Features
+- Redesign of the user profile page
+- Adds a user profile database table to store profile information
+- Updates the edit-profile page to work the the new profile models and new information
+- Adds Mobile Responsiveness to the Find-Care, Active Jobs, Applications Revcieved, and Applications Sent pages
+- Adds Job Completion Flow and Verification of Job Start
+
+### Bug Fixes
+- Fixed Grid Layout of the Find Care Page
+- Fixed redundancy of the account and profile pages by merging their functionalities
+- Fixed a issue with the date info of a received application
+
+### Known Issues
+- Webpack bundle needs to be optimized.
+- Search feature is not elastic so it will become slow with higher number of posts.
+- Some forms do not autofill information, requiring user to input the same info in multiple places.
+- Mobile sidebar is not closable on very small screen sizes. 
+- Filter button clips in front of the sidebar on find-jobs page.
+- Issue with date and time validation on the create and update job post.
+
+## Version 0.2.0
+### New Features
+- Adds live chat messaging system for users to communicate to each other.
+- Adds search and filter functionality to narrow the jobs shown on the find-jobs page.
+- Adds applying to a job post functionality where a caregiver can apply to a job post.
+- Adds editing and deleting job post functionality to allow change to be made to a job post.
+- Adds functionality for a careseeker to view a list of applicants, see their profiles, and add them to a chatroom for messages.
+- Adds hiring functionality for careseekers to hire someone from the list of applicant.
+- Adds working find-care functionality for caregseekers to find nearby caregivers.
+- Adds capability for a user to logout.
+
+### Bug Fixes
+- Fixed bug where messages link did not show in mobile side navigation.
+- Fixed explicit SQL queries with GORM refactoring to prevent SQL injection.
+- Put validation to prevent invalid information on the following forms: sign up, login, create job, and edit job.
+- Added authentication to backend of websockets to prevent hijacking.
+
+### Known Issues
+- Webpack bundle needs to be optimized.
+- Search feature is not elastic so it will become slow with higher number of posts.
+- Find-Care, Active Jobs, Applications Revcieved, Applications Sent pages are not mobile responsive.
+- Some forms do not autofill information, requiring user to input the same info in multiple places.
+- Mobile sidebar is not closable on very small screen sizes. 
+- Filter button clips in front of the sidebar on find-jobs page.
+
 ## Version 0.1.0
 ### New Features
 - Adds working signup/login functionality and stores authentication tokens in session storage
 - Adds working find-care page functionality where caregiver users are displayed in a user's local area
 - Adds working find-jobs page functionality where job posts are displayed in an easy to see, intuitive manner
 - Adds account page and edit profile functionality, to change a user's email, bio, experience, and user-type. 
+
+### Known Issues
+- Backend uses explicit SQL queries so it is vulnerable to SQL injection
+- Chatroom doesn't scroll to bottom on page load
+- Find-Care page's grid layout is not mobile responsive and does not work past a certain number of caregiver users
 
 
 ## Setup Guide
