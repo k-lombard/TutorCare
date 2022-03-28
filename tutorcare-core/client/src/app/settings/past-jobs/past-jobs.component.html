@@ -1,0 +1,32 @@
+<div>
+    <navbar></navbar>
+    <div class="flex flex-row w-[100%]">
+        <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-8 shadow shadow-2xl bg-white dark:bg-gray-800 dark:border-gray-600 z-100">
+          <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">Past Jobs</h2>
+    
+    
+          <settings-sidebar currPage="past-jobs" class="h-full mb-0 pb-0"></settings-sidebar>
+        </div>
+    
+        <div id="rightcol" class="flex flex-col" [class.showmenu]="menuVisible" [class.hiddencol]="mainCol">
+            <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none">
+                <mat-icon class="arrowback">arrow_back</mat-icon>
+                <span class = "pl-2 pt-.5 font-bold">Menu</span>
+            </button>
+            
+            <mat-card class="m-4">
+                <h2>Payment Information</h2>
+                <table>
+                    <tr>
+                        <th>Primary Card Number</th>
+                        <td><span></span></td>
+                    </tr>
+                    <tr>
+                        <th>Alternative Card Number</th>
+                        <td><span></span></td>
+                    </tr>
+                </table>
+            </mat-card>
+        </div>
+    </div>
+</div>

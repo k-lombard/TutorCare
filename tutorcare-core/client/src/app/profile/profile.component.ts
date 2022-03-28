@@ -136,6 +136,6 @@ export class ProfileComponent implements OnInit {
     }
 
     onSettingsClick() {
-      console.log("Settings Button Clicked")
+      this.router.navigate(['settings'])
     }
 }

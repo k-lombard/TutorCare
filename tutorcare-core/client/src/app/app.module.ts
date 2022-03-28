@@ -52,6 +52,8 @@ import { NgxMatMomentModule, NgxMatMomentAdapter, NGX_MAT_MOMENT_DATE_ADAPTER_OP
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { JobService } from './job/job.service';
+import { SettingsService } from './settings/settings.service';
+import { PastJobsService } from './settings/past-jobs/past-jobs.service';
 // import 'hammerjs';
 
 
@@ -102,7 +104,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     EffectsModule.forRoot([]),
     StoreRouterConnectingModule.forRoot({stateKey:'router'})
   ],
-  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, JobService, { provide: RouterStateSerializer, useClass: CustomSerializer },
+  providers: [UsersService, SignupService, FindCareService, EditProfileService, FindJobsService, ApplyJobService, ApplicationsReceivedService, ActiveJobsService, MyJobPostingsService, ChatroomsService, VerifyService, ProfileService, AppliedToService, JobService, SettingsService, PastJobsService, { provide: RouterStateSerializer, useClass: CustomSerializer },
     {
       provide: NgxMatDateAdapter,
       useClass: NgxMatMomentAdapter,

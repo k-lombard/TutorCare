@@ -1,0 +1,98 @@
+<div>
+    <navbar></navbar>
+    <div class="flex flex-row w-[100%]">
+        <div [class.menu]="menuVisible" class="sidenav flex flex-col h-full w-64 h-screen px-4 pt-8 shadow shadow-2xl bg-white dark:bg-gray-800 dark:border-gray-600 z-100">
+          <h2 class="text-3xl font-semibold text-gray-800 dark:text-white px-4">My Account</h2>
+    
+    
+          <settings-sidebar currPage="my-account" class="h-full mb-0 pb-0"></settings-sidebar>
+        </div>
+    
+        <div id="rightcol" class="flex flex-col" [class.showmenu]="menuVisible" [class.hiddencol]="mainCol">
+            <button (click)="backToMenu()" id="back" class="py-4 mx-2 my-2 justify-center items-center backbutton2 text-sm font-medium tracking-wider text-gray-100 uppercase transition-colors duration-200 transform bg-gray-700 rounded-lg hover:bg-gray-600 focus:bg-gray-600 focus:outline-none">
+                <mat-icon class="arrowback">arrow_back</mat-icon>
+                <span class = "pl-2 pt-.5 font-bold">Menu</span>
+            </button>
+            
+            <mat-card class="m-4">
+                <h2>General Information</h2>
+                <table>
+                    <tr>
+                        <th>First Name</th>
+                        <td><span>{{user.first_name}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Last Name</th>
+                        <td><span>{{user.last_name}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>
+                            <span>{{user.email}}</span>
+                            <span *ngIf = "user.status" class = "ml-4">Verified</span>
+                            <span *ngIf = "!user.status"  class = "ml-4">
+                                <a href="/verify">
+                                    Email is not verified. Please verify here.
+                                </a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Date of Birth</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Address</th>
+                        <td><span>{{user.address}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>City</th>
+                        <td><span>{{user.city}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>State</th>
+                        <td><span>{{user.state}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>ZIP Code</th>
+                        <td><span>{{user.zipcode}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Phone Number</th>
+                        <td><span></span></td>
+                    </tr>
+                    <tr>
+                        <th>Password</th>
+                        <td><a>Change Password</a></td>
+                    </tr>
+                </table>
+            </mat-card>
+            <mat-card class="m-4">
+                <h2>Account Information</h2>
+                <table>
+                    <tr>
+                        <th>Date Joined</th>
+                        <td><span>{{user.date_joined}}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Account Age</th>
+                        <td><span></span></td>
+                    </tr>
+                </table>
+            </mat-card>
+            <mat-card class="m-4">
+                <h2>Payment Information</h2>
+                <table>
+                    <tr>
+                        <th>Primary Card Number</th>
+                        <td><span></span></td>
+                    </tr>
+                    <tr>
+                        <th>Alternative Card Number</th>
+                        <td><span></span></td>
+                    </tr>
+                </table>
+            </mat-card>
+        </div>
+    </div>
+</div>

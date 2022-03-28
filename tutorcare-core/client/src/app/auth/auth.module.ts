@@ -52,6 +52,9 @@ import { AppliedToComponent } from '../find-jobs/applied-to/applied-to.component
 import { SidebarComponent } from '../find-jobs/sidebar/sidebar.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { JobComponent } from '../job/job.component';
+import { SettingsComponent } from '../settings/settings.component';
+import { SettingsSidebarComponent } from '../settings/settings-sidebar/settings-sidebar.component';
+import { PastJobsComponent } from '../settings/past-jobs/past-jobs.component';
 
 @NgModule({
     imports: [
@@ -111,7 +114,11 @@ import { JobComponent } from '../job/job.component';
         ProfileComponent,
         AppliedToComponent,
         EditJobDialog,
-        JobComponent
+        JobComponent,
+        SettingsComponent,
+        SettingsSidebarComponent,
+        PastJobsComponent
+        
     ],
     exports: [LoginComponent, NavbarComponent, ],
     entryComponents: [CreateJobDialog]
