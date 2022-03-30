@@ -15,32 +15,42 @@
             </div>
             <sidebar currPage="history" class="h-full mb-0 pb-0"></sidebar>
         </div>
-        <div class="both-tabnav py-4 flex justify-self-center justify-content-center justify-center content-center border-b-2 border-gray-700">
-            <div class="tablet:flex border-b border-gray-200">
-              <a [routerLink]="['/find-jobs/history/job-history']" class="flex items-center h-10 px-2 py-2 -mb-px text-center bg-transparent border-b-2 sm:px-4 -px-1 whitespace-nowrap focus:outline-none">
-                <mat-icon>assignment</mat-icon>
-                  
-                <span class="mx-1 text-sm sm:text-base">
-                  Job History
-                </span>
-              </a>
-              
-              <a [routerLink]="['/find-jobs/history/payments']" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-                <mat-icon>school</mat-icon>
-    
-                <span class="mx-1 text-sm sm:text-base">
-                   Payments
-                </span>
-              </a>
-              
-              
-              <a [routerLink]="['/find-jobs/history/review-history']" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
-                <mat-icon>school</mat-icon>
-    
-                <span class="mx-1 text-sm sm:text-base">
-                    Review History
-                </span>
-              </a>
+        <div class="flex flex-col justify-between justify-content-center w-[100%]">
+            <div class="flex flex-row both-tabnav py-4 flex justify-self-center justify-content-center justify-center content-center mb-4 border-gray-400">
+                <div class="tablet:flex">
+                <a [routerLink]="['/find-jobs/history/']" class="flex items-center h-10 px-2 py-2 -mb-px text-center bg-transparent border-b-2 sm:px-4 -px-1 whitespace-nowrap focus:outline-none">
+                    <mat-icon>assignment</mat-icon>
+                    
+                    <span class="mx-1 text-sm sm:text-base">
+                    Job History
+                    </span>
+                </a>
+                
+                <a [routerLink]="['/find-jobs/history/payments']" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+                    <mat-icon>school</mat-icon>
+        
+                    <span class="mx-1 text-sm sm:text-base">
+                    Payments
+                    </span>
+                </a>
+                
+                
+                <a [routerLink]="['/find-jobs/history/review-history']" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+                    <mat-icon>school</mat-icon>
+        
+                    <span class="mx-1 text-sm sm:text-base">
+                        Review History
+                    </span>
+                </a>
+                </div>
+            </div>
+        <div class="flex flex-row w-[100%] h-[100%]">
+            <div class="flex flex-col w-[100%] h-[100%]">
+                <div *ngFor="let post of posts" [routerLink]="['/find-jobs/jobs/', post.post_id]" class="flex flex-row mr-[2.5%] ml-[2.5%] mt-1 mb-1 p-8 justify-between content-center justify-content-center w-[95%] h-[10%] bg-gray-200 items-center rounded-md hover:bg-gray-100 hover:cursor-pointer">
+                    <a class="flex flex-col w-[33%]">{{post.title}}</a>
+                    <a class="flex flex-col w-[33%]">{{post.care_description}}</a>
+                    <a class="flex flex-col w-[33%]">{{post.start_date}} {{post.start_time}} - {{post.end_date}} {{post.end_time}}</a>
+                </div>
             </div>
         </div>
     </div>

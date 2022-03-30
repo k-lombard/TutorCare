@@ -284,18 +284,32 @@ func (db Database) UpdatePostCompleted(postId int, postData models.Post) (models
 		}
 		return post, errTwo
 	}
-	err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
-		"Title":              postData.Title,
-		"Tags":               postData.Tags,
-		"CareDescription":    postData.CareDescription,
-		"PosterCompleted":    postData.PosterCompleted,
-		"CaregiverCompleted": postData.CaregiverCompleted,
-	}).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return post, ErrNoMatch
+	if postData.CaregiverCompleted {
+		err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
+			"Title":              postData.Title,
+			"Tags":               postData.Tags,
+			"CareDescription":    postData.CareDescription,
+			"CaregiverCompleted": postData.CaregiverCompleted,
+		}).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return post, ErrNoMatch
+			}
+			return post, err
 		}
-		return post, err
+	} else if postData.PosterCompleted {
+		err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
+			"Title":           postData.Title,
+			"Tags":            postData.Tags,
+			"CareDescription": postData.CareDescription,
+			"PosterCompleted": postData.PosterCompleted,
+		}).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return post, ErrNoMatch
+			}
+			return post, err
+		}
 	}
 	if (post2.CaregiverCompleted && postData.PosterCompleted) || (post2.PosterCompleted && postData.CaregiverCompleted) {
 		errLast := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{

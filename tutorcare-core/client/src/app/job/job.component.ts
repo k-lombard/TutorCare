@@ -64,6 +64,7 @@ export class JobComponent implements OnInit {
         if (this.postId && (!this.posts || this.posts.length === 0)) {
             await this.jobService.getPostByIdPromise(this.postId).then((resp: PostCode) => {
                 this.currPost = resp
+                console.log(resp)
                 this.start = new Date(this.currPost.start_date)
                 this.start.setHours(parseInt(this.currPost.start_time.split(':')[0]))
             })

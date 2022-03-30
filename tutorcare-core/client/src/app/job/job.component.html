@@ -78,7 +78,7 @@
                     </button>
                 </div>
             </mat-card>
-            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id === user.user_id && verified.value && (!currPost?.poster_completed || !currPost?.caregiver_completed)">
+            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id === user.user_id && verified.value && (!currPost?.caregiver_completed)">
                 <div class="flex flex-row items-center content-center">
                     <button color="accent" mat-raised-button  class="p-4" (click)="onCaregiverCompleted()">
                         <mat-icon aria-hidden="false" aria-label="Example home icon">task_alt</mat-icon>
@@ -86,7 +86,7 @@
                     </button>
                 </div>
             </mat-card>
-            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id !== user.user_id && verified.value && (!currPost?.poster_completed || !currPost?.caregiver_completed)">
+            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id !== user.user_id && verified.value && (!currPost?.poster_completed)">
                 <div class="flex flex-row items-center content-center">
                     <button color="accent" mat-raised-button class="p-4" (click)="onPosterCompleted()">
                         <mat-icon aria-hidden="false" aria-label="Example home icon">task_alt</mat-icon>
