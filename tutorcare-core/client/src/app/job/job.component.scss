@@ -50,6 +50,9 @@
     width: 75px;
   }
 
+.mat-form-field {
+  width: 100%;
+}
 
 .row-item-div-large {
   width: 28.3333333%;
@@ -92,9 +95,6 @@ h3 {
   overflow-wrap: break-all;
 }
 
-bar-rating {
-  float: right;
-}
 
 [id="rightcol"] {
   width: 100% !important;

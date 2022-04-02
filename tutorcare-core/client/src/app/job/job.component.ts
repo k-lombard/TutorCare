@@ -17,6 +17,7 @@ import { JobService } from './job.service';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DateValidator } from '../find-jobs/date.validator';
 import { PostCode } from '../models/postcode.model';
+import { Review } from '../models/review.model';
 
 @Component({
   selector: 'job-component',
@@ -44,7 +45,11 @@ export class JobComponent implements OnInit {
     userType!: string
     start!: Date
     editable: boolean = true
-    codeForm: FormGroup;
+    codeForm: FormGroup
+    reviewForm: FormGroup
+    reviews: Review[]
+    posterReview: Review
+    caregiverReview: Review
     private routeSub: Subscription;
 
     constructor(private router: Router, public dialog: MatDialog, private route: ActivatedRoute, private store: Store<AppState>, private toastr: ToastrService, private jobService: JobService, private fb: FormBuilder) {}
@@ -76,6 +81,17 @@ export class JobComponent implements OnInit {
             Validators.required
             ])),
         })
+
+        this.reviewForm = this.fb.group({
+          review: new FormControl('', Validators.compose([
+            Validators.maxLength(2047)
+          
+        ])),
+          rating: new FormControl('', Validators.compose([
+              Validators.pattern('^[0-5]*$'),
+              Validators.required
+          ]))
+      })
     
         if (this.userId === this.currPost?.user_id || this.userId === this.currPost?.caregiver_id) {
             if(this.currPost?.title) {
@@ -88,6 +104,21 @@ export class JobComponent implements OnInit {
                     })
                 // }
             }
+            this.jobService.getReviewsByPost(this.currPost.post_id).subscribe((data: Review[]) => {
+              this.reviews = data
+              console.log(this.reviews.length)
+              if (this.reviews) {
+                for (let i = 0; i < this.reviews.length; i++) {
+                  if (this.reviews[i].reviewer_id == this.currPost.user_id) {
+                    this.posterReview = this.reviews[i]
+                  } else if (this.reviews[i].reviewer_id == this.currPost.caregiver_id) {
+                    this.caregiverReview = this.reviews[i]
+                  } else {
+                    console.error("FOUND REVIEW THAT DOES NOT BELONG")
+                  }
+                }
+              }
+            })
         } else {
             this.router.navigate(['/home'])
         }
@@ -114,6 +145,24 @@ export class JobComponent implements OnInit {
         this.jobService.updateJobPostCaregiver(this.currPost.post_id, this.currPost).subscribe((resp: Post) => {
             this.currPost.caregiver_completed = true;
         })
+    }
+    
+    onPosterReviewSubmit() {
+      var rating : number =  parseInt(this.reviewForm.get('rating').value)
+      var review : string = this.reviewForm.get('review').value
+      this.jobService.postReview(this.currPost.caregiver.user_id, this.currPost.user.user_id, this.currPost.post_id, rating, review).subscribe((resp: Review) => {
+        this.posterReview = resp;
+      })
+    }
+
+    onCaregiverReviewSubmit() {
+      var rating : number =  parseInt(this.reviewForm.get('rating').value)
+      var review : string = this.reviewForm.get('review').value
+      console.log(rating)
+      console.log(review)
+      this.jobService.postReview(this.currPost.user.user_id, this.currPost.caregiver.user_id, this.currPost.post_id, rating, review).subscribe((resp: Review) => {
+        this.caregiverReview = resp;
+      })
     }
     
 

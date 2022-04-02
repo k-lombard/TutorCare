@@ -11,6 +11,8 @@ import { throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { PostCode } from '../models/postcode.model';
 import { compileDeclareDirectiveFromMetadata, compileDeclareInjectableFromMetadata } from '@angular/compiler';
+import { User } from '../models/user.model';
+import { Review } from '../models/review.model';
 
 
 @Injectable()
@@ -20,6 +22,7 @@ export class JobService {
   _applications: Application[] | undefined;
   _output: any[] | undefined;
   _post: Post | undefined
+  _reviews: Review[] | undefined
   selectedIdx!: number
   _post_id: string | undefined
   headers = new HttpHeaders({
@@ -185,6 +188,40 @@ acceptApplication(application_id?: number, post_id?: number, user_id?: string, m
             this._output = data
 
             observer.next(this._output);
+            observer.complete();
+         });
+  });
+}
+
+postReview(reviewee_id: string, reviewer_id: string, post_id: number, rating: number, comment: string) {
+  let url = `/api/reviews/`;
+  return new Observable((observer: any) => {
+     this.http.post<any>(url, JSON.stringify({
+         "user_id": reviewee_id,
+         "reviewer_id": reviewer_id,
+         "post_id" : post_id,
+         "rating": rating,
+         "comment": comment
+     }), {headers: this.headers})
+         .pipe(map((res: any) => res))
+         .subscribe((data: any) => {
+            this._output = data
+
+            observer.next(this._output);
+            observer.complete();
+         });
+  });
+}
+
+getReviewsByPost(post_id: number): Observable<Review[]> {
+  let url = `/api/reviews/post/${post_id}`;
+  return new Observable((observer: any) => {
+     this.http.get(url)
+         .pipe(map((res: any) => res.reviews))
+         .subscribe((data: Review[]) => {
+            this._reviews = data
+
+            observer.next(this._reviews);
             observer.complete();
          });
   });

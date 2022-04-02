@@ -94,6 +94,74 @@
                     </button>
                 </div>
             </mat-card>
+            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id === user.user_id && verified.value && (currPost?.caregiver_completed) && !caregiverReview">
+                <h2 class="jobdesctitle">Leave a review!</h2>
+                <form [formGroup]="reviewForm" novalidate>
+                    <div class = "flex-row">
+                        <bar-rating class="left" formControlName="rating" [theme]="'stars'" [max]="5"></bar-rating>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Comment on {{currPost.user.first_name}} {{currPost.user.last_name}}</mat-label>
+                            <textarea id="review-field" matInput
+                                    name="review"
+                                    formControlName="review"
+                                    cdkTextareaAutosize
+                                    class="textarea-inline-control" >
+                            </textarea>
+                            <!-- <mat-error *ngFor="let validation of validation_messages.job_desc">
+                            <mat-error class="error-message" *ngIf="form.get('job_desc').hasError(validation.type) && (form.get('job_desc').dirty || form.get('job_desc').touched)">{{validation.message}}</mat-error>
+                            </mat-error> -->
+                        </mat-form-field>
+                        <button color="accent" mat-raised-button  class="p-4" (click)="onCaregiverReviewSubmit()">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon">message</mat-icon>
+                            Complete
+                        </button>
+                    </div>
+                </form>
+            </mat-card>
+            <mat-card class="jobcard" *ngIf="currPost?.title && currPost.caregiver_id !== user.user_id && verified.value && (currPost?.poster_completed) && !posterReview">
+                <h2 class="jobdesctitle">Leave a review!</h2>
+                <form [formGroup]="reviewForm" novalidate>
+                    <div class = "flex-row">
+                        <bar-rating class="left" formControlName="rating" [theme]="'stars'" [max]="5"></bar-rating>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Comment on {{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}</mat-label>
+                            <textarea id="review-field" matInput
+                                    name="review"
+                                    formControlName="review"
+                                    cdkTextareaAutosize
+                                    class="textarea-inline-control" >
+                            </textarea>
+                            <!-- <mat-error *ngFor="let validation of validation_messages.job_desc">
+                            <mat-error class="error-message" *ngIf="form.get('job_desc').hasError(validation.type) && (form.get('job_desc').dirty || form.get('job_desc').touched)">{{validation.message}}</mat-error>
+                            </mat-error> -->
+                        </mat-form-field>
+                        <button color="accent" mat-raised-button  class="p-4" (click)="onPosterReviewSubmit()">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon">message</mat-icon>
+                            Complete
+                        </button>
+                    </div>
+                </form>
+            </mat-card>
+            <mat-card class="jobcard" *ngIf="((caregiverReview && caregiverReview.reviewer_id === user.user_id) || (posterReview && posterReview.reviewer_id === user.user_id)) && !currPost.completed">
+                <h2 class="jobdesctitle pt-2 pb-2">Your review has been saved! Thank you.</h2>
+                <h2 class="jobdesc">This job is now complete. You can view all completed jobs under History.</h2>
+            </mat-card>
+            <mat-card class="jobcard" *ngIf = "(caregiverReview && caregiverReview.reviewer_id === user.user_id) || (caregiverReview && posterReview && posterReview.reviewer_id === user.user_id)">
+                <div>
+                    <h2 class="jobdesctitle pt-2" *ngIf="currPost.user.user_id !== user.user_id">{{currPost.user.first_name}} {{currPost.user.last_name}} has left a review for you!</h2>
+                    <h2 class="jobdesctitle pt-2" *ngIf="currPost.user.user_id === user.user_id">You left a review for {{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}!</h2>
+                    <bar-rating class="" [readOnly]=true [(rate)]="caregiverReview.rating" [theme]="'stars'" [max]="5"></bar-rating>
+                    <h2 class="jobdesc">Comment: {{caregiverReview.comment}}</h2>
+                </div>
+            </mat-card>
+            <mat-card class="jobcard" *ngIf = "(posterReview && posterReview.reviewer_id === user.user_id) || (posterReview && caregiverReview && caregiverReview.reviewer_id === user.user_id)">
+                <div>
+                    <h2 class="jobdesctitle pt-2" *ngIf="currPost.user.user_id === user.user_id">{{currPost.user.first_name}} {{currPost.user.last_name}} has left a review for you!</h2>
+                    <h2 class="jobdesctitle pt-2" *ngIf="currPost.user.user_id !== user.user_id">You left a review for {{currPost.caregiver.first_name}} {{currPost.caregiver.last_name}}!</h2>
+                    <bar-rating class="" [readOnly]=true [(rate)]="posterReview.rating" [theme]="'stars'" [max]="5"></bar-rating>
+                    <h2 class="jobdesc">Comment: {{posterReview.comment}}</h2>
+                </div>
+            </mat-card>
         </div>
     </div>
 </div>
