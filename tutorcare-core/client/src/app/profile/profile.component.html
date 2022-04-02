@@ -40,8 +40,7 @@
               <span>{{ user.user_category }}</span>
               <span>  |  </span>
               <span>Jobs Completed: {{profile.jobs_completed}}</span>
-              <span>  |  </span>
-              <span>Rate: {{profile.rate_range}}</span>
+              <span *ngIf="profile.rate_range">|  Rate: {{profile.rate_range}}</span>
             </div>
 
 
@@ -85,13 +84,13 @@
               </span>
             </a>
             
-            <a href="{{url}}#family" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+            <!-- <a href="{{url}}#family" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
               <mat-icon>school</mat-icon>
 
               <span class="mx-1 text-sm sm:text-base">
                   My Family
               </span>
-            </a>
+            </a> -->
             
             <!-- <a href="{{url}}#recurring" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
               <mat-icon>calendar_today</mat-icon>
@@ -140,17 +139,21 @@
           <div id="profile" class="py-4">
             <mat-card class="bio">
               <h2>My Information</h2>
-              <p>Age: {{profile.age}} || Gender: {{profile.gender}} || Languages: {{profile.language}}</p>
+              <div class="stats-row">
+                <span *ngIf="profile.age">Age: {{profile.age}}   |   </span>
+                <span *ngIf="profile.gender">Gender: {{profile.gender}}   |   </span>
+                <span *ngIf="profile.rate_range">Languages: {{profile.language}}</span>
+              </div>
               <p>{{profile.bio}}</p>
             </mat-card>
           </div>
 
-          <div id="family" class="py-4">
+          <!-- <div id="family" class="py-4">
             <mat-card class="bio">
               <h2>My Family</h2>
               <p>[show user's Family Members]</p>
             </mat-card>
-          </div>
+          </div> -->
           
           <!-- <div id="recurring" class="py-4">
             <mat-card class="bio">
@@ -186,7 +189,6 @@
           <div id="reviews" class="py-4">
             <mat-card class="bio">
               <h2>My Recommendations</h2>
-              <p>[show user's Reviews and Recommendations]</p>
             </mat-card>
           </div>
         </div>

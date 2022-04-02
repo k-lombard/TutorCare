@@ -180,7 +180,7 @@ func (db Database) GetPostsByUserId(userId uuid.UUID) (*models.PostList, error) 
 
 func (db Database) GetPostsByUserIdCompleted(userId uuid.UUID) (*models.PostList, error) {
 	list := &models.PostList{}
-	err := db.Conn.Where("user_id = ? AND completed = true", userId).Order("post_id desc").Find(&list.Posts).Error
+	err := db.Conn.Where("(user_id = ? OR caregiver_id = ?) AND completed = true", userId, userId).Order("post_id desc").Find(&list.Posts).Error
 	if err != nil {
 		return list, err
 	}
