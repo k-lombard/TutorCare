@@ -55,7 +55,7 @@ func addReview(c *gin.Context) {
 }
 
 func getReviewsByUserId(c *gin.Context) {
-	userID := uuid.MustParse(c.Param("reviewerid"))
+	userID := uuid.MustParse(c.Param("userid"))
 	reviews, err := dbInstance.GetReviewsByUserId(userID)
 	if err != nil {
 		if err == database.ErrNoMatch {
@@ -69,7 +69,7 @@ func getReviewsByUserId(c *gin.Context) {
 }
 
 func getReviewsByReviewerId(c *gin.Context) {
-	userID := uuid.MustParse(c.Param("userid"))
+	userID := uuid.MustParse(c.Param("reviewerid"))
 	reviews, err := dbInstance.GetReviewsByReviewerId(userID)
 	if err != nil {
 		if err == database.ErrNoMatch {

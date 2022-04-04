@@ -11,6 +11,7 @@ import { Logout } from '../auth/auth.actions';
 import { Profile } from '../models/profile.model';
 import { ProfileService } from './profile.service';
 import { Subscription } from 'rxjs';
+import { Review } from '../models/review.model';
 
 interface Badges {
   value: string
@@ -33,6 +34,7 @@ export class ProfileComponent implements OnInit {
     user!: User;
     currentUser!: User;
     profile!: Profile;
+    userReviews!: Review[];
     /*first_name: string | undefined
     last_name: string |undefined
     user_type: string | undefined*/
@@ -94,6 +96,11 @@ export class ProfileComponent implements OnInit {
           this.last_name = (this.user ? this.user.last_name : "")
           this.user_type = this.user.user_category? this.user.user_category.charAt(0).toUpperCase() + this.user.user_category.substring(1) : ""*/
       })
+      if(this.url.includes("reviews")) {
+        this.profileService.getReviewsByUserId(this.currentUser.user_id).subscribe((data: Review[]) => {
+          this.userReviews = data
+        })
+      }
     }
 
     setBadges(badge_list: string) {

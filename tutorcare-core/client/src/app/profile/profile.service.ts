@@ -14,6 +14,7 @@ import { Message } from 'src/app/models/message.model';
 import { ThisReceiver } from '@angular/compiler';
 import { User } from '../models/user.model';
 import { Profile } from '../models/profile.model';
+import { Review } from '../models/review.model';
 
 
 @Injectable()
@@ -54,6 +55,18 @@ export class ProfileService {
               observer.complete();
            });
     });
+ }
+
+ getReviewsByUserId(user_id: string): Observable<Review[]> {
+   let url = `/api/reviews/${user_id}`;
+   return new Observable((observer: any) => {
+      this.http.get(url)
+          .pipe(map((res: any) => res.reviews))
+          .subscribe((data: Review[]) => {
+             observer.next(data);
+             observer.complete();
+          });
+   });
  }
 
 

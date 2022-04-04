@@ -76,13 +76,22 @@
         
         <div class="both-tabnav py-4">
           <div class="tablet:flex border-b border-gray-200 dark:border-gray-700">
-            <a href="{{url}}#profile" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:px-4 -px-1 dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
+            <a *ngIf="!url.includes('qualifications') && !url.includes('reviews') && !url.includes('services')" href="/profile/{{user.user_id}}" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:px-4 -px-1 dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
               <mat-icon>assignment</mat-icon>
                 
               <span class="mx-1 text-sm sm:text-base">
                 Profile
               </span>
             </a>
+
+            <a *ngIf="url.includes('qualifications') || url.includes('reviews') || url.includes('services')" href="/profile/{{user.user_id}}" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+              <mat-icon>assignment</mat-icon>
+
+              <span class="mx-1 text-sm sm:text-base">
+                  Profile
+              </span>
+            </a>
+
             
             <!-- <a href="{{url}}#family" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
               <mat-icon>school</mat-icon>
@@ -107,9 +116,15 @@
                 Availability
               </span>
             </a> -->
+            <a *ngIf="url.includes('qualifications')" href="/profile/{{user.user_id}}/qualifications" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:px-4 -px-1 dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
+              <mat-icon>school</mat-icon>
+                
+              <span class="mx-1 text-sm sm:text-base">
+                Qualifications
+              </span>
+            </a>
             
-            
-            <a href="{{url}}#qualifications" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+            <a *ngIf="!url.includes('qualifications')" href="/profile/{{user.user_id}}/qualifications" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
               <mat-icon>school</mat-icon>
 
               <span class="mx-1 text-sm sm:text-base">
@@ -117,25 +132,41 @@
               </span>
             </a>
 
-            <a href="{{url}}#services" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+            <a *ngIf="url.includes('services')" href="/profile/{{user.user_id}}/services" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:px-4 -px-1 dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
+              <mat-icon>child_care</mat-icon>
+                
+              <span class="mx-1 text-sm sm:text-base">
+                Services
+              </span>
+            </a>
+
+            <a *ngIf="!url.includes('services')" href="/profile/{{user.user_id}}/services" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
               <mat-icon>child_care</mat-icon>
 
               <span class="mx-1 text-sm sm:text-base">
                   Services
               </span>
             </a>
+
+            <a *ngIf="url.includes('reviews')" href="/profile/{{user.user_id}}/reviews" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-blue-600 bg-transparent border-b-2 border-blue-500 sm:px-4 -px-1 dark:border-blue-400 dark:text-blue-300 whitespace-nowrap focus:outline-none">
+              <mat-icon>comment</mat-icon>
+                
+              <span class="mx-1 text-sm sm:text-base">
+                Reviews and Recommendations
+              </span>
+            </a>
             
-            <a href="{{url}}#reviews" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
+            <a *ngIf="!url.includes('reviews')" href="/profile/{{user.user_id}}/reviews" class="flex items-center h-10 px-2 py-2 -mb-px text-center text-gray-700 bg-transparent border-b-2 border-transparent sm:px-4 -px-1 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400">
               <mat-icon>comment</mat-icon>
 
               <span class="mx-1 text-sm sm:text-base">
-                  Reviews and Recommendation
+                  Reviews and Recommendations
               </span>
             </a>
           </div>
         </div>
 
-        <div class="cs-profile-sections">
+        <div *ngIf="!url.includes('qualifications') && !url.includes('reviews') && !url.includes('services')" class="cs-profile-sections">
           <div id="profile" class="py-4">
             <mat-card class="bio">
               <h2>My Information</h2>
@@ -190,6 +221,15 @@
             <mat-card class="bio">
               <h2>My Recommendations</h2>
             </mat-card>
+          </div>
+        </div>
+
+        <div class="reviews flex flex-col" *ngIf="url.includes('reviews')">
+          <div *ngFor="let review of userReviews" class="flex flex-row m-4 p-2 h-[10%] w-[100%] justify-between align-items-center items-center rounded-md bg-gray-200">
+              <h3>Anonymous User</h3>
+              <h3>Comment: {{review?.comment}}</h3>
+              <h3>Date: {{review?.review_date}}</h3>
+              <bar-rating class="ml-4" [readOnly]=true [(rate)]="review.rating" [theme]="'stars'" [max]="5"></bar-rating>
           </div>
         </div>
       </div>
