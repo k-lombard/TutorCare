@@ -224,6 +224,34 @@ func (db Database) UpdateUserProfile(userId uuid.UUID, userData models.Profile) 
 	}
 	return userProfile, nil
 }
+func (db Database) UpdateUserProfileRating(userId uuid.UUID, userData models.Profile) (models.Profile, error) {
+	userProfile := models.Profile{}
+	user2 := models.Profile{}
+	errTwo := db.Conn.First(&user2, "user_id = ?", userId).Error
+	if errTwo != nil {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
+			return userProfile, ErrNoMatch
+		}
+		return userProfile, errTwo
+	}
+	err := db.Conn.Model(&user2).Where("user_id = ?", userId).Updates(map[string]interface{}{
+		"Rating": userData.Rating,
+	}).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return userProfile, ErrNoMatch
+		}
+		return userProfile, err
+	}
+	errFinal := db.Conn.First(&userProfile, "user_id = ?", userId).Error
+	if errFinal != nil {
+		if errors.Is(errFinal, gorm.ErrRecordNotFound) {
+			return userProfile, ErrNoMatch
+		}
+		return userProfile, errFinal
+	}
+	return userProfile, nil
+}
 
 func comparePasswords(hashedPwd string, plainPwd []byte) bool {
 	byteHash := []byte(hashedPwd)

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"main/database"
 	"net/http"
 	"strconv"
@@ -31,6 +32,25 @@ func addReview(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Error: Bad request")
 		return
 	}
+	profOut, err2 := dbInstance.GetUserProfileById(review.UserID)
+	if err2 != nil {
+		c.JSON(http.StatusBadRequest, "Error fetching user profile: bad request")
+		return
+	}
+	reviewsOut, err3 := dbInstance.GetReviewsByUserId(review.UserID)
+	if err3 != nil {
+		c.JSON(http.StatusBadRequest, "Error fetching total user reviews: bad request")
+		return
+	}
+	newAverage := ((float64(profOut.Rating) * float64(len(reviewsOut.Review))) + float64(review.Rating)) / float64((len(reviewsOut.Review) + 1))
+	profNew := models.Profile{}
+	profNew.Rating = newAverage
+	finalUpdate, err4 := dbInstance.UpdateUserProfileRating(review.UserID, profNew)
+	if err4 != nil {
+		c.JSON(http.StatusBadRequest, "Error updating user profile: bad request")
+		return
+	}
+	fmt.Printf(finalUpdate.UserID.String())
 	c.JSON(http.StatusOK, postOut)
 }
 
