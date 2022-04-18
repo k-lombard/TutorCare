@@ -28,6 +28,7 @@ type Post struct {
 	Caregiver          User          `json:"caregiver" gorm:"-"`
 	ApplicationID      int           `json:"application_id" gorm:"-"`
 	User               User          `json:"user" gorm:"-"`
+	JobRepeat          string        `json:"job_repeat" gorm:"default:null"`
 }
 
 type PostList struct {

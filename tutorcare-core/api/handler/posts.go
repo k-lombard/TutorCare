@@ -205,3 +205,28 @@ func updatePostCompleted(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, post)
 }
+
+func updateJobRepeat(c *gin.Context) {
+	r := c.Request
+	postIDStr := c.Param("postid")
+	postID, errConv := strconv.Atoi(postIDStr)
+	if errConv != nil {
+		c.JSON(http.StatusBadRequest, "Error: Invalid PostID Integer")
+		return
+	}
+	postData := models.Post{}
+	if err := render.Bind(r, &postData); err != nil {
+		c.JSON(http.StatusBadRequest, "Error: Bad request")
+		return
+	}
+	post, err := dbInstance.UpdateJobRepeat(postID, postData)
+	if err != nil {
+		if err == database.ErrNoMatch {
+			c.JSON(http.StatusNotFound, "Error: Resource not found")
+		} else {
+			c.JSON(http.StatusInternalServerError, "Internal server error")
+		}
+		return
+	}
+	c.JSON(http.StatusOK, post)
+}

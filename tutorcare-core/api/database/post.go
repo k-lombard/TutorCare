@@ -326,6 +326,32 @@ func (db Database) UpdatePostCompleted(postId int, postData models.Post) (models
 	return post, nil
 }
 
+func (db Database) UpdateJobRepeat(postId int, postData models.Post) (models.Post, error) {
+	post := models.Post{}
+
+	post2 := models.Post{}
+	errTwo := db.Conn.First(&post2, "post_id = ?", postId).Error
+	if errTwo != nil {
+		if errors.Is(errTwo, gorm.ErrRecordNotFound) {
+			return post, ErrNoMatch
+		}
+		return post, errTwo
+	}
+	if postData.Completed {
+		err := db.Conn.Model(&post).Where("post_id = ?", postId).Updates(map[string]interface{}{
+			"JobRepeat": postData.JobRepeat,
+		}).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return post, ErrNoMatch
+			}
+			return post, err
+		}
+		return post, nil
+	}
+	return post, errors.New("Post not completed")
+}
+
 func (db Database) AddApplicationToPost(postId int, postData models.Post, appUserId uuid.UUID) (models.Post, error) {
 	post := models.Post{}
 	post2 := models.Post{}
