@@ -19,6 +19,23 @@
       </mat-form-field>
     </mat-card>
     <mat-card>
+      <!-- <mat-form-field appearance="outline">
+          <mat-label>Type of Care</mat-label>
+          <input  formControlName="type_care" matInput />
+      </mat-form-field> -->
+      <mat-form-field [style.font-size]="'16px'" appearance="fill">
+        <mat-label>Repeat Job</mat-label>
+            <mat-select formControlName="repeat_job" name="option">
+            <mat-option *ngFor="let option of repeat_options" [value]="option.value">
+                {{option.viewValue}}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngFor="let validation of validation_messages.job_repeat">
+          <mat-error class="error-message" *ngIf="form.get('repeat_job').hasError(validation.type) && (form.get('repeat_job').dirty || form.get('repeat_job').touched)">{{validation.message}}</mat-error>
+        </mat-error>
+      </mat-form-field>
+    </mat-card>
+    <mat-card>
       <mat-form-field appearance="outline">
           <mat-label>Job Title</mat-label>
           <!-- <input formControlName="job_desc" matInput /> -->

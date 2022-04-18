@@ -292,10 +292,20 @@ export class CreateJobDialog implements OnInit{
     {value: 'babysitting-1', viewValue: 'Type: Babysitting'},
     {value: 'other-2', viewValue: 'Type: Other'}
 ];
+repeat_options: FilterOption[] = [
+  {value: 'none', viewValue: 'None'},
+  {value: 'repeat_daily', viewValue: 'Daily'},
+  {value: 'repeat_weekly', viewValue: 'Weekly'},
+  {value: 'repeat_biweekly', viewValue: 'Biweekly'},
+  {value: 'repeat_monthly', viewValue: 'Monthly'},
+];
 
 validation_messages = {
   'care_type': [
     { type: 'required', message: 'Type is required' }
+  ],
+  'job_repeat': [
+    { type: 'required', message: 'Job repeat is required' }
   ],
   'job_title': [
     { type: 'required', message: 'Title is required' },
@@ -345,6 +355,9 @@ validation_messages = {
 
     this.form = this.fb.group({
       type_care: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      repeat_job: new FormControl('', Validators.compose([
         Validators.required
       ])),
       job_title: new FormControl('', Validators.compose([
@@ -418,7 +431,8 @@ validation_messages = {
     this.end_time = end_time.getHours() + ':' + end_time.getMinutes()
     this.title = this.form.value.job_title
     this.tags = this.tagString
-    this._createJobObservable = this.findJobs.createPost(this.userId, this.title, this.job_desc, this.tags, this.type_care, this.start_date, this.start_time, this.end_date, this.end_time)
+    var repeat = this.form.value.repeat_job
+    this._createJobObservable = this.findJobs.createPost(this.userId, this.title, this.job_desc, this.tags, this.type_care, this.start_date, this.start_time, this.end_date, this.end_time, repeat)
 
     this._createJobObservable.subscribe((data2: Post) => {
         this.post = data2

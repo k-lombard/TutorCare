@@ -34,7 +34,7 @@ export class FindJobsService {
     });
  }
 
- createPost(userId: string, jobTitle: string, careDesc: string, tags: string, careType: string, start_date: string, start_time: string, end_date: string, end_time: string): Observable<Post> {
+ createPost(userId: string, jobTitle: string, careDesc: string, tags: string, careType: string, start_date: string, start_time: string, end_date: string, end_time: string, repeat: string): Observable<Post> {
   let url = `/api/posts/`;
   return new Observable((observer: any) => {
     // @ts-ignore
@@ -47,7 +47,8 @@ export class FindJobsService {
          "start_date": start_date,
          "start_time": start_time,
          "end_date": end_date,
-         "end_time": end_time
+         "end_time": end_time,
+         "job_repeat": repeat,
 
      }), {headers: this.headers})
          .pipe(map((res: any) => res))

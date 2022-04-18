@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"main/models"
 
@@ -320,6 +321,50 @@ func (db Database) UpdatePostCompleted(postId int, postData models.Post) (models
 				return post, ErrNoMatch
 			}
 			return post, errLast
+		}
+		if postData.JobRepeat != "none" {
+			startDate, errDateStart := time.Parse("2006-Jan-02", postData.StartDate)
+			if errDateStart != nil {
+				return post, errDateStart
+			}
+			endDate, errDateEnd := time.Parse("2006-Jan-02", postData.EndDate)
+			if errDateEnd != nil {
+				return post, errDateEnd
+			}
+			if postData.JobRepeat == "repeat_daily" {
+				startDate.AddDate(0, 0, 1)
+				endDate.AddDate(0, 0, 1)
+			} else if postData.JobRepeat == "repeat_weekly" {
+				startDate.AddDate(0, 0, 7)
+				endDate.AddDate(0, 0, 7)
+			} else if postData.JobRepeat == "repeat_biweekly" {
+				startDate.AddDate(0, 0, 14)
+				endDate.AddDate(0, 0, 14)
+			} else if postData.JobRepeat == "repeat_monthly" {
+				startDate.AddDate(0, 0, 28)
+				endDate.AddDate(0, 0, 28)
+			}
+			postOut := models.Post{}
+			newPost := models.Post{}
+			newPost.StartDate = startDate.String()
+			newPost.EndDate = endDate.String()
+			newPost.UserID = postData.UserID
+			newPost.Title = postData.Title
+			newPost.CareDescription = postData.CareDescription
+			newPost.Tags = postData.Tags
+			newPost.CareType = postData.CareType
+			newPost.StartTime = postData.StartTime
+			newPost.EndTime = postData.EndTime
+			newPost.JobRepeat = postData.JobRepeat
+			errFin := db.Conn.Create(&newPost).Error
+			if errFin != nil {
+				return postOut, errFin
+			}
+			err2 := db.Conn.Where("post_id = ?", newPost.PostID).Select("*").First(&postOut).Select("TO_CHAR(start_date :: DATE, 'Mon dd, yyyy') as start_date, TO_CHAR(start_time :: TIME, 'hh12:mi AM') as start_time,TO_CHAR(end_date :: DATE, 'Mon dd, yyyy') as end_date, TO_CHAR(end_time :: TIME, 'hh12:mi AM') as end_time").First(&postOut).Error
+			if err2 != nil {
+				return postOut, err2
+			}
+			fmt.Println("New post record created with postID and timestamp: ", postOut.PostID, postOut.DatePosted)
 		}
 	}
 	post.Completed = true
