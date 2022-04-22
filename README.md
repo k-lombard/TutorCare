@@ -62,12 +62,6 @@
 - Search feature is not elasticsearch so it will become slow with higher number of posts.
 - Some forms do not autofill information, requiring user to input the same info in multiple places.
 - Mobile sidebar is not closable on very small screen sizes. 
-- Filter button clips in front of the sidebar on find-jobs page.
-- Issue with date and time validation on the create and update job post.
-- Find-Care, Active Jobs, Applications Received, Applications Sent pages are not mobile responsive.
-- Backend uses explicit SQL queries so it is vulnerable to SQL injection
-- Chatroom doesn't scroll to bottom on page load
-- Find-Care page's grid layout is not mobile responsive and does not work past a certain number of caregiver users
 
 ## Setup Guide
 ### Required Pre-Setup Installations
