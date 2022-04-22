@@ -17,6 +17,22 @@
 
 
 # Release Notes
+## Version 0.5.0
+### New Features
+- Adds displayed reviews on a user's profile
+- Adds updating 5 star rating based on the user's moving average of other user's ratings
+- Adds repost job and reoccuring job functionality
+
+### Bug Fixes
+- Fixed bug with job completion not updating
+- Fixed bug with user profile tabs not redirecting to proper pages
+
+### Known Issues
+- Webpack bundle needs to be optimized.
+- Search feature is not elasticsearch so it will become slow with higher number of posts.
+- Some forms do not autofill information, requiring user to input the same info in multiple places.
+- Mobile sidebar is not closable on very small screen sizes. 
+
 ## Version 0.4.0
 ### New Features
 - Adds history for users to view their completed jobs.
