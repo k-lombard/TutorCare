@@ -101,6 +101,7 @@
 - Install the latest node version and activate it with (nvm use "version")
 - PostgreSQL (latest version)
 - Docker (latest version)
+- Docker UI Application (latest version) 
 - Go (latest version)
 
 ### Required Node_Modules Installations
@@ -109,8 +110,14 @@
 - Run ``` npm install -g @angular/cli ``` 
 - Run ``` npm install -D tailwindcss ```
 
+### Download Instructions
+- Click on the green code button at the top right of this github page
+- Copy the HTTPS URL
+- cd into a folder in which you want to download (clone) this project using the terminal or command line
+- Run ``` git clone <https url> ```
+
 ### Starting Client Frontend
-- cd into client folder
+- cd into client folder of cloned project
 - **If on Windows run:**
 ```
   ng run start-windows
@@ -121,7 +128,7 @@
 ```
 
 ### Starting API Backend
-- cd into api folder
+- cd into api folder of cloned project
 - **If on Windows run:**
 ```
   docker-compose up web
