@@ -17,64 +17,19 @@
 
 
 # Release Notes
-## Version 0.5.0
+## Version 1.0.0
 ### New Features
 - Adds displayed reviews on a user's profile
 - Adds updating 5 star rating based on the user's moving average of other user's ratings
 - Adds repost job and reoccuring job functionality
-
-### Bug Fixes
-- Fixed bug with job completion not updating
-- Fixed bug with user profile tabs not redirecting to proper pages
-
-### Known Issues
-- Webpack bundle needs to be optimized.
-- Search feature is not elasticsearch so it will become slow with higher number of posts.
-- Some forms do not autofill information, requiring user to input the same info in multiple places.
-- Mobile sidebar is not closable on very small screen sizes. 
-
-## Version 0.4.0
-### New Features
 - Adds history for users to view their completed jobs.
 - Adds rating system for both parties to rate each other when the job is complete.
 - Adds review/comment feature for both parties to review and comment on each other when the job is complete.
-
-### Bug Fixes
-- Fixed bug with completed jobs not showing if the user was the caregiver.
-- Fixed minor design bugs on profile page.
-- Fixed bug with updating a job post.
-
-### Known Issues
-- Webpack bundle needs to be optimized.
-- Search feature is not elastic so it will become slow with higher number of posts.
-- Some forms do not autofill information, requiring user to input the same info in multiple places.
-- Mobile sidebar is not closable on very small screen sizes. 
-- Filter button clips in front of the sidebar on find-jobs page.
-- Issue with date and time validation on the create and update job post.
-
-## Version 0.3.0
-### New Features
 - Redesign of the user profile page.
 - Adds a user profile database table to store profile information.
 - Updates the edit-profile page to work the the new profile models and new information.
 - Adds Mobile Responsiveness to the Find-Care, Active Jobs, Applications Revcieved, and Applications Sent pages.
 - Adds Job Completion Flow and Verification of Job Start.
-
-### Bug Fixes
-- Fixed Grid Layout of the Find Care Page.
-- Fixed redundancy of the account and profile pages by merging their functionalities.
-- Fixed a issue with the date info of a received application.
-
-### Known Issues
-- Webpack bundle needs to be optimized.
-- Search feature is not elastic so it will become slow with higher number of posts.
-- Some forms do not autofill information, requiring user to input the same info in multiple places.
-- Mobile sidebar is not closable on very small screen sizes. 
-- Filter button clips in front of the sidebar on find-jobs page.
-- Issue with date and time validation on the create and update job post.
-
-## Version 0.2.0
-### New Features
 - Adds live chat messaging system for users to communicate to each other.
 - Adds search and filter functionality to narrow the jobs shown on the find-jobs page.
 - Adds applying to a job post functionality where a caregiver can apply to a job post.
@@ -83,8 +38,20 @@
 - Adds hiring functionality for careseekers to hire someone from the list of applicant.
 - Adds working find-care functionality for caregseekers to find nearby caregivers.
 - Adds capability for a user to logout.
+- Adds working signup/login functionality and stores authentication tokens in session storage
+- Adds working find-care page functionality where caregiver users are displayed in a user's local area
+- Adds working find-jobs page functionality where job posts are displayed in an easy to see, intuitive manner
+- Adds account page and edit profile functionality, to change a user's email, bio, experience, and user-type. 
 
 ### Bug Fixes
+- Fixed bug with job completion not updating
+- Fixed bug with user profile tabs not redirecting to proper pages
+- Fixed bug with completed jobs not showing if the user was the caregiver.
+- Fixed minor design bugs on profile page.
+- Fixed bug with updating a job post.
+- Fixed Grid Layout of the Find Care Page.
+- Fixed redundancy of the account and profile pages by merging their functionalities.
+- Fixed a issue with the date info of a received application.
 - Fixed bug where messages link did not show in mobile side navigation.
 - Fixed explicit SQL queries with GORM refactoring to prevent SQL injection.
 - Put validation to prevent invalid information on the following forms: sign up, login, create job, and edit job.
@@ -92,24 +59,15 @@
 
 ### Known Issues
 - Webpack bundle needs to be optimized.
-- Search feature is not elastic so it will become slow with higher number of posts.
-- Find-Care, Active Jobs, Applications Revcieved, Applications Sent pages are not mobile responsive.
+- Search feature is not elasticsearch so it will become slow with higher number of posts.
 - Some forms do not autofill information, requiring user to input the same info in multiple places.
 - Mobile sidebar is not closable on very small screen sizes. 
 - Filter button clips in front of the sidebar on find-jobs page.
-
-## Version 0.1.0
-### New Features
-- Adds working signup/login functionality and stores authentication tokens in session storage
-- Adds working find-care page functionality where caregiver users are displayed in a user's local area
-- Adds working find-jobs page functionality where job posts are displayed in an easy to see, intuitive manner
-- Adds account page and edit profile functionality, to change a user's email, bio, experience, and user-type. 
-
-### Known Issues
+- Issue with date and time validation on the create and update job post.
+- Find-Care, Active Jobs, Applications Received, Applications Sent pages are not mobile responsive.
 - Backend uses explicit SQL queries so it is vulnerable to SQL injection
 - Chatroom doesn't scroll to bottom on page load
 - Find-Care page's grid layout is not mobile responsive and does not work past a certain number of caregiver users
-
 
 ## Setup Guide
 ### Required Pre-Setup Installations
