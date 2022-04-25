@@ -15,6 +15,9 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/k-lombard/TutorCare)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fk-lombard%2FTutorCare)
 
+<p align = "center"><a href="#version1">Version 1.0.0 Release Notes</a> &#9679; <a href="#setup">Download Guide</a></p>
+
+<br name="version1">
 
 # Release Notes
 ## Version 1.0.0
@@ -38,6 +41,8 @@
 - Search feature is not elasticsearch so it will become slow with higher number of posts
 - Usability: Forms do not autofill information, requiring user to input the same info in multiple places
 - Mobile sidebar is not closable on very small screen sizes
+
+<br name="setup">
 
 # Setup Guide for Development Server
 ### Required Pre-Requisite Installations
@@ -76,7 +81,9 @@ For development, there is an environment file that is not within the GitHub with
 ### Starting Server Backend
 - Open new terminal or command prompt on your computer
 - cd into 'api' folder. Example: ``` cd user/documents/github/tutorcare-core/api ```
-- **If on Windows run:**
+
+**Windows**
+- Run:
 ```
   docker-compose up web
 ```
@@ -84,7 +91,8 @@ For development, there is an environment file that is not within the GitHub with
 ```
   docker-compose up migrate
 ```
-- **If on MacOS/Linux run:**
+**MacOS/Linux**
+- Run:
 ```
   sudo docker-compose up web
 ```
@@ -97,11 +105,14 @@ For development, there is an environment file that is not within the GitHub with
 ### Starting Client Frontend
 - Open new terminal or command prompt on your computer
 - cd into the 'client' folder. Example: ``` cd user/documents/github/tutorcare-core/client ```
-- **If on Windows run:**
+
+**Windows**
+- Run:
 ```
   ng run ng serve --proxy-config proxy.config.json
 ```
-- **If on MacOS/Linux run:**
+**MacOS/Linux**
+- Run:
 ```
   npm run start
 ```
