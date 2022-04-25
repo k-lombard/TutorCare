@@ -19,40 +19,16 @@
 # Release Notes
 ## Version 1.0.0
 ### New Features
-- Adds displayed reviews on a user's profile
-- Adds updating 5 star rating based on the user's moving average of other user's ratings
-- Adds repost job and reoccuring job functionality
-- Adds history for users to view their completed jobs.
-- Adds rating system for both parties to rate each other when the job is complete.
-- Adds review/comment feature for both parties to review and comment on each other when the job is complete.
-- Redesign of the user profile page.
-- Adds a user profile database table to store profile information.
-- Updates the edit-profile page to work the the new profile models and new information.
-- Adds Mobile Responsiveness to the Find-Care, Active Jobs, Applications Revcieved, and Applications Sent pages.
-- Adds Job Completion Flow and Verification of Job Start.
-- Adds live chat messaging system for users to communicate to each other.
-- Adds search and filter functionality to narrow the jobs shown on the find-jobs page.
-- Adds applying to a job post functionality where a caregiver can apply to a job post.
-- Adds editing and deleting job post functionality to allow change to be made to a job post.
-- Adds functionality for a careseeker to view a list of applicants, see their profiles, and add them to a chatroom for messages.
-- Adds hiring functionality for careseekers to hire someone from the list of applicant.
-- Adds working find-care functionality for caregseekers to find nearby caregivers.
-- Adds capability for a user to logout.
-- Adds working signup/login functionality and stores authentication tokens in session storage
-- Adds working find-care page functionality where caregiver users are displayed in a user's local area
-- Adds working find-jobs page functionality where job posts are displayed in an easy to see, intuitive manner
-- Adds account page and edit profile functionality, to change a user's email, bio, experience, and user-type. 
+- Custom login and logout authentication
+- Email Verification and GaTech Restriction
+- Customizable public user profiles
+- Map of available nearby caregivers
+- Job Post: Create, Edit, Apply, Applications Received, Select
+- Active Job: Start and end verification
+- Ratings and Reviews
+- Live Chat Messaging
 
 ### Bug Fixes
-- Fixed bug with job completion not updating
-- Fixed bug with user profile tabs not redirecting to proper pages
-- Fixed bug with completed jobs not showing if the user was the caregiver.
-- Fixed minor design bugs on profile page.
-- Fixed bug with updating a job post.
-- Fixed Grid Layout of the Find Care Page.
-- Fixed redundancy of the account and profile pages by merging their functionalities.
-- Fixed a issue with the date info of a received application.
-- Fixed bug where messages link did not show in mobile side navigation.
 - Fixed explicit SQL queries with GORM refactoring to prevent SQL injection.
 - Put validation to prevent invalid information on the following forms: sign up, login, create job, and edit job.
 - Added authentication to backend of websockets to prevent hijacking.
@@ -60,29 +36,33 @@
 ### Known Issues
 - Webpack bundle needs to be optimized.
 - Search feature is not elasticsearch so it will become slow with higher number of posts.
-- Some forms do not autofill information, requiring user to input the same info in multiple places.
-- Mobile sidebar is not closable on very small screen sizes. 
+- Usability: Forms do not autofill information, requiring user to input the same info in multiple places.
+- Mobile sidebar is not closable on very small screen sizes.
 
-## Setup Guide
-### Required Pre-Setup Installations
-- Node version manager such as nvm for macOS/linux or nodist for windows (latest version)
-- Install the latest node version and activate it with (nvm use "version")
-- PostgreSQL (latest version)
-- Docker (latest version)
-- Docker UI Application (latest version) 
-- Go (latest version)
-
-### Required Node_Modules Installations
-- cd into the client folder
-- Run ``` npm i ```
-- Run ``` npm install -g @angular/cli ``` 
-- Run ``` npm install -D tailwindcss ```
+# Setup Guide for Development Server
+### Required Pre-Requisite Installations
+- Node version manager such as nvm for macOS/linux or nodist for windows (latest version) <br>
+  https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+- PostgreSQL Relational Database (latest version) <br>
+  https://www.postgresql.org/download/
+- Docker (latest version) <br>
+  https://docs.docker.com/get-docker/
+- Docker Desktop UI Application (latest version) <br>
+  https://www.docker.com/products/docker-desktop/
+- GoLang (latest version) <br>
+  https://go.dev/doc/install
 
 ### Download Instructions
 - Click on the green code button at the top right of this github page
 - Copy the HTTPS URL
-- cd into a folder in which you want to download (clone) this project using the terminal or command line
-- Run ``` git clone <https url> ```
+- Using the terminal or command line, cd into the folder in which you want to download (clone) this project 
+- Run ``` git clone <HTTPS URL> ```  with the HTTPS URL of this project (you just copied)
+
+### Install Required Node Modules
+- cd into the 'client' folder
+- Run ``` npm install ```
+- Run ``` npm install -g @angular/cli ``` 
+- Run ``` npm install -D tailwindcss ```
 
 ### Starting Client Frontend
 - cd into client folder of cloned project
@@ -90,7 +70,7 @@
 ```
   ng run start-windows
 ```
-- **If on macOS/linux run:**
+- **If on MacOS/Linux run:**
 ```
   npm run start
 ```
@@ -105,7 +85,7 @@
 ```
   docker-compose up migrate
 ```
-- **If on macOS/linux run:**
+- **If on MacOS/Linux run:**
 ```
   sudo docker-compose up web
 ```
