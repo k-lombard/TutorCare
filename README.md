@@ -64,26 +64,16 @@
 ```
 - Run ``` git clone <HTTPS URL> ```  with the HTTPS URL of this project (you just copied)
 
+**Important**
+For development, there is an environment file that is not within the GitHub with passwords and private API keys. This file should be placed into the api folder. Contact owner for access or more information.
+
 ### Install Required Node Modules
 - cd into the 'client' folder. Example: ``` cd user/documents/github/tutorcare-core/client ```
 - Run ``` npm install ```
 - Run ``` npm install -g @angular/cli ``` 
 - Run ``` npm install -D tailwindcss ```
 
-### Starting Client Frontend
-- Open new terminal or command prompt on your computer
-- cd into the 'client' folder. Example: ``` cd user/documents/github/tutorcare-core/client ```
-- **If on Windows run:**
-```
-  ng run ng serve --proxy-config proxy.config.json
-```
-- **If on MacOS/Linux run:**
-```
-  npm run start
-```
-- Keep this terminal/command prompt open
-
-### Starting API Backend
+### Starting Server Backend
 - Open new terminal or command prompt on your computer
 - cd into 'api' folder. Example: ``` cd user/documents/github/tutorcare-core/api ```
 - **If on Windows run:**
@@ -102,4 +92,46 @@
 ```
   sudo docker-compose up migrate
 ```
-- Keep this terminal/command prompt open
+- Keep this terminal/command prompt open to keep the server running
+
+### Starting Client Frontend
+- Open new terminal or command prompt on your computer
+- cd into the 'client' folder. Example: ``` cd user/documents/github/tutorcare-core/client ```
+- **If on Windows run:**
+```
+  ng run ng serve --proxy-config proxy.config.json
+```
+- **If on MacOS/Linux run:**
+```
+  npm run start
+```
+- Keep this terminal/command prompt open to keep the process running
+- In your favorite web browser, go to ```http://localhost:4200/ ```
+
+### Shutting Down
+**Client**
+- In terminal running the client
+- Press CTRL+C to end the process and close the terminal
+
+**Server**
+- In the terminal running the server
+- Press CTRL+C to end the process
+- Run the following to tear down the docker container
+```
+  docker-compose down
+```
+
+### Deploying Changes
+**Client**
+- Any changes to the client codebase should automatically recompile and refresh in your browser
+
+**Server**
+- Follow instructions above to shut down the server
+- Delete the api_web Docker Image
+- Follow instructions about to start up the server again
+
+**Database**
+- Follow instructions above to shut down the server
+- Delete the api_web, migrate/migrate, and postgres Docker Images
+- Delete the pgdata folder in that was created in the api folder 
+- Follow instructions about to start up the server again
