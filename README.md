@@ -146,3 +146,9 @@ For development, there is an environment file that is not within the GitHub with
 - Delete the api_web, migrate/migrate, and postgres Docker Images
 - Delete the pgdata folder in that was created in the api folder 
 - Follow instructions about to start up the server again
+
+### Troubleshooting
+- Many errors encountered will stem from issues with the docker-compose.yaml file interacting with your machine in a specific, unintended way. This will involve googling the error codes from the terminal output, as many different ones can occur. 
+- When creating new database tables, be aware that DELETE and UPDATE SQL operations still need to follow foreign key constraints, meaning a newly created table using a foreign key from a previous table, could break a DELETE endpoint that is deleting an object from the previous or older table. You must instead perform a DELETE operation on both the corresponding object from the newer table first, and then the older table second.
+- Many frontend errors encountered can simply be fixed by deleting package-lock.json and the node_modules folder inside the client directory. Then, simply re-run ``` npm install ```
+- Additionally, deleting the angular webpack folder and restarting the frontend can fix many issues. 
