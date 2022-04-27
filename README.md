@@ -118,7 +118,7 @@ For development, there is an environment file that is not within the GitHub with
 **Windows**
 - Run:
 ```
-  ng run ng serve --proxy-config proxy.config.json
+  ng serve --proxy-config proxy.config.json
 ```
 **MacOS/Linux**
 - Run:
